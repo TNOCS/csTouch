@@ -338,7 +338,7 @@
       <HintPath>..\..\libs\VlcVideoPlayer\VlcVideoPlayer.dll</HintPath>
     </Reference>
     <Reference Include="WebActivator">
-      <HintPath>..\..\..\apps\i-table\packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
+      <HintPath>..\..\libs\csWebDotNetLib\WebActivator.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
