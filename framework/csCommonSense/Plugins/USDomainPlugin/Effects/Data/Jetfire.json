@@ -1,0 +1,624 @@
+{
+ "Parameters": [
+  {
+   "IsResult": false,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "",
+   "Description": "Chemical name",
+   "ParameterType": 6,
+   "Name": "Chemical name",
+   "Data": {
+    "Chemical": {},
+    "Value": "-"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": false,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "kg\/s",
+   "Description": "(Calculated) Mass flow rate",
+   "ParameterType": 1,
+   "Name": "Mass flow rate in",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+    "Value": 10,
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Mass rate"
+  },{
+   "IsResult": false,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "Hole diameter",
+   "ParameterType": 1,
+   "Name": "Hole diameter",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+    "Value": 0.1,
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": false,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "rad",
+   "Description": "Outflow angle in XZ plane (0\u00b0=horizontal; 90\u00b0=vertical)",
+   "ParameterType": 1,
+   "Name": "Outflow angle in XZ plane",
+   "Data": {
+    "Min": 0,
+    "Max": 1.5707963267949,
+    "MaxInclusive": true,
+    "Value": 1.5707963267949,
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Angle"
+  },{
+   "IsResult": false,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m\/s",
+   "Description": "Wind speed at 10 m height",
+   "ParameterType": 1,
+   "Name": "Wind speed at 10m",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+    "Value": 2,
+    "MinInclusive": false
+   },
+   "ValueQuantity": "Velocity"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "",
+   "Description": "Type of flow of the jet",
+   "ParameterType": 2,
+   "Name": "Type of flow of the jet",
+   "Data": {
+    "SelectionItems": [],
+    "MultiSelect": false,
+    "Value": ""
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m\/s",
+   "Description": "Wind speed at stack height",
+   "ParameterType": 1,
+   "Name": "Wind speed at stack height",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": false
+   },
+   "ValueQuantity": "Velocity"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m\/s",
+   "Description": "Exit velocity of expanding jet",
+   "ParameterType": 1,
+   "Name": "Exit velocity of expanding jet",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Velocity"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "rad",
+   "Description": "Angle between hole and flame axis (alpha)",
+   "ParameterType": 1,
+   "Name": "Angle between hole and flame axis",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Angle"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "Frustum lift off height (b)",
+   "ParameterType": 1,
+   "Name": "Frustum lift off height",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "Width of frustum base (W1)",
+   "ParameterType": 1,
+   "Name": "Width of frustum base",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "Width of frustum tip (W2)",
+   "ParameterType": 1,
+   "Name": "Width of frustum tip",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "Length of frustum (flame) (Rl)",
+   "ParameterType": 1,
+   "Name": "Length of frustum",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m2",
+   "Description": "Surface area of frustum",
+   "ParameterType": 1,
+   "Name": "Surface area of frustum",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Area"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "W\/m2",
+   "Description": "Surface emissive power (max)",
+   "ParameterType": 1,
+   "Name": "Surface emissive power (max)",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "W\/m2",
+   "Description": "Surface emissive power (actual)",
+   "ParameterType": 1,
+   "Name": "Surface emissive power (actual)",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "W\/m2",
+   "Description": "Heat radiation at Xd",
+   "ParameterType": 1,
+   "Name": "Heat radiation level at location",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "-",
+   "Description": "Atmospheric transmissivity at Xd",
+   "ParameterType": 1,
+   "Name": "Atmospheric transmissivity",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "-",
+   "Description": "View factor at Xd",
+   "ParameterType": 1,
+   "Name": "View factor",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "s*(W\/m2)^4\/3",
+   "Description": "Heat radiation dose at Xd",
+   "ParameterType": 1,
+   "Name": "Heat Radiation Dose",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Heat radiation dose"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "1 kW\/m2 Heat radiation distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation first contour at",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "3 kW\/m2 Heat radiation distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation second contour at",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "10 kW\/m2 Heat radiation distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation third contour at",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "-",
+   "Description": "Percentage first degree burns at Xd",
+   "ParameterType": 1,
+   "Name": "Percentage Fatality 1st Degree Burns",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "-",
+   "Description": "Percentage second degree burns at Xd",
+   "ParameterType": 1,
+   "Name": "Percentage Fatality 2nd Degree Burns",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "-",
+   "Description": "Percentage third degree burns at Xd",
+   "ParameterType": 1,
+   "Name": "Percentage Fatality 3rd Degree Burns",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "1% First degree burns distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation first degree distance",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "1% Second degree burns distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation second degree distance",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "1% Third degree (Lethal) burns distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation third degree distance",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "W\/m2",
+   "Description": "Heat radiation",
+   "ParameterType": 5,
+   "Name": "Heat radiation vs. distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "m",
+   "Description": "Z",
+   "ParameterType": 5,
+   "Name": "Frustum shape (Flare)",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "-",
+   "Description": "Viewfactor",
+   "ParameterType": 5,
+   "Name": "Viewfactor vs Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "s*(W\/m2)^4\/3",
+   "Description": "Heat load",
+   "ParameterType": 5,
+   "Name": "Heat load vs. distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Heat radiation dose"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "-",
+   "Description": "First Degree Burns",
+   "ParameterType": 5,
+   "Name": "First Degree Burns vs. Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "-",
+   "Description": "Second Degree Burns",
+   "ParameterType": 5,
+   "Name": "Second Degree Burns vs. Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "-",
+   "Description": "Third Degree (Lethal) Burns",
+   "ParameterType": 5,
+   "Name": "Lethal Burns (Third Degree) vs. Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "",
+   "Description": "Flame area in XY plane (top view)",
+   "ParameterType": 3,
+   "Name": "Flame area in XY plane (top view)",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "W\/m2",
+   "Description": "1 kW\/m2 Heat radiation contour",
+   "ParameterType": 3,
+   "Name": "First heat radiation contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "W\/m2",
+   "Description": "3 kW\/m2 Heat radiation contour",
+   "ParameterType": 3,
+   "Name": "Second heat radiation contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "W\/m2",
+   "Description": "10 kW\/m2 Heatradiation contour",
+   "ParameterType": 3,
+   "Name": "Third heat radiation contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "",
+   "Description": "1% first degree burns",
+   "ParameterType": 3,
+   "Name": "1% first degree burns contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "",
+   "Description": "1% second degree burns",
+   "ParameterType": 3,
+   "Name": "1% second degree burns contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "",
+   "Description": "1% lethal burns",
+   "ParameterType": 3,
+   "Name": "1% lethal burns contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "W\/m2",
+   "Description": "Heat radiation Level",
+   "ParameterType": 4,
+   "Name": "Heat radiation grid",
+   "Data": {
+    "Value": ""
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Jet Fire (Chamberlain model)",
+   "ValueUnit": "-",
+   "Description": "Mortality outdoors",
+   "ParameterType": 4,
+   "Name": "Fraction of mortality outdoors grid",
+   "Data": {
+    "Value": ""
+   },
+   "ValueQuantity": "Dimensionless"
+  }]
+}

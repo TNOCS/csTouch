@@ -1,0 +1,14 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
+             x:Class="csCommon.Plugins.DashboardPlugin.DashboardsView">
+    <UserControl.Resources>
+       
+    </UserControl.Resources>
+
+	<Grid >
+        <ContentControl x:Name="ActiveDashboard"  >
+            
+        </ContentControl>
+       
+    </Grid>
+
+</UserControl>

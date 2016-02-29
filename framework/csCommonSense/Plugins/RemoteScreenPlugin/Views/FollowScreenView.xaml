@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="csRemoteScreenPlugin.FollowScreenView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid x:Name="gMain">
+        <InkPresenter x:Name="inkStrokes" Width="Auto" Height="Auto">
+            <Image x:Name="bs" />
+            <!--<InkPresenter.RenderTransform>
+                        <RotateTransform Angle="-90" />
+                    </InkPresenter.RenderTransform>
+                    <InkPresenter.RenderTransformOrigin>
+                        <Point X="0.5" Y="0.5" />
+                    </InkPresenter.RenderTransformOrigin>-->
+        </InkPresenter>
+    </Grid>
+</UserControl>

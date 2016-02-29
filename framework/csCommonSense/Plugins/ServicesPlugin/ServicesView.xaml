@@ -1,0 +1,102 @@
+﻿<UserControl x:Class="csCommon.Plugins.ServicesPlugin.ServicesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:wpfConverters="clr-namespace:WpfConverters"
+             xmlns:controls="http://schemas.microsoft.com/surface/2008"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataTemplate x:Key="DataTemplate1">
+            <Grid Width="195">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="{Binding Instance.Title}" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Foreground="Black"  IsEnabled="{Binding Instance.IsAvailable}"/>
+                    <TextBlock x:Name="Status" TextWrapping="Wrap" Text="{Binding Instance.Status}" Foreground="{Binding Instance.StatusColor}"/>
+                </StackPanel>
+                <Grid Margin="5,5,0,0" Visibility="{Binding Instance.IsAvailable, Converter={wpfConverters:ConvertBoolToVisibility}, ConverterParameter=False}" HorizontalAlignment="Right">
+                    <controls:SurfaceButton  x:Name="Stop"  cal:Message.Attach="[Event Click]=[Action Stop($dataContext)]" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Center" Background="#BF000000" Visibility="{Binding Instance.IsRunning, Converter={StaticResource BooleanHiddenConverter}}" BorderThickness="0" Padding="6,2,10,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                        <Path Data="M0,0L64,0 64,64 0,64z" Stretch="Uniform" Fill="#FFF4F4F4" Width="20" Height="20" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </controls:SurfaceButton>
+                    <controls:SurfaceButton  cal:Message.Attach="[Event Click]=[Action Start($dataContext)]" x:Name="Start" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Center" Background="#BF000000" Visibility="{Binding Instance.IsRunning, Converter={wpfConverters:ConvertBoolToVisibility}, ConverterParameter=false}" BorderThickness="0" Padding="6,2,10,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                        <Path Data="F1M1188.2,1715.23L1169.93,1728.57 1151.66,1741.9 1151.66,1715.23 1151.66,1688.57 1169.93,1701.9 1188.2,1715.23z" Stretch="Uniform" Fill="#FFF4F4F4" Width="20" Height="20" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </controls:SurfaceButton>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Margin="0" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Background="{Binding AccentBrush}">
+            <controls:SurfaceListBox x:Name="Views" ItemsSource="{Binding Plugin.Services}" SelectedItem="{Binding ActiveItem}" ItemTemplate="{DynamicResource DataTemplate1}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+            <StackPanel VerticalAlignment="Bottom">
+                <controls:SurfaceButton x:Name="StartAll" Margin="5" VerticalAlignment="Top" Background="#BF000000" Visibility="{Binding Instance.IsRunning, Converter={wpfConverters:ConvertBoolToVisibility}, ConverterParameter=False}">
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Margin="5,5,5,0">
+                        <Path Data="F1M1188.2,1715.23L1169.93,1728.57 1151.66,1741.9 1151.66,1715.23 1151.66,1688.57 1169.93,1701.9 1188.2,1715.23z" Stretch="Uniform" Fill="#7FF4F4F4" Width="20" Height="20" Margin="0,5,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                        <Path Data="F1M1188.2,1715.23L1169.93,1728.57 1151.66,1741.9 1151.66,1715.23 1151.66,1688.57 1169.93,1701.9 1188.2,1715.23z" Stretch="Uniform" Fill="#FFF4F4F4" Width="20" Height="20" Margin="-15,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                        <TextBlock TextWrapping="Wrap" Text="Start All Services" Margin="5,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                    </StackPanel>
+                </controls:SurfaceButton>
+                <controls:SurfaceButton x:Name="StopAll" Margin="5" VerticalAlignment="Top" Background="#BF000000" 
+                                        Visibility="{Binding Instance.IsRunning, Converter={wpfConverters:ConvertBoolToVisibility}, ConverterParameter=False}">
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Margin="5,5,5,0">
+                        <Path Data="M0,0L64,0 64,64 0,64z" Stretch="Uniform" Fill="#7FF4F4F4" Width="20" Height="20" Margin="0,5,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                        <Path Data="M0,0L64,0 64,64 0,64z" Stretch="Uniform" Fill="#FFF4F4F4" Width="20" Height="20" Margin="-15,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                        <TextBlock TextWrapping="Wrap" Text="Stop All Services" Margin="5,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                    </StackPanel>
+                </controls:SurfaceButton>
+            </StackPanel>
+        </Grid>
+        <ContentControl Grid.Column="1" x:Name="ActiveItem"  />
+
+        <!--<Button x:Name="ClickMeButton" Width="100" Height="50" Content="Click Me" HorizontalAlignment="Right" />-->
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,89 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:esri="http://schemas.esri.com/arcgis/client/2009"
+                    xmlns:MapIconMenu="clr-namespace:csMapCustomControls.MapIconMenu"
+                    x:Class="csGeoLayers.FlightTracker.FTDDictionary"
+                    xmlns:converters="clr-namespace:csCommon.Converters"
+                    xmlns:mapIconMenu="clr-namespace:csCommon.csMapCustomControls.MapIconMenu">
+
+    
+
+    <esri:MarkerSymbol x:Key="PlaneSymbol">
+        <esri:MarkerSymbol.ControlTemplate>
+            <ControlTemplate>
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" >
+                    <Canvas.Resources>
+                        <converters:LatLonStringConverter x:Key="LatLonStringConverter"/>
+                    </Canvas.Resources>
+                    
+
+                    <Path x:Name="path" Data="M14,-3 L43,15 0.5,37.5 z" Visibility="{Binding CallOutVisible, ElementName=bCircle, Converter={StaticResource BooleanToVisibilityConverter}}" Fill="{Binding Instance.AccentBrush}" Height="41.5" Canvas.Left="6" Stretch="Fill" Stroke="Black" Canvas.Top="-56.5" Width="43.5" DataContext="{Binding Source={StaticResource AppStateSettingsDataSource}}" StrokeThickness="0"/>
+
+                    <Border x:Name="border" Visibility="{Binding CallOutVisible, ElementName=bCircle, Converter={StaticResource BooleanToVisibilityConverter}}" BorderThickness="0" Height="90" Canvas.Top="-118" Width="220" Background="{Binding Fill, ElementName=path}"  Canvas.Left="20">
+                        <Grid>
+                            <StackPanel x:Name="spAddress" Margin="30,4,0,0">
+                                <TextBlock  Text="{Binding Attributes[plane].Type}" Foreground="White" />
+                                <TextBlock  Text="{Binding Attributes[plane].Operator}" />
+                                <TextBlock  Text="{Binding Attributes[plane].Registration}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock>Speed:</TextBlock>
+                                    <TextBlock  Text="{Binding Attributes[plane].Speed}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock>Altitude:</TextBlock>
+                                    <TextBlock  Text="{Binding Attributes[plane].Altitude}"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel VerticalAlignment="Bottom" />
+                            <Image Source="plane.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="30" />
+
+                        </Grid>
+                    </Border>
+
+                    <mapIconMenu:ReferenceAlignPanel  HorizontalReferencePointAlignment="Center" VerticalReferencePointAlignment="Center" AlignReferencePoint="0,0" AllowRealign="False" Width="200" Height="200" Margin="-100,-100,0,0" >
+                        <mapIconMenu:MapMenu MenuEnabled="{Binding Path='Menu',ElementName=surfaceUserControl}"  Margin="0,0,0,0" x:Name="MKRoot" VerticalAlignment="Bottom">
+                            <mapIconMenu:MapMenuItem x:Name="bCircle" RootToolTip="User" Style="{DynamicResource MenuKillerItemStyle1}">
+                                <mapIconMenu:MapMenuItem.Header>
+                                    <Grid>
+                                        <Border Height="30" Width="30" Background="Black" CornerRadius="15">
+                                            <Image Source="plane.png" Width="20" Height="20" RenderTransformOrigin="0.5,0.5">
+                                                <Image.RenderTransform>
+                                                    <RotateTransform Angle="{Binding Attributes[plane].Angle}" CenterX="0.5" CenterY="0.5" />
+                                                </Image.RenderTransform>
+                                            </Image>
+                                        </Border>
+                                    </Grid>
+                                </mapIconMenu:MapMenuItem.Header>
+
+                                <!--<MapIconMenu:MapMenuItem  RootToolTip="Remove" Tap="MapMenuItem_Tap" >
+                                    <MapIconMenu:MapMenuItem.Header>
+                                        <Border Height="30" Width="30" Background="Black" CornerRadius="15">
+                                            <Image Source="/csGeoLayrs;component/icons/picture.png" Stretch="Fill"/>
+                                        </Border>
+                                    </MapIconMenu:MapMenuItem.Header>
+                                </MapIconMenu:MapMenuItem>-->
+                            </mapIconMenu:MapMenuItem>
+                        </mapIconMenu:MapMenu>
+                    </mapIconMenu:ReferenceAlignPanel>
+
+                </Canvas>
+               
+            </ControlTemplate>
+        </esri:MarkerSymbol.ControlTemplate>
+    </esri:MarkerSymbol>
+
+    <esri:MarkerSymbol x:Key="AirportSymbol">
+        <esri:MarkerSymbol.ControlTemplate>
+            <ControlTemplate>
+                <Canvas Width="30" Height="30" Background="Black">
+                    <Image Source="plane.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="30" />
+                </Canvas>
+
+            </ControlTemplate>
+        </esri:MarkerSymbol.ControlTemplate>
+    </esri:MarkerSymbol>
+
+    <esri:SimpleMarkerSymbol x:Key="MediumMarkerSymbol" Color="#FF00BB00" Size="12" Style="Circle" />
+
+</ResourceDictionary>

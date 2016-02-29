@@ -1,0 +1,14 @@
+Opdracht {Title}
+
+{Description}
+
+Namens {Signature}
+Gestart op {TimeStamp:yyyy.MM.dd HH:mm}
+
+Image: {Map}
+
+===============================================================================
+
+{TagResponses}
+
+Bye

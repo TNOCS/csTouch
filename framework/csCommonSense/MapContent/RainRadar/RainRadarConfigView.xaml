@@ -1,0 +1,54 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:csShared_Utils="clr-namespace:csShared.Utils" 
+             xmlns:Custom="http://schemas.microsoft.com/surface/2008" 
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:utils="clr-namespace:csCommon.Utils"
+             xmlns:wpfConverters="clr-namespace:WpfConverters"
+             mc:Ignorable="d" 
+             x:Class="csGeoLayers.Content.RainRadar.RainRadarConfigView" 
+             Foreground="Black">
+	<UserControl.Resources>
+        
+		<wpfConverters:NotNullVisibilityConverter x:Key="NotNullVisibilityConverter"/>
+		<DataTemplate x:Key="DataTemplate1">
+            <Grid Width="150" Height="150" cal:Message.Attach="[Event TouchDown] = [Action SetTag($eventArgs,$dataContext)]"  Background="#FF939393">
+				<TextBlock x:Name="Name" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Bottom" Foreground="White" FontSize="16" Margin="3,0,0,3"/>
+				<TextBlock x:Name="Value" HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Value}" VerticalAlignment="Top" Foreground="White" FontSize="24" Margin="0,10,10,0"/>
+			</Grid>
+		</DataTemplate>
+        
+
+
+    </UserControl.Resources>
+
+	<Grid>
+		<StackPanel>
+			<TextBlock TextWrapping="Wrap" Text="Updates" FontSize="29.333" Margin="0,20,0,0"/>
+			<StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+				<Custom:SurfaceButton x:Name="Start" Content="Start" Margin="0,0,10,0" Background="#FF9AE4E8"/>
+				<Custom:SurfaceButton x:Name="Stop" Content="Stop" Margin="0,0,10,0" Background="#FF9AE4E8"/>
+				<!--<Custom:SurfaceButton x:Name="Reset" Content="Reset" Margin="0,0,10,0" Background="#FF9AE4E8"/>-->
+			</StackPanel>
+			<TextBlock TextWrapping="Wrap" Text="Filters" FontSize="29.333" Margin="0,20,0,0"/>
+			<StackPanel Orientation="Vertical" Margin="20,0,0,0">
+				<Grid Height="200" >
+                    <Custom:SurfaceListBox x:Name="TwitterKeyword" Margin="0,0,0,0" d:LayoutOverrides="Height" SelectedValue="{Binding SelectedInterval, Mode=TwoWay}">
+                        <Custom:SurfaceListBoxItem>1</Custom:SurfaceListBoxItem>
+                        <Custom:SurfaceListBoxItem>2</Custom:SurfaceListBoxItem>
+                        <Custom:SurfaceListBoxItem>5</Custom:SurfaceListBoxItem>
+                        <Custom:SurfaceListBoxItem>10</Custom:SurfaceListBoxItem>
+                        <Custom:SurfaceListBoxItem>15</Custom:SurfaceListBoxItem>
+                    </Custom:SurfaceListBox>
+				</Grid>
+			</StackPanel>
+			<TextBlock TextWrapping="Wrap" Text="View" FontSize="29.333" Margin="0,20,0,0"/>
+			<StackPanel Orientation="Vertical" Margin="20,0,0,0">
+				<Custom:SurfaceCheckBox IsChecked="{Binding Layer.Notifications, Mode=TwoWay}" Content="Show Notifications" Margin="0" Foreground="Black"/>
+			</StackPanel>
+		</StackPanel>
+	</Grid>
+
+</UserControl>

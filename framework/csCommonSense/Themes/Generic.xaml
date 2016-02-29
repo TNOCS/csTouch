@@ -1,0 +1,271 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:menuKiller="clr-namespace:MenuKiller"
+    xmlns:controls="clr-namespace:csCommon.Controls"
+    xmlns:controls1="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
+    xmlns:custom="http://schemas.microsoft.com/surface/2008"
+    xmlns:pivotControl="clr-namespace:csCommon.csMapCustomControls.PivotControl"
+    xmlns:circularMenu="clr-namespace:csCommon.csMapCustomControls.CircularMenu"
+    xmlns:mapIconMenu="clr-namespace:csCommon.csMapCustomControls.MapIconMenu"
+    xmlns:mapIconMenu1="clr-namespace:csCommon.Controls.MapIconMenu">
+    <circularMenu:BorderCornerRadiusConverter x:Key="BorderCornerRadiusConverter" />
+ 
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFF" />
+    <SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />
+    <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
+    <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
+ 
+    <Style TargetType="pivotControl:PivotItem">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="pivotControl:PivotItem">
+                    <Grid Name="Panel"
+                          TextBlock.FontFamily="Segoe WP"
+                          TextBlock.FontWeight="Light"
+                          TextBlock.Foreground="Gray"
+                          TextBlock.FontSize="32">
+                        <ContentPresenter x:Name="ContentSite"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          ContentSource="Header"
+                                          Margin="10,2" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <!--<Setter TargetName="Panel" Property="Background" Value="LightSkyBlue" />-->
+                            <Setter TargetName="Panel" Property="TextBlock.FontWeight" Value="Regular" />
+                            <Setter TargetName="Panel" Property="TextBlock.Foreground" Value="Black" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type pivotControl:PivotControl}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type pivotControl:PivotControl}">
+                    <Grid KeyboardNavigation.TabNavigation="Local" MaxHeight="400">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      Grid.Row="0">
+                            <TabPanel Name="HeaderPanel"
+                                      Panel.ZIndex="1"
+                                      Margin="0,0,4,-1"
+                                      IsItemsHost="True"
+                                      KeyboardNavigation.TabIndex="1"
+                                      Background="Transparent" />
+                        </ScrollViewer>
+                        <Border Name="Border"
+                                Grid.Row="1"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="2"
+                                KeyboardNavigation.TabNavigation="Local"
+                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                KeyboardNavigation.TabIndex="2">
+                            <controls1:SurfaceScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                                           VerticalScrollBarVisibility="Auto">
+                                <ContentPresenter Name="PART_SelectedContentHost"
+                                              Margin="4" HorizontalAlignment="Stretch"
+                                              ContentSource="SelectedContent" />
+                            </controls1:SurfaceScrollViewer>
+                            <!--ContentTemplate="{StaticResource SwipeTemplate}"-->
+                            <!--<controls:TransitioningContentControl Name="PART_SelectedContentHost"
+                                              Margin="4" Content="{TemplateBinding SelectedContent}" />-->
+                            <!--<ContentPresenter Name="PART_SelectedContentHost"
+                                              Margin="4"
+                                              Content="SelectedContent" />-->
+                            <!--<ContentPresenter.Resources>
+                                    <DataTemplate DataType="{x:Type local:PivotItem}">
+                                        <Grid />
+                                    </DataTemplate>
+                                </ContentPresenter.Resources>-->
+
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush"
+                                    Value="{StaticResource DisabledBorderBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type circularMenu:CircularMenu}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type circularMenu:CircularMenu}">
+                    <Border Background="{TemplateBinding Property=BackgroundBrush}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Width="{TemplateBinding Property=BorderSize}"
+                            Height="{TemplateBinding Property=BorderSize}"
+                            CornerRadius="{TemplateBinding Converter={StaticResource BorderCornerRadiusConverter}, Property=BorderSize}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="ValidationStates" />
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid x:Name="Main" Height="{TemplateBinding Property=BorderSize}"
+                              Width="{TemplateBinding Property=BorderSize}">
+                            <Grid x:Name="gArcs" HorizontalAlignment="Stretch" Height="Auto"
+                                  VerticalAlignment="Stretch" Width="Auto" />
+                            <custom:SurfaceButton x:Name="Center" HorizontalAlignment="Center"
+                                                  
+                                                  Style="{DynamicResource CenterSurfaceButtonStyle}"
+                                                  VerticalAlignment="Center"
+                                                  Margin="0" Background="{x:Null}" BorderThickness="0" MinWidth="0"
+                                                  MinHeight="0" HorizontalContentAlignment="Center"
+                                                  VerticalContentAlignment="Center">
+                                <controls:ClippingBorder x:Name="cbCenter" BorderBrush="Black" BorderThickness="2"
+                                                         Background="White" CornerRadius="30">
+                                    <Grid Margin="4" IsHitTestVisible="False">
+                                        <Path x:Name="pBack"
+                                              Data="F1M1928.8,1024.07L1920.05,1024.07 1905.62,1009.64 1901.24,1005.26 1920.1,986.403 1928.78,986.403 1928.82,986.439 1913.09,1002.17 1954.58,1002.17 1954.58,1008.35 1913.09,1008.35 1928.8,1024.07z"
+                                              Stretch="Uniform" Fill="Black" Width="Auto" Height="Auto"
+                                              Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <RotateTransform Angle="0" />
+                                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Image x:Name="iCenterIcon" />
+                                    </Grid>
+                                </controls:ClippingBorder>
+                            </custom:SurfaceButton>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <ControlTemplate x:Key="MenuKillerButtonDefaulTemplate"
+                     TargetType="{x:Type Button}">
+        <ContentPresenter HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          x:Name="contentPresenter"
+                          Cursor="Hand" />
+    </ControlTemplate>
+
+    <Style x:Key="MenuKillerBtnStyle"
+           TargetType="{x:Type Button}">
+        <Setter Property="Template"
+                Value="{StaticResource MenuKillerButtonDefaulTemplate}" />
+    </Style>
+
+    <ControlTemplate x:Key="MenuKillerTemplate"
+                     TargetType="{x:Type mapIconMenu:MapMenu}">
+        <ContentPresenter />
+
+        <!--
+            Debateable, but using the more general approach is not necessary. It adds overhead, is slower and harder to databind.
+            Design decision for an API: Support the probable case, and have the crude cases available via re-templating.
+            Now, however, we are still bound to a TextBox. Hybrid approach is using the Textxt Field in the Border, but have the 
+            control epect any kind of content control.
+            -->
+
+        <!-- WARNING about the MARGIN ISSUE:
+                 this is bound to the size of the root control, which is not known to the template!! -->
+        <!--
+            <Border x:Name="PART_ToolTipBox" Background="Transparent" BorderThickness="0">
+                <TextBox IsReadOnly="True" Focusable="False" IsHitTestVisible="False" 
+                     Margin="0, 128, 0, 0" 
+                     TextBlock.FontWeight="Bold"
+                     BorderBrush="Transparent" BorderThickness="0" Background="Transparent" 
+                     Text="{TemplateBinding RootToolTip}" TextBlock.TextAlignment="Center" Width="128">
+                </TextBox>
+            </Border></Grid> -->
+
+        <!--
+        <Border BorderBrush="Silver" BorderThickness="0" CornerRadius="7">
+            <Grid>
+                <StackPanel>
+                    <ItemsPresenter/>
+                </StackPanel>
+            </Grid>
+        </Border>-->
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="MenuKillerItemTemplate"
+                     TargetType="{x:Type mapIconMenu:MapMenuItem}">
+        <mapIconMenu:ReferenceAlignPanel x:Name="PART_AlignPanel">
+            <mapIconMenu:ReferenceAlignPanel.Resources>
+                <mapIconMenu1:PanelVisibilityConverter x:Key="conv" />
+            </mapIconMenu:ReferenceAlignPanel.Resources>
+
+            <Button x:Name="PART_Button"
+                    Style="{StaticResource MenuKillerBtnStyle}">
+                <ContentPresenter ContentSource="Header" />
+            </Button>
+
+            <menuKiller:CircularPanel x:Name="PART_Panel"
+                                      IsItemsHost="True"
+                                      StartAngle="200"
+                                      Visibility="{TemplateBinding IsExpanded, Converter={StaticResource conv}}" />
+
+        </mapIconMenu:ReferenceAlignPanel>
+
+    </ControlTemplate>
+
+    <Style TargetType="{x:Type mapIconMenu:MapMenuItem}">
+        <Setter Property="Template"
+                Value="{StaticResource MenuKillerItemTemplate}" />
+    </Style>
+
+    <Style TargetType="{x:Type mapIconMenu:MapMenu}">
+        <Setter Property="Template"
+                Value="{StaticResource MenuKillerTemplate}" />
+    </Style>
+    <Style x:Key="SurfaceButtonCenterStyle" TargetType="{x:Type controls1:SurfaceButton}">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls1:SurfaceButton}">
+
+                    <Grid x:Name="Grid" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates" />
+                            <VisualStateGroup x:Name="FocusStates" />
+                            <VisualStateGroup x:Name="ValidationStates" />
+                        </VisualStateManager.VisualStateGroups>
+                        <ContentPresenter x:Name="Content" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.BasedOn>
+            <Style TargetType="{x:Type Control}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="SnapsToDevicePixels" Value="False" />
+                <Setter Property="FontFamily" Value="Segoe360" />
+                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="FontSize" Value="17" />
+
+                <Setter Property="Margin" Value="1" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                <Setter Property="BorderThickness" Value="2" />
+            </Style>
+        </Style.BasedOn>
+    </Style>
+    <Style x:Key="CenterSurfaceButtonStyle" TargetType="{x:Type custom:SurfaceButton}" />
+</ResourceDictionary>

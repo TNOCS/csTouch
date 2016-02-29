@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="csCommon.Plugins.Events.EventsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:events="clr-namespace:csCommon.Plugins.Events"
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:csEvents="clr-namespace:csEvents"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:wpfConverters="clr-namespace:WpfConverters"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance events:EventsViewModel}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <events:AttributeStatusFillConverter x:Key="AttributeStatusFillConverter" />
+        <Style x:Key="SurfaceButto" TargetType="{x:Type controls:SurfaceButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type controls:SurfaceButton}">
+                        <Border BorderBrush="Black" BorderThickness="0" Background="White" CornerRadius="10" Width="30"
+                                Height="30">
+                            <Path
+                                Data="M3.4749239,10.185359L8.9229882,10.234859 19.967267,10.332358 25.446634,10.379358C28.279866,10.405358,29.42838,11.828556,27.996263,13.544652L25.04693,17.077144C23.614612,18.790842,21.269584,21.596735,19.838367,23.310232L18.178247,25.296028 18.178247,36.790805C18.178247,37.590304,17.529739,38.236001,16.73293,38.236001L12.159376,38.236001C11.360566,38.236001,10.714759,37.590304,10.714759,36.790805L10.714759,25.527628 8.8499873,23.211232C7.4491003,21.471735,5.1546333,18.624142,3.7561772,16.884544L0.86943278,13.299853C-0.5353736,11.562956,0.64164034,10.159259,3.4749239,10.185359z M1.4140666,4.7150002L27.106696,4.7150002C27.8892,4.7150006 28.522001,5.3491311 28.522001,6.1291251 28.522001,6.9102194 27.8892,7.5430002 27.106696,7.5430002L1.4140666,7.5430002C0.63403553,7.5430002 2.682209E-07,6.9102194 0,6.1291251 2.682209E-07,5.3491311 0.63403553,4.7150006 1.4140666,4.7150002z M1.4140672,0L27.106696,0C27.8892,0 28.522001,0.63432217 28.522001,1.4156456 28.522001,2.1957951 27.8892,2.8300004 27.106696,2.8300004L1.4140672,2.8300004C0.63403553,2.8300004 2.682209E-07,2.1957951 0,1.4156456 2.682209E-07,0.63432217 0.63403553,0 1.4140672,0z"
+                                Stretch="Uniform" Fill="#FF000000" Width="26" Height="26" Margin="0,0,0,0"
+                                RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.75" ScaleY="0.75" />
+                                        <SkewTransform />
+                                        <RotateTransform />
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="0" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" Visibility="Collapsed">
+            <Label Margin="40,0,0,0" FontFamily="Segoe360" FontSize="18">Time</Label>
+            <Label Margin="30,0,0,0" FontFamily="Segoe360" FontSize="18">Description</Label>
+        </StackPanel>
+        <controls:SurfaceListBox x:Name="Alarms"
+                                 Grid.Row="1"
+                                 SelectedItem="{Binding SelectedEvent}"
+                                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <controls:SurfaceListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </controls:SurfaceListBox.ItemContainerStyle>
+            <controls:SurfaceListBox.ItemTemplate>
+                <DataTemplate DataType="csEvents:IEvent">
+                    <!--<Grid Background="{Binding State, Converter={StaticResource AttributeStatusFillConverter}}" Opacity="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=controls:SurfaceListBox}, Path=SelectedItem, Converter={StaticResource AttributeSelectedConverter}}" >-->
+                    <Grid x:Name="EventMessageGrid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"  />
+                            <ColumnDefinition Width="68" />
+                            <ColumnDefinition Width="*"   />
+                            <ColumnDefinition Width="Auto"  />
+                        </Grid.ColumnDefinitions>
+                        <Grid.Background>
+                            <MultiBinding Converter="{StaticResource AttributeStatusFillConverter}">
+                                <Binding Path="State" />
+                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=controls:SurfaceListBox}"
+                                         Path="SelectedItem" />
+                                <Binding />
+                            </MultiBinding>
+                        </Grid.Background>
+                        <Image           Grid.Row="0" Grid.Column="0" Source ="{Binding Icon}" Width="30" Height="30" Grid.RowSpan="2" Margin="5 0 0 0" />
+                        <TextBlock       Grid.Row="0" Grid.Column="1" Text="{Binding Date, StringFormat='{}{0:yyyy-MM-dd}'}" FontSize="12" HorizontalAlignment="Right" Margin="0 0 5 0" />
+                        <TextBlock       Grid.Row="0" Grid.Column="1" Text="{Binding Date, StringFormat='{}{0:HH:mm.ss}'}"   FontSize="12" HorizontalAlignment="Right" Margin="0 16 5 0" />
+                        <mui:BBCodeBlock Grid.Row="0" Grid.Column="2" BBCode ="{Binding Name}"        FontSize="12" VerticalAlignment="Top" TextWrapping="Wrap" 
+                                         Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=controls:SurfaceListBox}, ConverterParameter=145, Converter={wpfConverters:SubtractConverter}}" />
+                        <mui:BBCodeBlock Grid.Row="1" Grid.Column="2" BBCode ="{Binding Description}" FontSize="12" VerticalAlignment="Top" TextWrapping="Wrap"
+                                         Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=controls:SurfaceListBox}, ConverterParameter=145, Converter={wpfConverters:SubtractConverter}}" />
+                    </Grid>
+                </DataTemplate>
+            </controls:SurfaceListBox.ItemTemplate>
+        </controls:SurfaceListBox>
+        <StackPanel VerticalAlignment="Bottom" Grid.Row="2" Background="#FFBFBFBF" Visibility="{Binding ShowSortOrder,Converter={StaticResource BooleanToVisibilityConverter  }}">
+            <StackPanel VerticalAlignment="Bottom">
+                <Grid x:Name="GroupingOption">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <controls:SurfaceButton Content=""
+                                            cal:Message.Attach="[Event Click] = [Action OpenSortingMenu($dataContext,$source)]"
+                                            HorizontalAlignment="Left" Height="30"
+                                            Style="{DynamicResource SurfaceButto}" VerticalAlignment="Top" Width="30"
+                                            Background="Teal" />
+                    <StackPanel Grid.Column="1" Margin="5,0,0,0" Orientation="Vertical" d:LayoutOverrides="Height">
+                        <TextBlock TextWrapping="Wrap" Text="Sorting" VerticalAlignment="Top" Foreground="Black" />
+                        <TextBlock TextWrapping="Wrap" Text="{Binding CurrentSortingOrder}" FontSize="18.667"
+                                   FontWeight="Bold" Margin="0" Foreground="Black" />
+                    </StackPanel>
+                </Grid>
+                <controls:SurfaceCheckBox Content="Map Filter" Margin="0"
+                                          IsChecked="{Binding MapFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <controls:SurfaceCheckBox Content="Time Filter" Margin="0"
+                                          IsChecked="{Binding TimeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <!--<controls:SurfaceButton x:Name="Add" Content="Add" />-->
+        </StackPanel>
+    </Grid>
+
+</UserControl>

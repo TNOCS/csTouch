@@ -1,0 +1,24 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:csShared="clr-namespace:csShared"
+             x:Class="csCommon.Plugins.Dashboards.Toolbox.FocusTime.FocusTimeDashboardView">
+    <Grid>
+        <Viewbox HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 Stretch="Uniform">
+            <Grid Margin="10">
+                <StackPanel>
+                    <TextBlock FontSize="30"
+                               HorizontalAlignment="Center"
+                               Text="{Binding TimelineManager.FocusTime, StringFormat='{}{0:HH:mm:ss}', Source={x:Static csShared:AppStateSettings.Instance}}"
+                               FontFamily="pack://csCommon:,,,/Resources/Fonts/#Helvetica Neue" />
+                    <TextBlock FontSize="20"
+                               HorizontalAlignment="Center"
+                               Opacity="0.75"
+                               Text="{Binding TimelineManager.FocusTime, StringFormat='{}{0:dd MMMM yyyy}', Source={x:Static csShared:AppStateSettings.Instance}}"
+                               FontFamily="pack://csCommon:,,,/Resources/Fonts/#Helvetica Neue" />
+                </StackPanel>
+            </Grid>
+        </Viewbox>
+    </Grid>
+</UserControl>

@@ -1,0 +1,684 @@
+{
+ "Parameters": [
+  {
+   "IsResult": false,
+   "ModelName": "Pool fire",
+   "ValueUnit": "",
+   "Description": "Chemical name",
+   "ParameterType": 6,
+   "Name": "Chemical name",
+   "Data": {
+    "Chemical": {},
+    "Value": "-"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": false,
+   "ModelName": "Pool fire",
+   "ValueUnit": "kg",
+   "Description": "Total mass released",
+   "ParameterType": 1,
+   "Name": "Total mass released",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+    "Value": 10000,
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Mass"
+  },{
+   "IsResult": false,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m\/s",
+   "Description": "Wind speed at 10 m height",
+   "ParameterType": 1,
+   "Name": "Wind speed at 10m",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+    "Value": 2,
+    "MinInclusive": false
+   },
+   "ValueQuantity": "Velocity"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m",
+   "Description": "Equivalent diameter poolfire",
+   "ParameterType": 1,
+   "Name": "Max Diameter of the Pool Fire",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m",
+   "Description": "Max D\u00edameter top flame (length ellipse)",
+   "ParameterType": 1,
+   "Name": "Max Diameter top flame",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m2",
+   "Description": "Calculated pool surface area",
+   "ParameterType": 1,
+   "Name": "Pool surface pool fire",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Area"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "kg\/s",
+   "Description": "Combustion rate",
+   "ParameterType": 1,
+   "Name": "Combustion rate",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Mass rate"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "s",
+   "Description": "Duration of the pool fire",
+   "ParameterType": 1,
+   "Name": "Duration of fire",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Time"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "W\/m2",
+   "Description": "Surface emissive power flame",
+   "ParameterType": 1,
+   "Name": "Heat emission from surface",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "W\/m2",
+   "Description": "Surface emissive power (clear flame)",
+   "ParameterType": 1,
+   "Name": "Surface emissive power (max)",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "W\/m2",
+   "Description": "Surface emissive power (sooted flame)",
+   "ParameterType": 1,
+   "Name": "Surface emissive power (actual)",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "rad",
+   "Description": "Flame tilt",
+   "ParameterType": 1,
+   "Name": "Flame tilt",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Angle"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "K",
+   "Description": "Flame temperature",
+   "ParameterType": 1,
+   "Name": "Flame temperature",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Temperature"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m",
+   "Description": "Length of the flame",
+   "ParameterType": 1,
+   "Name": "Height of the Flame",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m",
+   "Description": "Height of clear fraction Flame",
+   "ParameterType": 1,
+   "Name": "Height of clear fraction Flame",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Weight ratio of HCL\/chemical",
+   "ParameterType": 1,
+   "Name": "Weight ratio of HCL\/chemical",
+   "Data": {
+    "Min": 0,
+    "Max": 100,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Weight ratio of NO2\/chemical",
+   "ParameterType": 1,
+   "Name": "Weight ratio of NO2\/chemical",
+   "Data": {
+    "Min": 0,
+    "Max": 100,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Weight ratio of SO2\/chemical",
+   "ParameterType": 1,
+   "Name": "Weight ratio of SO2\/chemical",
+   "Data": {
+    "Min": 0,
+    "Max": 100,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Weight ratio of CO2\/chemical",
+   "ParameterType": 1,
+   "Name": "Weight ratio of CO2\/chemical",
+   "Data": {
+    "Min": 0,
+    "Max": 100,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Weight ratio of H2O\/chemical",
+   "ParameterType": 1,
+   "Name": "Weight ratio of H2O\/chemical",
+   "Data": {
+    "Min": 0,
+    "Max": 100,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "W\/m2",
+   "Description": "Heat radiation at Xd",
+   "ParameterType": 1,
+   "Name": "Heat radiation level at location",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Atmospheric Transmissivity at Xd",
+   "ParameterType": 1,
+   "Name": "Atmospheric transmissivity",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Viewfactor at Xd",
+   "ParameterType": 1,
+   "Name": "View factor",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "s*(W\/m2)^4\/3",
+   "Description": "Heat radiation dose at Xd",
+   "ParameterType": 1,
+   "Name": "Heat Radiation Dose",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Heat radiation dose"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m",
+   "Description": "1 kW\/m2 Heat radiation distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation first contour at",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m",
+   "Description": "3 kW\/m2 Heat radiation distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation second contour at",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m",
+   "Description": "10 kW\/m2 Heat radiation distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation third contour at",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Percentage first degree burns at Xd",
+   "ParameterType": 1,
+   "Name": "Percentage Fatality 1st Degree Burns",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Percentage second degree burns at Xd",
+   "ParameterType": 1,
+   "Name": "Percentage Fatality 2nd Degree Burns",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Percentage third degree burns at Xd",
+   "ParameterType": 1,
+   "Name": "Percentage Fatality 3rd Degree Burns",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m",
+   "Description": "1% First degree burns distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation first degree distance",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m",
+   "Description": "1% Second degree burns distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation second degree distance",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "m",
+   "Description": "1% Third degree (Lethal) burns distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation third degree distance",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "W\/m2",
+   "Description": "Heat radiation",
+   "ParameterType": 5,
+   "Name": "Heat radiation vs. distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Viewfactor",
+   "ParameterType": 5,
+   "Name": "Viewfactor vs Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "s*(W\/m2)^4\/3",
+   "Description": "Heat load",
+   "ParameterType": 5,
+   "Name": "Heat load vs. distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Heat radiation dose"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "First Degree Burns",
+   "ParameterType": 5,
+   "Name": "First Degree Burns vs. Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Second Degree Burns",
+   "ParameterType": 5,
+   "Name": "Second Degree Burns vs. Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Third Degree (Lethal) Burns",
+   "ParameterType": 5,
+   "Name": "Lethal Burns (Third Degree) vs. Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "",
+   "Description": "Pool fire area",
+   "ParameterType": 3,
+   "Name": "Pool contour (Pool Fire)",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "",
+   "Description": "Flame area top surface",
+   "ParameterType": 3,
+   "Name": "Flame area in XY plane (top view)",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "W\/m2",
+   "Description": "1 kW\/m2 Heat radiation contour",
+   "ParameterType": 3,
+   "Name": "First heat radiation contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "W\/m2",
+   "Description": "3 kW\/m2 Heat radiation contour",
+   "ParameterType": 3,
+   "Name": "Second heat radiation contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "W\/m2",
+   "Description": "10 kW\/m2 Heatradiation contour",
+   "ParameterType": 3,
+   "Name": "Third heat radiation contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "",
+   "Description": "1% first degree burns",
+   "ParameterType": 3,
+   "Name": "1% first degree burns contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "",
+   "Description": "1% second degree burns",
+   "ParameterType": 3,
+   "Name": "1% second degree burns contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "",
+   "Description": "1% lethal burns",
+   "ParameterType": 3,
+   "Name": "1% lethal burns contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "W\/m2",
+   "Description": "Heat radiation Level",
+   "ParameterType": 4,
+   "Name": "Heat radiation grid",
+   "Data": {
+    "Value": ""
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "Pool fire",
+   "ValueUnit": "-",
+   "Description": "Mortality outdoors",
+   "ParameterType": 4,
+   "Name": "Fraction of mortality outdoors grid",
+   "Data": {
+    "Value": ""
+   },
+   "ValueQuantity": "Dimensionless"
+  }]
+}

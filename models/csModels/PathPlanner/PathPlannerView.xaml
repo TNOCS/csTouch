@@ -1,0 +1,108 @@
+﻿<UserControl x:Class="csModels.PathPlanner.PathPlannerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="http://schemas.microsoft.com/surface/2008"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:controls2="clr-namespace:csShared.Controls;assembly=csCommon"
+             xmlns:pathPlanner1="clr-namespace:csModels.PathPlanner"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance pathPlanner1:PathPlannerViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:SurfaceListBox x:Name="VisitedLocations"
+                                 HorizontalContentAlignment="Stretch" 
+                                 VerticalContentAlignment="Stretch">
+            <controls:SurfaceListBox.ItemTemplate>
+                <DataTemplate DataType="pathPlanner1:VisitedLocation">
+                    <Grid Margin="0 0 0 -10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{Binding Title}" 
+                                   Grid.Row="0"
+                                   Grid.Column="1"/>
+
+                        <TextBlock Text="{Binding TimeOfVisit, StringFormat='visited at {0:HH:mm:ss}.'}" 
+                                   Grid.Row="1" 
+                                   Grid.Column="1"
+                                   FontStyle="Italic"
+                                   FontSize="12" />
+                        
+                        <controls:SurfaceButton x:Name="sbDelete"
+                                                Grid.Row="0"
+                                                Grid.Column="2"
+                                                Grid.RowSpan="2"
+                                                Margin="1"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                cal:Message.Attach="[Event Click]=[Action RemoveVisitedLocation($dataContext)]">
+                            <Path
+                                Data="M33.977998,27.684L33.977998,58.102997 41.373998,58.102997 41.373998,27.684z M14.841999,27.684L14.841999,58.102997 22.237998,58.102997 22.237998,27.684z M4.0319996,22.433001L52.183,22.433001 52.183,63.999001 4.0319996,63.999001z M15.974,0L40.195001,0 40.195001,7.7260003 56.167001,7.7260003 56.167001,16.000999 0,16.000999 0,7.7260003 15.974,7.7260003z"
+                                Stretch="Uniform" Fill="#FF000000" Width="15" Height="15" Margin="0,0,0,0"
+                                RenderTransformOrigin="0.5,0.5" />
+                        </controls:SurfaceButton>
+                        <controls:SurfaceButton x:Name="sbSearchTime"
+                                                Grid.Row="0"
+                                                Grid.Column="3"
+                                                Grid.RowSpan="2"
+                                                Margin="1"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                cal:Message.Attach="[Event Click]=[Action JumpToTime($dataContext)]">
+                            <Path
+                                Data="M41.040945,31.660296L41.040945,35.470463 42.311043,35.470463 42.311043,31.660296z M49.901594,21.900247L49.901594,23.170304 53.701754,23.170304 53.701754,21.900247z M41.670988,9.7797785C41.111018,9.7797785,40.651029,10.229987,40.651029,10.799828L40.651029,21.900247 29.550252,21.900247C28.980271,21.900247 28.530292,22.360221 28.530293,22.920296 28.530292,23.48037 28.980271,23.940344 29.550252,23.940344L41.670988,23.940344C42.241093,23.940344,42.691071,23.48037,42.691071,22.920296L42.691071,10.799828C42.691071,10.229987,42.241093,9.7797785,41.670988,9.7797785z M41.111018,7.0697389C49.701509,7.0697391 56.662018,14.029902 56.662018,22.619995 56.662018,31.210576 49.701509,38.170737 41.111018,38.170737 32.530537,38.170737 25.560018,31.210576 25.560018,22.619995 25.560018,14.029902 32.530537,7.0697391 41.111018,7.0697389z M40.993925,4.2578611C30.904695,4.2578611 22.725319,12.437896 22.725319,22.527938 22.725319,32.617981 30.904695,40.798016 40.993925,40.798016 51.083157,40.798016 59.262533,32.617981 59.262533,22.527938 59.262533,12.437896 51.083157,4.2578611 40.993925,4.2578611z M41.136831,9.5367432E-07C41.909128,-0.00024271011 42.688795,0.038468361 43.473736,0.11784363 56.012779,1.4078493 65.152082,12.607896 63.882177,25.15795 62.612276,37.708003 51.403131,46.83804 38.854089,45.558033 34.414428,45.118035 30.404733,43.408028 27.114984,40.848015L8.9263725,56.158082C6.6365471,58.088089 3.2068081,57.778088 1.2769547,55.488076 -0.66289711,53.198067 -0.35292053,49.768052 1.9369049,47.828045L20.385498,32.327979C18.745623,28.767964 18.015678,24.717947 18.435646,20.53793 19.626181,8.7722552 29.552377,0.003663063 41.136831,9.5367432E-07z"
+                                Stretch="Uniform" Fill="#FF000000" Width="15" Height="15" Margin="0,0,0,0"
+                                RenderTransformOrigin="0.5,0.5" />
+                        </controls:SurfaceButton>
+
+                        <controls:SurfaceButton cal:Message.Attach="[Event Click]=[Action SelectTransition($dataContext, $source)]" 
+                                                Margin="0 5 0 0"
+                                                Grid.Row="0" 
+                                                Grid.Column="0" 
+                                                Grid.RowSpan="2" >
+                            <Image Width="26" Height="26" Source="{Binding Transition, Converter={pathPlanner1:ConvertTransitionToImage}}" />
+                        </controls:SurfaceButton>
+
+
+                    </Grid>
+                </DataTemplate>
+            </controls:SurfaceListBox.ItemTemplate>
+        </controls:SurfaceListBox>
+
+        <Grid Height="40" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <controls2:KeyboardTextBox x:Name="VisitedLocationName" 
+                                       Focusable="True" 
+                                       Watermark="Name"
+                                       FontSize="18" 
+                                       HorizontalAlignment="Stretch" />
+            <controls:SurfaceButton cal:Message.Attach="[Event Click]=[Action SelectColor($source)]" 
+                                    Grid.Column="1" >
+                <Ellipse Width="26" Height="26" Fill="{Binding SelectedColor}" />
+            </controls:SurfaceButton>
+
+            <controls:SurfaceButton x:Name="AddLocation" 
+                                    VerticalContentAlignment="Bottom"
+                                    Grid.Column="2">Add location
+            </controls:SurfaceButton>
+        </Grid>
+
+    </Grid>
+</UserControl>

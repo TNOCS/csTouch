@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="csDataServerPlugin.ucPoiPreview"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:csCommon.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:thirdParty="clr-namespace:csShared.ThirdParty"
+             x:Name="SurfaceUserControl"
+             d:DesignHeight="30"
+             d:DesignWidth="30"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:PoiIconConverter x:Key="PoiIconConverter" />
+    </UserControl.Resources>
+
+    <Viewbox Stretch="Uniform">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup" />
+        </VisualStateManager.VisualStateGroups>
+        <Border x:Name="bMain"
+                Background="Black"
+                BorderThickness="0"
+                CornerRadius="18">
+            <Grid>
+                <Image x:Name="iImage"
+                       Width="28"
+                       Visibility="Collapsed"
+                       thirdParty:Loader.CacheHeight="28"
+                       thirdParty:Loader.DisplayOption="Preview"
+                       thirdParty:Loader.DisplayWaitingAnimationDuringLoading="True"
+                       thirdParty:Loader.Source="{Binding Converter={StaticResource PoiIconConverter}}"
+                       thirdParty:Loader.SourceType="ExternalResource" />
+                <Path x:Name="pFreehand"
+                      Margin="0"
+                      Data="M31,245 C49.510405,226.4896 56.04927,175.59015 84,170 84,169.33333 84,168.66667 84,168 107.79007,163.24199 136.21205,155.65997 159,143 179.00339,131.88701 192.76519,115.17404 198,89 198.66667,89 199.33333,89 200,89 207.08708,71.282309 222.78301,74.249618 241,67"
+                      Stretch="Fill"
+                      StrokeThickness="{Binding StrokeWidth}"
+                      Visibility="Collapsed">
+                    <Path.Stroke>
+                        <SolidColorBrush Color="{Binding StrokeColor}" />
+                    </Path.Stroke>
+                </Path>
+                <Path x:Name="pPolygon"
+                      Margin="8,5,7.5,14.5"
+                      Data="M35,5 L8.0454545,16.606557 9.5,33.5 41.5,34.5 28.409091,26.278689 z"
+                      Stretch="Fill"
+                      Visibility="Collapsed">
+                    <Path.Stroke>
+                        <SolidColorBrush Color="{Binding StrokeColor}" />
+                    </Path.Stroke>
+                    <Path.Fill>
+                        <SolidColorBrush Color="{Binding FillColor}" />
+                    </Path.Fill>
+                </Path>
+                <Path x:Name="pPolyline"
+                      Margin="7,12,11,6"
+                      Data="M41,5 L10,36"
+                      Stretch="Fill"
+                      StrokeThickness="{Binding StrokeWidth}"
+                      Visibility="Collapsed">
+                    <Path.Stroke>
+                        <SolidColorBrush Color="{Binding StrokeColor}" />
+                    </Path.Stroke>
+                </Path>
+                <Rectangle x:Name="pRectangle"
+                           Margin="7,12,11,14.5"
+                           Visibility="Collapsed">
+                    <Rectangle.Stroke>
+                        <SolidColorBrush Color="{Binding StrokeColor}" />
+                    </Rectangle.Stroke>
+                    <Rectangle.Fill>
+                        <SolidColorBrush Color="{Binding FillColor}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Ellipse x:Name="pCircle"
+                         Width="30"
+                         Height="30"
+                         Margin="5"
+                         Stretch="Uniform"
+                         Visibility="Collapsed">
+                    <Ellipse.Stroke>
+                        <SolidColorBrush Color="{Binding StrokeColor}" />
+                    </Ellipse.Stroke>
+                    <Ellipse.Fill>
+                        <SolidColorBrush Color="{Binding FillColor}" />
+                    </Ellipse.Fill>
+                </Ellipse>
+                <TextBlock x:Name="tbInnerText"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="16" />
+            </Grid>
+        </Border>
+    </Viewbox>
+</UserControl>

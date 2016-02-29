@@ -1,0 +1,296 @@
+﻿<UserControl x:Class="csBookmarkPlugin.BookmarkView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:s="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
+             xmlns:Controls="clr-namespace:csShared.Controls"
+             xmlns:pivotControl="clr-namespace:csCommon.csMapCustomControls.PivotControl"
+             xmlns:utils2="clr-namespace:csCommon.Utils"
+             xmlns:wpfConverters="clr-namespace:WpfConverters">
+    <UserControl.Resources>
+
+        <wpfConverters:ReverseBooleanActiveOpacityConverter x:Key="ReverseBooleanActiveOpacityConverter" />
+
+        <DataTemplate x:Key="BookmarkTemplate">
+            <Grid Width="{Binding ElementName=Bookmarks, Path=ActualWidth}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <s:SurfaceButton Grid.Row="0"
+                                 Margin="1 1 1 -12"
+                                 Height="20"
+                                 FontSize="18"
+                                 Micro:Message.Attach="[Event Click]=[Action GoTo($dataContext)]">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Path
+                            Data="F1M582.961,492.242L557.554,517.865 557.554,467.049 582.961,467.049 582.961,492.242z"
+                            Stretch="Uniform" Fill="#FF000000" Width="28" Height="28" Margin="0,0,0,0"
+                            RenderTransformOrigin="0.5,0.5" />
+                        <TextBlock Text="{Binding Id}" 
+                                   Grid.Column="1"
+                                   TextTrimming="CharacterEllipsis"/>
+                    </Grid>
+                </s:SurfaceButton>
+                <s:SurfaceButton x:Name="sbDelete"
+                                 Grid.Column="1"
+                                 Margin="1 1 8 -12"
+                                 Height="20"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Center"
+                                 Micro:Message.Attach="[Event Click]=[Action Delete($dataContext)]">
+                    <Path
+                        Data="M33.977998,27.684L33.977998,58.102997 41.373998,58.102997 41.373998,27.684z M14.841999,27.684L14.841999,58.102997 22.237998,58.102997 22.237998,27.684z M4.0319996,22.433001L52.183,22.433001 52.183,63.999001 4.0319996,63.999001z M15.974,0L40.195001,0 40.195001,7.7260003 56.167001,7.7260003 56.167001,16.000999 0,16.000999 0,7.7260003 15.974,7.7260003z"
+                        Stretch="Uniform" Fill="#FF000000" Width="15" Height="15" Margin="0,0,0,0"
+                        RenderTransformOrigin="0.5,0.5" />
+                </s:SurfaceButton>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DashboardTemplate">
+            <Grid Height="35">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" 
+                            Grid.Column="1"
+                            Margin="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                    <s:SurfaceButton Micro:Message.Attach="[Event Click]=[Action Pin($dataContext)]"
+                                     Opacity="{Binding IsPinned, Converter={StaticResource ReverseBooleanActiveOpacityConverter}}">
+                        <Path
+                            Data="F1M1525.83,266.24L1529.12,256.359 1539,246.478 1542.29,249.771 1552.17,246.478 1542.29,236.598 1545.59,233.304 1559.25,212.907 1539,226.718 1535.71,230.008 1540.88,235.189 1525.83,220.131 1522.53,230.008 1525.83,233.304 1515.95,243.181 1506.06,246.478 1525.83,266.24z"
+                            Stretch="Uniform" Fill="#FF000000" Width="15" Height="15" Margin="0,0,0,0"
+                            RenderTransformOrigin="0.5,0.5" />
+                    </s:SurfaceButton>
+                    <s:SurfaceButton x:Name="sbDelete"
+                                     Micro:Message.Attach="[Event Click]=[Action RemoveDashboard($dataContext)]">
+                        <Path
+                            Data="M33.977998,27.684L33.977998,58.102997 41.373998,58.102997 41.373998,27.684z M14.841999,27.684L14.841999,58.102997 22.237998,58.102997 22.237998,27.684z M4.0319996,22.433001L52.183,22.433001 52.183,63.999001 4.0319996,63.999001z M15.974,0L40.195001,0 40.195001,7.7260003 56.167001,7.7260003 56.167001,16.000999 0,16.000999 0,7.7260003 15.974,7.7260003z"
+                            Stretch="Uniform" Fill="#FF000000" Width="15" Height="15" Margin="0,0,0,0"
+                            RenderTransformOrigin="0.5,0.5" />
+                    </s:SurfaceButton>
+                </StackPanel>
+                <s:SurfaceButton Grid.Row="0"
+                                 Margin="0"
+                                 FontSize="18"
+                                 Micro:Message.Attach="[Event Click]=[Action GoToDashboard($dataContext)];[Event TouchDown]=[Action GoToDashboard($dataContext)]">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Path Grid.Column="0"
+                              Data="M0,43.998999L52.426998,43.998999 52.426998,48.718999 43.22031,48.718999 45.964998,64 40.458103,64 37.713417,48.718999 29.219999,48.718999 29.219999,63.999999 23.711999,63.999999 23.711999,48.718999 14.825638,48.718999 12.082291,63.999999 6.5739994,63.999999 9.3187943,48.718999 0,48.718999z M31.505999,38.054999L42.394999,38.054999 42.394999,41.054999 31.505999,41.054999z M2.8659973,10.620998L49.561,10.620998 49.561,41.132998 46.133924,41.132998 46.133924,14.498638 6.5742226,14.498638 6.5742226,41.132998 2.8659973,41.132998z M23.263998,0L29.443998,0 29.443998,7.4179993 23.263998,7.4179993z"
+                              Stretch="Uniform" Fill="#FF000000" Width="28" Height="28" Margin="0,0,0,0"
+                              RenderTransformOrigin="0.5,0.5" />
+                        <TextBlock Grid.Column="1" 
+                                   Text="{Binding Title}" 
+                                   TextTrimming="CharacterEllipsis" />
+                    </Grid>
+                </s:SurfaceButton>
+
+            </Grid>
+        </DataTemplate>
+
+        <Style x:Key="SurfaceButtonStyle1" TargetType="{x:Type s:SurfaceButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type s:SurfaceButton}">
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Margin="0" Background="White">
+
+        <pivotControl:PivotControl x:Name="Sections"
+                                   Margin="0"
+                                   SelectedIndex="0" HorizontalContentAlignment="Stretch"
+                                   Background="{x:Null}">
+
+            <pivotControl:PivotItem Header="Locations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <Grid VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <s:SurfaceListBox x:Name="Bookmarks"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      HorizontalContentAlignment="Stretch"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                      ItemTemplate="{DynamicResource BookmarkTemplate}" 
+                                      Background="{x:Null}" />
+                    <StackPanel Grid.Row="1">
+                        <!--<TextBlock Width="Auto"
+                                   FontSize="16"
+                                   Foreground="#FFFFFFFF"
+                                   Text="Add Bookmark"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />-->
+                        <Controls:InfoBox Visibility="Collapsed" Text="Your bookmark will save the existing map position. Please provide a name to remember." HorizontalAlignment="Left" Width="400" Margin="0,5" />
+                        <!--<TextBlock Width="Auto"
+                                   FontSize="16"
+                                   Foreground="#FFFFFFFF"
+                                   Text="Add Bookmark"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />-->
+                        <Grid Height="45" Margin="5,-5,5,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+
+                            <Controls:KeyboardTextBox  x:Name="stbName"
+                        		Height="30"
+                        		Margin="3,0,5,0"
+                        		VerticalAlignment="Center"
+                        		FontSize="18.667"
+                        		Watermark="Enter new bookmark name"
+                        		TextWrapping="Wrap">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TouchDown">
+                                        <Micro:ActionMessage MethodName="AddBmTextFocus">
+                                            <Micro:Parameter Value="$eventArgs" />
+                                        </Micro:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+
+                            </Controls:KeyboardTextBox>
+
+                            <s:SurfaceButton x:Name="AddButton2"
+                                    Grid.Column="1" Micro:Message.Attach="[Event Click]=[Action AddPlan()]"
+                                    Width="40"
+                                    Height="40">
+
+                                <Canvas Width="36.15"
+                                        Height="47"
+                                        Margin="12,0,0,0">
+                                    <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                            x:Name="svg3"
+                                            Canvas.Left="0"
+                                            Canvas.Top="0"
+                                            Width="20"
+                                            Height="20">
+                                       
+                                        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                              x:Name="path839"
+                                              Canvas.Left="-13"
+                                              Canvas.Top="-2"
+                                              Width="35.2"
+                                              Height="36.396"
+                                              Data="M 12.725695 15.919083 L 12.725695 8.8915273 C 12.725695 7.9084376 12.994508 7.1096772 13.532135 6.4952461 C 14.069762 5.8654544 14.837801 5.5505585 15.836252 5.5505585 C 16.834702 5.5505585 17.602741 5.8654544 18.140369 6.4952461 C 18.693357 7.1096772 18.969851 7.9084376 18.969851 8.8915273 L 18.969851 15.919083 L 25.905241 15.919083 C 26.919053 15.919083 27.717813 16.195577 28.301523 16.748565 C 28.900593 17.286192 29.200128 18.046551 29.200128 19.029640 C 29.200128 20.028091 28.900593 20.803810 28.301523 21.356798 C 27.717813 21.909786 26.919053 22.186280 25.905241 22.186280 L 18.969851 22.186280 L 18.969851 29.190795 C 18.969851 30.189245 18.693357 30.995686 18.140369 31.610117 C 17.587381 32.224548 16.819342 32.531764 15.836252 32.531764 C 14.853162 32.531764 14.085123 32.224548 13.532135 31.610117 C 12.994508 30.995686 12.725695 30.189245 12.725695 29.190795 L 12.725695 22.186280 L 5.7903036 22.186280 C 4.8072138 22.186280 4.0084534 21.886745 3.3940223 21.287675 C 2.7949518 20.673244 2.4954170 19.920565 2.4954170 19.029640 C 2.4954170 18.046551 2.7872715 17.286192 3.3709811 16.748565 C 3.9700516 16.195577 4.7764923 15.919083 5.7903036 15.919083 L 12.725695 15.919083 z "
+                                              Fill="#FF333333"
+                                              RenderTransformOrigin="0.5,0.5"
+                                              Stretch="Fill"
+                                              StrokeThickness="1">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                                                    <SkewTransform />
+                                                    <RotateTransform />
+                                                    <TranslateTransform />
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                    </Canvas>
+                                    <!--  <TextBlock TextWrapping="Wrap" Text="Add" Foreground="#FF333333" Margin="9,35,0,0" HorizontalAlignment="Center"/>  -->
+                                </Canvas>
+                            </s:SurfaceButton>
+                            <!--
+                    <s:SurfaceButton x:Name="AddPlanButton" Grid.Column="1" Width="40" Height="40">
+                    <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TouchDown">
+                    <CaliburnFramework_Framework:ActionMessage MethodName="AddPlan2">
+                    
+                    </CaliburnFramework_Framework:ActionMessage>
+                    </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <Canvas Width="36.15" Height="47">
+                    <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" x:Name="svg3" Width="20" Height="20" Canvas.Left="0" Canvas.Top="0"><Canvas.Resources><LinearGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="linearGradient900" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1"><LinearGradientBrush.GradientStops><GradientStopCollection><GradientStop Color="#FF000000" Offset="0"/><GradientStop Color="#FFFFFFFF" Offset="1"/></GradientStopCollection></LinearGradientBrush.GradientStops></LinearGradientBrush><LinearGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="linearGradient903" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1"><LinearGradientBrush.GradientStops><GradientStopCollection><GradientStop Color="#FF000000" Offset="0"/><GradientStop Color="#FFFFFFFF" Offset="1"/></GradientStopCollection></LinearGradientBrush.GradientStops></LinearGradientBrush><LinearGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="linearGradient904" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1"><LinearGradientBrush.GradientStops><GradientStopCollection><GradientStop Color="#FF000000" Offset="0"/><GradientStop Color="#FFFFFFFF" Offset="1"/></GradientStopCollection></LinearGradientBrush.GradientStops></LinearGradientBrush><LinearGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="linearGradient905" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1"><LinearGradientBrush.GradientStops><GradientStopCollection><GradientStop Color="#FF000000" Offset="0"/><GradientStop Color="#FFFFFFFF" Offset="1"/></GradientStopCollection></LinearGradientBrush.GradientStops></LinearGradientBrush><LinearGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="linearGradient906" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1"><LinearGradientBrush.GradientStops><GradientStopCollection><GradientStop Color="#FF000000" Offset="0"/><GradientStop Color="#FFFFFFFF" Offset="1"/></GradientStopCollection></LinearGradientBrush.GradientStops></LinearGradientBrush><LinearGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="linearGradient907" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1"><LinearGradientBrush.GradientStops><GradientStopCollection><GradientStop Color="#FF000000" Offset="0"/><GradientStop Color="#FFFFFFFF" Offset="1"/></GradientStopCollection></LinearGradientBrush.GradientStops></LinearGradientBrush></Canvas.Resources><Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="path839" Fill="#FF333333" StrokeThickness="1" Data="M 12.725695 15.919083 L 12.725695 8.8915273 C 12.725695 7.9084376 12.994508 7.1096772 13.532135 6.4952461 C 14.069762 5.8654544 14.837801 5.5505585 15.836252 5.5505585 C 16.834702 5.5505585 17.602741 5.8654544 18.140369 6.4952461 C 18.693357 7.1096772 18.969851 7.9084376 18.969851 8.8915273 L 18.969851 15.919083 L 25.905241 15.919083 C 26.919053 15.919083 27.717813 16.195577 28.301523 16.748565 C 28.900593 17.286192 29.200128 18.046551 29.200128 19.029640 C 29.200128 20.028091 28.900593 20.803810 28.301523 21.356798 C 27.717813 21.909786 26.919053 22.186280 25.905241 22.186280 L 18.969851 22.186280 L 18.969851 29.190795 C 18.969851 30.189245 18.693357 30.995686 18.140369 31.610117 C 17.587381 32.224548 16.819342 32.531764 15.836252 32.531764 C 14.853162 32.531764 14.085123 32.224548 13.532135 31.610117 C 12.994508 30.995686 12.725695 30.189245 12.725695 29.190795 L 12.725695 22.186280 L 5.7903036 22.186280 C 4.8072138 22.186280 4.0084534 21.886745 3.3940223 21.287675 C 2.7949518 20.673244 2.4954170 19.920565 2.4954170 19.029640 C 2.4954170 18.046551 2.7872715 17.286192 3.3709811 16.748565 C 3.9700516 16.195577 4.7764923 15.919083 5.7903036 15.919083 L 12.725695 15.919083 z " Height="36.396" Stretch="Fill" Width="35.2" RenderTransformOrigin="0.5,0.5" Canvas.Left="-13" Canvas.Top="-2">
+                    <Path.RenderTransform>
+                    <TransformGroup>
+                    <ScaleTransform ScaleX="0.5" ScaleY="0.5"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                    </TransformGroup>
+                    </Path.RenderTransform>
+                    </Path></Canvas>
+                    <TextBlock TextWrapping="Wrap" Text="Add" Foreground="#FF333333" Margin="9,35,0,0" HorizontalAlignment="Center"/>
+                    </Canvas>
+                    
+                    </s:SurfaceButton>
+                -->
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+
+
+            </pivotControl:PivotItem>
+            <pivotControl:PivotItem Header="Dashboards" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <Grid VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <s:SurfaceListBox x:Name="Dashboards"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      HorizontalContentAlignment="Stretch"
+                                      ItemTemplate="{DynamicResource DashboardTemplate}" Background="{x:Null}" />
+
+
+                    <Grid Grid.Row="1">
+                        <StackPanel>
+                            <Controls:InfoBox Visibility="Collapsed" Text="Your dashboard will save the existing state (map style, position, layers, etc.). Please provide a name to remember." HorizontalAlignment="Left" Width="400" Margin="0,5" />
+
+                            <Grid Height="45" Margin="5,-5,5,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                             <Controls:KeyboardTextBox x:Name="DashboardName"
+                                                      Height="30" MinWidth="300"
+                                                      Margin="3,0,5,0"
+                                                      VerticalAlignment="Center"
+                                                          Watermark="Enter new dashboard name"
+                                                      FontSize="18.667"
+                                                      TextWrapping="Wrap" />
+                           
+                            
+                            <s:SurfaceButton Content="Add" Grid.Column="1"
+                                             Micro:Message.Attach="[Event Click]=[Action AddDashboard()]" />
+                        </Grid>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </pivotControl:PivotItem>
+        </pivotControl:PivotControl>
+
+
+    </Grid>
+
+</UserControl>

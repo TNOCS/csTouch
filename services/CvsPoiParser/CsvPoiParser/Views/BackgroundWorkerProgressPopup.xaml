@@ -1,0 +1,35 @@
+﻿<Window x:Class="PoiConvertor.Views.BackgroundWorkerProgressPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Progress"
+        MinHeight="20" Width="250" SizeToContent="Height"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
+    <DockPanel LastChildFill="True" Margin="10">
+        <DockPanel Dock="Bottom" LastChildFill="False" Margin="0,5,0,0">
+            <Button Name="CancelButton" DockPanel.Dock="Right" Content="Cancel" Click="CancelButton_OnClick"/>
+        </DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <Label Content="Estimated time remaining: " Padding="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Name="TimeRemainingLabel" Content="0" Padding="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Content="s" Padding="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <Label Content="Elapsed time: " Padding="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Name="TimeElapsedLabel" Content="0" Padding="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Content="s" Padding="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Stretch" DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <Label Content="At item " Padding="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Name="ProgressLabel" Padding="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"
+               Content="{Binding UpdateSourceTrigger=PropertyChanged, Path=ProgressStruct.NumDone}" />
+            <Label Content=" of " Padding="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Name="TotalLabel" Padding="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"
+               Content="{Binding UpdateSourceTrigger=PropertyChanged, Path=ProgressStruct.NumTotal}" />
+        </StackPanel>
+        <ProgressBar Name="Progress" Height="10" Margin="0,0,0,10" DockPanel.Dock="Top"
+                     Minimum="0"
+                     Maximum="{Binding UpdateSourceTrigger=PropertyChanged, Path=ProgressStruct.NumTotal}"
+                     Value="{Binding UpdateSourceTrigger=PropertyChanged, Path=ProgressStruct.NumDone}" />
+    </DockPanel>
+</Window>

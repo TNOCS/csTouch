@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:complexType name="PositionType">
+    <!-- degrees -->
+    <xs:attribute name="Latitude" type="xs:double" />
+    <!-- degrees -->
+    <xs:attribute name="Longitude" type="xs:double" />
+    <xs:attribute name="Altitude" type="xs:double" />
+  </xs:complexType>
+
+  <xs:complexType name="AreaType">
+    <!-- degrees -->
+    <xs:attribute name="MinorAxis" type="xs:double" />
+    <!-- degrees -->
+    <xs:attribute name="MajorAxis" type="xs:double" />
+    <xs:attribute name="Orientation" type="xs:int" />
+  </xs:complexType>
+
+  <xs:complexType name="CourseType">
+    <!-- degrees -->
+    <xs:attribute name="Heading" type="xs:double" />
+    <!-- degrees -->
+    <xs:attribute name="Elevation" type="xs:double" />
+    <xs:attribute name="Speed" type="xs:double" />
+  </xs:complexType>
+
+
+  <xs:complexType name="EntityType">
+    <xs:sequence>
+      <xs:element name="Position" type="PositionType" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Course" type="CourseType" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+
+    <!-- Marking -->
+    <xs:attribute name="Name" type="xs:string" use="required" />
+
+    <!-- Entity Type '1:2:3:4:5:6:7' -->
+    <xs:attribute name="Classification" type="xs:string" />
+
+    <!-- Force Id 'OTHER', 'FRIENDLY', 'OPPOSING', 'NEUTRAL' -->
+    <xs:attribute name="Identification" type="xs:string" />
+
+    <!-- 'NoDamage', 'SlightDamage', 'ModerateDamage', 'Destroyed' -->
+    <xs:attribute name="DamageState" type="xs:string" />
+
+    <!-- True if the entity active bit is set (bit 23) -->
+    <xs:attribute name="Active" type="xs:boolean" />
+
+    <!-- Sim Time -->
+    <xs:attribute name="Time" type="xs:dateTime" />
+  </xs:complexType>
+
+
+  <xs:complexType name="FireType">
+    <xs:sequence>
+      <xs:element name="Position" type="PositionType" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Course" type="CourseType" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+
+    <!-- Munition Type '1:2:3:4:5:6:7' -->
+    <xs:attribute name="Classification" type="xs:string" />
+    <!-- Rounds per minute -->
+    <xs:attribute name="Rate" type="xs:int" />
+    <!-- Number of rounds fired -->
+    <xs:attribute name="Quantity" type="xs:int" />
+    <!-- Fuse (detonator)
+		0000 Other
+		0010 Intelligent Influence
+		0020 Sensor
+		0030 Self-destruct
+		0040 Ultra Quick
+		0050 Body
+		0060 Deep Intrusion
+		0100 Multifunction
+		0200 Point Detonation (PD)
+		0300 Base Detonation (BD)
+		1000 Contact
+		1100 Contact, Instant (Impact)
+		1200 Contact, Delayed
+		1201 10 ms delay
+		1202 20 ms delay
+		1205 50 ms delay
+		1206 60 ms delay
+		1210 100 ms delay
+		1212 125 ms delay
+		1225 250 ms delay
+		1300 Contact, Electronic (Oblique Contact)
+		1400 Contact, Graze
+		1500 Contact, Crush
+		1600 Contact, Hydrostatic
+		1700 Contact, Mechanical
+		1800 Contact, Chemical
+		1900 Contact, Piezoelectric
+		1910 Contact, Point Initiating
+		1920 Contact, Point Initiating, Base Detonating
+		1930 Contact, Base Detonating
+		1940 Contact, Ballistic Cap and Base
+		1950 Contact, Base
+		1960 Contact, Nose
+		1970 Contact, Fitted in Standoff Probe
+		1980 Contact, Non-aligned
+		2000 Timed
+		2100 Timed, Programmable
+		2200 Timed, Burnout
+		2300 Timed, Pyrotechnic
+		2400 Timed, Electronic
+		2500 Timed, Base Delay
+		2600 Timed, Reinforced Nose Impact Delay
+		2700 Timed, Short Delay Impact
+		2701 10 ms delay
+		2702 20 ms delay
+		2705 50 ms delay
+		2706 60 ms delay
+		2710 100 ms delay
+		2712 125 ms delay
+		2725 250 ms delay
+		2800 Timed, Nose Mounted Variable Delay
+		2900 Timed, Long Delay Side
+		2910 Timed, Selectable Delay
+		2920 Timed, Impact
+		2930 Timed, Sequence
+		3000 Proximity
+		3100 Proximity, Active Laser
+		3200 Proximity, Magnetic (Magpolarity)
+		3300 Proximity, Active Radar (Doppler Radar)
+		3400 Proximity, Radio Frequency (RF)
+		3500 Proximity, Programmable
+		3600 Proximity, Programmable, Prefragmented
+		3700 Proximity, Infrared
+		4000 Command
+		4100 Command, Electronic, Remotely Set
+		5000 Altitude
+		5100 Altitude, Radio Altimeter
+		5200 Altitude, Air Burst
+		6000 Depth
+		7000 Acoustic
+		8000 Pressure
+		8010 Pressure, Delay
+		8100 Inert
+		8110 Dummy
+		8120 Practice
+		8130 Plug Representing
+		8150 Training
+		9000 Pyrotechnic
+		9010 Pyrotechnic, Delay
+		9100 Electro-optical
+		9110 Electromechanical
+		9120 Electromechanical, Nose
+		9200 Strikerless
+		9210 Strikerless, Nose Impact
+		9220 Strikerless, Compression-Ignition
+		9300 Compression-Ignition
+		9310 Compression-Ignition, Strikerless, Nose Impact
+		9400 Percussion
+		9410 Percussion, Instantaneous
+		9500 Electronic
+		9510 Electronic, Internally Mounted
+		9520 Electronic, Range Setting
+		9530 Electronic, Programmed
+		9600 Mechanical
+		9610 Mechanical, Nose
+		9620 Mechanical, Tail
+	-->
+    <xs:attribute name="Fuse" type="xs:int" />
+    <!-- Warhead
+		0000 Other
+		0010 Cargo (Variable Submunitions)
+		0020 Fuel/Air Explosive
+		0030 Glass Beads
+		0031 1 um
+		0032 5 um
+		0033 10 um
+		1000 High Explosive (HE)
+		1100 HE, Plastic
+		1200 HE, Incendiary
+		1300 HE, Fragmentation
+		1400 HE, Antitank
+		1500 HE, Bomblets
+		1600 HE, Shaped Charge
+		1610 HE, Continuous Rod
+		1615 HE, Tungsten Ball
+		1620 HE, Blast Fragmentation
+		1625 HE, Steerable Darts with HE
+		1630 HE, Darts
+		1635 HE, Flechettes
+		1640 HE, Directed Fragmentation
+		1645 HE, Semi-Armor Piercing (SAP)
+		1650 HE, Shaped Charge Fragmentation
+		1655 HE, Semi-Armor Piercing, Fragmentation
+		1660 HE, Hollow Charge
+		1665 HE, Double Hollow Charge
+		1670 HE, General Purpose
+		1675 HE, Blast Penetrator
+		1680 HE, Rod Penetrator
+		1685 HE, Antipersonnel
+		2000 Smoke
+		3000 Illumination
+		4000 Practice
+		5000 Kinetic
+		6000 Mines
+		7000 Nuclear
+		7010 Nuclear, IMT
+		8000 Chemical, General
+		8100 Chemical, Blister Agent
+		8110 HD (Mustard)
+		8115 Thickened HD (Mustard)
+		8120 Dusty HD (Mustard)
+		8200 Chemical, Blood Agent
+		8210 AC (HCN)
+		8215 CK (CNCI)
+		8220 CG (Phosgene)
+		8300 Chemical, Nerve Agent
+		8310 VX
+		8315 Thickened VX
+		8320 Dusty VX
+		8325 GA (Tabun)
+		8330 Thickened GA (Tabun)
+		8335 Dusty GA (Tabun)
+		8340 GB (Sarin)
+		8345 Thickened GB (Sarin)
+		8350 Dusty GB (Sarin)
+		8355 GD (Soman)
+		8360 Thickened GD (Soman)
+		8365 Dusty GD (Soman)
+		8370 GF
+		8375 Thickened GF
+		8380 Dusty GF
+		9000 Biological
+		9100 Biological, Virus
+		9200 Biological, Bacteria
+		9300 Biological, Rickettsia
+		9400 Biological, Genetically Modified Micro-organisms
+		9500 Biological, Toxin
+	-->
+    <xs:attribute name="Warhead" type="xs:int" />
+
+    <!-- Sim Time -->
+    <xs:attribute name="Time" type="xs:dateTime" />
+  </xs:complexType>
+
+
+  <xs:complexType name="DetonationType">
+    <xs:sequence>
+      <xs:element name="Position" type="PositionType" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Course" type="CourseType" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+
+    <!-- Munition Type '1:2:3:4:5:6:7' -->
+    <xs:attribute name="Classification" type="xs:string" />
+
+    <!-- Detonation Result
+	     0 Other
+         1 Entity Impact
+         2 Entity Proximate Detonation
+         3 Ground Impact
+         4 Ground Proximate Detonation
+         5 Detonation
+         6 None or No Detonation (Dud)
+         7 HE hit, small
+         8 HE hit, medium
+         9 HE hit, large
+         10 Armor-piercing hit
+         11 Dirt blast, small
+         12 Dirt blast, medium
+         13 Dirt blast, large
+         14 Water blast, small
+         15 Water blast, medium
+         16 Water blast, large
+         17 Air hit
+         18 Building hit, small
+         19 Building hit, medium
+         20 Building hit, large
+         21 Mine-clearing line charge
+         22 Environment object impact
+         23 Environment object proximate detonation
+         24 Water Impact
+         25 Air Burst
+         26 Kill with fragment type 1
+         27 Kill with fragment type 2
+         28 Kill with fragment type 3
+         29 Kill with fragment type 1 after fly-out failure
+         30 Kill with fragment type 2 after fly-out failure
+         31 Miss due to fly-out failure
+         32 Miss due to end-game failure
+         33 Miss due to fly-out and end-game failure
+    -->
+    <xs:attribute name="DetonationResult" type="xs:int" />
+    <xs:attribute name="Rate" type="xs:int" />
+    <xs:attribute name="Quantity" type="xs:int" />
+    <xs:attribute name="Fuse" type="xs:int" />
+    <xs:attribute name="Warhead" type="xs:int" />
+
+    <!-- Sim Time -->
+    <xs:attribute name="Time" type="xs:dateTime" />
+  </xs:complexType>
+
+
+  <xs:complexType name="PointOfOriginType">
+    <xs:sequence>
+      <xs:element name="Position" type="PositionType" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Area" type="AreaType" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+
+    <!-- Sim Time -->
+    <xs:attribute name="Time" type="xs:dateTime" />
+    <xs:attribute name="TrackNumber" type="xs:int" />
+  </xs:complexType>
+
+
+  <xs:complexType name="PointOfImpactType">
+    <xs:sequence>
+      <xs:element name="Position" type="PositionType" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Area" type="AreaType" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+
+    <!-- Sim Time -->
+    <xs:attribute name="Time" type="xs:dateTime" />
+    <xs:attribute name="TrackNumber" type="xs:int" />
+  </xs:complexType>
+
+
+  <xs:complexType name="TrackType">
+    <xs:sequence>
+      <xs:element name="Position" type="PositionType" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+
+    <!-- Sim Time -->
+    <xs:attribute name="Time" type="xs:dateTime" />
+    <xs:attribute name="TrackNumber" type="xs:int" />
+  </xs:complexType>
+
+
+  <xs:element name="Message">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Entity" type="EntityType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="Fire" type="FireType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="Detonation" type="DetonationType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="PointOfOrigin" type="PointOfOriginType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="PointOfImpact" type="PointOfImpactType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="Track" type="TrackType" minOccurs="0" maxOccurs="1" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+
+</xs:schema>

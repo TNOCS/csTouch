@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="csAppraisalPlugin.Controls.Gauge"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Viewbox Width="32">
+        <Grid>
+            <Grid Name="backgroundGrid" Width="32" Height="32" >
+                <Ellipse Fill="#FF000000" Name="Fill" />
+            </Grid>
+            <Path Data="F1M31.9258,2.66919C15.5654,2.66919 2.30273,15.9323 2.30273,32.2968 2.30273,48.6575 15.5654,61.9192 31.9258,61.9192 48.2864,61.9192 61.5527,48.6575 61.5527,32.2968 61.5527,15.9323 48.2864,2.66919 31.9258,2.66919z M22.8698,18.0287L25.3492,16.8241 30.5482,27.5298 28.0677,28.7356 22.8698,18.0287z M31.708,38.4453C29.2285,38.4453 27.22,36.4348 27.22,33.957 27.22,31.4752 29.2285,29.4648 31.708,29.4648 34.1875,29.4648 36.1998,31.4752 36.1998,33.957 36.1998,36.4348 34.1875,38.4453 31.708,38.4453z M52.1797,32.6459C51.9912,21.7317 43.1016,12.9387 32.1436,12.9387 21.1855,12.9387 12.2979,21.7317 12.1107,32.6459L7.6048,32.6459C7.79327,19.2473 18.7054,8.44263 32.1436,8.44263 45.5833,8.44263 56.4935,19.2473 56.6823,32.6459L52.1797,32.6459z" Stretch="Uniform" Fill="#FFFFFFFF" Width="28" Height="28" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" />
+        </Grid>
+    </Viewbox>
+</UserControl>

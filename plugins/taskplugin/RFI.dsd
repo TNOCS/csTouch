@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Content Id="00A888FC-1842-4C53-9FB2-E8F0EEE2BFB1" Name="RFI">
+	<settings>
+		<ServiceSetting CanEdit="true" CanCreate="true" SyncDelay="500" ShareOnline="false" TabBarVisible="false">
+      <Labels />
+		</ServiceSetting>
+	</settings>
+	<poitypes />
+	<pois />
+	<eventtypes />
+	<events />
+	<tracks />
+	<tasks />
+</Content>

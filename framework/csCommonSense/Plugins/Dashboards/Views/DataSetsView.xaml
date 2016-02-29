@@ -1,0 +1,547 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sensors1="clr-namespace:csGeoLayers.Sensors"
+	xmlns:SlideTab="clr-namespace:csShared.Controls.SlideTab"
+    xmlns:csShared="clr-namespace:csShared"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:Custom="http://schemas.microsoft.com/surface/2008"
+    xmlns:Controls="clr-namespace:csShared.Controls"
+    xmlns:csDataServerPlugin="clr-namespace:csDataServerPlugin"
+    x:Class="csCommon.Plugins.DashboardPlugin.DataSetsView"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+		<ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/csCommon;component/Resources/Styles/Simple Styles.xaml" />
+                <ResourceDictionary Source="/csCommon;component/Resources/Styles/BlackStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+			<csDataServerPlugin:ReverseBooleanVisiblityConverter x:Key="ReverseBooleanVisiblityConverter"/>
+        <CollectionViewSource x:Key="SensorsSet" Source="{Binding SelectedSensorSets}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Category" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+
+        <DataTemplate x:Key="DataSetTemplate">
+        	<Grid ToolTip="{Binding Description}" d:DataContext="{d:DesignData DataSet}">
+        		<Grid.ColumnDefinitions>
+        			<ColumnDefinition Width="*" />
+        			<ColumnDefinition Width="Auto" />
+        			<ColumnDefinition Width="Auto" />
+        		</Grid.ColumnDefinitions>
+        		<TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Title}"
+        			VerticalAlignment="Top" FontSize="18.667" />
+        		<TextBlock HorizontalAlignment="Right" Text="{Binding FocusValue, StringFormat=F2}"
+        			Grid.Column="1"
+        			VerticalAlignment="Top" FontSize="18.667" />
+        		<StackPanel Grid.Column="2" Margin="0" Orientation="Horizontal">
+        			<Custom:SurfaceButton x:Name="Pin" cal:Message.Attach="[Event Click]=[Action PinDataSet($dataContext)]" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top">
+        				<Path
+        					Data="F1M1525.83,266.24L1529.12,256.359 1539,246.478 1542.29,249.771 1552.17,246.478 1542.29,236.598 1545.59,233.304 1559.25,212.907 1539,226.718 1535.71,230.008 1540.88,235.189 1525.83,220.131 1522.53,230.008 1525.83,233.304 1515.95,243.181 1506.06,246.478 1525.83,266.24z"
+        					Stretch="Uniform" Fill="#FF000000" RenderTransformOrigin="0.3,0.3" Width="25" Height="25"
+        					Margin="0" />
+        			</Custom:SurfaceButton>
+        			<sensors1:ucSensor Width="30"
+        				Height="30"
+        				Margin="0"
+        				HorizontalAlignment="Right"
+        				DataSet="{Binding}" />
+        		</StackPanel>
+        		<!--<TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Title}"
+                           VerticalAlignment="Top" FontSize="18.667" />
+                <TextBlock HorizontalAlignment="Right" Text="{Binding FocusValue, StringFormat=F2}"
+                           Margin="0,0,40,0"
+                           VerticalAlignment="Top" FontSize="18.667" />
+                <sensors1:ucSensor Width="30"
+                                   Height="30"
+                                   Margin="0,0,4,0"
+                                   HorizontalAlignment="Right"
+                                   DataSet="{Binding}" />-->
+        	</Grid>
+        </DataTemplate>
+
+        <Style x:Key="ContainerStyle" TargetType="{x:Type GroupItem}">
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate>
+        				<csShared:SurfaceExpander Margin="5 0"
+        					Background="#30FFFFFF"
+        					IsExpanded="True">
+        					<csShared:SurfaceExpander.Header>
+        						<TextBlock FontWeight="Bold" Text="{Binding Name}" FontSize="24" Margin="5 0" />
+        					</csShared:SurfaceExpander.Header>
+        					<ItemsPresenter />
+        				</csShared:SurfaceExpander>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        </Style>
+		<Style x:Key="SlideTabControlStyle1" TargetType="{x:Type SlideTab:SlideTabControl}">
+			<Setter Property="Padding" Value="2" />
+			<Setter Property="HorizontalContentAlignment" Value="Center" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			<Setter Property="Background" Value="White" />
+			<Setter Property="BorderBrush" Value="#FFACACAC" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type SlideTab:SlideTabControl}">
+						<Grid x:Name="templateRoot" ClipToBounds="True" SnapsToDevicePixels="True"
+							KeyboardNavigation.TabNavigation="Local">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition x:Name="ColumnDefinition0" />
+								<ColumnDefinition x:Name="ColumnDefinition1" Width="0" />
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition x:Name="RowDefinition0" Height="Auto" />
+								<RowDefinition x:Name="RowDefinition1" Height="*" />
+							</Grid.RowDefinitions>
+							<Border Grid.Column="0" Margin="20,0,0,0" Grid.Row="0" Height="50" BorderThickness="0"
+								BorderBrush="Black">
+								<TabPanel x:Name="HeaderPanel" Background="{x:Null}" IsItemsHost="True"
+									KeyboardNavigation.TabIndex="1" Panel.ZIndex="1" />
+							</Border>
+							<Border x:Name="ContentPanel" BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}" Grid.Column="0"
+								KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1"
+								KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
+								<ContentPresenter x:Name="PART_SelectedContentHost"
+									ContentTemplate="{TemplateBinding SelectedContentTemplate}"
+									Content="{TemplateBinding SelectedContent}"
+									ContentStringFormat="{TemplateBinding SelectedContentStringFormat}"
+									ContentSource="SelectedContent" Margin="{TemplateBinding Padding}"
+									SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+							</Border>
+							<Border BorderBrush="Black" BorderThickness="0,0,0,1" HorizontalAlignment="Left"
+								Height="50" Grid.RowSpan="2" VerticalAlignment="Top" Width="20" />
+						</Grid>
+						<ControlTemplate.Triggers>
+							<Trigger Property="TabStripPlacement" Value="Bottom">
+								<Setter Property="Grid.Row" TargetName="HeaderPanel" Value="1" />
+								<Setter Property="Grid.Row" TargetName="ContentPanel" Value="0" />
+								<Setter Property="Height" TargetName="RowDefinition0" Value="*" />
+								<Setter Property="Height" TargetName="RowDefinition1" Value="Auto" />
+								<Setter Property="Margin" TargetName="HeaderPanel" Value="2,0,2,2" />
+							</Trigger>
+							<Trigger Property="TabStripPlacement" Value="Left">
+								<Setter Property="Grid.Row" TargetName="HeaderPanel" Value="0" />
+								<Setter Property="Grid.Row" TargetName="ContentPanel" Value="0" />
+								<Setter Property="Grid.Column" TargetName="HeaderPanel" Value="0" />
+								<Setter Property="Grid.Column" TargetName="ContentPanel" Value="1" />
+								<Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto" />
+								<Setter Property="Width" TargetName="ColumnDefinition1" Value="*" />
+								<Setter Property="Height" TargetName="RowDefinition0" Value="*" />
+								<Setter Property="Height" TargetName="RowDefinition1" Value="0" />
+								<Setter Property="Margin" TargetName="HeaderPanel" Value="2,2,0,2" />
+							</Trigger>
+							<Trigger Property="TabStripPlacement" Value="Right">
+								<Setter Property="Grid.Row" TargetName="HeaderPanel" Value="0" />
+								<Setter Property="Grid.Row" TargetName="ContentPanel" Value="0" />
+								<Setter Property="Grid.Column" TargetName="HeaderPanel" Value="1" />
+								<Setter Property="Grid.Column" TargetName="ContentPanel" Value="0" />
+								<Setter Property="Width" TargetName="ColumnDefinition0" Value="*" />
+								<Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto" />
+								<Setter Property="Height" TargetName="RowDefinition0" Value="*" />
+								<Setter Property="Height" TargetName="RowDefinition1" Value="0" />
+								<Setter Property="Margin" TargetName="HeaderPanel" Value="0,2,2,2" />
+							</Trigger>
+							<Trigger Property="IsEnabled" Value="False">
+								<Setter Property="TextElement.Foreground" TargetName="templateRoot"
+									Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+        	</Style>
+			<Style x:Key="TabItemStyle2" TargetType="{x:Type TabItem}">
+				<Setter Property="FocusVisualStyle" Value="{StaticResource TabItemFocusVisual}" />
+				<Setter Property="Foreground" Value="White" />
+				<Setter Property="BorderBrush" Value="{StaticResource TabControlNormalBorderBrush}" />
+				<Setter Property="Background" Value="{StaticResource ButtonNormalBackground}" />
+				<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+				<Setter Property="VerticalContentAlignment" Value="Stretch" />
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type SlideTab:SlideTabItem}">
+							<Grid x:Name="grid" SnapsToDevicePixels="true" Margin="0">
+								<Border x:Name="Bd"  Height="Auto"
+									BorderThickness="0,0,0,1" Background="{x:Null}" BorderBrush="Black"
+									Margin="0,5,0,0">
+									<ContentPresenter ContentSource="Header" />
+								</Border>
+							</Grid>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsSelected" Value="False">
+									<Setter Property="Panel.ZIndex" Value="1" />
+									<Setter Property="Margin" TargetName="Bd" Value="0" />
+								</Trigger>
+								<Trigger Property="Selector.IsSelected" Value="True">
+									<Setter Property="BorderBrush" TargetName="Bd" Value="Black" />
+									<Setter Property="BorderThickness" TargetName="Bd" Value="1,1,1,0" />
+									<Setter Property="Margin" TargetName="grid" Value="0" />
+									<Setter Property="CornerRadius" TargetName="Bd" Value="0" />
+									<Setter Property="Margin" TargetName="Bd" Value="0,5,0,0" />
+								</Trigger>
+								<Trigger Property="IsEnabled" Value="false">
+									<Setter Property="BorderBrush" TargetName="Bd"
+										Value="{StaticResource TabItemDisabledBorderBrush}" />
+									<Setter Property="Foreground"
+										Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+        	</Style>
+			<DataTemplate x:Key="DashboardTemplate">
+				<Grid>
+					<Border Background="Black" CornerRadius="5" Width="40" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top">
+						<Viewbox Stretch="Fill" Margin="6">
+							<Grid Height="88.583" Width="94.627">
+								<Path Data="M61.352,34.599C60.224,34.282,59.033,34.956,58.719,36.1L50.119,67.534C49.957,67.527 49.796,67.506 49.633,67.506 45.598,67.506 41.978,69.749 40.187,73.361 37.607,78.565 39.739,84.9 44.944,87.482 46.413,88.212 47.987,88.583 49.621,88.583 53.654,88.583 57.272,86.34 59.063,82.728 61.647,77.526 59.513,71.191 54.309,68.607 54.298,68.602 54.286,68.598 54.275,68.592L62.855,37.23C63.166,36.089,62.495,34.911,61.352,34.599z M55.225,80.825C54.162,82.968 52.015,84.299 49.621,84.299 48.654,84.299 47.723,84.079 46.848,83.646 43.761,82.114 42.495,78.356 44.025,75.267 45.09,73.124 47.237,71.793 49.633,71.793 50.598,71.793 51.531,72.013 52.404,72.446 55.491,73.979 56.757,77.738 55.225,80.825z M49.625,15.151C24.813,15.151 4.625,35.338 4.625,60.151 4.625,62.518 6.544,64.437 8.911,64.437 11.278,64.437 13.197,62.518 13.197,60.151 13.197,40.064 29.538,23.722 49.626,23.722 69.714,23.722 86.055,40.063 86.055,60.151 86.055,62.518 87.974,64.437 90.341,64.437 92.708,64.437 94.627,62.518 94.627,60.151 94.625,35.338 74.437,15.151 49.625,15.151z" Fill="White" Height="Auto" />
+							</Grid>
+						</Viewbox>
+					</Border>
+					<TextBlock HorizontalAlignment="Left"  Text="{Binding Title}" VerticalAlignment="Top" FontSize="28" Margin="50,0,0,0" MaxWidth="300"/>
+					<Custom:SurfaceToggleButton x:Name="surfaceToggleButton" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Background="{x:Null}" Visibility="{Binding IsEmpty, Converter={StaticResource ReverseBooleanVisiblityConverter}}">
+						<Path Data="F1M60.9043,41.6863C57.7236,39.6523 41.5319,29.1797 32.4893,23.332 33.1949,17.4545 30.6182,11.4167 25.3102,7.98975 20.0208,4.57422 13.4778,4.68884 8.41565,7.72009L22.7796,17.0052 22.3782,25.129 15.1432,28.8373 0.76886,19.5496C0.0845947,25.4115 2.66895,31.4285 7.95862,34.8463 13.2617,38.2709 19.8206,38.142 24.888,35.0925 33.9541,40.9545 50.2184,51.4688 53.303,53.4492 57.6168,56.2239 65.3626,44.5326 60.9043,41.6863z" Stretch="Uniform" Width="15" Height="15" Margin="0" RenderTransformOrigin="0.5,0.5" Fill="#FF898989"/>
+					</Custom:SurfaceToggleButton>
+					<Grid HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Top" Width="Auto" Visibility="{Binding IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=surfaceToggleButton}" Margin="25,50,0,0" Background="{x:Null}">
+						<StackPanel Height="Auto" VerticalAlignment="Stretch" Width="Auto" Margin="0,10,0,0">
+							<TextBlock HorizontalAlignment="Left" Height="Auto" TextWrapping="Wrap" Text="Title" Width="Auto" Foreground="Black" FontFamily="Segoe360" FontSize="16"/>							
+							<Controls:KeyboardTextBox Height="32" TextWrapping="Wrap" Text="{Binding Title, BindsDirectlyToSource=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+							<Controls:PopupButton Options="Map,Blue,White,Orange,Green" Value="{Binding BackgroundColor, BindsDirectlyToSource=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cal:Message.Attach="[Event ValueChanged]=[Action BackgroundChanged()]" />
+							<TextBlock HorizontalAlignment="Left" Height="Auto" TextWrapping="Wrap" Text="Opacity" Width="Auto" Foreground="Black" FontFamily="Segoe360" FontSize="16"/>
+                            <Custom:SurfaceSlider HorizontalAlignment="Stretch" Height="Auto" Style="{StaticResource BlackSliderStyle}" Width="Auto" Maximum="1" Foreground="Black" VerticalAlignment="Top" FontFamily="Segoe360" FontSize="16" MinHeight="0" Value="{Binding Opacity}" LargeChange="0.1"/>
+							<Custom:SurfaceCheckBox Content="Can Edit" Height="Auto" Margin="0" Style="{DynamicResource BlackCheckBox}" Width="Auto" Foreground="Black" FontFamily="Segoe360" FontSize="16" Padding="5,0,5,5" IsChecked="{Binding CanEdit, Mode=TwoWay}"/>
+							<Custom:SurfaceCheckBox Content="Hide Timeline" Height="Auto" Margin="0" Style="{DynamicResource BlackCheckBox}" Width="Auto" Foreground="Black" FontFamily="Segoe360" FontSize="16" Padding="5,0,5,5" IsChecked="{Binding HideTimeline, Mode=TwoWay}"/>
+							<StackPanel Orientation="Horizontal">
+								<Custom:SurfaceButton cal:Message.Attach="[Event Click]=[Action RemoveDashboard($dataContext)]" x:Name="DeleteDashboard" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Background="{x:Null}">
+									<Path Data="M33.977998,27.684L33.977998,58.102997 41.373998,58.102997 41.373998,27.684z M14.841999,27.684L14.841999,58.102997 22.237998,58.102997 22.237998,27.684z M4.0319996,22.433001L52.183,22.433001 52.183,63.999001 4.0319996,63.999001z M15.974,0L40.195001,0 40.195001,7.7260003 56.167001,7.7260003 56.167001,16.000999 0,16.000999 0,7.7260003 15.974,7.7260003z" Stretch="Uniform" Width="15" Height="15" Margin="0" RenderTransformOrigin="0.5,0.5" Fill="Black"/>
+								</Custom:SurfaceButton>
+								<Custom:SurfaceButton cal:Message.Attach="[Event Click]=[Action SetDefaultDashboard($dataContext)]" x:Name="DefaultDashboard" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Background="{x:Null}" Visibility="{Binding IsDefault, Converter={StaticResource ReverseBooleanVisiblityConverter}}">
+									<Path Data="M31.427649,15.523999L53.103002,34.871683 53.103002,59.723391C53.088601,60.666094 52.466603,61.263796 51.961408,61.544996 51.426911,61.845797 50.850717,61.972101 50.232221,61.976L38.688001,61.976C38.2909,61.976 37.902205,61.821096 37.619008,61.544996 37.340407,61.272898 37.179908,60.890093 37.179908,60.502092L37.179908,48.548944 25.677389,48.548944 25.677389,60.502092C25.677389,60.890093 25.514991,61.272898 25.235993,61.544996 24.953094,61.821096 24.564398,61.976 24.1673,61.976L12.622781,61.976C12.008585,61.972101 11.428489,61.845797 10.895992,61.544996 10.390396,61.263796 9.7670005,60.666094 9.752,59.723391L9.752,34.871683z M31.430007,0C32.412786,0,33.395349,0.34765434,34.172341,1.0429621L61.536054,25.469772C63.191937,26.947757 63.306836,29.45413 61.791253,31.072613 60.273667,32.685896 57.703996,32.796495 56.048413,31.31991L31.427569,9.3424339 6.8067472,31.31991C6.0245249,32.015303 5.0434551,32.358999 4.0678854,32.358999 2.9643769,32.358999 1.8680081,31.925505 1.0659571,31.072613L1.0623569,31.066113C-0.44769764,29.45413,-0.33539391,26.945057,1.3191938,25.469772L28.686399,1.0429621C29.46424,0.34765434,30.44723,0,31.430007,0z" Stretch="Uniform" Width="15" Height="15" Margin="0" RenderTransformOrigin="0.5,0.5" Fill="Black"/>
+								</Custom:SurfaceButton>
+							</StackPanel>
+						</StackPanel>
+					</Grid>
+					<Border BorderBrush="Black" BorderThickness="0" HorizontalAlignment="Left" Height="15" VerticalAlignment="Top" Width="15" Background="#FF19B401" CornerRadius="3" Margin="30,30,0,0" Visibility="{Binding IsDefault, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<Path Data="M31.427649,15.523999L53.103002,34.871683 53.103002,59.723391C53.088601,60.666094 52.466603,61.263796 51.961408,61.544996 51.426911,61.845797 50.850717,61.972101 50.232221,61.976L38.688001,61.976C38.2909,61.976 37.902205,61.821096 37.619008,61.544996 37.340407,61.272898 37.179908,60.890093 37.179908,60.502092L37.179908,48.548944 25.677389,48.548944 25.677389,60.502092C25.677389,60.890093 25.514991,61.272898 25.235993,61.544996 24.953094,61.821096 24.564398,61.976 24.1673,61.976L12.622781,61.976C12.008585,61.972101 11.428489,61.845797 10.895992,61.544996 10.390396,61.263796 9.7670005,60.666094 9.752,59.723391L9.752,34.871683z M31.430007,0C32.412786,0,33.395349,0.34765434,34.172341,1.0429621L61.536054,25.469772C63.191937,26.947757 63.306836,29.45413 61.791253,31.072613 60.273667,32.685896 57.703996,32.796495 56.048413,31.31991L31.427569,9.3424339 6.8067472,31.31991C6.0245249,32.015303 5.0434551,32.358999 4.0678854,32.358999 2.9643769,32.358999 1.8680081,31.925505 1.0659571,31.072613L1.0623569,31.066113C-0.44769764,29.45413,-0.33539391,26.945057,1.3191938,25.469772L28.686399,1.0429621C29.46424,0.34765434,30.44723,0,31.430007,0z" Stretch="Uniform" Fill="#FF020202" Width="10" Height="10" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+      <Path.RenderTransform>
+        <TransformGroup>
+          <TransformGroup.Children>
+            <RotateTransform Angle="0" />
+            <ScaleTransform ScaleX="1" ScaleY="1" />
+          </TransformGroup.Children>
+        </TransformGroup>
+      </Path.RenderTransform>
+    </Path></Border>
+				</Grid>
+			</DataTemplate>
+			<Style x:Key="DashboardSelectionStyle" TargetType="{x:Type Custom:SurfaceListBoxItem}">
+				<Setter Property="Background" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+				<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+				<Setter Property="BorderThickness" Value="0"/>
+				<Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type Custom:SurfaceListBoxItem}">
+							<ControlTemplate.Resources>
+								<Storyboard x:Key="Press">
+									<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+										<SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+									</DoubleAnimationUsingKeyFrames>
+								</Storyboard>
+								<Storyboard x:Key="Release">
+									<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+										<SplineDoubleKeyFrame KeyTime="0:0:0.25" Value="0"/>
+									</DoubleAnimationUsingKeyFrames>
+								</Storyboard>
+							</ControlTemplate.Resources>
+							<Grid x:Name="Grid" Background="Transparent" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+								<VisualStateManager.VisualStateGroups>
+									<VisualStateGroup x:Name="SelectionStates">
+										<VisualState x:Name="Unselected"/>
+										<VisualState x:Name="Selected">
+											<Storyboard>
+												<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Grid">
+													<EasingColorKeyFrame KeyTime="0" Value="Red"/>
+												</ColorAnimationUsingKeyFrames>
+											</Storyboard>
+										</VisualState>
+										<VisualState x:Name="SelectedUnfocused"/>
+									</VisualStateGroup>
+								</VisualStateManager.VisualStateGroups>
+								<Border x:Name="ButtonBody" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Background="{x:Null}"/>
+								<Border x:Name="PressOverlay" Background="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}" Opacity="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+								<ContentPresenter x:Name="Content" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+							</Grid>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsSelected" Value="True">
+									<Setter Property="Background" TargetName="PressOverlay" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+									<Setter Property="Background" TargetName="ButtonBody" Value="{Binding Path=AccentBrush, Source={x:Static csShared:AppStateSettings.Instance}}"/>
+								</Trigger>
+								<Trigger Property="IsPressed" Value="True">
+									<Trigger.EnterActions>
+										<BeginStoryboard>
+											<Storyboard>
+												<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+													<SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+												</DoubleAnimationUsingKeyFrames>
+											</Storyboard>
+										</BeginStoryboard>
+									</Trigger.EnterActions>
+									<Trigger.ExitActions>
+										<BeginStoryboard>
+											<Storyboard>
+												<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+													<SplineDoubleKeyFrame KeyTime="0:0:0.25" Value="0"/>
+												</DoubleAnimationUsingKeyFrames>
+											</Storyboard>
+										</BeginStoryboard>
+									</Trigger.ExitActions>
+									<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+								</Trigger>
+								<MultiTrigger>
+									<MultiTrigger.Conditions>
+										<Condition Property="IsEnabled" Value="False"/>
+										<Condition Property="IsSelected" Value="True"/>
+									</MultiTrigger.Conditions>
+									<Setter Property="Background" TargetName="ButtonBody" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+									<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+									<Setter Property="Opacity" TargetName="Content" Value="0.6"/>
+								</MultiTrigger>
+								<MultiTrigger>
+									<MultiTrigger.Conditions>
+										<Condition Property="IsEnabled" Value="False"/>
+										<Condition Property="IsSelected" Value="False"/>
+									</MultiTrigger.Conditions>
+									<Setter Property="Background" TargetName="ButtonBody" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+									<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+									<Setter Property="Opacity" TargetName="Content" Value="0.33"/>
+								</MultiTrigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+				<Style.BasedOn>
+					<Style TargetType="{x:Type Control}">
+						<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+						<Setter Property="SnapsToDevicePixels" Value="False"/>
+						<Setter Property="FontFamily" Value="Segoe360"/>
+						<Setter Property="FontWeight" Value="Normal"/>
+						<Setter Property="FontSize" Value="17"/>
+						<Setter Property="Padding" Value="6,2,10,10"/>
+						<Setter Property="MinHeight" Value="38"/>
+						<Setter Property="MinWidth" Value="38"/>
+						<Setter Property="Margin" Value="1"/>
+						<Setter Property="HorizontalContentAlignment" Value="Left"/>
+						<Setter Property="VerticalContentAlignment" Value="Top"/>
+						<Setter Property="BorderThickness" Value="2"/>
+					</Style>
+				</Style.BasedOn>
+			</Style>
+			<DataTemplate x:Key="ToolboxItem">
+				<Grid Width="Auto" Height="Auto" Background="{x:Null}">
+					<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Title}" VerticalAlignment="Top" Style="{DynamicResource TextListboxStyle}"/>
+					<Custom:SurfaceButton cal:Message.Attach="[Event Click]=[Action AddToolboxItem($dataContext)]" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top">
+						<Path Data="M19.833,0L32.5,0 32.5,19.833999 52.334,19.833999 52.334,32.500999 32.5,32.500999 32.5,52.333 19.833,52.333 19.833,32.500999 0,32.500999 0,19.833999 19.833,19.833999z" Stretch="Uniform" Fill="#FF020202" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+      <Path.RenderTransform>
+        <TransformGroup>
+          <TransformGroup.Children>
+            <RotateTransform Angle="0" />
+            <ScaleTransform ScaleX="1" ScaleY="1" />
+          </TransformGroup.Children>
+        </TransformGroup>
+      </Path.RenderTransform>
+    </Path>
+						</Custom:SurfaceButton>
+				</Grid>
+			</DataTemplate>
+			</ResourceDictionary>
+    </UserControl.Resources>
+	<Grid>
+		<Border BorderBrush="Black" HorizontalAlignment="Stretch" BorderThickness="0,0,0,1" Height="50" VerticalAlignment="Top" Margin="250,0,0,0"/>
+		<SlideTab:SlideTabControl Background="{x:Null}" BorderThickness="0"
+			Style="{DynamicResource SlideTabControlStyle1}" VerticalContentAlignment="Stretch"
+			HorizontalContentAlignment="Stretch"
+			SelectedIndex="{Binding SelectedTab, Mode=TwoWay}" Margin="0">
+			<SlideTab:SlideTabItem x:Name="stiDashboards" Style="{DynamicResource TabItemStyle2}" Background="{x:Null}"
+				Foreground="Black" FontSize="16" ShowHeaderText="Hidden" Height="50" Padding="0"
+				MinWidth="75" Margin="0,0,-4,0">
+				<SlideTab:SlideTabItem.Header>
+					<Grid Margin="0" Background="Transparent">
+						<Path
+							Data="M61.352,34.599C60.224,34.282,59.033,34.956,58.719,36.1L50.119,67.534C49.957,67.527 49.796,67.506 49.633,67.506 45.598,67.506 41.978,69.749 40.187,73.361 37.607,78.565 39.739,84.9 44.944,87.482 46.413,88.212 47.987,88.583 49.621,88.583 53.654,88.583 57.272,86.34 59.063,82.728 61.647,77.526 59.513,71.191 54.309,68.607 54.298,68.602 54.286,68.598 54.275,68.592L62.855,37.23C63.166,36.089,62.495,34.911,61.352,34.599z M55.225,80.825C54.162,82.968 52.015,84.299 49.621,84.299 48.654,84.299 47.723,84.079 46.848,83.646 43.761,82.114 42.495,78.356 44.025,75.267 45.09,73.124 47.237,71.793 49.633,71.793 50.598,71.793 51.531,72.013 52.404,72.446 55.491,73.979 56.757,77.738 55.225,80.825z M49.625,15.151C24.813,15.151 4.625,35.338 4.625,60.151 4.625,62.518 6.544,64.437 8.911,64.437 11.278,64.437 13.197,62.518 13.197,60.151 13.197,40.064 29.538,23.722 49.626,23.722 69.714,23.722 86.055,40.063 86.055,60.151 86.055,62.518 87.974,64.437 90.341,64.437 92.708,64.437 94.627,62.518 94.627,60.151 94.625,35.338 74.437,15.151 49.625,15.151z"
+							Stretch="Uniform" Fill="#FF000000" RenderTransformOrigin="0.5,0.5" Width="30" Height="30"
+							Margin="0" />
+					</Grid>
+				</SlideTab:SlideTabItem.Header>
+				
+				<Grid x:Name="MainGrid1" Margin="0 10 0 0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<Grid>
+						<StackPanel HorizontalAlignment="Right">
+							<Custom:SurfaceButton cal:Message.Attach="[Event Click]=[Action AddDashboard()]" Margin="0" Background="{x:Null}">
+								<Path Data="M19.833,0L32.501,0 32.501,19.833999 52.334,19.833999 52.334,32.500999 32.501,32.500999 32.501,52.333 19.833,52.333 19.833,32.500999 0,32.500999 0,19.833999 19.833,19.833999z" Stretch="Uniform" Fill="Black" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+									<Path.RenderTransform>
+										<TransformGroup>
+											<RotateTransform Angle="0" />
+											<ScaleTransform ScaleX="1" ScaleY="1" />
+										</TransformGroup>
+									</Path.RenderTransform>
+								</Path>
+							</Custom:SurfaceButton>
+						</StackPanel>
+					</Grid>
+					<Custom:SurfaceListBox Margin="0"   ItemsSource="{Binding Dashboards}" ItemTemplate="{DynamicResource DashboardTemplate}" Foreground="Black" HorizontalContentAlignment="Stretch" Grid.Row="1" ItemContainerStyle="{DynamicResource DashboardSelectionStyle}" SelectedItem="{Binding Dashboards.ActiveDashboard, Mode=TwoWay, Source={x:Static csShared:AppStateSettings.Instance}}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden"/>
+				</Grid>
+			</SlideTab:SlideTabItem>
+			<SlideTab:SlideTabItem x:Name="stiItems" Style="{DynamicResource TabItemStyle2}" Background="{x:Null}"
+				Foreground="Black" FontSize="16" ShowHeaderText="Hidden" Height="50" Padding="0"
+				MinWidth="75">
+				<SlideTab:SlideTabItem.Header>
+					<Grid Margin="0" Background="Transparent">
+						<Path
+							Data="M64,5.1430006L63.286486,11.908481 62.574169,18.674001 59.122931,15.221438 49.564644,24.856143 49.589999,24.881308 44.738304,29.768 34.04957,19.161486 16.246351,37.101002 11.357,32.249504 33.930229,9.5059996 34.083288,9.6579561 34.166595,9.5740004 44.675789,20.004088 54.253777,10.351877 50.471003,6.5700893 57.234251,5.8578291z M0,0L7.7270012,0 7.7270012,48.351 58.115002,48.351 58.115002,56.077002 7.7270012,56.077002 0,56.077002 0,48.351z"
+							Stretch="Uniform" Fill="Black" RenderTransformOrigin="0.5,0.5" Width="30" Height="30"
+							Margin="0" />
+					</Grid>
+				</SlideTab:SlideTabItem.Header>
+				
+				<Grid x:Name="MainGrid" Margin="0 10 0 0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<Grid HorizontalAlignment="Stretch">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+						<Custom:SurfaceButton x:Name="PreviousCategory"
+							Margin="0"
+							Grid.Column="0"
+							VerticalAlignment="Center">
+							<Path
+								Data="F1M568.254,-7.43524L568.159,-7.34277 567.977,-7.52246 546.559,-28.9417 525.484,-28.9417 549.787,-4.63446 557.439,3.01532 557.619,3.19629 550.067,10.7549 525.758,35.0583 546.834,35.0583 568.254,13.6429 578.792,3.10254 568.254,-7.43524z"
+								Stretch="Uniform"
+								Fill="Black"
+								Width="26"
+								Height="26"
+								Margin="0,0,0,0"
+								RenderTransformOrigin="0.5,0.5">
+								<Path.RenderTransform>
+									<TransformGroup>
+										<ScaleTransform ScaleY="1"
+											ScaleX="-1" />
+										<SkewTransform AngleY="0"
+											AngleX="0" />
+										<RotateTransform Angle="0" />
+										<TranslateTransform />
+									</TransformGroup>
+								</Path.RenderTransform>
+							</Path>
+						</Custom:SurfaceButton>
+
+						<TextBlock Grid.Column="1" 
+							Text="{Binding Category}" 
+							Foreground="Black" 
+							FontWeight="Bold" 
+							FontSize="32" 
+							Margin="0 0 0 13"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Top" />
+
+						<Custom:SurfaceButton x:Name="NextCategory"
+							Margin="0"
+							Grid.Column="2"
+							VerticalAlignment="Center">
+							<Path
+								Data="F1M568.254,-7.43524L568.159,-7.34277 567.977,-7.52246 546.559,-28.9417 525.484,-28.9417 549.787,-4.63446 557.439,3.01532 557.619,3.19629 550.067,10.7549 525.758,35.0583 546.834,35.0583 568.254,13.6429 578.792,3.10254 568.254,-7.43524z"
+								Stretch="Uniform"
+								Fill="Black"
+								Width="26"
+								Height="26"
+								Margin="0,0,0,0"
+								RenderTransformOrigin="0.5,0.5" />
+						</Custom:SurfaceButton>
+					</Grid>
+					<Custom:SurfaceListBox x:Name="SensorSetsList"  ItemsSource="{Binding Source={StaticResource SensorsSet}}"
+						Grid.Row="1"
+						BorderThickness="0"
+						ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+						ScrollViewer.VerticalScrollBarVisibility="Hidden"
+						ItemTemplate="{DynamicResource DataSetTemplate}"
+						HorizontalContentAlignment="Stretch">
+						<Custom:SurfaceListBox.GroupStyle>
+							<GroupStyle ContainerStyle="{StaticResource ContainerStyle}" />
+						</Custom:SurfaceListBox.GroupStyle>
+					</Custom:SurfaceListBox>
+				</Grid>
+			</SlideTab:SlideTabItem>
+			<SlideTab:SlideTabItem x:Name="stiToolbox" Style="{DynamicResource TabItemStyle2}" Background="{x:Null}"
+				Foreground="Black" FontSize="16" ShowHeaderText="Hidden" Height="50" Padding="0"
+				MinWidth="75" Margin="0,0,-4,0">
+				<SlideTab:SlideTabItem.Header>
+					<Grid Margin="0" Background="Transparent">
+						<Path
+							Data="M0.20100021,24.643002L27.581,24.643002 27.581,28.715612C27.581,28.971006,27.788197,29.178001,28.044694,29.178001L35.453308,29.178001C35.710003,29.178001,35.917,28.971006,35.917,28.715612L35.917,24.643002 63.598,24.643002 63.598,41.622002 0.20100021,41.622002z M29.589001,18.825001L33.909,18.825001 33.909,26.914001 29.589001,26.914001z M8.540411,5.5260019L16.8,5.5260019 16.8,8.4402142C16.8,10.131662,18.17611,11.508002,19.86892,11.508001L24.092749,11.508001 24.092749,5.5260019 39.356053,5.5260019 39.356053,11.508001 43.580079,11.508001C45.272794,11.508002,46.649002,10.131662,46.649002,8.4402142L46.649002,5.5260019 55.7617,5.5260019 64,13.764116 64,21.902 35.917,21.902 35.917,17.023291C35.917,16.768097,35.710003,16.561002,35.453308,16.561003L28.044694,16.561003C27.788197,16.561002,27.581,16.768097,27.581,17.023291L27.581,21.902 0,21.902 0,14.066111z M19.868308,0L43.579694,0C43.8024,1.9073486E-06,43.981999,0.17974663,43.981999,0.40239143L43.981999,8.4400101C43.981999,8.6612043,43.8024,8.8410006,43.579694,8.8410006L42.02237,8.8410006 42.02237,2.914052C42.02237,2.6913967,41.842465,2.5117207,41.619763,2.5117207L21.826738,2.5117207C21.605336,2.5117207,21.425532,2.6913967,21.425532,2.914052L21.425532,8.8410006 19.868308,8.8410006C19.645703,8.8410006,19.466001,8.6612043,19.466001,8.4400101L19.466001,0.40239143C19.466001,0.17974663,19.645703,1.9073486E-06,19.868308,0z"
+							Stretch="Uniform" Fill="#FF000000" RenderTransformOrigin="0.5,0.5" Width="30" Height="30"
+							Margin="0" />
+					</Grid>
+				</SlideTab:SlideTabItem.Header>
+				
+				<Grid  Margin="0 10 0 0" x:Name="gToolbox" DataContext="{Binding ActiveDashboardItem}">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<Custom:SurfaceListBox ItemsSource="{Binding Dashboards.Toolbox, Source={x:Static csShared:AppStateSettings.Instance}}" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalContentAlignment="Stretch" ItemTemplate="{DynamicResource ToolboxItem}"/>
+				</Grid>
+			</SlideTab:SlideTabItem>
+			<SlideTab:SlideTabItem x:Name="stiDashboardItems" Style="{DynamicResource TabItemStyle2}" Background="{x:Null}"
+				Foreground="Black" FontSize="16" ShowHeaderText="Hidden" Height="50" Padding="0"
+				MinWidth="75" Margin="0,0,-4,0">
+				<SlideTab:SlideTabItem.Header>
+					<Grid Margin="0" Background="Transparent">
+						<Path
+							Data="M9.706234,51.033211C8.8426228,51.033211 7.9786911,51.362331 7.3172436,52.020577 5.9969063,53.335663 5.9969063,55.474945 7.3172436,56.795437 8.6401386,58.110325 10.772972,58.110325 12.093298,56.795437 13.408524,55.474945 13.408524,53.335663 12.093298,52.020577 11.433136,51.362331 10.569845,51.033211 9.706234,51.033211z M36.795098,36.901001L44.805398,44.975102 49.546398,45.976501 58.061998,58.8932 54.851097,62.112 41.920098,53.589703 40.921498,48.848801 32.923998,40.7915z M16.103878,36.897003L27.163997,47.955608C22.044195,53.497063,17.833112,58.106525,15.708069,60.224907L15.71067,60.228909C12.421604,63.528378 7.0906792,63.551678 3.8222942,60.290108 0.55794907,57.016735 0.58530045,51.697678 3.8848648,48.398205L3.8848648,48.395706z M5.8735714,13.560596C5.4733295,13.560595 5.0735779,13.714872 4.7649803,14.023427 4.1452255,14.637938 4.1452255,15.639454 4.7649803,16.241064L23.421496,34.906666C24.029501,35.525074 25.034608,35.519875 25.641512,34.906666 26.265116,34.290756 26.265116,33.29454 25.640112,32.67733L6.985096,14.023427C6.6745434,13.714872,6.2738132,13.560595,5.8735714,13.560596z M10.426508,9.009408C10.023506,9.009409 9.6205025,9.1634035 9.3171005,9.4713936 8.6946964,10.093763 8.6946964,11.078079 9.3171005,11.704289L27.973528,30.354492C28.590732,30.983501 29.588139,30.983501 30.194842,30.351893 30.809447,29.737183 30.809447,28.743666 30.194842,28.135555L11.535915,9.4713936C11.232513,9.1634035,10.82951,9.009409,10.426508,9.009408z M8.5140762,4.7760001C10.692169,4.7760001,12.869925,5.6080461,14.532036,7.2721382L38.497,31.147406 26.468217,43.188 2.4940948,19.300913C-0.83136749,15.983259 -0.83136749,10.591072 2.4940948,7.2721382 4.1575546,5.6080461 6.3359852,4.7760001 8.5140762,4.7760001z M48.401098,0C50.518183,3.3140125E-08,52.53647,0.42700887,54.374958,1.1887387L46.015612,9.5497122C44.506523,11.058777,44.506523,13.528916,46.015612,15.03804L49.194092,18.220291C50.701784,19.728214,53.174465,19.728214,54.682257,18.220291L62.933401,9.9636593C63.610695,11.713687 63.999998,13.609617 63.999998,15.595349 63.999998,24.207388 57.014242,31.187998 48.401098,31.187998 39.790455,31.187998 32.809998,24.207388 32.809998,15.595349 32.809998,6.9883914 39.790455,3.3140125E-08 48.401098,0z"
+							Stretch="Uniform" Fill="#FF000000" RenderTransformOrigin="0.5,0.5" Width="30" Height="30"
+							Margin="0" />
+					</Grid>
+				</SlideTab:SlideTabItem.Header>
+				
+				<Grid  Margin="0 10 0 0" x:Name="gActiveDashboardItem" DataContext="{Binding ActiveDashboardItem}">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<StackPanel Margin="0,20,0,0">
+						<TextBlock TextWrapping="Wrap" Text="Color"/>
+						<Controls:PopupButton Options="White,Blue,Orange,Green,Transparent" Value="{Binding BackgroundString, BindsDirectlyToSource=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+						<TextBlock TextWrapping="Wrap" Text="Width"/>
+						<Controls:PopupButton Options="2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36" Value="{Binding GridWidth, BindsDirectlyToSource=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />  <!-- cal:Message.Attach="[Event ValueChanged]=[Action BackgroundChanged()]"-->
+						<TextBlock TextWrapping="Wrap" Text="Height"/>
+						<Controls:PopupButton Options="2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36" Value="{Binding GridHeight, BindsDirectlyToSource=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />  <!-- cal:Message.Attach="[Event ValueChanged]=[Action BackgroundChanged()]"-->
+							
+					</StackPanel>
+					<ContentControl Grid.Row="1" x:Name="ItemConfigScreen" Content="" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+					<Custom:SurfaceButton x:Name="DeleteItem" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top">
+						<Path Data="M33.977998,27.684L33.977998,58.102997 41.373998,58.102997 41.373998,27.684z M14.841999,27.684L14.841999,58.102997 22.237998,58.102997 22.237998,27.684z M4.0319996,22.433001L52.183,22.433001 52.183,63.999001 4.0319996,63.999001z M15.974,0L40.195001,0 40.195001,7.7260003 56.167001,7.7260003 56.167001,16.000999 0,16.000999 0,7.7260003 15.974,7.7260003z" Stretch="Uniform" Fill="#FFB0B0B0" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5"/>
+					</Custom:SurfaceButton>
+				</Grid>
+			</SlideTab:SlideTabItem>
+		</SlideTab:SlideTabControl>
+	</Grid>
+</UserControl>

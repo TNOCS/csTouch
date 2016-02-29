@@ -1,0 +1,401 @@
+{
+ "Parameters": [
+  {
+   "IsResult": false,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "",
+   "Description": "Chemical name",
+   "ParameterType": 6,
+   "Name": "Chemical name",
+   "Data": {
+    "Chemical": {},
+    "Value": "-"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": false,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "kg\/s",
+   "Description": "Mass flow rate of the source",
+   "ParameterType": 1,
+   "Name": "Mass flow rate in",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+    "Value": 10,
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Mass rate"
+  },{
+   "IsResult": false,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "m\/s",
+   "Description": "Wind speed at 10 m height",
+   "ParameterType": 1,
+   "Name": "Wind speed at 10m",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+    "Value": 2,
+    "MinInclusive": false
+   },
+   "ValueQuantity": "Velocity"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "s*(kg\/m3)^n",
+   "Description": "Dose at (Xd, Yd, Zd)",
+   "ParameterType": 1,
+   "Name": "Dose at XYZ",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Toxic dose"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "-",
+   "Description": "Fraction of mortality at (Xd, Yd, Zd)",
+   "ParameterType": 1,
+   "Name": "Fraction of mortality at location",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "kg\/m3",
+   "Description": "Threshold concentration",
+   "ParameterType": 1,
+   "Name": "Threshold concentration",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "m",
+   "Description": "Distance to toxic dose or fraction of mortality",
+   "ParameterType": 1,
+   "Name": "Distance to toxic dose or fraction of mortality",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "m",
+   "Description": "Maximum distance to threshold concentration",
+   "ParameterType": 1,
+   "Name": "Maximum distance to threshold concentration",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "m",
+   "Description": "Length of toxic contour",
+   "ParameterType": 1,
+   "Name": "Length of toxic contour",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "m",
+   "Description": "Width of toxic contour",
+   "ParameterType": 1,
+   "Name": "Width of toxic contour",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "1\/m",
+   "Description": "Inverse Monin-Obukhov length (1\/L) used",
+   "ParameterType": 1,
+   "Name": "Inverse Monin-Obukhov length (1\/L) used",
+   "Data": {
+
+
+    "MaxInclusive": false,
+
+    "MinInclusive": false
+   },
+   "ValueQuantity": "Inverse length"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "s*(kg\/m3)^n",
+   "Description": "Dose",
+   "ParameterType": 5,
+   "Name": "Toxic dose vs Downwind distance at (Yd, Zd)",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Toxic dose"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "-",
+   "Description": "Fraction of mortality",
+   "ParameterType": 5,
+   "Name": "Fraction of mortality vs. downwind distance at (Yd, Zd)",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "kg\/m3",
+   "Description": "Maximum concentration",
+   "ParameterType": 5,
+   "Name": "Maximum concentration vs. Downwind distance at (Yd, Zd)",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "s*(kg\/m3)^n",
+   "Description": "Toxic Dose Indoors",
+   "ParameterType": 5,
+   "Name": "Toxic Dose indoors vs Downwind distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Toxic dose"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "-",
+   "Description": "Fraction of mortality indoors",
+   "ParameterType": 5,
+   "Name": "Fraction of mortality indoors vs. Downwind distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "kg\/m3",
+   "Description": "Maximum concentration indoors",
+   "ParameterType": 5,
+   "Name": "Maximum concentration indoors vs. distance at (Yd, Zd)",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "kg\/m3",
+   "Description": "Maximum concentration at y=0, z=Hr",
+   "ParameterType": 5,
+   "Name": "Max conc. vs. Downwind distance at center at release height",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "kg\/m3",
+   "Description": "Maximum concentration at y=0, z=0",
+   "ParameterType": 5,
+   "Name": "Max conc. vs. Downwind distance at center at the ground",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "m",
+   "Description": "Effective Cloud Width vs distance",
+   "ParameterType": 5,
+   "Name": "Effective Cloud Width vs distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "m",
+   "Description": "Cloud Center Height vs distance",
+   "ParameterType": 5,
+   "Name": "Cloud Center Height vs distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "m",
+   "Description": "Effective Cloud Height vs distance",
+   "ParameterType": 5,
+   "Name": "Effective Cloud Height vs distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "",
+   "Description": "Toxic Contour at Zd",
+   "ParameterType": 3,
+   "Name": "Toxic Contour Plot at Zd",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "-",
+   "Description": "Mortality outdoors",
+   "ParameterType": 4,
+   "Name": "Fraction of mortality outdoors grid",
+   "Data": {
+    "Value": ""
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "kg\/m3",
+   "Description": "Maximum concentration",
+   "ParameterType": 4,
+   "Name": "Max Concentration outdoors grid",
+   "Data": {
+    "Value": ""
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "s*(kg\/m3)^n",
+   "Description": "Dosage outdoors",
+   "ParameterType": 4,
+   "Name": "Toxic dose outdoors grid",
+   "Data": {
+    "Value": ""
+   },
+   "ValueQuantity": "Toxic dose"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "-",
+   "Description": "Mortality indoors",
+   "ParameterType": 4,
+   "Name": "Fraction of mortality indoors grid",
+   "Data": {
+    "Value": ""
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "s*(kg\/m3)^n",
+   "Description": "Dosage indoors",
+   "ParameterType": 4,
+   "Name": "Toxic dose indoors grid",
+   "Data": {
+    "Value": ""
+   },
+   "ValueQuantity": "Toxic dose"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "kg\/m3",
+   "Description": "Maximum concentration indoors",
+   "ParameterType": 4,
+   "Name": "Max Concentration indoors grid",
+   "Data": {
+    "Value": ""
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Dense gas release; toxic",
+   "ValueUnit": "",
+   "Description": "Concentration profile grid",
+   "ParameterType": 8,
+   "Name": "Concentration profile grid",
+   "Data": {
+    "YQuantity": "Length",
+    "YUnit": "m",
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "No units"
+  }]
+}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="100px"
+   height="94.445px"
+   viewBox="-0.5 0.722 100 94.445"
+   enable-background="new -0.5 0.722 100 94.445"
+   xml:space="preserve"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="play_SetStart.svg"
+   inkscape:export-filename="C:\Users\Erik\Pictures\play_SetStart.png"
+   inkscape:export-xdpi="43"
+   inkscape:export-ydpi="43"><metadata
+   id="metadata13"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs11" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="640"
+   inkscape:window-height="480"
+   id="namedview9"
+   showgrid="false"
+   inkscape:zoom="2.4988088"
+   inkscape:cx="50"
+   inkscape:cy="47.2225"
+   inkscape:window-x="0"
+   inkscape:window-y="0"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="Layer_1" />
+<g
+   id="g3">
+	<path
+   fill-rule="evenodd"
+   clip-rule="evenodd"
+   d="M3.365,7.673c2.783-0.754,5.653,0.9,6.405,3.72l20.279,76.427   c0.746,2.817-0.895,5.714-3.691,6.466c-2.776,0.756-5.652-0.916-6.404-3.732L-0.318,14.13C-1.069,11.302,0.582,8.424,3.365,7.673z"
+   id="path5" />
+	<path
+   fill-rule="evenodd"
+   clip-rule="evenodd"
+   d="M14.5,13.722c1.356-2.345,14-21.829,35.71-8.11   c21.752,13.714,35.906,23.515,45.29,7.11c0,0-2.344,13.28-6.371,20.319C85.108,40.081,72.5,49.722,56.89,45.616   c-14.441-3.799-25.065,2.058-29.39,15.106C27.5,60.722,15.53,17.388,14.5,13.722z"
+   id="path7" />
+</g>
+</svg>

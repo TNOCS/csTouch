@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <title>{Title}</title>
+  </head>
+  <body>
+    <h1>{Title}</h1>
+	<p>{Description}</p> 
+	<a href="{Map}" target="_blank"><img border="0" src="{Map}" alt="{Title}" width="400" height="225"></a>
+	<p>Aangevraagd door <i>{Signature}</i> om {TimeStamp:yyyy.MM.dd HH:mm}.</p>
+	<h1>Reacties</h1>
+	{TagResponses}
+  </body>
+</html>

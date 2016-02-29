@@ -1,0 +1,252 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Custom="http://schemas.microsoft.com/surface/2008" xmlns:cal="http://www.caliburnproject.org"
+             xmlns:remoteScreenPlugin="clr-namespace:csCommon.RemoteScreenPlugin"
+             xmlns:WpfConverters="clr-namespace:WpfConverters"
+             mc:Ignorable="d" x:Class="csCommon.RemoteScreenPlugin.GroupView" d:DataContext="{d:DesignInstance remoteScreenPlugin:GroupViewModel}">
+
+<UserControl.Resources>
+        <remoteScreenPlugin:GroupActiveBrushConverter x:Key="GroupActiveBrushConverter" />
+    <WpfConverters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"></WpfConverters:InverseBooleanToVisibilityConverter>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+	<WpfConverters:BooleanActiveOpacityConverter x:Key="BooleanActiveOpacityConverter"/>
+        <remoteScreenPlugin:UserIconConverter x:Key="UserIconConverter" />
+        <DataTemplate x:Key="MemberTemplate">
+        	<Grid Margin="0,0,0,4">
+        		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Top" FontSize="16" Margin="30,0,0,0"/>
+        		<Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Background="Black" CornerRadius="3">
+        			<Image Source="{Binding Converter={StaticResource UserIconConverter}}"/>
+        		</Border>
+        	</Grid>
+        </DataTemplate>
+        <SolidColorBrush x:Key="IconBrush" Color="#FF898989"/>
+        <Style x:Key="RedLineToggleButton" TargetType="{x:Type Custom:SurfaceToggleButton}">
+        	<Setter Property="HorizontalContentAlignment" Value="Center"/>
+        	<Setter Property="VerticalContentAlignment" Value="Center"/>
+        	<Setter Property="Padding" Value="7"/>
+        	<Setter Property="Background" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+        	<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+        	<Setter Property="BorderThickness" Value="0"/>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="{x:Type Custom:SurfaceToggleButton}">
+        				<ControlTemplate.Resources>
+        					<Storyboard x:Key="Press">
+        						<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+        							<SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+        						</DoubleAnimationUsingKeyFrames>
+        					</Storyboard>
+        					<Storyboard x:Key="Release">
+        						<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+        							<SplineDoubleKeyFrame KeyTime="0:0:0.25" Value="0"/>
+        						</DoubleAnimationUsingKeyFrames>
+        					</Storyboard>
+        				</ControlTemplate.Resources>
+        				<Grid x:Name="Grid" Background="Transparent" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+        					<Border x:Name="ButtonBody" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        					<Border x:Name="PressOverlay" Background="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}" Opacity="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        					<ContentPresenter x:Name="Content" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        					<Path x:Name="path" Data="M4,27 24,8" Fill="{DynamicResource DisabledBrush}" HorizontalAlignment="Left" Height="19" Margin="4,8,0,0" Stretch="Fill" VerticalAlignment="Top" Width="20" Stroke="{DynamicResource DisabledBrush}" StrokeThickness="2" Visibility="Collapsed"/>
+        				</Grid>
+        				<ControlTemplate.Triggers>
+        					<Trigger Property="IsChecked" Value="False">
+        						<Setter Property="Background" TargetName="ButtonBody" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+        						<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+        						<Setter Property="Visibility" TargetName="path" Value="Visible"/>
+        						<Setter Property="Opacity" TargetName="Content" Value="0.5"/>
+        						<Setter Property="StrokeThickness" TargetName="path" Value="3"/>
+        					</Trigger>
+        					<Trigger Property="IsPressed" Value="True">
+        						<Trigger.EnterActions>
+        							<BeginStoryboard>
+        								<Storyboard>
+        									<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+        										<SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+        									</DoubleAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</BeginStoryboard>
+        						</Trigger.EnterActions>
+        						<Trigger.ExitActions>
+        							<BeginStoryboard>
+        								<Storyboard>
+        									<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+        										<SplineDoubleKeyFrame KeyTime="0:0:0.25" Value="0"/>
+        									</DoubleAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</BeginStoryboard>
+        						</Trigger.ExitActions>
+        						<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+        					</Trigger>
+        					<MultiTrigger>
+        						<MultiTrigger.Conditions>
+        							<Condition Property="IsPressed" Value="True"/>
+        							<Condition Property="IsChecked" Value="True"/>
+        						</MultiTrigger.Conditions>
+        						<Setter Property="Background" TargetName="PressOverlay" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+        					</MultiTrigger>
+        					<MultiTrigger>
+        						<MultiTrigger.Conditions>
+        							<Condition Property="IsEnabled" Value="False"/>
+        							<Condition Property="IsChecked" Value="True"/>
+        						</MultiTrigger.Conditions>
+        						<Setter Property="Background" TargetName="ButtonBody" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+        						<Setter Property="Opacity" TargetName="Content" Value="0.6"/>
+        					</MultiTrigger>
+        					<MultiTrigger>
+        						<MultiTrigger.Conditions>
+        							<Condition Property="IsEnabled" Value="False"/>
+        							<Condition Property="IsChecked" Value="False"/>
+        						</MultiTrigger.Conditions>
+        						<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+        						<Setter Property="Background" TargetName="ButtonBody" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"/>
+        						<Setter Property="Opacity" TargetName="Content" Value="0.33"/>
+        					</MultiTrigger>
+        				</ControlTemplate.Triggers>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        	<Style.BasedOn>
+        		<Style TargetType="{x:Type Control}">
+        			<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        			<Setter Property="SnapsToDevicePixels" Value="False"/>
+        			<Setter Property="FontFamily" Value="Segoe360"/>
+        			<Setter Property="FontWeight" Value="Normal"/>
+        			<Setter Property="FontSize" Value="17"/>
+        			<Setter Property="Padding" Value="6,2,10,10"/>
+        			<Setter Property="MinHeight" Value="38"/>
+        			<Setter Property="MinWidth" Value="38"/>
+        			<Setter Property="Margin" Value="1"/>
+        			<Setter Property="HorizontalContentAlignment" Value="Left"/>
+        			<Setter Property="VerticalContentAlignment" Value="Top"/>
+        			<Setter Property="BorderThickness" Value="2"/>
+        		</Style>
+        	</Style.BasedOn>
+        </Style>
+    </UserControl.Resources>
+	<Grid  Visibility="Visible">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Custom:SurfaceToggleButton  x:Name="stbToggle" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top"  Width="40" Height="40" MinWidth="30" MinHeight="30" VerticalContentAlignment="Top" Background="{x:Null}" HorizontalContentAlignment="Left" Padding="0" Style="{DynamicResource CleanToggleButton}" Visibility="Visible" IsChecked="{Binding Group.ShowClients}">
+			<Grid x:Name="grid" Height="Auto" HorizontalAlignment="Left">
+				<Border HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="30" Background="{Binding Group.IsActive, Converter={StaticResource GroupActiveBrushConverter}}" CornerRadius="4" Margin="0" BorderThickness="0">
+
+					<Grid Margin="0">
+
+						<!--<Progress:CircularProgressBar/>-->
+						<Path Data="M24.525049,44.043999L35.277451,44.043999 40.655001,53.355549 35.277451,62.667002 24.525049,62.667002 19.149999,53.355549z M5.3750095,33.250998L16.12875,33.250998 21.505,42.562349 16.12875,51.875 5.3750095,51.875 0,42.562349z M43.849176,33.076998L54.601828,33.076998 59.978003,42.388399 54.601828,51.701 43.849176,51.701 38.473001,42.388399z M24.525048,22.108999L35.277451,22.108999 40.654999,31.420399 35.277451,40.731998 24.525048,40.731998 19.149999,31.420399z M43.849176,10.969L54.601828,10.969 59.978003,20.2799 54.601828,29.590999 43.849176,29.590999 38.473001,20.2799z M5.3750095,10.793999L16.12875,10.793999 21.505,20.10555 16.12875,29.417 5.3750095,29.417 0,20.10555z M24.52505,0L35.277451,0 40.655001,9.3126497 35.277451,18.624 24.52505,18.624 19.149999,9.3126497z" Stretch="Uniform" Fill="#FFFFFDFD" Width="20" Height="20" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5"/>
+
+					</Grid>
+
+				</Border>
+				<Border HorizontalAlignment="Left" Height="15" VerticalAlignment="Top" Width="15" Background="Blue" CornerRadius="2" Margin="21,22,0,0" Visibility="{Binding HasClients, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<Grid HorizontalAlignment="Left">
+						<Path
+                            Visibility="{Binding Group.ShowClients, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+							x:Name="expandedPath"
+							Width="Auto"
+							Height="Auto"
+							Data="M 12.725695 15.919083 L 12.725695 8.8915273 C 12.725695 7.9084376 12.994508 7.1096772 13.532135 6.4952461 C 14.069762 5.8654544 14.837801 5.5505585 15.836252 5.5505585 C 16.834702 5.5505585 17.602741 5.8654544 18.140369 6.4952461 C 18.693357 7.1096772 18.969851 7.9084376 18.969851 8.8915273 L 18.969851 15.919083 L 25.905241 15.919083 C 26.919053 15.919083 27.717813 16.195577 28.301523 16.748565 C 28.900593 17.286192 29.200128 18.046551 29.200128 19.029640 C 29.200128 20.028091 28.900593 20.803810 28.301523 21.356798 C 27.717813 21.909786 26.919053 22.186280 25.905241 22.186280 L 18.969851 22.186280 L 18.969851 29.190795 C 18.969851 30.189245 18.693357 30.995686 18.140369 31.610117 C 17.587381 32.224548 16.819342 32.531764 15.836252 32.531764 C 14.853162 32.531764 14.085123 32.224548 13.532135 31.610117 C 12.994508 30.995686 12.725695 30.189245 12.725695 29.190795 L 12.725695 22.186280 L 5.7903036 22.186280 C 4.8072138 22.186280 4.0084534 21.886745 3.3940223 21.287675 C 2.7949518 20.673244 2.4954170 19.920565 2.4954170 19.029640 C 2.4954170 18.046551 2.7872715 17.286192 3.3709811 16.748565 C 3.9700516 16.195577 4.7764923 15.919083 5.7903036 15.919083 L 12.725695 15.919083 z "
+							Fill="White"
+							RenderTransformOrigin="0.5,0.5"
+							Stretch="Fill"
+							StrokeThickness="1" Margin="0" d:IsHidden="True" >
+							<Path.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+									<SkewTransform />
+									<RotateTransform />
+									<TranslateTransform />
+								</TransformGroup>
+							</Path.RenderTransform>
+						</Path>
+						<Path
+							x:Name="collapsedPath"
+							Width="Auto"
+                            Visibility="{Binding Group.ShowClients, Converter={StaticResource BooleanToVisibilityConverter}}" Height="Auto"
+							Data="M25.905241,15.919083 C26.919053,15.919083 27.717813,16.195577 28.301523,16.748565 28.900593,17.286192 29.200128,18.046551 29.200128,19.02964 29.200128,20.028091 28.900593,20.80381 28.301523,21.356798 27.717813,21.909786 26.919053,22.18628 25.905241,22.18628 25.905241,22.18628 5.7903036,22.18628 5.7903036,22.18628 4.8072138,22.18628 4.0084534,21.886745 3.3940223,21.287675 2.7949518,20.673244 2.495417,19.920565 2.495417,19.02964 2.495417,18.046551 2.7872715,17.286192&#xA;3.3709811,16.748565 3.9700516,16.195577 4.7764923,15.919083 5.7903036,15.919083"
+							Fill="White"
+							RenderTransformOrigin="0.5,0.5"
+							Stretch="Fill"
+							StrokeThickness="1" Margin="0,2.883,0,8.633" >
+							<Path.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+									<SkewTransform />
+									<RotateTransform />
+									<TranslateTransform X="0" Y="2.8789999999999996" />
+								</TransformGroup>
+							</Path.RenderTransform>
+						</Path>
+					</Grid>
+				</Border>
+			</Grid>
+		</Custom:SurfaceToggleButton>
+		<StackPanel Orientation="Vertical" Margin="40,0,4,0" Visibility="Visible">
+			<Grid>
+				<StackPanel Margin="0,0,69,0" Orientation="Vertical">
+
+                    <Custom:SurfaceToggleButton x:Name="surfaceToggleButton" 
+                                                cal:Message.Attach="[Event Checked]=[Action Join()];[Event Unchecked]=[Action Leave()]" 
+                                                IsChecked="{Binding Group.IsActive, Mode=OneWay}" 
+                                                Content="{Binding Group.Name}" HorizontalAlignment="Stretch" Margin="0,0,44,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="Black" FontSize="24" HorizontalContentAlignment="Left" MinHeight="0" Padding="7,7,7,0" Opacity="{Binding Group.IsActive, Converter={StaticResource BooleanActiveOpacityConverter}}" />
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="15,0,0,0" VerticalAlignment="Top" >
+                        <TextBlock Text="{Binding Clients}" Foreground="Black" FontSize="10"  />
+                    </WrapPanel>
+				</StackPanel>
+				<StackPanel Margin="2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding Group.IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+
+					<Custom:SurfaceToggleButton x:Name="FollowLayers"  HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Width="30" Height="30" MinWidth="30" MinHeight="30" VerticalContentAlignment="Center" Background="{x:Null}" Style="{DynamicResource CleanToggleButton}" Visibility="Collapsed">
+						<Grid Height="15" Width="15">
+							<Path Data="M0,14.769L9.8462706,14.769 9.8462706,39.384388 49.23,39.384388 49.23,49.231003 0,49.231003z M14.77,0L64,0 64,34.462002 14.77,34.462002z" Stretch="Uniform" Fill="#FF898989" Width="Auto" Height="Auto" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+								<Path.RenderTransform>
+									<TransformGroup>
+										<RotateTransform Angle="0" />
+										<ScaleTransform ScaleX="1" ScaleY="1" />
+									</TransformGroup>
+								</Path.RenderTransform>
+							</Path>
+						</Grid>
+					</Custom:SurfaceToggleButton>
+
+
+					<Custom:SurfaceToggleButton x:Name="FollowMap"  HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Width="30" Height="30" MinWidth="30" MinHeight="30" VerticalContentAlignment="Center" Background="{x:Null}"  Style="{DynamicResource RedLineToggleButton}" IsChecked="{Binding Group.FollowMap}">
+						<Grid Height="15" Width="15">
+							<Path Data="M36.232002,44.387998C37.058087,44.387998,42.012604,46.177183,42.012604,46.177183L42.287998,53.059 36.232002,50.855798z M55.501001,41.220998L55.501001,48.516885 44.766003,52.507997 44.766003,44.937296z M7.7419672,41.084997L11.320001,47.966558 0.17200089,52.920999 0.17200089,50.993883z M21.643001,40.395998L34.168001,43.699258 34.168001,49.892999C34.168001,49.480318,21.643001,45.35029,21.643001,45.35029z M63.759001,37.504999L63.759001,44.937154 57.427999,47.691 57.427999,40.258848z M36.694747,29.370525C38.06366,29.392154,42.151001,30.073038,42.151001,30.073038L42.151001,43.698999 36.370001,42.04804 36.370001,29.385555C36.421603,29.37693 36.489338,29.372068 36.570986,29.370535 36.609259,29.369815 36.650588,29.369827 36.694747,29.370525z M19.165705,28.147001L19.303,45.350008 13.660717,47.138998 9.394001,39.157343z M22.056001,26.633001C28.662801,27.183778,34.168001,28.83481,34.168001,28.83481L34.168001,41.220998 22.056001,38.193723z M55.501001,23.741998L55.501001,38.881704 44.904001,42.598001 44.904001,28.834634C44.904001,28.834634,54.124189,24.15481,55.501001,23.741998z M19.303,21.264L19.303,24.877399C19.303,24.877399,10.012741,34.477964,8.1546001,37.368642L0.20600128,46.657999 0.20600128,39.329599C0.20600128,39.329599,16.10318,21.781015,19.303,21.264z M21.781,20.954C22.297295,21.368118,42.116003,24.670362,42.116003,24.670362L42.116003,27.871C40.877714,27.458183,21.781,24.360449,21.781,24.360449z M63.897001,19.339L63.897001,35.028581 57.427999,37.504999 57.427999,22.642191z M64.000002,9.1879994L64.000002,16.825912 44.697001,26.528999 44.697001,23.742532C44.697001,23.742532,58.115992,15.380628,64.000002,9.1879994z M19.303,0.7229996L19.303,16.103126C9.9093266,21.058788,0,32.310001,0,32.310001L0,7.948228z M21.884001,0.41299916L42.322001,7.9480325 42.322001,19.509 21.884001,16.102856z M63.897001,0L63.897001,3.2005645C63.897001,3.2005648,51.40667,15.484569,44.697001,18.271L44.697001,7.3295204z" Stretch="Uniform" Fill="{DynamicResource IconBrush}" Width="Auto" Height="Auto" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" Opacity="{Binding Client.IsFollowing, Converter={StaticResource BooleanActiveOpacityConverter}}">
+								<Path.RenderTransform>
+									<TransformGroup>
+										<RotateTransform Angle="0" />
+										<ScaleTransform ScaleX="1" ScaleY="1" />
+									</TransformGroup>
+								</Path.RenderTransform>
+							</Path>
+						</Grid>
+					</Custom:SurfaceToggleButton>
+					<Custom:SurfaceToggleButton x:Name="FollowSketch"  HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Width="30" Height="30" MinWidth="30" MinHeight="30" VerticalContentAlignment="Center" Background="{x:Null}" Visibility="Collapsed" Style="{DynamicResource CleanToggleButton}">
+						<Grid Height="15" Width="15">
+							<Path Data="M53.950129,32.124C57.090712,32.125301,59.3744,32.338901,59.411002,32.341402L59.099802,35.654001 59.099802,35.652601 59.011302,35.646299C58.575007,35.6084 56.567217,35.451002 53.950129,35.451002 50.840746,35.446901 46.851168,35.6839 43.718482,36.549798 42.153193,36.975599 40.815997,37.563001 39.926703,38.2478 39.032206,38.948301 38.58951,39.6331 38.45151,40.547101L38.434512,40.6644 38.416312,40.732099C38.411112,40.760801 38.403212,40.827199 38.403212,40.929998 38.413611,41.336301 38.496909,42.284299 39.635104,43.687799 40.776999,45.085001 43.046385,46.922201 47.426665,48.762197L47.739161,48.892297 47.973563,49.135698C48.039961,49.204797 48.460558,49.640897 48.895457,50.390897 49.323855,51.138399 49.785952,52.223096 49.788653,53.570596 49.78995,54.3155 49.637652,55.130498 49.273055,55.933897 48.727458,57.146299 47.731261,58.301198 46.231268,59.340299 44.723578,60.381898 42.701487,61.334997 39.960604,62.193098L39.931902,62.202096 39.905901,62.209997C39.817305,62.230798 33.392937,63.996397 25.13118,63.998998 19.137812,63.995096 12.148148,63.074499 5.9190001,59.742498L7.4893923,56.811498C13.010243,59.774999 19.476309,60.677495 25.13118,60.673597 29.024359,60.673597 32.521842,60.252996 35.032229,59.831098 36.288722,59.620096 37.296416,59.410497 37.986514,59.254198 38.331709,59.176099 38.596011,59.110998 38.773108,59.068098 38.861609,59.044599 38.926707,59.027696 38.968508,59.017297L38.999609,59.008096C42.332991,57.967897 44.266581,56.815496 45.278273,55.849298 45.788672,55.364999 46.075072,54.935098 46.241671,54.566698 46.407168,54.196897 46.461867,53.8794 46.463068,53.570596 46.465769,53.022497 46.257472,52.470399 46.013873,52.053697 45.925272,51.900098 45.835471,51.768499 45.761374,51.666997 41.270396,49.730798 38.623309,47.696897 37.062117,45.797098 35.455428,43.8518 35.067328,42.030199 35.07783,40.929998 35.07783,40.510801 35.127329,40.196901 35.168829,40.0095 35.442328,38.148801 36.530821,36.640901 37.907214,35.604501 40.012702,34.016 42.784789,33.2217 45.651873,32.732101 48.520358,32.253 51.495741,32.125301 53.950129,32.124z M19.72247,24.875564L29.487446,33.485055 13.341732,50.953954C11.109808,53.485456,8.1198459,54.603517,5.4685707,53.134611L5.3896363,53.087892 5.3373606,53.19061C5.2805459,53.289701,5.2129583,53.38458,5.1344943,53.473619L3.0078529,55.885065C2.3801829,56.597177 1.2941643,56.664979 0.58249295,56.037366 -0.12987757,55.409753 -0.19827628,54.323835 0.42939723,53.61152L2.5567453,51.200075C2.674428,51.066514,2.8082264,50.955617,2.9526513,50.867719L3.0701927,50.803903 3.0521027,50.774835C1.6278896,48.340192,2.1626436,45.275972,4.2350552,42.92513z M41.646128,2.9468016C43.322207,2.9214815 45.012534,3.4957159 46.368659,4.6914136 49.262022,7.2422929 49.53932,11.656541 46.988551,14.549687L32.084172,30.675521 22.21341,21.972534 36.509573,5.3112931C37.865305,3.7742932,39.746569,2.9755,41.646128,2.9468016z M33.454846,0.0012404919C33.976462,0.018227339 34.495562,0.20975828 34.917716,0.58174157 35.882536,1.431988 35.973738,2.9031814 35.12472,3.8681748L23.796282,16.715239C22.944764,17.680003 21.473433,17.772499 20.509913,16.922231 19.544993,16.072064 19.45249,14.600721 20.302708,13.635858L31.631146,0.78876281C32.109393,0.24609447,32.784197,-0.02059865,33.454846,0.0012404919z" Stretch="Uniform" Fill="{DynamicResource IconBrush}" Width="Auto" Height="Auto" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+								<Path.RenderTransform>
+									<TransformGroup>
+										<RotateTransform Angle="0" />
+										<ScaleTransform ScaleX="1" ScaleY="1" />
+									</TransformGroup>
+								</Path.RenderTransform>
+							</Path>
+						</Grid>
+					</Custom:SurfaceToggleButton>
+                    <Custom:SurfaceButton Visibility="{Binding CanDeleteGroup, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" cal:Message.Attach="[Event Click]=[Action GroupMenu($source)]" x:Name="sbMenu" Margin="0" MinWidth="30" MinHeight="30" VerticalAlignment="Top" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" Foreground="Black" Padding="0" Width="30" Height="30">
+						<Path Data="F1M60.9043,41.6863C57.7236,39.6523 41.5319,29.1797 32.4893,23.332 33.1949,17.4545 30.6182,11.4167 25.3102,7.98975 20.0208,4.57422 13.4778,4.68884 8.41565,7.72009L22.7796,17.0052 22.3782,25.129 15.1432,28.8373 0.76886,19.5496C0.0845947,25.4115 2.66895,31.4285 7.95862,34.8463 13.2617,38.2709 19.8206,38.142 24.888,35.0925 33.9541,40.9545 50.2184,51.4688 53.303,53.4492 57.6168,56.2239 65.3626,44.5326 60.9043,41.6863z" Stretch="Uniform" Width="15" Height="15" Margin="0" RenderTransformOrigin="0.5,0.5" Fill="{DynamicResource IconBrush}"/>
+					</Custom:SurfaceButton>
+
+				</StackPanel>
+
+			</Grid>
+		</StackPanel>
+		<Grid Grid.Row="1" Margin="45,5,0,0" Visibility="{Binding Group.ShowClients, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<ItemsControl x:Name="Clients" ItemsSource="{Binding Group.FullClients}" ItemTemplate="{DynamicResource MemberTemplate}"/>
+		</Grid>
+	</Grid>
+
+</UserControl>

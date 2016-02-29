@@ -1,0 +1,97 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:csShared="clr-namespace:csShared" xmlns:csShared_Utils="clr-namespace:csShared.Utils" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+	xmlns:esri="http://schemas.esri.com/arcgis/client/2009"
+    xmlns:routeTool="clr-namespace:csCommon.MapPlugins.MapTools.RouteTool"
+	xmlns:converters="clr-namespace:csCommon.Converters"
+	xmlns:mapIconMenu1="clr-namespace:csCommon.csMapCustomControls.MapIconMenu"
+	x:Class="csCommon.MapPlugins.MapTools.RouteTool.ucRouteTool"
+	x:Name="SurfaceUserControl"
+	mc:Ignorable="d">
+
+	<UserControl.Resources>
+		<converters:LatLonStringConverter x:Key="LatLonStringConverter"/>
+		<esri:MarkerSymbol x:Key="Start">
+			<esri:MarkerSymbol.ControlTemplate>
+				<ControlTemplate>
+                    
+                    <routeTool:ucRouteTool x:Name="gctControl" Grph="{Binding}"  Width="30" Height="30"  />
+				</ControlTemplate>
+			</esri:MarkerSymbol.ControlTemplate>
+		</esri:MarkerSymbol>
+		<esri:MarkerSymbol x:Key="Finish">
+			<esri:MarkerSymbol.ControlTemplate>
+				<ControlTemplate>
+					<routeTool:ucRouteTool x:Name="gctControl" Grph="{Binding}"  Width="30" Height="30"  />
+				</ControlTemplate>
+			</esri:MarkerSymbol.ControlTemplate>
+		</esri:MarkerSymbol>
+	</UserControl.Resources>
+
+	<i:Interaction.Triggers>
+		<i:EventTrigger EventName="Loaded">
+			<ei:GoToStateAction TargetObject="{Binding ElementName=SurfaceUserControl}" StateName="Icon"/>
+		</i:EventTrigger>
+	</i:Interaction.Triggers>
+
+	<Canvas HorizontalAlignment="Left" VerticalAlignment="Top" >
+		
+
+
+		<!--<Border x:Name="bCircle" Background="Black" CornerRadius="15" BorderThickness="0" DataContext="{Binding Source={x:Static csShared:AppStateSettings.Instance}}" Width="30" Height="30" Canvas.Left="-15" Canvas.Top="-15" d:LayoutOverrides="Width, Height">
+			<Image Source="flag.png" HorizontalAlignment="Center" VerticalAlignment="Center" />    
+		</Border>-->
+        <Path x:Name="path" Visibility="Collapsed" Data="M14,-3 L43,15 0.5,37.5 z" Fill="{Binding Instance.AccentBrush}" Height="41.5" Canvas.Left="6" Stretch="Fill" Stroke="Black" Canvas.Top="-56.5" Width="43.5" DataContext="{Binding Source={x:Static csShared:AppStateSettings.Instance}}" StrokeThickness="0"/>
+
+        <Border x:Name="border" Visibility="Collapsed" BorderThickness="0" Height="80" Canvas.Top="-118" Width="220" Background="{Binding Instance.AccentBrush}" DataContext="{Binding Source={x:Static csShared:AppStateSettings.Instance}}" Canvas.Left="20">
+            <Grid>
+                <StackPanel x:Name="spAddress" Margin="30,4,0,0">
+                    <TextBlock x:Name="tbDistance" LineHeight="10.667" FontSize="15"/>
+                    <TextBlock x:Name="tbDuration" LineHeight="10.667" FontSize="15"/>
+                </StackPanel>
+
+                <StackPanel VerticalAlignment="Bottom" />
+                <Image Source="/csCommon;component/Resources/Icons/car.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="30" />
+
+            </Grid>
+        </Border>
+        <mapIconMenu1:ReferenceAlignPanel  HorizontalReferencePointAlignment="Center" VerticalReferencePointAlignment="Center" AlignReferencePoint="0,0" AllowRealign="False" Width="200" Height="200" Margin="-100,-100,0,0" >
+            <mapIconMenu1:MapMenu Radius="50" MenuEnabled="{Binding Path='Menu',ElementName=SurfaceUserControl}" Margin="0,0,0,0" x:Name="MKRoot" VerticalAlignment="Bottom">
+                <mapIconMenu1:MapMenuItem x:Name="bCircle" RootToolTip="User" Style="{DynamicResource MenuKillerItemStyle1}">
+                    <mapIconMenu1:MapMenuItem.Header>
+                        <Grid>
+                            <Border Height="30" Width="30" Background="Black" CornerRadius="15">
+                                <Image Source="/csCommon;component/Resources/Icons/car.png" Stretch="Fill"/>
+                            </Border>
+                        </Grid>
+                    </mapIconMenu1:MapMenuItem.Header>
+
+                    <mapIconMenu1:MapMenuItem RootToolTip="Remove" Tap="MapMenuItem_Tap">
+                        <mapIconMenu1:MapMenuItem.Header>
+                            <Border Height="30" Width="30" Background="Black" CornerRadius="15">
+                                <Image Source="/csCommon;component/Resources/Icons/appbar.delete.white.png" Stretch="Fill"/>
+                            </Border>
+                        </mapIconMenu1:MapMenuItem.Header>
+                    </mapIconMenu1:MapMenuItem>
+                    <mapIconMenu1:MapMenuItem RootToolTip="Remove" x:Name="mmiZoom" Tap="mmiZoom_Tap">
+                        <mapIconMenu1:MapMenuItem.Header>
+                            <Border Height="30" Width="30" Background="Black" CornerRadius="15">
+                                <Image Source="/csCommon;component/Resources/Icons/zoom.png" Stretch="Fill"/>
+                            </Border>
+                        </mapIconMenu1:MapMenuItem.Header>
+                    </mapIconMenu1:MapMenuItem>
+                    <!--<MapIconMenu:MapMenuItem RootToolTip="Remove" x:Name="mmiPlay" Tap="mmiPlay_Tap">
+                        <MapIconMenu:MapMenuItem.Header>
+                            <Border Height="30" Width="30" Background="Black" CornerRadius="15">
+                                <Image Source="/csCommon;component/icons/play.png" Stretch="Fill"/>
+                            </Border>
+                        </MapIconMenu:MapMenuItem.Header>
+                    </MapIconMenu:MapMenuItem>-->
+                </mapIconMenu1:MapMenuItem>
+            </mapIconMenu1:MapMenu>
+        </mapIconMenu1:ReferenceAlignPanel>
+    </Canvas>
+
+    
+</UserControl>

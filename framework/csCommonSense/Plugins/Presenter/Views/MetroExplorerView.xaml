@@ -1,0 +1,112 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Custom="http://schemas.microsoft.com/surface/2008" xmlns:local="clr-namespace:nl.tno.cs.presenter" x:Class="nl.tno.cs.presenter.MetroExplorerView" 
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="600" >
+	<UserControl.Resources>
+		<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+		<ItemsPanelTemplate x:Key="FolderListPanelTemplate">
+			<VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+		</ItemsPanelTemplate>
+		<Style TargetType="{x:Type Control}" x:Key="ControlBaseStyle">
+			<Setter Property="FocusVisualStyle"	
+				Value="{x:Null}"/>
+			<Setter Property="SnapsToDevicePixels"
+				Value="False"/>
+			<Setter Property="FontFamily"
+				Value="Segoe360"/>
+			<Setter Property="FontWeight"
+				Value="Normal"/>
+			<Setter Property="FontSize"
+				Value="17"/>
+			<Setter Property="Padding"
+				Value="6,2,10,10"/>
+			<Setter Property="MinHeight"
+				Value="38"/>
+			<Setter Property="MinWidth"
+				Value="38"/>
+			<Setter Property="Margin"
+				Value="1"/>
+			<Setter Property="HorizontalContentAlignment"
+				Value="Left"/>
+			<Setter Property="VerticalContentAlignment"
+				Value="Top"/>
+			<Setter Property="BorderThickness"
+				Value="2"/>
+		</Style>
+		<SolidColorBrush x:Key="ControlHitAreaBrush"    
+			Color="#00FFFFFF"/>
+		<Style x:Key="SurfaceListBoxItemStyle1" TargetType="{x:Type Custom:SurfaceListBoxItem}"
+			BasedOn="{StaticResource ControlBaseStyle}">
+			<Setter Property="Background" 
+				Value="Transparent"/>
+			<Setter Property="Foreground" 
+				Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemForegroundBrushKey}}"/>
+			<Setter Property="BorderThickness" 
+				Value="0"/>
+			<Setter Property="HorizontalContentAlignment"
+				Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Custom:SurfaceListBoxItem}">						
+						<Grid   x:Name="Grid"
+							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Visibility="Visible">							
+							<ContentPresenter   x:Name="Content"										
+								Margin="{TemplateBinding Padding}"
+								HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"                               					   
+								VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="SurfaceButtonStyle1"
+			TargetType="{x:Type Custom:SurfaceButton}" 
+			BasedOn="{StaticResource ControlBaseStyle}">
+			<Setter Property="IsTabStop"
+				Value="False" />
+			<Setter Property="Focusable"
+				Value="True" />
+			<Setter Property="Background"
+				Value="Transparent" />
+			<Setter Property="Foreground"
+				Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonForegroundBrushKey}}" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Custom:SurfaceButton}">
+						
+						<Grid x:Name="Grid"
+							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">							
+							<ContentPresenter  x:Name="Content"
+								Margin="{TemplateBinding Padding}"  
+								HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"		                                                                           
+								VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+						</Grid>
+
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</UserControl.Resources>
+    <Grid>
+    	<Grid.RowDefinitions>
+    		<RowDefinition Height="Auto"/>
+    		<RowDefinition/>
+    	</Grid.RowDefinitions>
+            
+    	<Custom:SurfaceListBox x:Name="Folders" Grid.Row="1" BorderThickness="0" ItemsPanel="{DynamicResource FolderListPanelTemplate}" ItemContainerStyle="{DynamicResource SurfaceListBoxItemStyle1}" Background="{x:Null}"/>
+        <Grid HorizontalAlignment="Left" Margin="5,0,0,0" >
+    		<TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Title}" Margin="0,30" VerticalAlignment="Center" FontFamily="Segoe WP" FontSize="48"/>
+    		<Custom:SurfaceButton x:Name="Back" Margin="0,0,5,0" Height="65" VerticalAlignment="Center" Style="{DynamicResource SurfaceButtonStyle1}" Background="{x:Null}">
+    			<Image Source="/csPresenterPlugin;component/back.png" />
+    		</Custom:SurfaceButton>
+            
+    	</Grid>
+            
+    </Grid>
+</UserControl>

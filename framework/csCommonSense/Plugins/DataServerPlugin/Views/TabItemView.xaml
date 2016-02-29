@@ -1,0 +1,422 @@
+﻿<UserControl x:Class="csDataServerPlugin.TabItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:systems="clr-namespace:csDataServerPlugin"
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:csShared="clr-namespace:csShared"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:s="http://schemas.microsoft.com/surface/2008"
+             d:DesignHeight="300"
+             AllowDrop="True"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+
+        <!--<wpfConverters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisiblityConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+        <csShared:AppStateSettings x:Key="AppStateSettingsDataSource" d:IsDataSource="True" />-->
+        <DataTemplate x:Key="DataTemplate1">
+            <Grid Width="85"
+                  Height="30"
+                  Opacity="1">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewTouchDown">
+                        <cal:ActionMessage MethodName="StartTouchDrag">
+                            <cal:Parameter Value="$dataContext" />
+                            <cal:Parameter Value="$eventArgs" />
+                        </cal:ActionMessage>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseDown">
+                        <cal:ActionMessage MethodName="StartDrag">
+                            <cal:Parameter Value="$dataContext" />
+                            <cal:Parameter Value="$eventArgs" />
+                        </cal:ActionMessage>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <systems:ucPoiPreview Width="30" 
+                                      Height="30"
+                                      Margin="2,0,0,0"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Top"
+                                      PoI="{Binding}">
+                </systems:ucPoiPreview>
+                <TextBlock Width="Auto"
+                           Margin="38,-2,0,0"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           FontSize="12"
+                           Foreground="Black"
+                           Text="{Binding Name}"
+                           TextWrapping="Wrap" />
+                <TextBlock Width="Auto"                           
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom"
+                           FontSize="8"
+                           Margin="0,0,0,-3"
+                           FontWeight="Bold"
+                           Foreground="Black"
+                           Text="{Binding ItemsLeft}"
+                           TextWrapping="Wrap" />
+            </Grid>
+        </DataTemplate>
+
+        <Style x:Key="ControlBaseStyle" TargetType="{x:Type Control}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="SnapsToDevicePixels" Value="False" />
+            <Setter Property="FontFamily" Value="Segoe360" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontSize" Value="17" />
+            <Setter Property="Padding" Value="6,2,10,10" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="MinWidth" Value="38" />
+            <Setter Property="Margin" Value="1" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Top" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+        <SolidColorBrush x:Key="ControlHitAreaBrush" Color="#00FFFFFF" />
+        <Style x:Key="SurfaceToggleButtonMetroStyle"
+               BasedOn="{StaticResource ControlBaseStyle}"
+               TargetType="{x:Type s:SurfaceToggleButton}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="7" />
+            <Setter Property="Background" Value="{DynamicResource {x:Static s:SurfaceColors.ButtonBackgroundBrushKey}}" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static s:SurfaceColors.ButtonForegroundBrushKey}}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type s:SurfaceToggleButton}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="Press">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+                                                               Storyboard.TargetName="PressOverlay"
+                                                               Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="Release">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+                                                               Storyboard.TargetName="PressOverlay"
+                                                               Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+                        <Grid x:Name="Grid"
+                              Width="Auto"
+                              Height="Auto"
+                              Background="{StaticResource ControlHitAreaBrush}"
+                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates" />
+                                <VisualStateGroup x:Name="FocusStates" />
+                                <VisualStateGroup x:Name="CheckStates" />
+                                <VisualStateGroup x:Name="ValidationStates" />
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="ButtonBody"
+                                    Height="Auto"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="30"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <Border x:Name="PressOverlay"
+                                    Background="{DynamicResource {x:Static s:SurfaceColors.ButtonBackgroundPressedBrushKey}}"
+                                    CornerRadius="30"
+                                    Opacity="0"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ContentPresenter x:Name="Content"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="ButtonBody" Property="Background" Value="Black" />
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static s:SurfaceColors.ButtonForegroundBrushKey}}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource Press}" />
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource Release}" />
+                                </Trigger.ExitActions>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static s:SurfaceColors.ButtonForegroundPressedBrushKey}}" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsPressed" Value="True" />
+                                    <Condition Property="IsChecked" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="PressOverlay" Property="Background" Value="{DynamicResource {x:Static s:SurfaceColors.ToggleButtonBackgroundCheckedPressedBrushKey}}" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsEnabled" Value="False" />
+                                    <Condition Property="IsChecked" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="ButtonBody" Property="Background" Value="{DynamicResource {x:Static s:SurfaceColors.ToggleButtonBackgroundCheckedDisabledBrushKey}}" />
+                                <Setter TargetName="Content" Property="Opacity" Value="0.6" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsEnabled" Value="False" />
+                                    <Condition Property="IsChecked" Value="False" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static s:SurfaceColors.ButtonForegroundDisabledBrushKey}}" />
+                                <Setter TargetName="ButtonBody" Property="Background" Value="{DynamicResource {x:Static s:SurfaceColors.ButtonBackgroundDisabledBrushKey}}" />
+                                <Setter TargetName="Content" Property="Opacity" Value="0.33" />
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ServicesSurfaceListBoxItemStyle"
+               BasedOn="{StaticResource ControlBaseStyle}"
+               TargetType="{x:Type s:SurfaceListBoxItem}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemBackgroundBrushKey}}" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemForegroundBrushKey}}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <!--<Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" />-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type s:SurfaceListBoxItem}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="Press">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+                                                               Storyboard.TargetName="PressOverlay"
+                                                               Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="Release">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+                                                               Storyboard.TargetName="PressOverlay"
+                                                               Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+                        <Grid x:Name="Grid"
+                              Margin="0,0,10,0"
+                              Background="{StaticResource ControlHitAreaBrush}"
+                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                            <Border x:Name="ButtonBody"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <Border x:Name="PressOverlay"
+                                    Background="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemBackgroundPressedBrushKey}}"
+                                    Opacity="0"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ContentPresenter x:Name="Content" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ContainerStyle" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <csShared:SurfaceExpander Margin="5 0"
+                                                  Background="#30FFFFFF"
+                                                  ExpandDirection="Right"
+                                                  IsExpanded="False">
+                            <csShared:SurfaceExpander.Header>
+                                <TextBlock FontWeight="Bold" Text="{Binding Name}">
+                                    <TextBlock.LayoutTransform>
+                                        <RotateTransform Angle="90" />
+                                    </TextBlock.LayoutTransform>
+                                </TextBlock>
+                            </csShared:SurfaceExpander.Header>
+                            <ItemsPresenter />
+                        </csShared:SurfaceExpander>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Margin="0">
+        <s:SurfaceListBox x:Name="slbAvailable1"
+                          Margin="10,0,0,-2"
+                          BorderThickness="0"
+                          ItemContainerStyle="{DynamicResource SurfaceListBoxItemStyle1}"
+                          ItemTemplate="{DynamicResource DataTemplate1}"
+                          ItemsPanel="{DynamicResource ItemsPanelTemplate1}"
+                          ItemsSource="{Binding ServicePoITypes}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                          SelectedValue="{Binding SelectedPoiType}"
+                          SelectionMode="Single"
+                          Template="{DynamicResource SurfaceListBoxControlTemplate1}">
+            <s:SurfaceListBox.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource ContainerStyle}">
+                    <GroupStyle.Panel>
+                        <ItemsPanelTemplate>
+                            <StackPanel IsItemsHost="True" Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </GroupStyle.Panel>
+                </GroupStyle>
+            </s:SurfaceListBox.GroupStyle>
+            <s:SurfaceListBox.Resources>
+                <ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
+                    <WrapPanel IsItemsHost="True" Orientation="Vertical" />
+                </ItemsPanelTemplate>
+                <Style x:Key="ControlBaseStyle" TargetType="{x:Type Control}">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="SnapsToDevicePixels" Value="False" />
+                    <Setter Property="FontFamily" Value="Segoe360" />
+                    <Setter Property="FontWeight" Value="Normal" />
+                    <Setter Property="FontSize" Value="17" />
+                    <Setter Property="Padding" Value="6,2,10,10" />
+                    <Setter Property="MinHeight" Value="38" />
+                    <Setter Property="MinWidth" Value="38" />
+                    <Setter Property="Margin" Value="1" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    <Setter Property="VerticalContentAlignment" Value="Top" />
+                    <Setter Property="BorderThickness" Value="2" />
+                </Style>
+                <SolidColorBrush x:Key="ControlHitAreaBrush" Color="#00FFFFFF" />
+                <Style x:Key="SurfaceListBoxItemStyle1"
+                       BasedOn="{StaticResource ControlBaseStyle}"
+                       TargetType="{x:Type s:SurfaceListBoxItem}">
+                    <Setter Property="Background" Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemBackgroundBrushKey}}" />
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemForegroundBrushKey}}" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type s:SurfaceListBoxItem}">
+                                <ControlTemplate.Resources>
+                                    <Storyboard x:Key="Press">
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+                                                                       Storyboard.TargetName="PressOverlay"
+                                                                       Storyboard.TargetProperty="(UIElement.Opacity)">
+                                            <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                    <Storyboard x:Key="Release">
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+                                                                       Storyboard.TargetName="PressOverlay"
+                                                                       Storyboard.TargetProperty="(UIElement.Opacity)">
+                                            <SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="0" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </ControlTemplate.Resources>
+                                <Grid x:Name="Grid"
+                                      Background="{StaticResource ControlHitAreaBrush}"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <Border x:Name="ButtonBody"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    <Border x:Name="PressOverlay"
+                                            Background="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemBackgroundPressedBrushKey}}"
+                                            Opacity="0"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    <ContentPresenter x:Name="Content"
+                                                      Margin="2"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="ButtonBody" Property="Background" Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemSelectionBackgroundBrushKey}}" />
+                                        <Setter TargetName="PressOverlay" Property="Background" Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemSelectionBackgroundPressedBrushKey}}" />
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard Storyboard="{StaticResource Press}" />
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard Storyboard="{StaticResource Release}" />
+                                        </Trigger.ExitActions>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemForegroundPressedBrushKey}}" />
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsEnabled" Value="False" />
+                                            <Condition Property="IsSelected" Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter TargetName="ButtonBody" Property="Background" Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemSelectionBackgroundDisabledBrushKey}}" />
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemForegroundDisabledBrushKey}}" />
+                                        <Setter TargetName="Content" Property="Opacity" Value="0.6" />
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsEnabled" Value="False" />
+                                            <Condition Property="IsSelected" Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter TargetName="ButtonBody" Property="Background" Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemBackgroundDisabledBrushKey}}" />
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemForegroundDisabledBrushKey}}" />
+                                        <Setter TargetName="Content" Property="Opacity" Value="0.33" />
+                                    </MultiTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <ControlTemplate x:Key="SurfaceListBoxControlTemplate1" TargetType="{x:Type s:SurfaceListBox}">
+                    <Grid SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <ItemsPresenter MinWidth="{TemplateBinding MinWidth}"
+                                        MinHeight="{TemplateBinding MinHeight}"
+                                        ClipToBounds="False"
+                                        d:LayoutOverrides="Width, Height" />
+                        <Border x:Name="Border"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsGrouping" Value="True">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </s:SurfaceListBox.Resources>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <cal:ActionMessage MethodName="PoiSelectionChanged">
+                        <cal:Parameter Value="$executionContext" />
+                        <cal:Parameter Value="$eventArgs" />
+                    </cal:ActionMessage>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </s:SurfaceListBox>
+        <WrapPanel Width="200"
+                   HorizontalAlignment="Left"
+                   Orientation="Vertical"
+                   Visibility="Collapsed">
+            <s:SurfaceToggleButton Margin="10"
+                                   Content="Visible"
+                                   IsChecked="{Binding Layer.Visible,
+                                                       Mode=TwoWay}" />
+            <s:SurfaceToggleButton Margin="10"
+                                   Content="Tab"
+                                   IsChecked="{Binding Layer.DetailTabVisible,
+                                                       Mode=TwoWay}"
+                                   Visibility="Collapsed" />
+            <s:SurfaceToggleButton Margin="10"
+                                   Content="Review"
+                                   IsChecked="{Binding Layer.ReviewMode,
+                                                       Mode=TwoWay}"
+                                   Visibility="Collapsed" />
+            <!--<s:SurfaceToggleButton Margin="10"
+                                   Content="History"
+                                   IsChecked="{Binding Layer.TrackLayer.Visible,
+                                                       Mode=TwoWay}"
+                                   Visibility="Collapsed" />-->
+        </WrapPanel>
+    </Grid>
+</UserControl>

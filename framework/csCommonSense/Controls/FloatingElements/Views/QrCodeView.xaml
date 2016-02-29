@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="csShared.FloatingElements.QrCodeView"
+       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+       xmlns:qr="clr-namespace:Gma.QrCodeNet.Encoding.Windows.WPF;assembly=Gma.QrCodeNet.Encoding"
+       mc:Ignorable="d"
+       d:DesignHeight="300"
+       d:DesignWidth="300">
+ <Grid HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    Background="White">
+  <qr:QrCodeGeoControl HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Margin="0"
+             Name="qrCodeGeoControl1"
+             Text="hi"
+             MaxWidth="200"
+             MaxHeight="200"
+             LightBrush="White"
+             DarkBrush="Black" />
+ </Grid>
+</UserControl>

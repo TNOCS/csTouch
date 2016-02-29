@@ -1,0 +1,160 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation" xmlns:Presentation="clr-namespace:Microsoft.Surface.Presentation;assembly=Microsoft.Surface.Presentation" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:csShared="clr-namespace:csShared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro" mc:Ignorable="d" x:Class="csCommon.MapPlugins.Timeline.TimelineControlView">
+	<UserControl.Resources>
+		<csShared:AppStateSettings x:Key="AppStateSettingsDataSource1" d:IsDataSource="True"/>
+		<csShared:AppStateSettings x:Key="AppStateSettingsDataSource" />
+		<DataTemplate x:Key="DataTemplate1">
+
+            <ContentPresenter ContentSource="{Binding}" />
+            
+		</DataTemplate>
+	
+		<ItemsPanelTemplate x:Key="MapSelectionItemPanelTemplate">
+			<WrapPanel IsItemsHost="True" />
+		</ItemsPanelTemplate>
+		<DataTemplate x:Key="dtItem">
+            <s:SurfaceButton  Width="100" Height="75">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cal:ActionMessage MethodName="Click">
+                            <cal:Parameter Value="$datacontext"></cal:Parameter>
+                            <cal:Parameter Value="$eventArgs"></cal:Parameter>
+                        </cal:ActionMessage>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <s:SurfaceButton.Content>
+                    <Grid Width="90" Height="60" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <!--<Image Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Top" Source="http://www.bywaysonline.org/common/graphics/close_32.gif" />-->
+                    <TextBlock VerticalAlignment="Bottom" TextWrapping="Wrap" Text="{Binding Name}" />
+                    </Grid>
+                </s:SurfaceButton.Content>
+            </s:SurfaceButton>
+        </DataTemplate>
+		<Style TargetType="{x:Type Control}" x:Key="ControlBaseStyle">
+			<Setter Property="FocusVisualStyle"	
+				Value="{x:Null}"/>
+			<Setter Property="SnapsToDevicePixels"
+				Value="False"/>
+			<Setter Property="FontFamily"
+				Value="Segoe360"/>
+			<Setter Property="FontWeight"
+				Value="Normal"/>
+			<Setter Property="FontSize"
+				Value="17"/>
+			<Setter Property="Padding"
+				Value="6,2,10,10"/>
+			<Setter Property="MinHeight"
+				Value="38"/>
+			<Setter Property="MinWidth"
+				Value="38"/>
+			<Setter Property="Margin"
+				Value="1"/>
+			<Setter Property="HorizontalContentAlignment"
+				Value="Left"/>
+			<Setter Property="VerticalContentAlignment"
+				Value="Top"/>
+			<Setter Property="BorderThickness"
+				Value="2"/>
+		</Style>
+		<SolidColorBrush x:Key="ControlHitAreaBrush"    
+			Color="#00FFFFFF"/>
+		<Style x:Key="MetroButtonRadioButtonStyle" TargetType="{x:Type s:SurfaceRadioButton}"
+			BasedOn="{StaticResource ControlBaseStyle}">
+			<Setter Property="Background"   
+				Value="{DynamicResource {x:Static Presentation:SurfaceColors.ControlBackgroundBrushKey}}"/>
+			<Setter Property="Foreground" 
+				Value="{DynamicResource {x:Static Presentation:SurfaceColors.ControlForegroundBrushKey}}"/>
+			<Setter Property="BorderBrush"
+				Value="{DynamicResource {x:Static Presentation:SurfaceColors.ControlBorderBrushKey}}"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type s:SurfaceRadioButton}">
+						<ControlTemplate.Resources>
+							<Storyboard x:Key="Checked">
+								
+							</Storyboard>
+							<Storyboard x:Key="Unchecked">
+								
+							</Storyboard>
+						</ControlTemplate.Resources>
+						<Grid x:Name="grid" Background="{TemplateBinding Background}" Opacity="0.5">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							<Rectangle  Grid.ColumnSpan="2" 
+								x:Name="hitArea"
+								Fill="{StaticResource ControlHitAreaBrush}" 
+								Width="{TemplateBinding Width}" 
+								Height="{TemplateBinding Height}"/>
+							
+							<ContentPresenter  	x:Name="Content"
+								Grid.Column="1"
+								ClipToBounds="False"
+								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,10" />
+						</Grid>
+						<ControlTemplate.Triggers>
+							
+							<Trigger Property="IsChecked"
+								Value="True">
+								<Trigger.EnterActions>
+									<BeginStoryboard Storyboard="{StaticResource Checked}" />
+								</Trigger.EnterActions>
+								<Trigger.ExitActions>
+									<BeginStoryboard Storyboard="{StaticResource Unchecked}" />
+								</Trigger.ExitActions>
+								<Setter Property="Opacity" TargetName="grid" Value="1"/>
+							</Trigger>
+							<Trigger Property="IsPressed"
+								Value="True">
+								<Setter Property="Background"
+									Value="{DynamicResource {x:Static Presentation:SurfaceColors.ControlBackgroundPressedBrushKey}}"/>
+								<Setter Property="BorderBrush"
+									Value="{DynamicResource {x:Static Presentation:SurfaceColors.ControlBorderPressedBrushKey}}"/>
+								<Setter Property="Foreground"
+									Value="{DynamicResource {x:Static Presentation:SurfaceColors.ControlForegroundPressedBrushKey}}"/>								
+							</Trigger>
+							<Trigger Property="IsEnabled"
+								Value="False">
+								<Setter Property="Background"
+									Value="{DynamicResource {x:Static Presentation:SurfaceColors.ControlBackgroundDisabledBrushKey}}"/>
+								<Setter Property="Foreground"
+									Value="{DynamicResource {x:Static Presentation:SurfaceColors.ControlForegroundDisabledBrushKey}}"/>
+								<Setter Property ="BorderBrush"
+									Value ="{DynamicResource {x:Static Presentation:SurfaceColors.ControlBorderDisabledBrushKey}}"/>
+								
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		
+
+	</UserControl.Resources>
+
+	<Grid >
+		<WrapPanel Margin="1" d:LayoutOverrides="Height">
+			<s:SurfaceRadioButton x:Name="Custom" Content="Custom" Margin="0,0,5,0" Style="{DynamicResource MetroButtonRadioButtonStyle}" Background="#4D000000" Width="100" Height="75" Foreground="White" GroupName="Time" IsChecked="True"/>
+
+
+
+
+			<s:SurfaceRadioButton x:Name="LastYear" Content="Last Year" Margin="0,0,5,0" Style="{DynamicResource MetroButtonRadioButtonStyle}" Background="#4D000000" Width="100" Height="75" Foreground="White" GroupName="Time"/>
+			<s:SurfaceRadioButton x:Name="LastMonth" Content="Last Month" Margin="0,0,5,0" Style="{DynamicResource MetroButtonRadioButtonStyle}" Background="#4D000000" Width="100" Height="75" Foreground="White" GroupName="Time"/>
+			<s:SurfaceRadioButton x:Name="LastWeek" Content="Last Week" Margin="0,0,5,0" Style="{DynamicResource MetroButtonRadioButtonStyle}" Background="#4D000000" Width="100" Height="75" Foreground="White" GroupName="Time"/>
+			<s:SurfaceRadioButton x:Name="LastDay" Content="Last Day" Margin="0,0,5,0" Style="{DynamicResource MetroButtonRadioButtonStyle}" Background="#4D000000" Width="100" Height="75" Foreground="White" GroupName="Time"/>
+			<s:SurfaceRadioButton x:Name="LastHour" Content="Last Hour" Margin="0,0,5,0" Style="{DynamicResource MetroButtonRadioButtonStyle}" Background="#4D000000" Width="100" Height="75" Foreground="White" GroupName="Time"/>
+			<s:SurfaceRadioButton x:Name="Last15min" Content="Last 15 min" Margin="0,0,5,0" Style="{DynamicResource MetroButtonRadioButtonStyle}" Background="#4D000000" Width="100" Height="75" Foreground="White" GroupName="Time"/>
+			<s:SurfaceRadioButton x:Name="Last5min" Content="Last 5 min" Margin="0,0,5,0" Style="{DynamicResource MetroButtonRadioButtonStyle}" Background="#4D000000" Width="100" Height="75" Foreground="White" GroupName="Time"/>
+			<s:SurfaceRadioButton x:Name="Last1min" Content="Last min" Margin="0,0,5,0" Style="{DynamicResource MetroButtonRadioButtonStyle}" Background="#4D000000" Width="100" Height="75" Foreground="White" GroupName="Time"/>
+
+
+
+
+		</WrapPanel>
+	</Grid>
+
+</UserControl>

@@ -1,0 +1,259 @@
+﻿<UserControl x:Class="csAppraisalPlugin.Views.AppraisalView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="clr-namespace:csAppraisalPlugin.Controls"
+             xmlns:Custom="http://schemas.microsoft.com/surface/2008"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="640"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!--  <Utils:InverseBooleanToVisiblityConverter x:Key="InverseBooleanToVisiblityConverter" />  -->
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <Style x:Key="SurfaceEvaluateButtonStyle" TargetType="{x:Type Custom:SurfaceButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Custom:SurfaceButton}">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="MouseOver" />
+                                    <VisualState x:Name="Pressed" />
+                                    <VisualState x:Name="Disabled" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="ValidationStates">
+                                    <VisualState x:Name="InvalidFocused" />
+                                    <VisualState x:Name="InvalidUnfocused" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border Width="200"
+                                    Height="200"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="Black"
+                                    BorderThickness="0"
+                                    CornerRadius="100" />
+                            <Path Width="26"
+                                  Height="26"
+                                  Margin="120.636,120.636,53.363,53.363"
+                                  Data="M46.400001,46.933998L63.466002,46.933998 63.466002,63.999998 46.400001,63.999998z M23.199001,46.933998L40.267002,46.933998 40.267002,63.999998 23.199001,63.999998z M0,46.933998L17.066002,46.933998 17.066002,63.999998 0,63.999998z M46.400001,23.465998L63.466002,23.465998 63.466002,40.533998 46.400001,40.533998z M23.199001,23.465998L40.267002,23.465998 40.267002,40.533998 23.199001,40.533998z M0,23.465998L17.066002,23.465998 17.066002,40.533998 0,40.533998z M46.400001,0L63.466002,0 63.466002,17.065998 46.400001,17.065998z M23.199001,0L40.267002,0 40.267002,17.065998 23.199001,17.065998z M0,0L17.066002,0 17.066002,17.065998 0,17.065998z"
+                                  Fill="#FFFFFFFF"
+                                  RenderTransformOrigin="0.5,0.5"
+                                  Stretch="Uniform">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <RotateTransform Angle="0" />
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ButtonScreenshotMapStyle" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="MouseOver" />
+                                    <VisualState x:Name="Pressed" />
+                                    <VisualState x:Name="Disabled" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="ValidationStates">
+                                    <VisualState x:Name="InvalidFocused" />
+                                    <VisualState x:Name="InvalidUnfocused" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ed:Arc ArcThickness="40"
+                                    EndAngle="135"
+                                    Fill="#FFF4F4F5"
+                                    StartAngle="90"
+                                    Stretch="None"
+                                    Stroke="Black"
+                                    StrokeThickness="2"
+                                    UseLayoutRounding="False" />
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True" />
+                            <Trigger Property="IsDefaulted" Value="True" />
+                            <Trigger Property="IsMouseOver" Value="True" />
+                            <Trigger Property="IsPressed" Value="True" />
+                            <Trigger Property="IsEnabled" Value="False" />
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScreenshotMapSurfaceButtonStyle" TargetType="{x:Type Custom:SurfaceButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Custom:SurfaceButton}">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="MouseOver" />
+                                    <VisualState x:Name="Pressed" />
+                                    <VisualState x:Name="Disabled" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="ValidationStates">
+                                    <VisualState x:Name="InvalidFocused" />
+                                    <VisualState x:Name="InvalidUnfocused" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ed:Arc ArcThickness="40"
+                                    EndAngle="180"
+                                    Fill="{TemplateBinding Background}"
+                                    StartAngle="137"
+                                    Stretch="None"
+                                    Stroke="{TemplateBinding BorderBrush}"
+                                    StrokeThickness="0"
+                                    UseLayoutRounding="False" />
+                            <Path Width="30"
+                                  Height="30"
+                                  Margin="177.608,251.604,92.391,18.395"
+                                  Data="M2.925457,45.511272C10.741428,45.502132,18.48247,50.500496,21.411001,52.619106L20.564001,62.264 0,53.770779 2.1689987,45.528053C2.4211235,45.517071,2.6733284,45.511566,2.925457,45.511272z M43.952001,43.591896C55.724,52.525307,62.183001,53.360489,62.789,53.421089L64,61.205421 44.424,54.828056 44.396,54.156773z M40.450001,43.115406L40.919001,54.26947 40.950001,54.990753 24.056,62.232002 24.903,52.581406z M32.606,36.478134L32.606,43.690895 25.280001,48.306694 26.096001,39.011951z M59.924001,35.005447L62.139,49.239574C59.452001,49.095078 54.612,46.333439 50.368,43.548397 53.144,35.378548 59.758,35.013317 59.924001,35.005447z M16.933001,22.882633L23.807001,25.352081 23.771,25.766691 23.009001,34.433929C13.212002,29.659979,16.569,23.494579,16.933001,22.882633z M8.8899994,19.993994L13.364,21.601459C9.25,30.491262,18.677,36.603863,22.634001,38.703369L21.754,48.719387C6.2389984,39.027451,3.1920013,41.771053,3.1920013,41.771053L2.8279991,43.028809z M39.475,19.857397L40.272,38.861565 36.321,41.351074 36.242001,33.327076C35.919001,31.54977,33.817,31.872763,33.817,31.872763L26.479,34.649315 27.239,25.997887 27.308001,25.195833z M42.948,19.718L46.328,20.843176 48.265,28.147562 49.341001,32.198376 51.812,28.815638 55.427,23.871042 58.343,24.841661 59.338,31.237457C50.179,32.483341,47.031,41.246284,47.031,41.246284L47.372,41.519039C45.925,40.510029,44.669,39.595921,43.755,38.916862z M53.679668,4.3845386C51.646579,4.4165239 49.847217,5.8707604 49.457722,7.9460926 49.009715,10.31923 50.56956,12.603175 52.941967,13.049685 55.314495,13.496293 57.60103,11.937162 58.046438,9.5640144 58.494245,7.1922369 56.93172,4.9063015 54.561872,4.4602423 54.26532,4.4044247 53.970109,4.3799686 53.679668,4.3845386z M53.876964,0.00037478212C54.370403,0.0050314565 54.870273,0.05313564 55.372135,0.14771746 59.963256,1.0122223 62.984005,5.4340973 62.119318,10.023382 61.814724,11.634684 61.072536,13.050685 60.038754,14.176887L55.179538,20.820293 50.197683,27.634001 48.033721,19.474491 45.924445,11.519484C45.372331,10.095582 45.19521,8.50704 45.497207,6.8932085 46.267306,2.8053779 49.85896,-0.037543376 53.876964,0.00037478212z"
+                                  Fill="#FFFFFFFF"
+                                  RenderTransformOrigin="0.5,0.5"
+                                  Stretch="Uniform">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <RotateTransform Angle="0" />
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScreenshotScreenSurfaceButtonStyle" TargetType="{x:Type Custom:SurfaceButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Custom:SurfaceButton}">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="MouseOver" />
+                                    <VisualState x:Name="Pressed" />
+                                    <VisualState x:Name="Disabled" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="ValidationStates">
+                                    <VisualState x:Name="InvalidFocused" />
+                                    <VisualState x:Name="InvalidUnfocused" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ed:Arc ArcThickness="40"
+                                    EndAngle="133"
+                                    Fill="{TemplateBinding Background}"
+                                    StartAngle="90"
+                                    Stretch="None"
+                                    Stroke="{TemplateBinding BorderBrush}"
+                                    StrokeThickness="0"
+                                    UseLayoutRounding="False" />
+                            <Path Width="26"
+                                  Height="26"
+                                  Margin="258.09,186.332,15.909,87.667"
+                                  Data="M16.6693,45.905003L43.4757,45.905003C44.112999,45.905003,44.628002,46.421967,44.628002,47.056145L44.628002,48.788155C44.628002,49.425034,44.112999,49.941998,43.4757,49.941998L16.6693,49.941998C16.0326,49.941998,15.517,49.425034,15.517,48.788155L15.517,47.056145C15.517,46.421967,16.0326,45.905003,16.6693,45.905003z M49.41954,39.667637C48.692036,39.667637 48.101837,40.270634 48.101837,41.014027 48.101837,41.76012 48.692036,42.362915 49.41954,42.362915 50.145443,42.362915 50.735249,41.76012 50.735249,41.014027 50.735249,40.270634 50.145443,39.667637 49.41954,39.667637z M44.825417,39.607838C44.097614,39.607838 43.509415,40.210533 43.509415,40.953926 43.509415,41.69762 44.097614,42.303116 44.825417,42.303116 45.55172,42.303116 46.141525,41.69762 46.141525,40.953926 46.141525,40.210533 45.55172,39.607838 44.825417,39.607838z M6.3522615,5.5287595C5.911829,5.5287595,5.5541072,5.8554168,5.5541077,6.2604427L5.5541077,37.508957C5.5541072,37.913853,5.911829,38.240654,6.3522615,38.240654L55.388371,38.240654C55.828773,38.240654,56.188175,37.913853,56.188175,37.508957L56.188175,6.2604427C56.188175,5.8554168,55.828773,5.5287595,55.388371,5.5287595z M0.98016852,0L61.087196,0C61.629902,-2.3297311E-09,62.068005,0.436275,62.068005,0.97923898L62.068005,42.791309C62.068005,43.333004,61.629902,43.772999,61.087196,43.772999L38.711491,43.772999 38.711491,42.46711C38.711491,41.924217,38.272388,41.484024,37.729683,41.484024L24.010818,41.484024C23.471514,41.484024,23.030712,41.924217,23.030712,42.46711L23.030712,43.772999 0.98016852,43.772999C0.43945515,43.772999,-3.5527137E-15,43.333004,0,42.791309L0,0.97923898C-3.5527137E-15,0.436275,0.43945515,-2.3297311E-09,0.98016852,0z"
+                                  Fill="#FFFFFFFF"
+                                  RenderTransformOrigin="0.5,0.5"
+                                  Stretch="Uniform">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <RotateTransform Angle="0" />
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid x:Name="EvaluateView"
+              Background="#FF00B2A2"
+              Visibility="{Binding Plugin.Active,
+                                   Converter={StaticResource BooleanToVisibilityConverter}}">
+            <ContentControl x:Name="ActiveItem"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            Background="Purple" />
+            <StackPanel Margin="40"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Visibility="Collapsed">
+                <Custom:SurfaceToggleButton x:Name="ShowSpider"
+                                            Margin="10"
+                                            IsChecked="{Binding IsSpiderShown}">
+                    <Controls:SpiderWeb />
+                </Custom:SurfaceToggleButton>
+                <Custom:SurfaceToggleButton x:Name="ShowWeights"
+                                            Margin="10"
+                                            IsChecked="{Binding IsWeightShown}">
+                    <Controls:Weights />
+                </Custom:SurfaceToggleButton>
+                <Custom:SurfaceToggleButton x:Name="ShowComparison"
+                                            Margin="10"
+                                            IsChecked="{Binding IsComparisonShown}">
+                    <Controls:Scale />
+                </Custom:SurfaceToggleButton>
+            </StackPanel>
+        </Grid>
+
+
+        <Grid x:Name="MapView">
+            <Image x:Name="MainImage"
+                   IsHitTestVisible="False"
+                   RenderTransformOrigin="0.5,0.5"
+                   Visibility="Collapsed">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform />
+                        <SkewTransform />
+                        <RotateTransform />
+                        <TranslateTransform />
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+        </Grid>
+    </Grid>
+</UserControl>

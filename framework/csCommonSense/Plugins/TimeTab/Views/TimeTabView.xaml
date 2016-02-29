@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="csTimeTabPlugin.TimeTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Custom="http://schemas.microsoft.com/surface/2008"
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:csTimeTabPlugin"
+             x:Name="UserControl"
+             d:DesignHeight="1024"
+             d:DesignWidth="768"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <viewModels:TimeItemPositionConverter x:Key="TimeItemPositionConverter" />
+        <ItemsPanelTemplate x:Key="TimelineCanvas">
+            <Canvas IsItemsHost="True" />
+        </ItemsPanelTemplate>
+        <DataTemplate x:Key="TimeItemTemplate">
+            <ContentControl cal:View.Model="{Binding}" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid x:Name="gMain">
+        <ListBox x:Name="Items"
+                 Margin="0"
+                 HorizontalContentAlignment="Stretch"
+                 Background="Transparent"
+                 ItemTemplate="{StaticResource TimeItemTemplate}"
+                 ItemsPanel="{DynamicResource TimelineCanvas}"
+                 ItemsSource="{Binding TimeItems}" />
+        <Border Width="50"
+                Margin="0"
+                HorizontalAlignment="Left">
+            <StackPanel VerticalAlignment="Bottom">
+                <Custom:SurfaceButton x:Name="RowSettings"
+                                      Width="35"
+                                      Height="35"
+                                      Margin="5,5,0,5"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Top"
+                                      HorizontalContentAlignment="Stretch"
+                                      VerticalContentAlignment="Stretch"
+                                      Padding="0">
+                    <Image Margin="5" Source="/csCommon;component/Resources/Icons/timetab.png" />
+                </Custom:SurfaceButton>
+                <Custom:SurfaceButton x:Name="ShowLog"
+                                      Width="35"
+                                      Height="35"
+                                      Margin="5,5,0,5"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Top"
+                                      HorizontalContentAlignment="Stretch"
+                                      VerticalContentAlignment="Stretch"
+                                      Padding="0">
+                    <Image Margin="5" Source="/csCommon;component/Resources/Icons/logbook.png" />
+                </Custom:SurfaceButton>
+                <Custom:SurfaceButton x:Name="Previous"
+                                      Width="35"
+                                      Height="35"
+                                      Margin="5,5,0,5"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Top"
+                                      HorizontalContentAlignment="Stretch"
+                                      VerticalContentAlignment="Stretch"
+                                      Padding="0"
+                                      Visibility="Collapsed">
+                    <Image Margin="5" Source="/csCommon;component/Resources/Icons/volume.png" />
+                </Custom:SurfaceButton>
+                <Custom:SurfaceButton x:Name="Next"
+                                      Width="35"
+                                      Height="35"
+                                      Margin="5,5,0,5"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Top"
+                                      HorizontalContentAlignment="Stretch"
+                                      VerticalContentAlignment="Stretch"
+                                      Padding="0"
+                                      Visibility="Collapsed">
+                    <Image Margin="5" Source="/csCommon;component/Resources/Icons/undo.png" />
+                </Custom:SurfaceButton>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="csAppraisalPlugin.Controls.Weights"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="300">
+    <Viewbox Stretch="Uniform" Width="32">
+        <Canvas Name="svg2"
+                Width="51.749733"
+                Height="51.749734">
+            <Path Name="path2950"
+                  Fill="#FF000000">
+                <Path.Data>
+                    <PathGeometry Figures="M 6.5268994 42.597084 22.138323 42.597084 22.138323 26.473749 16.763804 25.57827 16.763804 23.535813 C 18.436978 22.979814 19.578992 21.86823 19.578992 20.587318 19.578992 18.749997 17.229552 17.260432 14.332604 17.260432 11.43545 17.260432 9.08601 18.749997 9.08601 20.587318 9.08601 21.86823 10.228231 22.97981 11.901404 23.535813 L 11.901404 25.607045 6.5268852 26.473749 6.5268852 42.597084 z"
+                                  FillRule="evenodd" />
+                </Path.Data>
+            </Path>
+            <Path Name="path2932"
+                  Fill="#FF000000">
+                <Path.Data>
+                    <PathGeometry Figures="M 24.615709 42.597084 45.222848 42.597084 45.222848 21.314256 38.128579 20.131874 38.128579 17.436543 C 40.337255 16.702734 41.844621 15.234696 41.844621 13.54434 41.844621 11.119349 38.743364 9.15265 34.919264 9.15265 31.094957 9.15265 27.993907 11.119349 27.993907 13.54434 27.993907 15.234696 29.50148 16.702734 31.709949 17.436543 L 31.709949 20.169963 24.61568 21.314256 24.61568 42.597084 z"
+                                  FillRule="evenodd" />
+                </Path.Data>
+            </Path>
+        </Canvas>
+    </Viewbox>
+</UserControl>

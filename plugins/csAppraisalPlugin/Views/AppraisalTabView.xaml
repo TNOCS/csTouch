@@ -1,0 +1,299 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
+             xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ThirdParty1="clr-namespace:csShared.ThirdParty;assembly=csCommon"
+             xmlns:Custom="http://schemas.microsoft.com/surface/2008"
+             mc:Ignorable="d"
+             x:Class="csAppraisalPlugin.Views.AppraisalTabView"
+             d:DesignWidth="600"
+             d:DesignHeight="176">
+    <UserControl.Resources>
+        <DataTemplate x:Key="AppraisalTemplate">
+            <Grid Height="Auto" Background="LightGray">
+                <Image ThirdParty1:Loader.DisplayOption="Preview"
+                       ThirdParty1:Loader.CacheHeight="100"
+                       ThirdParty1:Loader.Source="{Binding FileName}"
+                       ThirdParty1:Loader.DisplayWaitingAnimationDuringLoading="True"
+                       x:Name="image"
+                       Stretch="UniformToFill"
+                       Source="{Binding FileName}" />
+                <s:SurfaceButton Content="..."
+                                 Micro:Message.Attach="[Event Click] = [Action AppraisalMenu($executionContext)]"
+                                 HorizontalAlignment="Center"
+                                 Margin="0"
+                                 VerticalAlignment="Top"
+                                 Width="38"
+                                 Height="38"
+                                 Background="#4D000000"
+                                 HorizontalContentAlignment="Center"
+                                 Padding="0"
+                                 Foreground="White" />
+                <TextBlock Text="{Binding Title}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Background="Transparent"
+                                  
+                                  Foreground="{Binding Brush}"
+                                  TextWrapping="Wrap"
+                                 
+                                  FontSize="18"
+                                  FontWeight="Bold" />
+                <Path Data="M1540.22,2082.07L1546.95,2102.78 1568.73,2102.78 1551.11,2115.58 1557.84,2136.29 1540.22,2123.49 1522.6,2136.29 1529.33,2115.58 1511.71,2102.78 1533.49,2102.78 1540.22,2082.07z"
+                      Stretch="Uniform"
+                      Fill="#FF1A1A1A"
+                      Width="15"
+                      Height="15"
+                      Margin="0,3,3,0"
+                      RenderTransformOrigin="0.5,0.5"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Top"
+                      Visibility="{Binding IsCompare, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="AppraisalPanel">
+            <StackPanel IsItemsHost="True"
+                        Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+    </UserControl.Resources>
+
+    <Grid Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical"
+        	VerticalAlignment="Top" Margin="0,0,25,0">
+            <Custom:SurfaceButton x:Name="NewBlankAppraisal"
+        		Margin="0"
+        		Width="75"
+        		Height="75"
+        		HorizontalContentAlignment="Center"
+        		VerticalContentAlignment="Center"
+        		Padding="0">
+                <Path Data="M19.833,0L32.5,0 32.5,19.833999 52.334,19.833999 52.334,32.500999 32.5,32.500999 32.5,52.333 19.833,52.333 19.833,32.500999 0,32.500999 0,19.833999 19.833,19.833999z"
+        			Stretch="Uniform"
+        			Fill="#FFFFFFFF"
+        			Margin="20"
+        			RenderTransformOrigin="0.5,0.5"
+        			HorizontalAlignment="Center"
+        			VerticalAlignment="Center">
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="0" />
+                            <ScaleTransform ScaleX="1"
+        						ScaleY="1" />
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+            </Custom:SurfaceButton>
+            <Custom:SurfaceButton x:Name="Export"
+        		Margin="0.1,10,0.1,0"
+        		Width="75"
+        		Height="75"
+        		HorizontalContentAlignment="Center"
+        		VerticalContentAlignment="Center"
+        		Padding="0">
+                <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform" Margin="0,10,0,0">
+                    <Canvas Name="svg2" Canvas.Left="0" Canvas.Top="0" Width="100" Height="125">
+                        <Canvas.RenderTransform>
+                            <TranslateTransform X="0" Y="0"/>
+                        </Canvas.RenderTransform>
+                        <Canvas.Resources/>
+                        <!--Unknown tag: metadata-->
+                        <!--Unknown tag: sodipodi:namedview-->
+                        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4" Fill="White" Stroke="White">
+                            <Path.Data>
+                                <PathGeometry Figures="M60.464 58.654c0.758 0 1.403 0.11 1.934 0.331c0.532 0.221 0.964 0.512 1.298 0.874c0.333 0.362 0.577 0.775 0.729 1.239  c0.153 0.464 0.229 0.945 0.229 1.442c0 0.487-0.076 0.965-0.229 1.434c-0.153 0.47-0.396 0.885-0.729 1.247  c-0.334 0.362-0.767 0.653-1.298 0.874c-0.532 0.221-1.177 0.331-1.934 0.331h-2.8v4.344H55V58.654H60.464z M59.734 64.355  c0.306 0 0.6-0.023 0.882-0.068c0.283-0.045 0.532-0.133 0.747-0.263c0.215-0.13 0.387-0.314 0.518-0.551  c0.13-0.238 0.195-0.549 0.195-0.933c0-0.384-0.065-0.696-0.195-0.933c-0.13-0.238-0.303-0.421-0.518-0.551  c-0.215-0.13-0.464-0.218-0.747-0.263c-0.283-0.045-0.577-0.068-0.882-0.068h-2.07v3.631H59.734z" FillRule="NonZero"/>
+                            </Path.Data>
+                        </Path>
+                        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path6" Fill="White" Stroke="White">
+                            <Path.Data>
+                                <PathGeometry Figures="M62.448 5H15v90h69.231V26.783L62.448 5z M63.462 10.909l14.86 14.86h-14.86V10.909z M18.462 91.538V8.462H60v20.769h20.769  v62.308H18.462z" FillRule="NonZero"/>
+                            </Path.Data>
+                        </Path>
+                        <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="28.846" Canvas.Top="77.692" Width="41.538" Height="1.731" Name="rect8" Fill="White" Stroke="White"/>
+                        <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="28.846" Canvas.Top="56.923" Width="17.308" Height="1.731" Name="rect10" Fill="White" Stroke="White"/>
+                        <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="28.846" Canvas.Top="50" Width="41.538" Height="1.731" Name="rect12" Fill="White" Stroke="White"/>
+                        <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="28.846" Canvas.Top="43.077" Width="41.538" Height="1.731" Name="rect14" Fill="White" Stroke="White"/>
+                        <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="28.846" Canvas.Top="36.154" Width="41.538" Height="1.731" Name="rect16" Fill="White"/>
+                        <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="28.846" Canvas.Top="29.231" Width="24.231" Height="1.731" Name="rect18" Fill="White"/>
+                        <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="28.846" Canvas.Top="63.846" Width="17.308" Height="1.731" Name="rect20" Fill="White"/>
+                        <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="28.846" Canvas.Top="70.769" Width="17.308" Height="1.731" Name="rect22" Fill="White"/>
+                    </Canvas>
+                </Viewbox>
+            </Custom:SurfaceButton>
+        </StackPanel>
+        <Custom:SurfaceListBox Micro:Message.Attach="[Event SelectionChanged]=[Action Selected()]"
+                          x:Name="Appraisals"
+                          Margin="20,0,0,0"
+                          ItemTemplate="{DynamicResource AppraisalTemplate}"
+                          ItemsPanel="{DynamicResource AppraisalPanel}"
+                          Grid.Column="1"
+                          SelectionMode="Multiple"
+                          Background="{x:Null}"
+                          HorizontalContentAlignment="Stretch"
+                          VerticalContentAlignment="Stretch"
+                          ItemContainerStyle="{DynamicResource SurfaceListBoxItemStyle1}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+            <Custom:SurfaceListBox.Resources>
+                <Style x:Key="SurfaceListBoxItemStyle1"
+            		TargetType="{x:Type Custom:SurfaceListBoxItem}">
+                    <Setter Property="IsSelected"
+            			Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Setter Property="Template"
+            			Value="{DynamicResource SurfaceListBoxItemControlTemplate1}" />
+                </Style>
+                <ControlTemplate x:Key="SurfaceListBoxItemControlTemplate1"
+            		TargetType="{x:Type Custom:SurfaceListBoxItem}">
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="Press">
+                            <DoubleAnimationUsingKeyFrames BeginTime="0"
+            					Storyboard.TargetProperty="(UIElement.Opacity)"
+            					Storyboard.TargetName="PressOverlay">
+                                <SplineDoubleKeyFrame KeyTime="0:0:0.1"
+            						Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="Release">
+                            <DoubleAnimationUsingKeyFrames BeginTime="0"
+            					Storyboard.TargetProperty="(UIElement.Opacity)"
+            					Storyboard.TargetName="PressOverlay">
+                                <SplineDoubleKeyFrame KeyTime="0:0:0.25"
+            						Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </ControlTemplate.Resources>
+                    <Border x:Name="border"
+            			Width="{Binding ActualHeight, ElementName=border}"
+            			BorderThickness="1"
+            			BorderBrush="White">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="SelectionStates">
+                                <VisualState x:Name="Unselected">
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)"
+            								Storyboard.TargetName="border">
+                                            <EasingDoubleKeyFrame KeyTime="0"
+            									Value="0.5" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)"
+            								Storyboard.TargetName="border">
+                                            <EasingThicknessKeyFrame KeyTime="0"
+            									Value="10" />
+                                        </ThicknessAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Selected">
+                                    <Storyboard>
+                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderThickness)"
+            								Storyboard.TargetName="border">
+                                            <EasingThicknessKeyFrame KeyTime="0"
+            									Value="5" />
+                                        </ThicknessAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="SelectedUnfocused" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid x:Name="Grid"
+            				Background="{x:Null}"
+            				SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+            				Height="Auto">
+                            <Border x:Name="ButtonBody"
+            					BorderBrush="{TemplateBinding BorderBrush}"
+            					BorderThickness="{TemplateBinding BorderThickness}"
+            					Background="{TemplateBinding Background}"
+            					SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <Border x:Name="PressOverlay"
+            					Background="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}"
+            					Opacity="0"
+            					SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ContentPresenter x:Name="Content"
+            					ContentTemplate="{TemplateBinding ContentTemplate}"
+            					Content="{TemplateBinding Content}"
+            					ContentStringFormat="{TemplateBinding ContentStringFormat}"
+            					SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected"
+            				Value="True">
+                            <Setter Property="Background"
+            					TargetName="ButtonBody"
+            					Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}" />
+                            <Setter Property="Background"
+            					TargetName="PressOverlay"
+            					Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+            				Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="0"
+            								Storyboard.TargetProperty="(UIElement.Opacity)"
+            								Storyboard.TargetName="PressOverlay">
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0.1"
+            									Value="1" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="0"
+            								Storyboard.TargetProperty="(UIElement.Opacity)"
+            								Storyboard.TargetName="PressOverlay">
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0.25"
+            									Value="0" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                            <Setter Property="Foreground"
+            					Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled"
+            						Value="False" />
+                                <Condition Property="IsSelected"
+            						Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+            					TargetName="ButtonBody"
+            					Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}" />
+                            <Setter Property="Foreground"
+            					Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}" />
+                            <Setter Property="Opacity"
+            					TargetName="Content"
+            					Value="0.6" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled"
+            						Value="False" />
+                                <Condition Property="IsSelected"
+            						Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+            					TargetName="ButtonBody"
+            					Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}" />
+                            <Setter Property="Foreground"
+            					Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type Custom:SurfaceColors}}}" />
+                            <Setter Property="Opacity"
+            					TargetName="Content"
+            					Value="0.33" />
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Custom:SurfaceListBox.Resources>
+        </Custom:SurfaceListBox>
+    </Grid>
+
+</UserControl>
+

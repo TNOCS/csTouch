@@ -1,0 +1,219 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:presentation="http://schemas.microsoft.com/surface/2008"
+             xmlns:wpfConverters="clr-namespace:WpfConverters"
+             xmlns:converters="clr-namespace:csCommon.Converters"
+             xmlns:controls="clr-namespace:csShared.Controls"
+             xmlns:cal="http://www.caliburnproject.org"
+             x:Class="csCommon.Plugins.NotebookPlugin.NotebookConfigView"
+             mc:Ignorable="d" MinWidth="400" MinHeight="400">
+    <UserControl.Resources>
+        <wpfConverters:ReverseBooleanVisibilityConverter x:Key="ReverseBooleanVisibilityConverter" />
+        <wpfConverters:BooleanActiveOpacityConverter x:Key="BooleanActiveOpacityConverter" />
+        <wpfConverters:IconConverter x:Key="IconConverter" />
+        <converters:PluginStartStopIconConverter x:Key="PluginStateIconConverter" />
+        <wpfConverters:NotNullVisibilityConverter x:Key="NotNullVisibilityConverter" />
+
+        <Style x:Key="ButtonStyle"
+    		TargetType="{x:Type presentation:SurfaceButton}" 
+    		BasedOn="{StaticResource ControlBaseStyle}">
+        	<Setter Property="IsTabStop"
+        		Value="False" />
+        	<Setter Property="Focusable"
+        		Value="True" />
+        	<Setter Property="Background"
+        		Value="{DynamicResource {x:Static presentation:SurfaceColors.ButtonBackgroundBrushKey}}" />
+        	<Setter Property="Foreground"
+        		Value="{DynamicResource {x:Static presentation:SurfaceColors.ButtonForegroundBrushKey}}" />
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="{x:Type presentation:SurfaceButton}">
+        				<ControlTemplate.Resources>
+        					<Storyboard x:Key="Press">
+        						<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+        							Storyboard.TargetName="PressOverlay"
+        							Storyboard.TargetProperty="(UIElement.Opacity)">
+        							<SplineDoubleKeyFrame KeyTime="00:00:00.1000000"
+        								Value="1" />
+        						</DoubleAnimationUsingKeyFrames>
+        					</Storyboard>
+        					<Storyboard x:Key="Release">
+        						<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+        							Storyboard.TargetName="PressOverlay"
+        							Storyboard.TargetProperty="(UIElement.Opacity)">
+        							<SplineDoubleKeyFrame KeyTime="00:00:00.1500000"
+        								Value="0" />
+        						</DoubleAnimationUsingKeyFrames>
+        					</Storyboard>
+        				</ControlTemplate.Resources>
+        				<Grid x:Name="Grid"
+        					SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+        					<Rectangle  x:Name="ButtonBody"
+        						SnapsToDevicePixels ="{TemplateBinding SnapsToDevicePixels}" Fill="#4D000000"/>
+        					<Rectangle  x:Name="PressOverlay"
+        						Opacity="0"
+        						Fill ="{DynamicResource {x:Static presentation:SurfaceColors.ButtonBackgroundPressedBrushKey}}" 							             
+        						SnapsToDevicePixels ="{TemplateBinding SnapsToDevicePixels}"/>
+        					<ContentPresenter  x:Name="Content"
+        						Margin="{TemplateBinding Padding}"  
+        						HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"		                                                                           
+        						VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+        						SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        				</Grid>
+
+        				<ControlTemplate.Triggers>
+        					<Trigger Property="IsPressed"
+        						Value="True">
+        						<Trigger.EnterActions>
+        							<BeginStoryboard Storyboard="{StaticResource Press}" />
+        						</Trigger.EnterActions>
+        						<Trigger.ExitActions>
+        							<BeginStoryboard Storyboard="{StaticResource Release}" />
+        						</Trigger.ExitActions>
+        						<Setter Property="Foreground"
+        							Value="{DynamicResource {x:Static presentation:SurfaceColors.ButtonForegroundPressedBrushKey}}"/>
+        					</Trigger>
+        					<Trigger Property="IsEnabled"
+        						Value="False">
+        						<Setter Property="Fill"
+        							Value="{DynamicResource {x:Static presentation:SurfaceColors.ButtonBackgroundDisabledBrushKey}}"
+        							TargetName="ButtonBody" />
+        						<Setter Property="Foreground"
+        							Value="{DynamicResource {x:Static presentation:SurfaceColors.ButtonForegroundDisabledBrushKey}}"/>
+        						<Setter Property="Opacity"
+        							Value="0.33"
+        							TargetName="Content" />
+        					</Trigger>
+        				</ControlTemplate.Triggers>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        </Style>
+        <DataTemplate x:Key="NotebookTemplate">
+        
+        		<Grid Opacity="{Binding Available, Converter={StaticResource BooleanActiveOpacityConverter}}" Margin="0">
+        			<Grid.ColumnDefinitions>
+        				<ColumnDefinition Width="50"/>
+        				<ColumnDefinition/>
+        				<ColumnDefinition Width="Auto"/>
+        			</Grid.ColumnDefinitions>
+        			<StackPanel Grid.Column="1">
+        				<TextBlock Margin="0" TextWrapping="Wrap" Text="{Binding Name}" d:LayoutOverrides="Width" FontSize="18.667"/>
+        					
+        				<StackPanel Orientation="Horizontal" >
+        					<TextBlock Margin="5,0,0,0" TextWrapping="Wrap" Text="{Binding Folder}">
+        						
+        					</TextBlock>
+        				        				</StackPanel>
+        				
+        			</StackPanel>
+        			<StackPanel Grid.Column="2" Orientation="Horizontal" d:LayoutOverrides="Height" Margin="0,5,5,5">
+        				<presentation:SurfaceButton x:Name="Remove" cal:Message.Attach="Remove($dataContext)" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Stretch" Width="50" HorizontalContentAlignment="Center" IsEnabled="{Binding CanDelete}" Padding="4,2" VerticalContentAlignment="Center" Style="{DynamicResource ButtonStyle}">
+        					<Image Width="25" Height="Auto" Source="/csCommon;component/Resources/Icons/appbar.delete.white.png"/>
+        				</presentation:SurfaceButton>
+        				<!--<presentation:SurfaceButton x:Name="Connect" cal:Message.Attach="Connect($dataContext)" HorizontalAlignment="Right" Margin="10,0,0,0" VerticalAlignment="Stretch" Width="50" HorizontalContentAlignment="Center" IsEnabled="{Binding Available}" Padding="4,2" VerticalContentAlignment="Center" Style="{DynamicResource ButtonStyle}">
+        					<Image Width="20" Height="Auto" Source="/csCommon;component/Resources/Icons/link.png" Margin="0"/>
+        				</presentation:SurfaceButton>-->
+        			</StackPanel>
+        			<Border Width="40" Height="40" Margin="3" Background="#FF494949" >
+        				<Grid Margin="0" Background="#FF00AA2E">
+        					<Path Data="M78.505678,8.6831653C79.032389,8.6534097 79.521448,9.1961935 79.653567,10.014287 79.801974,10.947847 79.426974,11.891908 78.817568,12.1224L39.936106,26.668603C39.846205,26.702401 39.756304,26.718001 39.666506,26.718001 39.574106,26.718001 39.481703,26.699902 39.391806,26.668603L0.86691642,12.118399C0.25494647,11.889309 -0.11746025,10.946547 0.033602476,10.011785 0.18466425,9.0742242 0.79922819,8.503947 1.4098828,8.7370279L39.044104,22.946055C39.445204,23.097049,39.890505,23.098449,40.291506,22.948655L78.278567,8.731838C78.354418,8.7033517,78.43043,8.6874158,78.505678,8.6831653z M12.613961,6.1869788E-07C20.456185,-0.0013463921 31.803953,2.1961648 39.398897,12.921693 39.577196,13.172793 39.948393,13.168993 40.139693,12.926793 51.125399,-0.995022 65.810183,-0.083583034 71.333437,0.6363892 72.138132,0.74185979 72.820521,1.2561404 73.291819,1.9175814 74.218912,3.2170825 75.235804,4.4175837 75.945498,5.2145145 76.36999,5.692425 76.205797,6.4527962 75.609598,6.6833966L39.664496,20.626002 3.680432,6.6833966C3.1127163,6.4632361 3.0293671,5.7235553 3.4486832,5.2836149 4.130988,4.5662043 5.0607003,3.4058626 5.922533,1.7132311 6.3080001,0.95933008 6.9954646,0.37216947 7.833988,0.27444878 9.1811583,0.11772244 10.804217,0.0003124105 12.613961,6.1869788E-07z" Stretch="Uniform" Fill="#FFF4F4F4" RenderTransformOrigin="0.5,0.5" Margin="5">
+        						<Path.RenderTransform>
+        							<TransformGroup>
+        								<RotateTransform Angle="0" />
+        								<ScaleTransform ScaleX="1" ScaleY="1" />
+        							</TransformGroup>
+        						</Path.RenderTransform>
+        					</Path>
+        				</Grid>
+        			</Border>
+        		</Grid>
+        	
+        </DataTemplate>
+    	
+    </UserControl.Resources>
+
+	<Grid Margin="10">
+		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Timeline Configuration" VerticalAlignment="Top"
+			Style="{DynamicResource ConfigHeader}" />
+		<StackPanel>
+			<WrapPanel Margin="10,50,10,0">
+				<presentation:SurfaceToggleButton x:Name="ButtonVisible" HorizontalAlignment="Left" Margin="0,0,10,10"
+					VerticalAlignment="Top" Width="75" Height="75"
+					Style="{DynamicResource ConfigToggleButtons}"
+					IsChecked="{Binding Plugin.ShowScreenshotButton}">
+					<TextBlock Margin="0,0,-0.001,0" 
+						TextWrapping="Wrap" 
+						Text="Show button" 
+						FontSize="14.667"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center" />
+				</presentation:SurfaceToggleButton>
+				<presentation:SurfaceToggleButton x:Name="TabVisible" HorizontalAlignment="Left" Margin="0,0,10,10"
+					VerticalAlignment="Top" Width="75" Height="75"
+					Style="{DynamicResource ConfigToggleButtons}"
+					IsChecked="{Binding Plugin.ShowNotebookTab}">
+					<TextBlock Margin="0,0,-0.001,0" 
+						TextWrapping="Wrap" 
+						Text="Show notebook" 
+						FontSize="14.667"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center" />
+				</presentation:SurfaceToggleButton>
+				<!--<presentation:SurfaceToggleButton x:Name="AdvancedScreenshotButton" HorizontalAlignment="Left" Margin="0,0,10,10"
+                                              VerticalAlignment="Top" Width="75" Height="75"
+                                              Style="{DynamicResource ConfigToggleButtons}"
+                                              IsChecked="{Binding Timeline.FocusVisible}">
+                <TextBlock Margin="0,0,-0.001,0" 
+                           TextWrapping="Wrap" 
+                           Text="Focus Time" 
+                           FontSize="14.667"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+            </presentation:SurfaceToggleButton>
+            <presentation:SurfaceToggleButton x:Name="EventsVisible" HorizontalAlignment="Left" Margin="0,0,10,10"
+                                              VerticalAlignment="Top" Width="75" Height="75"
+                                              Style="{DynamicResource ConfigToggleButtons}"
+                                              IsChecked="{Binding Timeline.EventsVisible}">
+                <TextBlock Margin="0,0,-0.001,0" TextWrapping="Wrap" Text="Events" FontSize="14.667"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+            </presentation:SurfaceToggleButton>
+            <presentation:SurfaceToggleButton x:Name="TimePlayerVisible" HorizontalAlignment="Left" Margin="0,0,10,10"
+                                              VerticalAlignment="Top" Width="75" Height="75"
+                                              Style="{DynamicResource ConfigToggleButtons}"
+                                              IsChecked="{Binding Timeline.PlayerVisible}">
+                <TextBlock Margin="0,0,-0.001,0" TextWrapping="Wrap" Text="Time Player" FontSize="14.667"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+            </presentation:SurfaceToggleButton>
+            <presentation:SurfaceToggleButton x:Name="FixTimeline" HorizontalAlignment="Left" Margin="0,0,10,10"
+                                              VerticalAlignment="Top" Width="75" Height="75"
+                                              Style="{DynamicResource ConfigToggleButtons}"
+                                              IsChecked="{Binding Timeline.CanChangeTimeInterval}">
+                <TextBlock Margin="0,0,-0.001,0" TextWrapping="Wrap" Text="Fix Timeline Interval" FontSize="14.667"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+            </presentation:SurfaceToggleButton>-->
+			</WrapPanel>
+			<Grid Margin="0">
+				<StackPanel Margin="50,0,10,5" Orientation="Vertical">
+					<TextBlock TextWrapping="Wrap" Text="Add Notebook" FontSize="18.667" Margin="0,6,0,0"/>
+					<Grid VerticalAlignment="Top" Margin="0,5,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<controls:KeyboardTextBox x:Name="NewName" Watermark="Notebook name" Margin="0" TextWrapping="Wrap" Text="" FontSize="16" VerticalContentAlignment="Center"/>
+						<presentation:SurfaceButton x:Name="AddNotebook" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Height="40" BorderThickness="0" Padding="10,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Content="Save" VerticalContentAlignment="Center" Margin="10,0,0,0" Grid.Column="2"/>
+					</Grid>
+				</StackPanel>
+			</Grid>
+			<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Available Notebooks" VerticalAlignment="Top" Style="{DynamicResource ConfigHeader}"/>
+			<presentation:SurfaceListBox Background="{x:Null}" BorderBrush="{x:Null}" ItemsSource="{Binding Plugin.Notebooks}" ItemTemplate="{DynamicResource NotebookTemplate}" HorizontalContentAlignment="Stretch"/>
+		</StackPanel>
+	</Grid>
+</UserControl>

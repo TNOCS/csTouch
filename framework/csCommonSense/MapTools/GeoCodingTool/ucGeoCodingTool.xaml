@@ -1,0 +1,131 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:csShared="clr-namespace:csShared"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:esri="http://schemas.esri.com/arcgis/client/2009" 
+    xmlns:geo="clr-namespace:csCommon.MapTools.GeoCodingTool"
+    xmlns:mapIconMenu="clr-namespace:csCommon.csMapCustomControls.MapIconMenu"
+    xmlns:mapIconMenu1="clr-namespace:csCommon.csMapCustomControls.MapIconMenu"
+    xmlns:converters="clr-namespace:csCommon.Converters"
+    xmlns:mapIconMenu2="clr-namespace:csMapCustomControls.MapIconMenu"
+
+    x:Class="csCommon.MapTools.GeoCodingTool.ucGeoCodingTool"
+    x:Name="SurfaceUserControl"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:LatLonStringConverter x:Key="LatLonStringConverter" />
+        <esri:MarkerSymbol x:Key="GeoCodingTool">
+            <esri:MarkerSymbol.ControlTemplate>
+                <ControlTemplate>
+                    <geo:ucGeoCodingTool x:Name="gctControl" Grph="{Binding}" Width="30" Height="30" />
+                </ControlTemplate>
+            </esri:MarkerSymbol.ControlTemplate>
+        </esri:MarkerSymbol>
+    </UserControl.Resources>
+
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <ei:GoToStateAction TargetObject="{Binding ElementName=SurfaceUserControl}" StateName="Icon" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Canvas HorizontalAlignment="Left" VerticalAlignment="Top">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="Icon">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                       Storyboard.TargetName="border">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                       Storyboard.TargetName="path">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Info" />
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Path x:Name="path" Data="M14,-3 L43,15 0.5,37.5 z"
+              DataContext="{Binding Source={x:Static csShared:AppStateSettings.Instance}}"
+              Fill="{Binding Instance.AccentBrush}" Height="41.5"
+              Canvas.Left="6" Stretch="Fill" Stroke="Black" Canvas.Top="-56.5" Width="43.5"
+               StrokeThickness="0" />
+
+        <Border x:Name="border" BorderThickness="0" Height="80" Canvas.Top="-118" Width="220"
+                DataContext="{Binding Source={x:Static csShared:AppStateSettings.Instance}}"
+                Background="{Binding Instance.AccentBrush}" 
+                Canvas.Left="20">
+            <Grid DataContext="">
+                <StackPanel x:Name="spAddress"
+                            Margin="30,4,0,0"
+                            d:DataContext="{d:DesignInstance geo:Address}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="tbRoute"
+                                   Text="{Binding Route}"
+                                   LineHeight="10.667" />
+                        <TextBlock x:Name="tbStreetNumber"
+                                   Text="{Binding StreetNumber}"
+                                   LineHeight="10.667"
+                                   Margin="5,0,0,0" />
+                    </StackPanel>
+                    <TextBlock x:Name="tbPostalCode"
+                               Text="{Binding PostalCode}"
+                               LineHeight="10.667" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="tbLocality"
+                                   Text="{Binding Locality, StringFormat='{}{0}, '}"
+                                   LineHeight="10.667" />
+                        <TextBlock x:Name="tbCountry"
+                                   Text="{Binding Country}"
+                                   LineHeight="10.667" />
+                    </StackPanel>
+                    <TextBlock x:Name="tbLocation"
+                               Text="{Binding Position, Converter={StaticResource LatLonStringConverter}, ElementName=SurfaceUserControl}"
+                               LineHeight="10.667"
+                               Margin="0,4,0,0"
+                               Foreground="White" />
+                </StackPanel>
+
+                <StackPanel VerticalAlignment="Bottom" />
+                <Image Source="/csCommon;component/Resources/Icons/flag.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="30" />
+
+            </Grid>
+        </Border>
+
+        <mapIconMenu:ReferenceAlignPanel HorizontalReferencePointAlignment="Center"
+                                         VerticalReferencePointAlignment="Center" AlignReferencePoint="0,0"
+                                         AllowRealign="False" Width="400" Height="400" Margin="-200,-200,0,0">
+            <mapIconMenu:MapMenu MenuEnabled="{Binding Path='Menu',ElementName=SurfaceUserControl}" Margin="0,0,0,0"
+                                 x:Name="MKRoot" VerticalAlignment="Bottom">
+                <mapIconMenu:MapMenuItem x:Name="bCircle" IsExpanded="False" RootToolTip="User"
+                                         Style="{DynamicResource MenuKillerItemStyle1}">
+                    <mapIconMenu:MapMenuItem.Header>
+                        <Grid>
+                            <Border Height="30" Width="30" Background="Black" CornerRadius="15">
+                                <Image Source="/csCommon;component/Resources/Icons/flag.png" Stretch="Fill" />
+                            </Border>
+                        </Grid>
+                    </mapIconMenu:MapMenuItem.Header>
+
+                    <mapIconMenu:MapMenuItem Tap="RemoveItem" RootToolTip="Remove">
+                        <mapIconMenu:MapMenuItem.Header>
+                            <Border Height="30" Width="30" Background="Black" CornerRadius="15">
+                                <Image Source="/csCommon;component/Resources/Icons/appbar.delete.white.png" Stretch="Fill" />
+                            </Border>
+                        </mapIconMenu:MapMenuItem.Header>
+                    </mapIconMenu:MapMenuItem>
+                </mapIconMenu:MapMenuItem>
+            </mapIconMenu:MapMenu>
+        </mapIconMenu:ReferenceAlignPanel>
+
+    </Canvas>
+</UserControl>

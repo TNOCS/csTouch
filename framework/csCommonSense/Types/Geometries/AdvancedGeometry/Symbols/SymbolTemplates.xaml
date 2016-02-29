@@ -1,0 +1,76 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+   
+    xmlns:esriConverters="clr-namespace:ESRI.ArcGIS.Client.ValueConverters;assembly=ESRI.ArcGIS.Client"
+    xmlns:advancedGeometry="clr-namespace:csCommon.Types.Geometries.AdvancedGeometry;assembly=csCommon">
+
+    <esriConverters:DoubleCollectionCloner x:Key="doubleCollectionCloner"/>
+
+    <ControlTemplate x:Key="ExtendedFillSymbol">
+        <!-- Canvas allows to avoid clipping when using bézier curves or big patterns. Performance impact to consider.-->
+        <!--   ==> to remove if not needed-->
+        <Canvas>
+            <Path x:Name="Element"
+            Stroke="{Binding Symbol.BorderBrush}"
+            StrokeStartLineCap="Round"
+            StrokeThickness="{Binding Symbol.BorderThickness}"
+            StrokeLineJoin="Round"
+            StrokeEndLineCap="Round"
+            Fill="{Binding Symbol.Fill}"
+            advancedGeometry:GeometryTransformerService.AttachedGeometryTransformer="{Binding Symbol.GeometryTransformer}">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="SelectionStates">
+                        <VisualState x:Name="Unselected" />
+                        <VisualState x:Name="Selected">
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Element" Storyboard.TargetProperty="Fill">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{Binding Symbol.SelectionColor}" />
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Path>
+        </Canvas>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="ExtendedLineSymbol">
+        <!-- Canvas allows to avoid clipping when using bézier curves or big patterns. Performance impact to consider.-->
+        <!--   ==> to remove if not needed
+        advancedGeometry:GeometryTransformerService.AttachedGeometryTransformer="{Binding Symbol.GeometryTransformer}"
+        -->
+        <Canvas>
+            <Path	x:Name="Element"
+                Stroke="{Binding Attributes[PoI].AdvancedLineStroke}"
+                   
+                Fill="{Binding Attributes[PoI].AdvancedFillStroke}"
+                StrokeThickness="{Binding Attributes[PoI].AdvancedLineStrokeWidth}"
+                StrokeDashCap="Round"
+                StrokeStartLineCap="Round"
+                StrokeLineJoin="Round"
+                StrokeEndLineCap="{Binding Symbol.EndLineCap}"
+                StrokeDashOffset="{Binding Symbol.DashOffset}"
+                advancedGeometry:GeometryTransformerService.AttachedGeometryTransformer="{Binding Attributes[PoI].AdvancedLineGeometryTransformer}"
+                    
+                StrokeDashArray="{Binding Path=Attributes[PoI].AdvancedLineDash, Converter={StaticResource doubleCollectionCloner}}">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="SelectionStates">
+                        <VisualState x:Name="Unselected"/>
+                        <VisualState x:Name="Selected">
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Element" Storyboard.TargetProperty="Stroke">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{Binding Symbol.SelectionColor}" />
+                                </ObjectAnimationUsingKeyFrames>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Element" Storyboard.TargetProperty="Fill">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{Binding Symbol.SelectionColor}" />
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Path>
+        </Canvas>
+    </ControlTemplate>
+
+</ResourceDictionary>

@@ -1,0 +1,14 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+   x:Class="csShared.WebView"
+    >	
+
+  <Border Margin="0" BorderThickness="0" BorderBrush="Black" Width="Auto" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch">
+    <Viewbox Width="Auto" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch">          
+    <!--<Controls:WebControl x:Name="iWebPage" Width="800" Height="600"></Controls:WebControl>-->
+    </Viewbox>
+
+  </Border>
+
+</UserControl>

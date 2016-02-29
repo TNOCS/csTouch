@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="csStreamingVideoPlugin.Views.CsVideoStreamPlayerThumbnailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:VlcVideoPlayer;assembly=VlcVideoPlayer"
+             xmlns:views="clr-namespace:csCommon.Plugins.StreamingVideoPlugin.Views"
+             xmlns:viewModels="clr-namespace:csCommon.Plugins.StreamingVideoPlugin.ViewModels"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance viewModels:CsVideoStreamPlayerThumbnailViewModel}">
+    <!-- DataContext is VideoStreamPlayerThumbnailViewModel -->
+    <Border CornerRadius="4" BorderBrush="Black" BorderThickness="2" Margin ="1" Padding="2" cal:Message.Attach="[Event MouseDoubleClick] = [Action DoubleClickThumbnail()]" Background="Azure">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <views:UsrCtrlVideoHeader Grid.Row="0"/>
+            <!--  VideoFill="{Binding VideoFill} -->
+            <controls:WpfVlcPlayer 
+                 Description="{Binding Owner.Model.Name}"
+                StreamUrl="{Binding Owner.Model.VideoUrl}" 
+                                  
+                                  VideoFill="VerticalFill"
+                                   
+                                               controls:ExposeVideoSize.Observe="True" 
+            controls:ExposeVideoSize.ObservedVideoWidth="{Binding VideoWidth, Mode=OneWayToSource}" 
+            controls:ExposeVideoSize.ObservedVideoHeight="{Binding VideoHeight, Mode=OneWayToSource}"
+                                   Grid.Row="1"  />
+            <TextBlock Text="{Binding Owner.Model.Name}" Foreground="Black"  Grid.Row="2">
+                <TextBlock.ToolTip>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Owner.Model.Description}"/>
+                        <TextBlock Text="{Binding Owner.Model.VideoUrl}"/>
+                    </StackPanel>
+                </TextBlock.ToolTip>
+            </TextBlock>
+        </Grid>
+    </Border>
+</UserControl>

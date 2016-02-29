@@ -1,0 +1,182 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:csCommon.Controls"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:floatingElements="clr-namespace:csShared.FloatingElements"
+                    xmlns:csShared="clr-namespace:csShared"
+                    mc:Ignorable="d"
+                    x:Class="csCommon.Resources.FloatingStyles">
+
+    <!--<csShared:AppStateSettings x:Key="AppStateSettingsDataSource" d:IsDataSource="True" />-->
+
+    <Style x:Key="SimpleFloatingStyle"
+           TargetType="{x:Type floatingElements:FloatingContainer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type floatingElements:FloatingContainer}">
+                    <Grid Opacity="1"
+                          x:Name="PART_Base">
+                        <Border x:Name="PART_Content">
+                            <Border.Resources>
+                                <Storyboard x:Key="CloseStoryboard">
+                                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+                                                                   Storyboard.TargetName="PART_Content"
+                                                                   Storyboard.TargetProperty="(UIElement.Opacity)">
+                                        <SplineDoubleKeyFrame KeyTime="00:00:00.5000000"
+                                                              Value="0" />
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+                                                                   Storyboard.TargetName="PART_Content"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+                                        <SplineDoubleKeyFrame KeyTime="00:00:00.5000000"
+                                                              Value="0" />
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </Border.Resources>
+                            <Grid x:Name="grid"
+                                  Margin="0">
+                                <ContentControl x:Name="cpView"
+                                                HorizontalContentAlignment="Stretch"
+                                                VerticalContentAlignment="Stretch"
+                                                ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                                <!--<Custom:SurfaceButton x:Name="PART_Close" Content="SurfaceButton" HorizontalAlignment="Right" Height="10" Margin="0,-4,18,0" Style="{DynamicResource CloseButtonStyle}" VerticalAlignment="Top" Width="10"/> -->
+                            </Grid>
+                        </Border>
+                        <controls:ClippingBorder x:Name="PART_Preview"
+                                                 BorderBrush="{x:Null}"
+                                                 Visibility="Collapsed"
+                                                 Opacity="1" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="SimpleContainer"
+           TargetType="{x:Type floatingElements:FloatingContainer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type floatingElements:FloatingContainer}">
+                    <Grid d:DataContext="{d:DesignInstance csShared:FloatingElement}">
+                        <Line x:Name="PART_Association"
+                              Stroke="Black"
+                              StrokeThickness="2"></Line>
+                        <Grid x:Name="PART_Content"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch">
+                            <ContentControl x:Name="cpView"
+                                            HorizontalContentAlignment="Stretch"
+                                            VerticalContentAlignment="Stretch"
+                                            ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+
+                        </Grid>
+
+                        <controls:ClippingBorder x:Name="PART_Preview"
+                                                 BorderBrush="{x:Null}"
+                                                 BorderThickness="2,2,2,2"
+                                                 Background="{Binding Instance.AccentBrush, Source={x:Static csShared:AppStateSettings.Instance}}"
+                                                 Margin="0"
+                                                 Visibility="Visible"
+                                                 CornerRadius="{Binding CornerRadius}"
+                                                 RenderTransformOrigin="0.5,0.5"
+                                                 Opacity="0.8">
+                            <Grid x:Name="gSmall"
+                                  Width="Auto"
+                                  Height="Auto">
+                                <TextBlock Text="{Binding Title}"
+                                           TextWrapping="Wrap"
+                                           Foreground="#FFFFFFFF"
+                                           x:Name="tbTitle"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Width="Auto"
+                                           Height="Auto"
+                                           FontSize="13.333"
+                                           RenderTransformOrigin="0,0"
+                                           TextAlignment="Center"
+                                           Visibility="Collapsed">
+                                    <TextBlock.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="1"
+                                                            ScaleY="1" />
+                                            <SkewTransform AngleX="0"
+                                                           AngleY="0" />
+                                            <RotateTransform Angle="-90" />
+                                            <TranslateTransform X="6"
+                                                                Y="18" />
+                                        </TransformGroup>
+                                    </TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Title}"
+                                           TextWrapping="Wrap"
+                                           Foreground="#FFFFFFFF"
+                                           x:Name="tbTitleReverse"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"
+                                           Width="Auto"
+                                           Height="Auto"
+                                           FontSize="16"
+                                           RenderTransformOrigin="0,0"
+                                           TextAlignment="Left"
+                                           Opacity="1"
+                                           Visibility="Collapsed">
+                                    <TextBlock.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="-1"
+                                                            ScaleY="-1" />
+                                            <SkewTransform AngleX="0"
+                                                           AngleY="0" />
+                                            <RotateTransform Angle="-90" />
+                                            <TranslateTransform X="48"
+                                                                Y="1" />
+                                        </TransformGroup>
+                                    </TextBlock.RenderTransform>
+                                </TextBlock>
+                                <Image Width="{Binding IconWidth}"
+                                       Height="Auto"
+                                       Source="{Binding IconUri}"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="10,0,0,0"
+                                       RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform />
+                                            <SkewTransform />
+                                            <RotateTransform Angle="{Binding IconRotation, FallbackValue=0}" />
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Grid>
+
+                        </controls:ClippingBorder>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ConfigHeader"
+           TargetType="{x:Type TextBlock}">
+        <Setter Property="TextWrapping"
+                Value="NoWrap" />
+        <Setter Property="TextTrimming"
+                Value="None" />
+        <Setter Property="Height"
+                Value="Auto" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="FontSize"
+                Value="24" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="Foreground"
+                Value="#FF7E7E7E" />
+    </Style>
+    <SolidColorBrush x:Key="EnabledBrush"
+                     Color="#FF00AA2E" />
+    <SolidColorBrush x:Key="DisabledBrush"
+                     Color="#FFAA0000" />
+</ResourceDictionary>

@@ -1,0 +1,2471 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:csCommon.Controls"
+                    xmlns:custom="http://schemas.microsoft.com/surface/2008"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                    xmlns:csShared="clr-namespace:csShared"
+                    xmlns:floatingElements="clr-namespace:csShared.FloatingElements"
+                    xmlns:thirdParty="clr-namespace:csShared.ThirdParty"
+                    xmlns:local="clr-namespace:csShared.Controls"
+                    xmlns:wpfConverters="clr-namespace:WpfConverters"
+                    xmlns:c="clr-namespace:csPresenterPlugin.Controls"
+                    xmlns:presenter="clr-namespace:nl.tno.cs.presenter"
+                    xmlns:dashboardPlugin="clr-namespace:csCommon.Plugins.DashboardPlugin"
+                    mc:Ignorable="d">
+    <!--<csShared:AppStateSettings x:Key="AppStateSettingsDataSource" d:IsDataSource="True" />-->
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+   
+
+    <wpfConverters:BooleanHiddenConverter x:Key="BooleanHiddenConverter" />
+    <Style TargetType="{x:Type dashboardPlugin:DashboardControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type dashboardPlugin:DashboardControl}">
+                    <Grid Background="{Binding BackgroundBrush}"
+                          Margin="5">
+                        <Grid x:Name="PART_Content" />
+                        <Grid x:Name="PART_Control"
+                              Visibility="Collapsed">
+                            <Grid Margin="0">
+                                <StackPanel Width="30"
+                                            Height="30"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Margin="0">
+                                    <custom:SurfaceButton x:Name="sbSettings"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"
+                                                          Width="25"
+                                                          Height="25">
+                                        <Path Data="F1M60.9043,41.6863C57.7236,39.6523 41.5319,29.1797 32.4893,23.332 33.1949,17.4545 30.6182,11.4167 25.3102,7.98975 20.0208,4.57422 13.4778,4.68884 8.41565,7.72009L22.7796,17.0052 22.3782,25.129 15.1432,28.8373 0.76886,19.5496C0.0845947,25.4115 2.66895,31.4285 7.95862,34.8463 13.2617,38.2709 19.8206,38.142 24.888,35.0925 33.9541,40.9545 50.2184,51.4688 53.303,53.4492 57.6168,56.2239 65.3626,44.5326 60.9043,41.6863z"
+                                              Stretch="Uniform"
+                                              Fill="#FF000000"
+                                              Width="20"
+                                              Height="20"
+                                              Margin="0,0,0,0"
+                                              RenderTransformOrigin="0.5,0.5" />
+                                    </custom:SurfaceButton>
+                                </StackPanel>
+                                <custom:SurfaceButton x:Name="sbResize"
+                                                      Visibility="Collapsed"
+                                                      HorizontalAlignment="Right"
+                                                      VerticalAlignment="Bottom"
+                                                      Width="20"
+                                                      Height="20"
+                                                      Margin="0"
+                                                      HorizontalContentAlignment="Right"
+                                                      VerticalContentAlignment="Bottom"
+                                                      Padding="0">
+                                    <Image Source="/csCommon;component/Resources/Icons/resize.png" />
+                                </custom:SurfaceButton>
+
+                            </Grid>
+                        </Grid>
+
+
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type c:MetroExplorer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type c:MetroExplorer}">
+                    <ControlTemplate.Resources>
+
+                        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                        <ItemsPanelTemplate x:Key="FolderListPanelTemplate">
+                            <VirtualizingStackPanel IsItemsHost="True"
+                                                    Orientation="Horizontal"
+                                                    Margin="0,0,0,-15" />
+                        </ItemsPanelTemplate>
+                        <Style TargetType="{x:Type Control}"
+                               x:Key="ControlBaseStyle">
+                            <Setter Property="FocusVisualStyle"
+                                    Value="{x:Null}" />
+                            <Setter Property="SnapsToDevicePixels"
+                                    Value="False" />
+                            <Setter Property="FontFamily"
+                                    Value="Segoe360" />
+                            <Setter Property="FontWeight"
+                                    Value="Normal" />
+                            <Setter Property="FontSize"
+                                    Value="17" />
+                            <Setter Property="Foreground"
+                                    Value="Black" />
+                            <Setter Property="Padding"
+                                    Value="6,2,10,10" />
+                            <Setter Property="MinHeight"
+                                    Value="38" />
+                            <Setter Property="MinWidth"
+                                    Value="38" />
+                            <Setter Property="Margin"
+                                    Value="1" />
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Left" />
+                            <Setter Property="VerticalContentAlignment"
+                                    Value="Top" />
+                            <Setter Property="BorderThickness"
+                                    Value="2" />
+                        </Style>
+                        <SolidColorBrush x:Key="ControlHitAreaBrush"
+                                         Color="#00FFFFFF" />
+                        <Style x:Key="SurfaceListBoxItemStyle1"
+                               TargetType="{x:Type custom:SurfaceListBoxItem}"
+                               BasedOn="{StaticResource ControlBaseStyle}">
+                            <Setter Property="Background"
+                                    Value="Transparent" />
+                            <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static Presentation:SurfaceColors.ListBoxItemForegroundBrushKey}}"/>-->
+
+                            <Setter Property="BorderThickness"
+                                    Value="0" />
+                            <!--<Setter Property="HorizontalContentAlignment"
+								Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" />-->
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type custom:SurfaceListBoxItem}">
+                                        <Grid x:Name="Grid"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              Visibility="Visible">
+                                            <ContentPresenter x:Name="Content"
+                                                              Margin="{TemplateBinding Padding}"
+                                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <Style x:Key="SurfaceButtonStyle1"
+                               TargetType="{x:Type custom:SurfaceButton}"
+                               BasedOn="{StaticResource ControlBaseStyle}">
+                            <Setter Property="IsTabStop"
+                                    Value="False" />
+                            <Setter Property="Focusable"
+                                    Value="True" />
+                            <Setter Property="Background"
+                                    Value="Transparent" />
+
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type custom:SurfaceButton}">
+
+                                        <Grid x:Name="Grid"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                            <ContentPresenter x:Name="Content"
+                                                              Margin="{TemplateBinding Padding}"
+                                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        </Grid>
+
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+
+                    </ControlTemplate.Resources>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="0,2,0,7">
+
+                        <Grid Height="Auto"
+                              Width="Auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="6*" />
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Path Data="F1M1679.72,744.283C1679.66,744.379 1679.6,744.473 1679.54,744.573 1679.48,744.681 1679.43,744.791 1679.38,744.9 1679.35,744.96 1679.31,745.015 1679.26,745.176 1679.21,745.294 1679.17,745.416 1679.14,745.535 1679.11,745.632 1679.08,745.728 1679.05,745.83 1679.03,745.945 1679.01,746.066 1678.99,746.184 1678.98,746.285 1678.96,746.386 1678.96,746.488 1678.95,746.608 1678.95,746.733 1678.95,746.855 1678.95,746.953 1678.95,747.054 1678.96,747.15 1678.96,747.275 1678.98,747.4 1679,747.527 1679.02,747.621 1679.03,747.715 1679.05,747.809 1679.08,747.933 1679.11,748.055 1679.15,748.175 1679.18,748.27 1679.21,748.363 1679.24,748.455 1679.26,748.499 1679.27,748.541 1679.28,748.583 1679.32,748.659 1679.36,748.727 1679.39,748.798 1679.44,748.892 1679.48,748.983 1679.53,749.073 1679.59,749.181 1679.66,749.287 1679.73,749.39 1679.79,749.473 1679.84,749.554 1679.91,749.63 1679.98,749.734 1680.07,749.833 1680.16,749.93 1680.2,749.974 1680.24,750.025 1680.28,750.069L1701.74,771.525C1703.53,773.315 1706.43,773.315 1708.22,771.525 1710.01,769.737 1710.01,766.832 1708.22,765.046L1694.58,751.413 1737.03,751.413C1738.61,751.413 1740.01,750.612 1740.83,749.391 1741.33,748.66 1741.61,747.777 1741.61,746.83 1741.61,745.564 1741.1,744.416 1740.27,743.587 1739.44,742.757 1738.3,742.245 1737.03,742.245L1737.03,742.246 1694.59,742.246 1708.22,728.615C1710.01,726.826 1710.01,723.923 1708.22,722.134 1707.32,721.237 1706.15,720.788 1704.98,720.788 1703.8,720.788 1702.63,721.234 1701.74,722.129L1680.28,743.59C1680.23,743.636 1680.2,743.688 1680.16,743.733 1680.07,743.827 1679.99,743.921 1679.91,744.021 1679.84,744.105 1679.78,744.194 1679.72,744.283"
+                                      Fill="{TemplateBinding TextBrush}"
+                                      Width="26"
+                                      Height="21.6097258776843" />
+
+                                <custom:SurfaceButton x:Name="Previous"
+                                                      Margin="0"
+                                                      Height="65"
+                                                      VerticalAlignment="Center"
+                                                      Style="{DynamicResource SurfaceButtonStyle1}"
+                                                      Background="{x:Null}"
+                                                      Foreground="{TemplateBinding TextBrush}"
+                                                      Padding="0"
+                                                      Grid.Column="0"
+                                                      RenderTransformOrigin="0.5,0.5"
+                                                      Visibility="{TemplateBinding PreviousVisibility}">
+                                    <custom:SurfaceButton.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform />
+                                            <SkewTransform />
+                                            <RotateTransform Angle="0" />
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </custom:SurfaceButton.RenderTransform>
+                                    <Image Source="/csCommon;component/Resources/Icons/back.png" />
+                                </custom:SurfaceButton>
+                                <custom:SurfaceButton x:Name="Next"
+                                                      Margin="0"
+                                                      Height="65"
+                                                      VerticalAlignment="Center"
+                                                      Foreground="{TemplateBinding TextBrush}"
+                                                      Style="{DynamicResource SurfaceButtonStyle1}"
+                                                      Background="{x:Null}"
+                                                      Padding="0"
+                                                      Grid.Column="2"
+                                                      RenderTransformOrigin="0.5,0.5"
+                                                      Visibility="{TemplateBinding NextVisibility}">
+                                    <custom:SurfaceButton.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform />
+                                            <SkewTransform />
+                                            <RotateTransform Angle="180" />
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </custom:SurfaceButton.RenderTransform>
+                                    <Image Source="/csCommon;component/Resources/Icons/back.png" />
+                                </custom:SurfaceButton>
+
+                                <Grid d:LayoutOverrides="Width, Height"
+                                      Grid.Column="1">
+                                    <Grid.Resources>
+                                        <DataTemplate x:Key="FolderTemplate">
+                                            <c:MetroFolder Folder="{Binding}"
+                                                           TextBrush="{Binding TextBrush}" />
+                                        </DataTemplate>
+                                        <DataTemplate x:Key="FolderListTemplate">
+                                            <presenter:MetroFolderList Folder="{Binding}" />
+                                        </DataTemplate>
+                                        <presenter:FolderTemplateSelector x:Key="FolderTemplateSelector"
+                                                                          FolderTemplate="{StaticResource FolderTemplate}"
+                                                                          ItemsTemplate="{StaticResource FolderListTemplate}" />
+                                    </Grid.Resources>
+                                    <custom:SurfaceListBox x:Name="slbFolders"
+                                                           Grid.Row="0"
+                                                           ItemTemplateSelector="{StaticResource FolderTemplateSelector}"
+                                                           BorderThickness="0"
+                                                           ItemsPanel="{DynamicResource FolderListPanelTemplate}"
+                                                           ItemContainerStyle="{DynamicResource SurfaceListBoxItemStyle1}"
+                                                           Visibility="Visible"
+                                                           ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                                           Height="Auto"
+                                                           Background="{x:Null}"
+                                                           Grid.Column="0"
+                                                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                           HorizontalAlignment="Left"
+                                                           Style="{DynamicResource MetroExplorerListBoxStyle}"
+                                                           Foreground="{TemplateBinding TextBrush}" />
+
+                                    <!--<presenter:MetroFolderList x:Name="mflItems" Background="Red" HorizontalAlignment="Left"   Margin="0" Grid.Column="1"   />-->
+
+                                </Grid>
+                            </Grid>
+                            <Viewbox HorizontalAlignment="Left"
+                                     Height="Auto"
+                                     Margin="5,0,0,0"
+                                     Stretch="Uniform"
+                                     StretchDirection="Both"
+                                     Visibility="{TemplateBinding TitleVisibility}">
+                                <Grid Height="Auto"
+                                      Width="Auto"
+                                      Margin="0">
+                                    <ItemsControl x:Name="icTitle"
+                                                  Margin="64,0,0,0"
+                                                  HorizontalAlignment="Stretch"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  MinWidth="200"
+                                                  Background="{x:Null}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel IsItemsHost="True"
+                                                            Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <c:ucPath Foreground="{Binding TextBrush}" />
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    <custom:SurfaceButton x:Name="Back"
+                                                          Margin="0,0,5,0"
+                                                          Height="65"
+                                                          VerticalAlignment="Center"
+                                                          Style="{DynamicResource SurfaceButtonStyle1}"
+                                                          Background="{x:Null}">
+
+                                        <Grid Height="53"
+                                              Width="53"
+                                              Background="#00000000">
+                                            <Path Data="F1M1679.72,744.283C1679.66,744.379 1679.6,744.473 1679.54,744.573 1679.48,744.681 1679.43,744.791 1679.38,744.9 1679.35,744.96 1679.31,745.015 1679.26,745.176 1679.21,745.294 1679.17,745.416 1679.14,745.535 1679.11,745.632 1679.08,745.728 1679.05,745.83 1679.03,745.945 1679.01,746.066 1678.99,746.184 1678.98,746.285 1678.96,746.386 1678.96,746.488 1678.95,746.608 1678.95,746.733 1678.95,746.855 1678.95,746.953 1678.95,747.054 1678.96,747.15 1678.96,747.275 1678.98,747.4 1679,747.527 1679.02,747.621 1679.03,747.715 1679.05,747.809 1679.08,747.933 1679.11,748.055 1679.15,748.175 1679.18,748.27 1679.21,748.363 1679.24,748.455 1679.26,748.499 1679.27,748.541 1679.28,748.583 1679.32,748.659 1679.36,748.727 1679.39,748.798 1679.44,748.892 1679.48,748.983 1679.53,749.073 1679.59,749.181 1679.66,749.287 1679.73,749.39 1679.79,749.473 1679.84,749.554 1679.91,749.63 1679.98,749.734 1680.07,749.833 1680.16,749.93 1680.2,749.974 1680.24,750.025 1680.28,750.069L1701.74,771.525C1703.53,773.315 1706.43,773.315 1708.22,771.525 1710.01,769.737 1710.01,766.832 1708.22,765.046L1694.58,751.413 1737.03,751.413C1738.61,751.413 1740.01,750.612 1740.83,749.391 1741.33,748.66 1741.61,747.777 1741.61,746.83 1741.61,745.564 1741.1,744.416 1740.27,743.587 1739.44,742.757 1738.3,742.245 1737.03,742.245L1737.03,742.246 1694.59,742.246 1708.22,728.615C1710.01,726.826 1710.01,723.923 1708.22,722.134 1707.32,721.237 1706.15,720.788 1704.98,720.788 1703.8,720.788 1702.63,721.234 1701.74,722.129L1680.28,743.59C1680.23,743.636 1680.2,743.688 1680.16,743.733 1680.07,743.827 1679.99,743.921 1679.91,744.021 1679.84,744.105 1679.78,744.194 1679.72,744.283"
+                                                  Fill="{TemplateBinding TextBrush}"
+                                                  Width="33.333"
+                                                  Grid.Column="0"
+                                                  Margin="0,0,9.667,15"
+                                                  Stretch="Fill"
+                                                  HorizontalAlignment="Right"
+                                                  VerticalAlignment="Bottom"
+                                                  Height="25" />
+                                            <Ellipse StrokeThickness="5"
+                                                     Stroke="{TemplateBinding TextBrush}" />
+                                        </Grid>
+                                    </custom:SurfaceButton>
+
+                                </Grid>
+
+                            </Viewbox>
+
+                        </Grid>
+
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type c:MetroFolder}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type c:MetroFolder}">
+                    <Viewbox Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type custom:SurfaceListBox}}}"
+                             Margin="0"
+                             Stretch="Fill"
+                             Width="Auto">
+                        <Grid x:Name="gScaleGrid"
+                              Height="400"
+                              Width="500">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <ItemsControl Margin="0,10,0,0"
+                                          Grid.Row="1"
+                                          x:Name="Items"
+                                          Visibility="Visible">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                        </Grid>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style>
+                                        <Setter Property="Grid.Column"
+                                                Value="{Binding Col}" />
+                                        <Setter Property="Grid.Row"
+                                                Value="{Binding Row}" />
+                                        <Setter Property="Grid.ColumnSpan"
+                                                Value="{Binding ColSpan}" />
+                                        <Setter Property="Grid.RowSpan"
+                                                Value="{Binding RowSpan}" />
+                                        <Setter Property="Control.Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <Grid>
+                                                        <ContentPresenter />
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <c:MetroItem Item="{Binding}" />
+                                        <!--cal:Message.Attach="[Event MouseRightButtonDown] = [Action EditVariable($eventArgs, $dataContext)];[Event MouseDoubleClick] = [Action DeleteItem($dataContext)]"-->
+
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Grid x:Name="gTitle"
+                                  Height="Auto"
+                                  Width="Auto"
+                                  Background="#00000000"
+                                  HorizontalAlignment="Left">
+                                <Canvas Margin="0,0,5,4.657"
+                                        RenderTransformOrigin="0.5,0.5"
+                                        HorizontalAlignment="Left">
+                                    <Canvas.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="0.7"
+                                                            ScaleY="0.7" />
+                                            <SkewTransform />
+                                            <RotateTransform />
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </Canvas.RenderTransform>
+                                    <Path Data="F1M1679.72,744.283C1679.66,744.379 1679.6,744.473 1679.54,744.573 1679.48,744.681 1679.43,744.791 1679.38,744.9 1679.35,744.96 1679.31,745.015 1679.26,745.176 1679.21,745.294 1679.17,745.416 1679.14,745.535 1679.11,745.632 1679.08,745.728 1679.05,745.83 1679.03,745.945 1679.01,746.066 1678.99,746.184 1678.98,746.285 1678.96,746.386 1678.96,746.488 1678.95,746.608 1678.95,746.733 1678.95,746.855 1678.95,746.953 1678.95,747.054 1678.96,747.15 1678.96,747.275 1678.98,747.4 1679,747.527 1679.02,747.621 1679.03,747.715 1679.05,747.809 1679.08,747.933 1679.11,748.055 1679.15,748.175 1679.18,748.27 1679.21,748.363 1679.24,748.455 1679.26,748.499 1679.27,748.541 1679.28,748.583 1679.32,748.659 1679.36,748.727 1679.39,748.798 1679.44,748.892 1679.48,748.983 1679.53,749.073 1679.59,749.181 1679.66,749.287 1679.73,749.39 1679.79,749.473 1679.84,749.554 1679.91,749.63 1679.98,749.734 1680.07,749.833 1680.16,749.93 1680.2,749.974 1680.24,750.025 1680.28,750.069L1701.74,771.525C1703.53,773.315 1706.43,773.315 1708.22,771.525 1710.01,769.737 1710.01,766.832 1708.22,765.046L1694.58,751.413 1737.03,751.413C1738.61,751.413 1740.01,750.612 1740.83,749.391 1741.33,748.66 1741.61,747.777 1741.61,746.83 1741.61,745.564 1741.1,744.416 1740.27,743.587 1739.44,742.757 1738.3,742.245 1737.03,742.245L1737.03,742.246 1694.59,742.246 1708.22,728.615C1710.01,726.826 1710.01,723.923 1708.22,722.134 1707.32,721.237 1706.15,720.788 1704.98,720.788 1703.8,720.788 1702.63,721.234 1701.74,722.129L1680.28,743.59C1680.23,743.636 1680.2,743.688 1680.16,743.733 1680.07,743.827 1679.99,743.921 1679.91,744.021 1679.84,744.105 1679.78,744.194 1679.72,744.283"
+                                          Fill="{TemplateBinding TextBrush}"
+                                          Width="20"
+                                          Margin="0"
+                                          Stretch="Fill"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Top"
+                                          Height="20"
+                                          RenderTransformOrigin="0.5,0.5"
+                                          Canvas.Left="10"
+                                          Canvas.Top="11">
+                                        <Path.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform />
+                                                <SkewTransform />
+                                                <RotateTransform Angle="270" />
+                                                <TranslateTransform />
+                                            </TransformGroup>
+                                        </Path.RenderTransform>
+                                    </Path>
+                                    <Ellipse StrokeThickness="3"
+                                             Stroke="{TemplateBinding TextBrush}"
+                                             Width="40"
+                                             Height="40"
+                                             HorizontalAlignment="Left"
+                                             VerticalAlignment="Top" />
+                                </Canvas>
+                                <TextBlock x:Name="tbTitle"
+                                           TextWrapping="Wrap"
+                                           FontWeight="ExtraBold"
+                                           Text="{Binding Title}"
+                                           d:LayoutOverrides="Height"
+                                           FontSize="37.333"
+                                           Margin="35,-5,0,0"
+                                           Foreground="{TemplateBinding TextBrush}"
+                                           VerticalAlignment="Top" />
+                            </Grid>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type presenter:MetroFolderList}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type presenter:MetroFolderList}">
+                    <Viewbox Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type custom:SurfaceListBox}}}"
+                             Margin="0"
+                             Stretch="Fill"
+                             Width="Auto">
+                        <ItemsControl Margin="0"
+                                      x:Name="AllItems"
+                                      Visibility="Visible"
+                                      Height="400"
+                                      d:LayoutOverrides="VerticalAlignment"
+                                      Width="Auto"
+                                      HorizontalAlignment="Left">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="1" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style>
+                                    <Setter Property="Control.Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Grid>
+                                                    <ContentPresenter />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <c:MetroItem Item="{Binding}"
+                                                 Width="400"
+                                                 Margin="10,0,0,0" />
+                                    <!--cal:Message.Attach="[Event MouseRightButtonDown] = [Action EditVariable($eventArgs, $dataContext)];[Event MouseDoubleClick] = [Action DeleteItem($dataContext)]"-->
+
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <presenter:UriToBitmapConverter x:Key="UriToBitmapConverter" />
+
+    <Style TargetType="{x:Type c:MetroItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type c:MetroItem}">
+                    <ControlTemplate.Resources>
+                        <presenter:ItemImageConverter x:Key="ItemImageConverter" />
+                    </ControlTemplate.Resources>
+                    <custom:SurfaceButton x:Name="sbButton"
+                                          Background="{x:Null}"
+                                          Padding="0"
+                                          Style="{DynamicResource SurfaceButtonStyle2}"
+                                          HorizontalContentAlignment="Stretch"
+                                          VerticalContentAlignment="Stretch">
+                        <Grid Background="{x:Null}">
+                            <!--<Image Stretch="UniformToFill">
+                            <Image.Source>
+                              
+                                <BitmapImage DecodePixelHeight="200" CreateOptions="DelayCreation" CacheOption="OnDemand" UriSource="{Binding ImagePath}" />
+                            </Image.Source>
+                            </Image>-->
+
+                            <Image thirdParty:Loader.DisplayOption="Preview"
+                                   thirdParty:Loader.Source="{Binding ImagePath}"
+                                   thirdParty:Loader.DisplayWaitingAnimationDuringLoading="True"
+                                   Stretch="UniformToFill" />
+                            <!--Source="{Binding ImagePath, Converter={StaticResource UriToBitmapConverter}}"-->
+                            <Grid Height="30"
+                                  x:Name="ItemTitle"
+                                  VerticalAlignment="Bottom"
+                                  Background="#7F000000">
+
+                                <TextBlock TextWrapping="Wrap"
+                                           Text="{Binding Title}"
+                                           Foreground="White"
+                                           VerticalAlignment="Bottom"
+                                           d:LayoutOverrides="Width"
+                                           Margin="3,3,0,3" />
+                                <Image HorizontalAlignment="Right"
+                                       Source="{Binding Type, Converter={StaticResource ItemImageConverter}}" />
+
+                            </Grid>
+                        </Grid>
+                    </custom:SurfaceButton>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type Control}"
+           x:Key="ControlBaseStyle">
+        <Setter Property="FocusVisualStyle"
+                Value="{x:Null}" />
+        <Setter Property="SnapsToDevicePixels"
+                Value="False" />
+        <Setter Property="FontFamily"
+                Value="Segoe360" />
+        <Setter Property="FontWeight"
+                Value="Normal" />
+        <Setter Property="FontSize"
+                Value="17" />
+        <Setter Property="Padding"
+                Value="6,2,10,10" />
+        <Setter Property="MinHeight"
+                Value="38" />
+        <Setter Property="MinWidth"
+                Value="38" />
+        <Setter Property="Margin"
+                Value="1" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Left" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Top" />
+        <Setter Property="BorderThickness"
+                Value="2" />
+    </Style>
+    <Style x:Key="SurfaceButtonStyle1"
+           TargetType="{x:Type custom:SurfaceButton}"
+           BasedOn="{StaticResource ControlBaseStyle}">
+        <Setter Property="IsTabStop"
+                Value="False" />
+        <Setter Property="Focusable"
+                Value="True" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type custom:SurfaceButton}">
+
+                    <Grid x:Name="Grid"
+                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <ContentPresenter x:Name="Content"
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="SurfaceButtonStyle2"
+           TargetType="{x:Type custom:SurfaceButton}"
+           BasedOn="{StaticResource ControlBaseStyle}">
+        <Setter Property="IsTabStop"
+                Value="False" />
+        <Setter Property="Focusable"
+                Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type custom:SurfaceButton}">
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="Press" />
+                        <Storyboard x:Key="Release" />
+                    </ControlTemplate.Resources>
+                    <Grid x:Name="Grid"
+                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <ContentPresenter x:Name="Content"
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Press}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Release}" />
+                            </Trigger.ExitActions>
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="False">
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                            <Setter Property="Opacity"
+                                    Value="0.33"
+                                    TargetName="Content" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BlackCheckBox"
+           TargetType="{x:Type custom:SurfaceCheckBox}">
+        <Setter Property="Background"
+                Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type custom:SurfaceCheckBox}">
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="Checked">
+                            <DoubleAnimation Duration="0:0:0.01"
+                                             To="1"
+                                             Storyboard.TargetProperty="Opacity"
+                                             Storyboard.TargetName="Checkmark" />
+                        </Storyboard>
+                        <Storyboard x:Key="Unchecked">
+                            <DoubleAnimation Duration="0:0:0.15"
+                                             From="0.4"
+                                             To="0"
+                                             Storyboard.TargetProperty="Opacity"
+                                             Storyboard.TargetName="Checkmark" />
+                        </Storyboard>
+                    </ControlTemplate.Resources>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Rectangle x:Name="hitArea"
+                                   Grid.ColumnSpan="2"
+                                   Fill="Transparent"
+                                   Height="{TemplateBinding Height}"
+                                   Width="{TemplateBinding Width}" />
+                        <BulletDecorator x:Name="bulletDecorator"
+                                         Grid.Column="0"
+                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <BulletDecorator.Bullet>
+                                <Border x:Name="CheckButtonRect"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Background="{TemplateBinding Background}"
+                                        Height="16"
+                                        Margin="1,6,0,0"
+                                        Width="16"
+                                        BorderBrush="#99000000">
+                                    <Grid>
+                                        <Path x:Name="Checkmark"
+                                              Data="M0,24L12,0 M0,0L12,24"
+                                              Fill="{x:Null}"
+                                              Height="10"
+                                              Opacity="0"
+                                              StrokeStartLineCap="Flat"
+                                              Stretch="Fill"
+                                              StrokeEndLineCap="Flat"
+                                              Stroke="Black"
+                                              StrokeThickness="2"
+                                              Width="10" />
+                                        <Rectangle x:Name="ThreeStateMark"
+                                                   Fill="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}"
+                                                   Height="6"
+                                                   Opacity="0"
+                                                   Width="6" />
+                                    </Grid>
+                                </Border>
+                            </BulletDecorator.Bullet>
+                        </BulletDecorator>
+                        <ContentPresenter x:Name="Content"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Content="{TemplateBinding Content}"
+                                          Grid.Column="1"
+                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsThreeState"
+                                           Value="True" />
+                                <Condition Property="IsChecked"
+                                           Value="{x:Null}" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Opacity"
+                                    TargetName="Checkmark"
+                                    Value="0" />
+                            <Setter Property="Opacity"
+                                    TargetName="ThreeStateMark"
+                                    Value="1" />
+                        </MultiTrigger>
+                        <Trigger Property="IsChecked"
+                                 Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.01"
+                                                         To="1"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="Checkmark" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.15"
+                                                         From="0.4"
+                                                         To="0"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="Checkmark" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="Stroke"
+                                    TargetName="Checkmark"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="False">
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="Stroke"
+                                    TargetName="Checkmark"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="Fill"
+                                    TargetName="ThreeStateMark"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.BasedOn>
+            <Style TargetType="{x:Type Control}">
+                <Setter Property="FocusVisualStyle"
+                        Value="{x:Null}" />
+                <Setter Property="SnapsToDevicePixels"
+                        Value="False" />
+                <Setter Property="FontFamily"
+                        Value="Segoe360" />
+                <Setter Property="FontWeight"
+                        Value="Normal" />
+                <Setter Property="FontSize"
+                        Value="17" />
+                <Setter Property="Padding"
+                        Value="6,2,10,10" />
+                <Setter Property="MinHeight"
+                        Value="38" />
+                <Setter Property="MinWidth"
+                        Value="38" />
+                <Setter Property="Margin"
+                        Value="1" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Top" />
+                <Setter Property="BorderThickness"
+                        Value="2" />
+            </Style>
+        </Style.BasedOn>
+    </Style>
+
+    <Style x:Key="ScatterViewStyle"
+           TargetType="{x:Type custom:ScatterView}">
+        <Setter Property="SnapsToDevicePixels"
+                Value="True" />
+        <Setter Property="Background"
+                Value="{x:Null}" />
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type custom:ScatterView}">
+                    <Border x:Name="Border"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}">
+                        <ItemsPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <LinearGradientBrush x:Key="TextBoxBorder"
+                         EndPoint="0,20"
+                         MappingMode="Absolute"
+                         StartPoint="0,0">
+        <GradientStop Color="#ABADB3"
+                      Offset="0.05" />
+        <GradientStop Color="#E2E3EA"
+                      Offset="0.07" />
+        <GradientStop Color="#E3E9EF"
+                      Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="TextBox_MouseOver"
+                         EndPoint="0,1"
+                         StartPoint="0,0">
+        <GradientStop Color="#5794BF"
+                      Offset="0.05" />
+        <GradientStop Color="#B7D5EA"
+                      Offset="0.07" />
+        <GradientStop Color="#C7E2F1"
+                      Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="TextBox_Focused"
+                         EndPoint="0,1"
+                         StartPoint="0,0">
+        <GradientStop Color="#3D7BAD"
+                      Offset="0.05" />
+        <GradientStop Color="#A4C9E3"
+                      Offset="0.07" />
+        <GradientStop Color="#B7D9ED"
+                      Offset="1" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="TextBox_DisabledBorder"
+                     Color="#ADB2B5" />
+    <SolidColorBrush x:Key="TextBox_DisabledBackground"
+                     Color="#F4F4F4" />
+
+    <DataTemplate x:Key="DefaultWatermarkTemplate">
+        <ContentControl Content="{Binding}"
+                        Foreground="Gray"
+                        Focusable="False" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="DefaultInfoBoxTemplate">
+        <ContentControl Content="{Binding}"
+                        Foreground="Gray"
+                        Focusable="False" />
+    </DataTemplate>
+
+    <Style TargetType="{x:Type local:InfoBox}">
+        <Setter Property="Foreground"
+                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="Background"
+                Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="BorderBrush"
+                Value="{StaticResource TextBoxBorder}" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="Padding"
+                Value="3" />
+        <Setter Property="AllowDrop"
+                Value="true" />
+        <Setter Property="FocusVisualStyle"
+                Value="{x:Null}" />
+        <Setter Property="ScrollViewer.PanningMode"
+                Value="VerticalFirst" />
+        <Setter Property="Stylus.IsFlicksEnabled"
+                Value="False" />
+        <Setter Property="InfoBoxTemplate"
+                Value="{StaticResource DefaultInfoBoxTemplate}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:InfoBox}">
+                    <Grid Margin="5">
+                        <Border Background="#FFD0E476"
+                                BorderThickness="1"
+                                BorderBrush="Black"
+                                CornerRadius="10">
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="5">
+                                <Path Data="F1M950.458,504.864L940.094,504.864 940.094,503.164 940.925,503.164C941.828,503.164 942.434,503.083 942.748,502.922 943.057,502.758 943.276,502.531 943.404,502.231 943.532,501.935 943.597,501.239 943.597,500.148L943.597,488.226 940.094,488.226 940.094,486.547C941.216,486.414 942.153,486.226 942.917,485.987 943.68,485.747 944.546,485.367 945.518,484.846L946.994,484.846 946.994,501.079C946.994,501.646 947.078,502.071 947.24,502.354 947.401,502.635 947.628,502.843 947.917,502.971 948.206,503.099 948.737,503.164 949.505,503.164L950.458,503.164 M943.576,476.395C944.034,475.944 944.589,475.719 945.234,475.719 945.882,475.719 946.437,475.944 946.896,476.395 947.354,476.848 947.584,477.398 947.584,478.046 947.584,478.692 947.354,479.247 946.896,479.704 946.437,480.164 945.882,480.392 945.234,480.392 944.589,480.392 944.034,480.164 943.576,479.704 943.117,479.247 942.888,478.692 942.888,478.046 942.888,477.398 943.117,476.848 943.576,476.395z M945.276,468.91C933.469,468.91 923.896,478.483 923.896,490.29 923.896,502.099 933.469,511.671 945.276,511.671 957.084,511.671 966.656,502.099 966.656,490.29 966.656,478.483 957.084,468.91 945.276,468.91z"
+                                      Stretch="Uniform"
+                                      Fill="Black"
+                                      Width="20"
+                                      Height="20"
+                                      Margin="5,0,0,0"
+                                      RenderTransformOrigin="0.5,0.5"
+                                      VerticalAlignment="Top">
+                                    <Path.RenderTransform>
+                                        <TransformGroup>
+                                            <TransformGroup.Children>
+                                                <RotateTransform Angle="0" />
+                                                <ScaleTransform ScaleX="1"
+                                                                ScaleY="1" />
+                                            </TransformGroup.Children>
+                                        </TransformGroup>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <TextBlock Text="{TemplateBinding Text}"
+                                           FontSize="16"
+                                           Margin="5,0,0,0"
+                                           VerticalAlignment="Top"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <!--<Border x:Name="Border" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="1" Background="{TemplateBinding Background}" />
+                        <Border x:Name="FocusVisual" Opacity="0" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{StaticResource TextBox_Focused}" CornerRadius="1" />
+                        <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <ContentPresenter x:Name="PART_WatermarkHost"
+                                    Content="{TemplateBinding Text}"
+                                    ContentTemplate="{TemplateBinding InfoBoxTemplate}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    IsHitTestVisible="False"
+                                    Margin="{TemplateBinding Padding}"
+                                    Visibility="Collapsed" />-->
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:KeyboardTextBox}">
+        <Setter Property="Foreground"
+                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="Background"
+                Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="BorderBrush"
+                Value="{StaticResource TextBoxBorder}" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="Padding"
+                Value="3" />
+        <Setter Property="AllowDrop"
+                Value="true" />
+        <Setter Property="FocusVisualStyle"
+                Value="{x:Null}" />
+        <Setter Property="ScrollViewer.PanningMode"
+                Value="VerticalFirst" />
+        <Setter Property="Stylus.IsFlicksEnabled"
+                Value="False" />
+        <Setter Property="WatermarkTemplate"
+                Value="{StaticResource DefaultWatermarkTemplate}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:KeyboardTextBox}">
+                    <Grid>
+
+                        <Border x:Name="Border"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                CornerRadius="1"
+                                Background="{TemplateBinding Background}" />
+                        <Border x:Name="MouseOverVisual"
+                                Opacity="0"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{StaticResource TextBox_MouseOver}"
+                                CornerRadius="1" />
+                        <Border x:Name="FocusVisual"
+                                Opacity="0"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{StaticResource TextBox_Focused}"
+                                CornerRadius="1" />
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <ContentPresenter x:Name="PART_WatermarkHost"
+                                          Content="{TemplateBinding Watermark}"
+                                          ContentTemplate="{TemplateBinding WatermarkTemplate}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          IsHitTestVisible="False"
+                                          Margin="{TemplateBinding Padding}"
+                                          Visibility="Collapsed" />
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsFocused"
+                                           Value="False" />
+                                <Condition Property="Text"
+                                           Value="" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter Property="Visibility"
+                                        TargetName="PART_WatermarkHost"
+                                        Value="Visible" />
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="MouseOverVisual"
+                                    Property="Opacity"
+                                    Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsFocused"
+                                 Value="True">
+                            <Setter TargetName="FocusVisual"
+                                    Property="Opacity"
+                                    Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter TargetName="Border"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource TextBox_DisabledBorder}" />
+                            <Setter TargetName="Border"
+                                    Property="Background"
+                                    Value="{StaticResource TextBox_DisabledBackground}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type csShared:Plane}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type csShared:Plane}">
+                    <Grid>
+                        <!-- anti-aliasing is off here, but fear not... -->
+                        <Viewport3D x:Name="PART_Viewport"
+                                    ClipToBounds="False"
+                                    RenderOptions.EdgeMode="Aliased">
+                            <Viewport3D.Children>
+
+                                <!-- directional lights -->
+                                <ModelVisual3D x:Name="PART_DirectionalLights">
+                                    <ModelVisual3D.Content>
+                                        <Model3DGroup>
+                                            <DirectionalLight Color="White"
+                                                              Direction="0 0 -1" />
+                                            <DirectionalLight Color="White"
+                                                              Direction="0.1 -0.1 1" />
+                                        </Model3DGroup>
+                                    </ModelVisual3D.Content>
+                                </ModelVisual3D>
+
+                                <!-- ambient lights -->
+                                <ModelVisual3D x:Name="PART_AmbientLights">
+                                    <ModelVisual3D.Content>
+                                        <Model3DGroup>
+                                            <AmbientLight Color="White" />
+                                        </Model3DGroup>
+                                    </ModelVisual3D.Content>
+                                </ModelVisual3D>
+
+                                <!-- back -->
+                                <Viewport2DVisual3D x:Name="PART_BackModel"
+                                                    RenderOptions.CachingHint="Cache"
+                                                    RenderOptions.CacheInvalidationThresholdMaximum="2"
+                                                    RenderOptions.CacheInvalidationThresholdMinimum=".5">
+                                    <Viewport2DVisual3D.Geometry>
+                                        <MeshGeometry3D Positions="0 0 0, 0 1 0, 1 1 0, 1 0 0"
+                                                        TextureCoordinates="0 0, 0 1, 1 1, 1 0"
+                                                        TriangleIndices="1 2 0, 2 3 0" />
+                                    </Viewport2DVisual3D.Geometry>
+                                    <Viewport2DVisual3D.Transform>
+                                        <Transform3DGroup>
+                                            <ScaleTransform3D ScaleX="{Binding ElementName=PART_Scale, Path=ScaleX}"
+                                                              ScaleY="{Binding ElementName=PART_Scale, Path=ScaleY}" />
+                                            <!--<RotateTransform3D CenterX="{Binding ElementName=PART_Rotate, Path=CenterX}"
+                          CenterY="{Binding ElementName=PART_Rotate, Path=CenterY}">
+                        <RotateTransform3D.Rotation>
+                          <QuaternionRotation3D Quaternion="{Binding ElementName=PART_Quaternion, Path=Quaternion}" />
+                        </RotateTransform3D.Rotation>
+                      </RotateTransform3D>-->
+                                        </Transform3DGroup>
+                                    </Viewport2DVisual3D.Transform>
+                                    <Viewport2DVisual3D.Material>
+                                        <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True"
+                                                         Brush="White" />
+                                    </Viewport2DVisual3D.Material>
+                                    <Viewport2DVisual3D.Visual>
+                                        <!-- the 1px transparent border here effectively turns anti-aliasing on, but is much faster than enabling it on the scene. -->
+                                        <!-- this will make all of your content 1px smaller than you expect it to be, but it's probably worth it. -->
+                                        <Border x:Name="PART_BackContent"
+                                                BorderThickness="1"
+                                                BorderBrush="Transparent"
+                                                Width="{TemplateBinding ActualWidth}"
+                                                Height="{TemplateBinding ActualHeight}"
+                                                Padding="{TemplateBinding BackPadding}"
+                                                RenderTransformOrigin=".5,.5">
+                                            <Border.RenderTransform>
+                                                <RotateTransform Angle="180" />
+                                            </Border.RenderTransform>
+                                            <ContentPresenter Content="{TemplateBinding BackContent}"
+                                                              ContentTemplate="{TemplateBinding BackContentTemplate}" />
+                                        </Border>
+                                    </Viewport2DVisual3D.Visual>
+                                </Viewport2DVisual3D>
+
+                                <!-- front -->
+                                <Viewport2DVisual3D x:Name="PART_FrontModel"
+                                                    RenderOptions.CachingHint="Cache"
+                                                    RenderOptions.CacheInvalidationThresholdMaximum="2"
+                                                    RenderOptions.CacheInvalidationThresholdMinimum=".5">
+                                    <Viewport2DVisual3D.Geometry>
+                                        <MeshGeometry3D Positions="0 0 0, 0 1 0, 1 1 0, 1 0 0"
+                                                        TextureCoordinates="0 1, 0 0, 1 0, 1 1"
+                                                        TriangleIndices="0 2 1, 0 3 2" />
+                                    </Viewport2DVisual3D.Geometry>
+                                    <Viewport2DVisual3D.Transform>
+                                        <Transform3DGroup>
+                                            <ScaleTransform3D x:Name="PART_Scale" />
+                                            <RotateTransform3D x:Name="PART_Rotate">
+                                                <RotateTransform3D.Rotation>
+                                                    <QuaternionRotation3D x:Name="PART_Quaternion" />
+                                                </RotateTransform3D.Rotation>
+                                            </RotateTransform3D>
+                                        </Transform3DGroup>
+                                    </Viewport2DVisual3D.Transform>
+                                    <Viewport2DVisual3D.Material>
+                                        <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True"
+                                                         Brush="White" />
+                                    </Viewport2DVisual3D.Material>
+                                    <Viewport2DVisual3D.Visual>
+                                        <Border x:Name="PART_FrontContent"
+                                                BorderThickness="1"
+                                                BorderBrush="Transparent"
+                                                Width="{TemplateBinding ActualWidth}"
+                                                Height="{TemplateBinding ActualHeight}"
+                                                Padding="{TemplateBinding FrontPadding}">
+                                            <ContentPresenter Content="{TemplateBinding Content}"
+                                                              ContentTemplate="{TemplateBinding ContentTemplate}" />
+                                        </Border>
+                                    </Viewport2DVisual3D.Visual>
+                                </Viewport2DVisual3D>
+
+                            </Viewport3D.Children>
+
+                            <Viewport3D.Camera>
+                                <PerspectiveCamera x:Name="PART_Camera"
+                                                   UpDirection="0 1 0"
+                                                   LookDirection="0 0 -1" />
+                            </Viewport3D.Camera>
+
+                        </Viewport3D>
+
+                        <Border x:Name="PART_FixedHiddenContainer"
+                                Visibility="Collapsed" />
+
+                        <!-- fixed content -->
+                        <Border x:Name="PART_FixedContainer">
+                            <Border.RenderTransform>
+                                <RotateTransform x:Name="PART_FixedTransform" />
+                            </Border.RenderTransform>
+                        </Border>
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="SimpleContainer"
+           TargetType="{x:Type floatingElements:FloatingContainer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type floatingElements:FloatingContainer}">
+                    <Grid d:DataContext="{d:DesignInstance csShared:FloatingElement}">
+                        <Line x:Name="PART_Association"
+                              Stroke="Black"
+                              StrokeThickness="2" />
+                        <Grid x:Name="PART_Content"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch">
+                            <ContentControl x:Name="cpView"
+                                            HorizontalContentAlignment="Stretch"
+                                            VerticalContentAlignment="Stretch"
+                                            ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+
+                        </Grid>
+
+                        <controls:ClippingBorder x:Name="PART_Preview"
+                                                 BorderBrush="{x:Null}"
+                                                 BorderThickness="2,2,2,2"
+                                                 Background="{Binding Instance.AccentBrush, Source={x:Static csShared:AppStateSettings.Instance}}"
+                                                 Margin="0"
+                                                 Visibility="Visible"
+                                                 CornerRadius="{Binding CornerRadius, FallbackValue=30}"
+                                                 RenderTransformOrigin="0.5,0.5"
+                                                 Opacity="0.8">
+                            <Grid x:Name="gSmall"
+                                  Width="Auto"
+                                  Height="Auto">
+                                <TextBlock Text="{Binding Title}"
+                                           TextWrapping="Wrap"
+                                           Foreground="#FFFFFFFF"
+                                           x:Name="tbTitle"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Width="Auto"
+                                           Height="Auto"
+                                           FontSize="13.333"
+                                           RenderTransformOrigin="0,0"
+                                           TextAlignment="Center"
+                                           Visibility="Collapsed">
+                                    <TextBlock.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="1"
+                                                            ScaleY="1" />
+                                            <SkewTransform AngleX="0"
+                                                           AngleY="0" />
+                                            <RotateTransform Angle="-90" />
+                                            <TranslateTransform X="6"
+                                                                Y="18" />
+                                        </TransformGroup>
+                                    </TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Title}"
+                                           TextWrapping="Wrap"
+                                           Foreground="#FFFFFFFF"
+                                           x:Name="tbTitleReverse"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"
+                                           Width="Auto"
+                                           Height="Auto"
+                                           FontSize="16"
+                                           RenderTransformOrigin="0,0"
+                                           TextAlignment="Left"
+                                           Opacity="1"
+                                           Visibility="Collapsed">
+                                    <TextBlock.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="-1"
+                                                            ScaleY="-1" />
+                                            <SkewTransform AngleX="0"
+                                                           AngleY="0" />
+                                            <RotateTransform Angle="-90" />
+                                            <TranslateTransform X="48"
+                                                                Y="1" />
+                                        </TransformGroup>
+                                    </TextBlock.RenderTransform>
+                                </TextBlock>
+                                <Image Width="{Binding IconWidth}"
+                                       Height="Auto"
+                                       Source="{Binding IconUri}"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="10,0,0,0"
+                                       RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform />
+                                            <SkewTransform />
+                                            <RotateTransform Angle="{Binding IconRotation, FallbackValue=0}" />
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Grid>
+
+                        </controls:ClippingBorder>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="NoBorder"
+           TargetType="{x:Type floatingElements:FloatingContainer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type floatingElements:FloatingContainer}">
+                    <Grid>
+                        <Line x:Name="PART_Association"
+                              Stroke="Black"
+                              StrokeThickness="2" />
+                        <Grid x:Name="PART_Content"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch">
+                            <ContentControl x:Name="cpView"
+                                            HorizontalContentAlignment="Stretch"
+                                            VerticalContentAlignment="Stretch"
+                                            ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                        </Grid>
+                        <Border x:Name="PART_Preview"
+                                BorderBrush="{x:Null}"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                Margin="0"
+                                Visibility="Visible"
+                                RenderTransformOrigin="0.5,0.5"
+                                Opacity="0.8" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type floatingElements:FloatingContainer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type floatingElements:FloatingContainer}">
+                    <Grid Width="Auto"
+                          Height="Auto">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="ValidationStates">
+                                <VisualState x:Name="Valid" />
+                                <VisualState x:Name="InvalidFocused" />
+                                <VisualState x:Name="InvalidUnfocused" />
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="VisualStateGroup">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0">
+                                        <VisualTransition.GeneratedEasingFunction>
+                                            <CubicEase EasingMode="EaseIn" />
+                                        </VisualTransition.GeneratedEasingFunction>
+                                    </VisualTransition>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Default" />
+                                <VisualState x:Name="FullScreen">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                                       Storyboard.TargetName="bResize">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="{x:Static Visibility.Collapsed}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)"
+                                                                          Storyboard.TargetName="clippingBorder">
+                                            <EasingThicknessKeyFrame KeyTime="0"
+                                                                     Value="0" />
+                                        </ThicknessAnimationUsingKeyFrames>
+                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)"
+                                                                          Storyboard.TargetName="gContent">
+                                            <EasingThicknessKeyFrame KeyTime="0"
+                                                                     Value="0" />
+                                        </ThicknessAnimationUsingKeyFrames>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                                                      Storyboard.TargetName="bShadow">
+                                            <EasingColorKeyFrame KeyTime="0"
+                                                                 Value="#00000000" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                                       Storyboard.TargetName="bShadow">
+                                            <EasingDoubleKeyFrame KeyTime="0"
+                                                                  Value="0" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.CornerRadius)"
+                                                                       Storyboard.TargetName="clippingBorder">
+                                            <DiscreteObjectKeyFrame KeyTime="0">
+                                                <DiscreteObjectKeyFrame.Value>
+                                                    <CornerRadius>0</CornerRadius>
+                                                </DiscreteObjectKeyFrame.Value>
+                                            </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid x:Name="PART_Content">
+
+                            <csShared:Plane x:Name="Plane">
+                                <csShared:Plane.Resources>
+                                    <Storyboard x:Key="Flip">
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(csShared:Plane.RotationX)"
+                                                                       Storyboard.TargetName="Plane">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.2"
+                                                                  Value="180" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                    <Storyboard x:Key="UnFlip">
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(csShared:Plane.RotationX)"
+                                                                       Storyboard.TargetName="Plane">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.2"
+                                                                  Value="0" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </csShared:Plane.Resources>
+                                <csShared:Plane.BackContent>
+                                    <controls:ClippingBorder BorderThickness="0,0,0,0"
+                                                             x:Name="PART_Back"
+                                                             RenderTransformOrigin="0.5,0.5"
+                                                             CornerRadius="{Binding CornerRadius}"
+                                                             Background="{Binding Instance.AccentBrush, Source={x:Static csShared:AppStateSettings.Instance}}">
+                                        <controls:ClippingBorder.RenderTransform>
+                                            <RotateTransform Angle="180" />
+                                        </controls:ClippingBorder.RenderTransform>
+                                        <Grid x:Name="grid1"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch">
+                                            <controls:ClippingBorder x:Name="clippingBorder1"
+                                                                     Margin="5,5,5,15"
+                                                                     CornerRadius="5"
+                                                                     HorizontalAlignment="Stretch"
+                                                                     VerticalAlignment="Stretch">
+                                                <Grid x:Name="gContent1"
+                                                      Background="{Binding Instance.AccentBrush, Source={x:Static csShared:AppStateSettings.Instance}}"
+                                                      Margin="0,20,0,0">
+                                                    <ContentControl x:Name="cpViewBack"
+                                                                    HorizontalContentAlignment="Stretch"
+                                                                    VerticalContentAlignment="Stretch"
+                                                                    ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                                                </Grid>
+                                            </controls:ClippingBorder>
+                                            <controls:ClippingBorder x:Name="bBack1"
+                                                                     BorderBrush="#7FFFFFFF"
+                                                                     BorderThickness="0,0,0,0"
+                                                                     CornerRadius="10,10,10,10"
+                                                                     ClipToBounds="True"
+                                                                     VerticalAlignment="Top"
+                                                                     Visibility="Collapsed" />
+
+                                            <controls:ClippingBorder x:Name="bShadow1"
+                                                                     BorderBrush="#7FFFFFFF"
+                                                                     BorderThickness="0,0,0,0"
+                                                                     Opacity="1"
+                                                                     CornerRadius="0,0,0,0"
+                                                                     ClipToBounds="True"
+                                                                     Width="Auto"
+                                                                     Background="#7F000000"
+                                                                     Height="20"
+                                                                     VerticalAlignment="Top"
+                                                                     RenderTransformOrigin="0.5,0.5"
+                                                                     Visibility="{Binding ShowHeader, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Visible}">
+                                                <Grid Width="Auto"
+                                                      Height="Auto"
+                                                      VerticalAlignment="Top">
+                                                    <custom:SurfaceButton x:Name="PART_Rotate2"
+                                                                          Content="Rotate"
+                                                                          HorizontalAlignment="Right"
+                                                                          Height="30"
+                                                                          Margin="0,-8,30,0"
+                                                                          Style="{DynamicResource SettingsButtonStyle}"
+                                                                          VerticalAlignment="Top"
+                                                                          Width="40"
+                                                                          Visibility="{Binding CanFlip, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Click">
+                                                                <ei:ControlStoryboardAction Storyboard="{StaticResource UnFlip}" />
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </custom:SurfaceButton>
+                                                </Grid>
+                                            </controls:ClippingBorder>
+                                            <TextBlock HorizontalAlignment="Left"
+                                                       Margin="10,0,0,0"
+                                                       Foreground="White"
+                                                       Text="{Binding Title}"
+                                                       TextWrapping="NoWrap"
+                                                       VerticalAlignment="Top"
+                                                       FontSize="14"
+                                                       x:Name="textBlock1"
+                                                       RenderTransformOrigin="0.5,0.5">
+                                                <TextBlock.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform ScaleX="1"
+                                                                        ScaleY="1" />
+                                                        <SkewTransform AngleX="0"
+                                                                       AngleY="0" />
+                                                        <RotateTransform Angle="0" />
+                                                        <TranslateTransform X="0"
+                                                                            Y="0" />
+                                                    </TransformGroup>
+                                                </TextBlock.RenderTransform>
+                                            </TextBlock>
+                                            <Border x:Name="bResize1"
+                                                    BorderBrush="Black"
+                                                    BorderThickness="0"
+                                                    Background="{x:Null}"
+                                                    Width="15"
+                                                    Height="15"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Bottom"
+                                                    OpacityMask="{x:Null}"
+                                                    Cursor="SizeNWSE">
+                                                <Image Source="/csCommon;component/Resources/Icons/resize.png" />
+                                            </Border>
+                                        </Grid>
+                                    </controls:ClippingBorder>
+
+                                </csShared:Plane.BackContent>
+
+                                <controls:ClippingBorder BorderThickness="0,0,0,0"
+                                                         RenderTransformOrigin="0.5,0.5"
+                                                         CornerRadius="{Binding CornerRadius}">
+                                    <controls:ClippingBorder.Resources>
+                                        <Storyboard x:Key="sbClose">
+                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+                                                                           Storyboard.TargetName="PART_Content"
+                                                                           Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                <SplineDoubleKeyFrame KeyTime="00:00:00.5000000"
+                                                                      Value="0" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+                                                                           Storyboard.TargetName="PART_Content"
+                                                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+                                                <SplineDoubleKeyFrame KeyTime="00:00:00.5000000"
+                                                                      Value="0" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </controls:ClippingBorder.Resources>
+                                    <Grid x:Name="grid"
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch">
+                                        <Grid HorizontalAlignment="Stretch"
+                                              Height="Auto"
+                                              VerticalAlignment="Stretch"
+                                              Width="Auto"
+                                              Background="{Binding Instance.AccentBrush, Source={x:Static csShared:AppStateSettings.Instance}}" />
+                                        <TextBlock HorizontalAlignment="Left"
+                                                   Margin="10,0,0,0"
+                                                   Foreground="White"
+                                                   Text="{Binding Title}"
+                                                   TextWrapping="NoWrap"
+                                                   VerticalAlignment="Top"
+                                                   FontSize="14"
+                                                   x:Name="textBlock"
+                                                   RenderTransformOrigin="0.5,0.5">
+                                            <TextBlock.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform ScaleX="1"
+                                                                    ScaleY="1" />
+                                                    <SkewTransform AngleX="0"
+                                                                   AngleY="0" />
+                                                    <RotateTransform Angle="0" />
+                                                    <TranslateTransform X="0"
+                                                                        Y="0" />
+                                                </TransformGroup>
+                                            </TextBlock.RenderTransform>
+                                        </TextBlock>
+                                        <controls:ClippingBorder x:Name="clippingBorder"
+                                                                 Margin="5,5,5,15"
+                                                                 CornerRadius="5"
+                                                                 HorizontalAlignment="Stretch"
+                                                                 VerticalAlignment="Stretch"
+                                                                 Background="{x:Null}">
+                                            <Grid x:Name="gContent"
+                                                  Background="{Binding Instance.AccentBrush, Source={x:Static csShared:AppStateSettings.Instance}}"
+                                                  Margin="0,20,0,0">
+                                                <ContentControl x:Name="cpView"
+                                                                HorizontalContentAlignment="Stretch"
+                                                                VerticalContentAlignment="Stretch"
+                                                                ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                                            </Grid>
+                                        </controls:ClippingBorder>
+                                        <controls:ClippingBorder x:Name="bBack"
+                                                                 BorderBrush="#7FFFFFFF"
+                                                                 BorderThickness="0,0,0,0"
+                                                                 CornerRadius="10,10,10,10"
+                                                                 ClipToBounds="True"
+                                                                 VerticalAlignment="Top"
+                                                                 Visibility="Collapsed" />
+
+                                        <controls:ClippingBorder x:Name="bShadow"
+                                                                 BorderBrush="#7FFFFFFF"
+                                                                 BorderThickness="0,0,0,0"
+                                                                 Opacity="1"
+                                                                 CornerRadius="0,0,0,0"
+                                                                 ClipToBounds="True"
+                                                                 Width="Auto"
+                                                                 Background="#7F000000"
+                                                                 Height="20"
+                                                                 VerticalAlignment="Top"
+                                                                 RenderTransformOrigin="0.5,0.5"
+                                                                 Visibility="{Binding ShowHeader, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <StackPanel x:Name="grid2"
+                                                        Height="Auto"
+                                                        VerticalAlignment="Top"
+                                                        Width="Auto"
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Right"
+                                                        Margin="0,-9,0,0">
+                                                <custom:SurfaceButton x:Name="PART_Stream"
+                                                                      Content=""
+                                                                      HorizontalAlignment="Right"
+                                                                      Height="30"
+                                                                      Margin="0,0,-5,0"
+                                                                      Style="{DynamicResource SettingsButtonStyle2}"
+                                                                      VerticalAlignment="Top"
+                                                                      Width="40"
+                                                                      Visibility="{Binding CanStream, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                <custom:SurfaceButton x:Name="PART_Rotate"
+                                                                      Content="Rotate"
+                                                                      HorizontalAlignment="Right"
+                                                                      Height="30"
+                                                                      Margin="0,0,-15,0"
+                                                                      Style="{DynamicResource SettingsButtonStyle}"
+                                                                      VerticalAlignment="Top"
+                                                                      Width="40"
+                                                                      Visibility="{Binding CanFlip, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Click">
+                                                            <ei:ControlStoryboardAction Storyboard="{StaticResource Flip}" />
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </custom:SurfaceButton>
+                                                <Border HorizontalAlignment="Right"
+                                                        Height="30"
+                                                        Margin="0,2,3,0"
+                                                        VerticalAlignment="Top"
+                                                        Width="40"
+                                                        Background="{x:Null}">
+                                                    <custom:SurfaceButton x:Name="PART_Close"
+                                                                          Content="SurfaceButton"
+                                                                          Style="{DynamicResource CloseButtonStyle}"
+                                                                          Visibility="{Binding CanExit, Converter={StaticResource BooleanHiddenConverter}}"
+                                                                          Background="#00FF0000"
+                                                                          Margin="0,0,0,-8" />
+                                                </Border>
+                                            </StackPanel>
+                                        </controls:ClippingBorder>
+
+                                        <Border x:Name="bResize"
+                                                BorderBrush="Black"
+                                                BorderThickness="0"
+                                                Background="{x:Null}"
+                                                Width="15"
+                                                Height="15"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Bottom"
+                                                OpacityMask="{x:Null}"
+                                                Cursor="SizeNWSE">
+                                            <Image Source="/csCommon;component/Resources/Icons/resize.png" />
+                                        </Border>
+                                    </Grid>
+                                </controls:ClippingBorder>
+
+                            </csShared:Plane>
+
+                        </Grid>
+                        <controls:ClippingBorder x:Name="PART_Preview"
+                                                 BorderBrush="{x:Null}"
+                                                 BorderThickness="2,2,2,2"
+                                                 Background="{Binding Background}"
+                                                 Margin="0"
+                                                 Visibility="Visible"
+                                                 CornerRadius="{Binding CornerRadius}"
+                                                 RenderTransformOrigin="0.5,0.5"
+                                                 Opacity="0.8">
+                            <Grid x:Name="gSmall"
+                                  Width="Auto"
+                                  Height="Auto">
+                                <TextBlock Text="{Binding Title}"
+                                           TextWrapping="Wrap"
+                                           Foreground="#FFFFFFFF"
+                                           x:Name="tbTitle"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Width="Auto"
+                                           Height="Auto"
+                                           FontSize="13.333"
+                                           RenderTransformOrigin="0,0"
+                                           TextAlignment="Center"
+                                           Visibility="Collapsed">
+                                    <TextBlock.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="1"
+                                                            ScaleY="1" />
+                                            <SkewTransform AngleX="0"
+                                                           AngleY="0" />
+                                            <RotateTransform Angle="-90" />
+                                            <TranslateTransform X="6"
+                                                                Y="18" />
+                                        </TransformGroup>
+                                    </TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Title}"
+                                           TextWrapping="Wrap"
+                                           Foreground="#FFFFFFFF"
+                                           x:Name="tbTitleReverse"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"
+                                           Width="Auto"
+                                           Height="Auto"
+                                           FontSize="16"
+                                           RenderTransformOrigin="0,0"
+                                           TextAlignment="Left"
+                                           Opacity="1"
+                                           Visibility="Collapsed">
+                                    <TextBlock.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="-1"
+                                                            ScaleY="-1" />
+                                            <SkewTransform AngleX="0"
+                                                           AngleY="0" />
+                                            <RotateTransform Angle="-90" />
+                                            <TranslateTransform X="48"
+                                                                Y="1" />
+                                        </TransformGroup>
+                                    </TextBlock.RenderTransform>
+                                </TextBlock>
+                                <Image Width="{Binding IconWidth}"
+                                       Source="{Binding IconUri}"
+                                       Height="Auto"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="10,0,0,0"
+                                       RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform />
+                                            <SkewTransform />
+                                            <RotateTransform Angle="{Binding IconRotation, FallbackValue=0}" />
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Grid>
+
+                        </controls:ClippingBorder>
+
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="CloseButtonStyle"
+           TargetType="{x:Type custom:SurfaceButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type custom:SurfaceButton}">
+                    <Grid x:Name="cExit"
+                          Background="#00FF0000"
+                          Height="Auto"
+                          Margin="-24,-20.5,-40,-15.5"
+                          RenderTransformOrigin="0.5,0.5"
+                          Width="Auto">
+                        <Grid.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.25"
+                                                ScaleY="0.25" />
+                                <SkewTransform AngleX="0"
+                                               AngleY="0" />
+                                <RotateTransform Angle="0" />
+                            </TransformGroup>
+                        </Grid.RenderTransform>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                                                      Storyboard.TargetName="path">
+                                            <EasingColorKeyFrame KeyTime="0"
+                                                                 Value="Red" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                                                      Storyboard.TargetName="path1">
+                                            <EasingColorKeyFrame KeyTime="0"
+                                                                 Value="Red" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed" />
+                                <VisualState x:Name="Disabled" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Canvas Margin="0,25,0,-25">
+                            <Path x:Name="path"
+                                  Fill="#FFFEFEFE"
+                                  Stretch="Fill"
+                                  Width="Auto"
+                                  Height="Auto"
+                                  Data="F1M279.5181,287.4336C271.0761,291.4316,267.4731,301.5146,271.4721,309.9556C275.4711,318.3966,285.5571,321.9976,294.0001,317.9996C302.4431,314.0016,306.0451,303.9176,302.0461,295.4776C300.3741,291.9486,297.5311,289.1056,294.0001,287.4336C292.3811,286.6666,291.6911,284.7346,292.4571,283.1166C293.2241,281.4976,295.1581,280.8076,296.7761,281.5736C308.4571,287.1046,313.4401,301.0546,307.9081,312.7316C302.3751,324.4086,288.4221,329.3906,276.7421,323.8606C265.0611,318.3296,260.0781,304.3786,265.6101,292.7026C267.9241,287.8196,271.8571,283.8866,276.7421,281.5736C278.3601,280.8076,280.2941,281.4976,281.0611,283.1166C281.8281,284.7346,281.1371,286.6666,279.5181,287.4336"
+                                  HorizontalAlignment="Left"
+                                  Margin="29.353,-4.739,27.833,-2.117"
+                                  VerticalAlignment="Top" />
+                            <Path x:Name="path1"
+                                  Fill="#FFFEFEFE"
+                                  Stretch="Fill"
+                                  Width="Auto"
+                                  Height="28.193"
+                                  Data="F1M283.5161,297.3223C283.5161,299.5463,284.9681,301.3493,286.7591,301.3493C288.5501,301.3493,290.0021,299.5463,290.0021,297.3223L290.0021,277.1833C290.0021,274.9593,288.5501,273.1563,286.7591,273.1563C284.9681,273.1563,283.5161,274.9593,283.5161,277.1833z"
+                                  HorizontalAlignment="Left"
+                                  Margin="49.517,-12.844,47.997,0"
+                                  VerticalAlignment="Top" />
+                            <Path Fill="Black"
+                                  Stretch="Fill"
+                                  Width="Auto"
+                                  Height="Auto"
+                                  Opacity="0.50196802616119385"
+                                  Data="F1M283.5161,276.3984C283.6511,274.7084,285.0631,273.4054,286.7591,273.4054C288.4551,273.4054,289.8671,274.7084,290.0021,276.3984C290.0021,274.6074,288.5501,273.1564,286.7591,273.1564C284.9681,273.1564,283.5161,274.6074,283.5161,276.3984 M292.1451,284.5034C292.2771,283.4844,292.8681,282.5834,293.7501,282.0554C294.6331,281.5294,295.7081,281.4354,296.6671,281.8034C299.0321,283.0164,301.2581,284.4824,303.3071,286.1734C301.4101,284.2774,299.2011,282.7214,296.7761,281.5734C295.7721,281.0974,294.5931,281.1694,293.6541,281.7644C292.7141,282.3584,292.1451,283.3924,292.1451,284.5034 M276.7421,281.5734C274.3171,282.7214,272.1091,284.2774,270.2121,286.1734C272.2611,284.4824,274.4871,283.0164,276.8501,281.8034C277.8101,281.4354,278.8861,281.5294,279.7671,282.0554C280.6501,282.5834,281.2421,283.4844,281.3731,284.5034C281.3731,283.3924,280.8041,282.3584,279.8641,281.7634C278.9251,281.1694,277.7461,281.0974,276.7421,281.5734 M298.7201,314.6744C292.1141,321.2784,281.4041,321.2784,274.7981,314.6744C277.8891,317.9964,282.2221,319.8814,286.7591,319.8814C291.2961,319.8824,295.6291,317.9964,298.7201,314.6744"
+                                  HorizontalAlignment="Left"
+                                  Margin="36.213,-12.844,34.692,4.119"
+                                  VerticalAlignment="Top" />
+                        </Canvas>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="SettingsButtonStyle2"
+           TargetType="{x:Type custom:SurfaceButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type custom:SurfaceButton}">
+                    <Grid Background="#00000000">
+                        <Viewbox Height="16">
+                            <Path x:Name="path"
+                                  Data="M30.694484,40.876998C37.02075,40.876998 42.148994,46.006031 42.148994,52.331697 42.148994,58.659262 37.02075,63.786997 30.694484,63.786997 24.368218,63.786997 19.238996,58.659262 19.238997,52.331697 19.238996,46.006031 24.368218,40.876998 30.694484,40.876998z M30.692787,26.052998C37.690714,26.051797,44.069649,28.801197,48.770599,33.265297L48.7726,33.267898C49.851589,34.291898 49.896587,35.997698 48.871599,37.078498 48.341604,37.636399 47.628613,37.916999 46.915619,37.916999 46.249626,37.916999 45.582632,37.671499 45.061638,37.176098 41.308678,33.619398 36.270729,31.444998 30.692787,31.442998 25.624839,31.444998 21.003887,33.241098 17.385924,36.237898 16.238936,37.187099 14.537954,37.028999 13.587964,35.883099 12.637973,34.736598 12.797972,33.038698 13.942959,32.088198 18.481913,28.322598 24.333852,26.051797 30.692787,26.052998z M30.69348,12.128C40.310379,12.126699 49.160284,15.516674 56.075212,21.157333 57.2292,22.099926 57.403196,23.795914 56.460207,24.951505 55.928213,25.6038 55.153223,25.942998 54.371229,25.942998 53.772234,25.941698 53.17024,25.743799 52.670248,25.335503 46.670311,20.446938 39.036392,17.519859 30.69348,17.51866 23.311559,17.51866 16.490632,19.810244 10.861691,23.723015 9.6377039,24.572607 7.9577217,24.27051 7.1087313,23.047218 6.2587404,21.825129 6.5607367,20.14624 7.7827244,19.296646 14.276655,14.779079 22.187571,12.126699 30.69348,12.128z M30.692791,0C42.864773,-0.0021018982,54.087759,4.1665459,62.969744,11.146259L62.970743,11.148161C64.140741,12.067549 64.343744,13.760828 63.422743,14.932013 62.892744,15.608404 62.102747,15.962 61.303747,15.962 60.720747,15.962 60.133749,15.773203 59.63875,15.385807 51.66176,9.1215858 41.626776,5.3905334 30.692791,5.3905334 20.858805,5.3905334 11.757818,8.4067955 4.2188292,13.56683 2.9908314,14.407919 1.3138332,14.093523 0.47183418,12.866339 -0.36916542,11.637754 -0.056165695,9.9600754 1.1738338,9.1183853 9.5708208,3.3684578 19.749807,-0.0021018982 30.692791,0z"
+                                  Stretch="Uniform"
+                                  Fill="#FFFFFFFF"
+                                  Width="26"
+                                  Height="26"
+                                  Margin="0,0,0,0" />
+                        </Viewbox>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="true">
+                            <Setter Property="Fill"
+                                    TargetName="path"
+                                    Value="Red" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding IsBacksideQrCode, FallbackValue=false}"
+                                     Value="True">
+                            <Setter Property="Data"
+                                    TargetName="path"
+                                    Value="M20.896996,45.594005L22.797995,45.594005 22.797995,47.495006 20.896996,47.495006z M45.594004,39.896003L47.495003,39.896003 47.495003,47.495006 45.594004,47.495006 43.693999,47.495006 43.693999,45.594005 45.594004,45.594005z M15.198,37.995997L17.098007,37.995997 17.098007,41.795016 18.997982,41.795016 18.997982,43.693006 20.896996,43.693006 20.896996,45.594005 18.997982,45.594005 18.997982,47.495006 17.098007,47.495006 17.098007,43.693006 15.198,43.693006z M3.7989883,37.995997L5.6989937,37.995997 7.598999,37.995997 9.4990044,37.995997 9.4990044,43.693006 7.598999,43.693006 5.6989937,43.693006 3.7989883,43.693006z M1.9000053,36.094005L1.9000053,45.594005 3.7989883,45.594005 3.8000107,45.594005 5.6989937,45.594005 7.598999,45.594005 9.4990044,45.594005 11.400005,45.594005 11.400005,36.094005 9.4990044,36.094005 7.598999,36.094005 5.6989937,36.094005 3.8000107,36.094005 3.7989883,36.094005z M34.195984,34.195024L36.094997,34.195024 36.094997,36.094005 34.195984,36.094005z M0,34.195024L1.9000053,34.195024 3.7989883,34.195024 3.8000107,34.195024 5.6989937,34.195024 7.598999,34.195024 9.4990044,34.195024 11.400005,34.195024 13.298994,34.195024 13.298994,47.495006 11.400005,47.495006 9.4990044,47.495006 7.598999,47.495006 5.6989937,47.495006 3.8000107,47.495006 3.7989883,47.495006 1.9000053,47.495006 0,47.495006z M32.296009,32.295016L32.296009,37.995004 34.195984,37.995004 34.197008,37.995004 36.094997,37.995004 37.995004,37.995004 37.995004,32.295016 36.094997,32.295016 34.197008,32.295016 34.195984,32.295016z M3.7989883,28.495997L5.6989937,28.495997 5.6989937,32.295016 3.7989883,32.295016z M32.296009,26.596022L34.197008,26.596022 34.197008,30.396004 36.094997,30.396004 37.995004,30.396004 39.893986,30.396004 39.89501,30.396004 41.795009,30.396004 41.795009,32.295016 39.89501,32.295016 39.89501,36.094005 41.795009,36.094005 41.795009,43.693006 39.893986,43.693006 39.893986,39.896003 37.995004,39.896003 37.995004,45.594005 36.094997,45.594005 36.094997,47.495006 34.195984,47.495006 34.195984,45.594005 32.296009,45.594005 30.396996,45.594005 28.495996,45.594005 28.495996,43.693006 30.396996,43.693006 32.296009,43.693006 34.195984,43.693006 34.195984,43.692014 36.094997,43.692014 36.094997,41.795016 34.197008,41.795016 34.195984,41.795016 32.296009,41.795016 32.296009,39.896003 30.396996,39.896003 28.495996,39.896003 28.495996,43.693006 26.595991,43.693006 26.595991,41.795016 24.697008,41.795016 24.697008,43.693006 26.595991,43.693006 26.595991,45.594005 24.697008,45.594005 24.695984,45.594005 22.797995,45.594005 22.797995,41.795016 20.896996,41.795016 20.896996,39.896003 22.797995,39.896003 22.797995,41.794024 24.695984,41.794024 24.695984,39.896003 22.797995,39.896003 22.797995,37.995004 24.695984,37.995004 24.695984,36.094998 26.595991,36.094998 26.595991,37.995997 28.495996,37.995997 28.495996,32.295016 30.396996,32.295016 30.396996,28.495997 32.296009,28.495997z M41.796009,26.594998L43.694999,26.594998 43.694999,26.596022 45.594004,26.596022 45.594004,26.594998 47.495003,26.594998 47.495003,30.396004 45.594004,30.396004 45.594004,32.295016 43.694999,32.295016 43.694999,34.196015 45.594004,34.196015 45.594004,34.195024 47.495003,34.195024 47.495003,37.995004 45.594004,37.995004 45.594004,39.896003 43.694999,39.896003 43.693999,39.896003 41.796009,39.896003 41.796009,37.995004 43.693999,37.995004 43.693999,36.094005 41.796009,36.094005 41.796009,30.397027 43.693999,30.397027 43.693999,28.495997 41.796009,28.495997z M24.697008,24.698002L24.697008,26.594998 26.595991,26.594998 26.595991,24.698002z M37.995004,22.797003L39.89501,22.797003 39.89501,24.698002 41.795009,24.698002 41.795009,28.496998 39.893986,28.496998 39.893986,28.495997 37.995004,28.495997 37.995004,26.594998 39.893986,26.594998 39.893986,24.698002 37.995004,24.698002z M20.896996,22.797003L22.797995,22.797003 22.797995,24.698002 20.896996,24.698002z M39.893986,18.998014L41.795009,18.998014 41.795009,20.897003 39.893986,20.897003z M1.9000053,18.998014L3.8000107,18.998014 3.8000107,22.797003 5.6989937,22.797003 5.6989937,24.698002 7.598999,24.698002 7.598999,26.594998 5.6989937,26.594998 5.6989937,26.595999 3.7989883,26.595999 3.7989883,26.594998 1.9000053,26.594998 1.9000053,24.698002 0,24.698002 0,20.89501 1.9000053,20.89501z M18.99699,17.096022L20.896996,17.096022 20.896996,18.997014 18.99699,18.997014z M0,17.096022L1.9000053,17.096022 1.9000053,18.997014 0,18.997014z M41.796009,15.198002L43.694999,15.198002 45.594004,15.198012 47.495003,15.198002 47.495003,17.097015 45.594004,17.097015 45.594004,18.998014 47.495003,18.998014 47.495003,24.698002 45.594004,24.698002 43.694004,24.698012 41.796009,24.698002 41.796009,22.797003 43.694004,22.797003 43.694004,17.097015 41.796009,17.097015z M3.7989883,15.198002L5.6989937,15.198002 7.598999,15.198002 9.4990044,15.198002 9.4990044,17.097015 7.598999,17.097015 7.598999,18.998014 5.6989937,18.998014 5.6989937,17.097015 3.7989883,17.097015z M30.396996,11.399013L32.296009,11.399013 32.296009,15.198002 34.195984,15.198002 34.197008,15.198002 36.094997,15.198002 37.995004,15.198002 37.995004,18.998014 36.094997,18.998014 36.094997,17.097015 34.197008,17.097015 34.195984,17.097015 32.296009,17.097015 32.296009,17.096014 30.396996,17.096014z M26.595991,5.6980019L28.495996,5.6980019 30.396996,5.6980019 30.396996,9.498014 28.495996,9.498014 26.595991,9.498014z M41.796009,3.8000116L43.694999,3.8000116 43.694999,9.497014 41.796009,9.497014z M37.995004,3.8000116L39.893986,3.8000116 39.89501,3.8000116 41.795009,3.8000116 41.795009,9.497014 39.89501,9.497014 39.893986,9.497014 37.995004,9.497014z M3.7989883,3.8000116L5.6989937,3.8000116 7.598999,3.8000116 9.4990044,3.8000116 9.4990044,9.497014 7.598999,9.497014 5.6989937,9.497014 3.7989883,9.497014z M1.9000053,1.8990126L1.9000053,11.39802 3.7989883,11.39802 3.8000107,11.39802 5.6989937,11.39802 7.598999,11.39802 9.4990044,11.39802 11.400005,11.39802 11.400005,1.8990126 9.4990044,1.8990126 7.598999,1.8990126 5.6989937,1.8990126 3.8000107,1.8990126 3.7989883,1.8990126z M30.396996,0.0010232925L32.296009,0.0010232925 32.296009,5.6980019 30.396996,5.6980019z M15.198,0.0010232925L17.098007,0.0010232925 17.098007,3.8000116 18.99699,3.8000116 18.99699,3.7990189 20.896996,3.7990189 22.797995,3.7990189 22.797995,5.6980019 20.896996,5.6980019 20.896996,7.5990005 18.997982,7.5990005 18.997982,9.498014 20.896996,9.498014 20.896996,7.5990005 22.797995,7.5990005 24.697008,7.5990005 24.697008,17.096014 22.797995,17.096014 22.797995,11.399013 20.896996,11.399013 20.896996,15.198002 18.99699,15.198002 18.99699,11.399013 17.098007,11.399013 17.098007,17.097015 15.198,17.097015 15.198,18.998014 17.098007,18.998014 17.098007,22.797003 18.997982,22.797003 18.997982,24.698002 20.896996,24.698002 20.896996,26.594998 18.99699,26.594998 18.99699,24.698002 17.098007,24.698002 15.198,24.698002 15.198,20.896004 13.298994,20.896004 13.298994,20.897003 11.400005,20.897003 11.400005,22.797003 13.298994,22.797003 13.298994,24.698002 11.400005,24.698002 11.400005,26.594998 13.298994,26.594998 13.298994,28.495997 15.198,28.495997 15.198,30.396004 17.098007,30.396004 17.098007,28.495997 15.198,28.495997 15.198,26.594998 17.098007,26.594998 17.098007,26.596022 18.997982,26.596022 18.997982,28.495997 20.896996,28.495997 22.797995,28.495997 22.797995,30.396004 20.896996,30.396004 20.896996,32.295016 18.997982,32.295016 18.99699,32.295016 17.098007,32.295016 17.098007,34.195024 18.99699,34.195024 18.997982,34.195024 20.896996,34.195024 20.896996,32.295016 22.797995,32.295016 22.797995,30.396004 24.695984,30.396004 24.695984,26.594998 22.797995,26.594998 22.797995,24.698002 24.695984,24.698002 24.695984,22.797003 22.797995,22.797003 22.797995,20.897003 20.896996,20.897003 20.896996,18.998014 22.797995,18.998014 22.797995,20.896004 24.695984,20.896004 24.695984,17.097015 26.595991,17.097015 26.595991,11.399013 28.495996,11.399013 28.495996,18.998014 30.396996,18.998014 30.396996,20.896004 32.296009,20.896004 32.296009,20.89501 34.195984,20.89501 34.195984,18.998014 36.094997,18.998014 36.094997,20.897003 34.197008,20.897003 34.197008,22.797003 36.094997,22.797003 36.094997,24.698002 34.197008,24.698002 34.195984,24.698002 32.296009,24.698002 32.296009,22.797003 30.396996,22.797003 30.396996,20.897003 28.495996,20.897003 28.495996,24.698002 30.396996,24.698002 32.296009,24.698002 32.296009,26.594998 30.396996,26.594998 28.495996,26.594998 28.495996,32.295016 26.595991,32.295016 26.595991,30.396004 24.697008,30.396004 24.697008,34.196015 22.797995,34.196015 22.797995,37.995004 20.896996,37.995004 18.997982,37.995004 18.99699,37.995004 17.098007,37.995004 17.098007,34.196015 15.198,34.196015 15.198,32.295016 13.298994,32.295016 13.297995,32.295016 11.400005,32.295016 9.4990044,32.295016 7.598999,32.295016 7.598999,30.396004 9.4990044,30.396004 9.4990044,28.495997 11.400005,28.495997 11.400005,30.396004 13.297995,30.396004 13.297995,28.495997 11.400005,28.495997 11.400005,26.595999 9.4990044,26.595999 9.4990044,28.495997 7.598999,28.495997 7.598999,26.594998 9.4990044,26.594998 9.4990044,24.698002 7.598999,24.698002 7.598999,18.998014 9.4990044,18.998014 9.4990044,17.097015 11.400005,17.097015 11.400005,18.998014 13.297995,18.998014 13.297995,17.097015 11.400005,17.097015 11.400005,15.198002 13.298994,15.198002 13.298994,17.096022 15.198,17.096022 15.198,9.498014 17.098007,9.498014 17.098007,5.6980019 15.198,5.6980019z M41.796009,0L43.693999,0 43.694999,0 45.594004,0 47.495003,0 47.495003,13.297003 45.594004,13.297003 43.694999,13.297003 43.693999,13.297003 41.796009,13.297003 41.796009,11.39802 43.693999,11.39802 43.694999,11.39802 45.594004,11.39802 45.594004,1.8990126 43.694999,1.8990126 43.693999,1.8990126 41.796009,1.8990126z M34.195984,0L36.094997,0 37.995004,0 39.893986,0 39.89501,0 41.795009,0 41.795009,1.8990126 39.89501,1.8990126 39.893986,1.8990126 37.995004,1.8990126 36.094997,1.8990126 36.094997,11.39802 37.995004,11.39802 39.893986,11.39802 39.89501,11.39802 41.795009,11.39802 41.795009,13.297003 39.89501,13.297003 39.893986,13.297003 37.995004,13.297003 36.094997,13.297003 34.195984,13.297003z M24.695984,0L26.595991,0 28.495996,0 28.495996,1.8990126 26.595991,1.8990126 26.595991,3.8000116 24.695984,3.8000116z M0,0L1.9000053,0 3.7989883,0 3.8000107,0 5.6989937,0 7.598999,0 9.4990044,0 11.400005,0 13.298994,0 13.298994,13.297003 11.400005,13.297003 9.4990044,13.297003 7.598999,13.297003 5.6989937,13.297003 3.8000107,13.297003 3.7989883,13.297003 1.9000053,13.297003 0,13.297002z" />
+                            <Setter Property="Width"
+                                    Value="28" />
+                            <Setter Property="Height"
+                                    Value="28" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="SettingsButtonStyle"
+           TargetType="{x:Type custom:SurfaceButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type custom:SurfaceButton}">
+                    <Grid Background="#00000000">
+                        <Viewbox Height="16">
+                            <Path x:Name="path"
+                                  Data="F1M5.33337,33.0078L22.224,16.0287 22.224,24.0105C56.0156,24.0105 58.6667,43.9871 58.6667,47.974 51.3776,32.002 22.224,39.9871 22.224,39.9871L22.224,47.974 5.33337,33.0078z"
+                                  Fill="#FFFFFFFF"
+                                  Stretch="Fill"
+                                  Height="33.491"
+                                  Width="42.583" />
+                        </Viewbox>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="true">
+                            <Setter Property="Fill"
+                                    TargetName="path"
+                                    Value="Red" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding IsBacksideQrCode, FallbackValue=true}"
+                                     Value="True">
+                            <Setter Property="Path.Data"
+                                    TargetName="path"
+                                    Value="M20.896996,45.594005L22.797995,45.594005 22.797995,47.495006 20.896996,47.495006z M45.594004,39.896003L47.495003,39.896003 47.495003,47.495006 45.594004,47.495006 43.693999,47.495006 43.693999,45.594005 45.594004,45.594005z M15.198,37.995997L17.098007,37.995997 17.098007,41.795016 18.997982,41.795016 18.997982,43.693006 20.896996,43.693006 20.896996,45.594005 18.997982,45.594005 18.997982,47.495006 17.098007,47.495006 17.098007,43.693006 15.198,43.693006z M3.7989883,37.995997L5.6989937,37.995997 7.598999,37.995997 9.4990044,37.995997 9.4990044,43.693006 7.598999,43.693006 5.6989937,43.693006 3.7989883,43.693006z M1.9000053,36.094005L1.9000053,45.594005 3.7989883,45.594005 3.8000107,45.594005 5.6989937,45.594005 7.598999,45.594005 9.4990044,45.594005 11.400005,45.594005 11.400005,36.094005 9.4990044,36.094005 7.598999,36.094005 5.6989937,36.094005 3.8000107,36.094005 3.7989883,36.094005z M34.195984,34.195024L36.094997,34.195024 36.094997,36.094005 34.195984,36.094005z M0,34.195024L1.9000053,34.195024 3.7989883,34.195024 3.8000107,34.195024 5.6989937,34.195024 7.598999,34.195024 9.4990044,34.195024 11.400005,34.195024 13.298994,34.195024 13.298994,47.495006 11.400005,47.495006 9.4990044,47.495006 7.598999,47.495006 5.6989937,47.495006 3.8000107,47.495006 3.7989883,47.495006 1.9000053,47.495006 0,47.495006z M32.296009,32.295016L32.296009,37.995004 34.195984,37.995004 34.197008,37.995004 36.094997,37.995004 37.995004,37.995004 37.995004,32.295016 36.094997,32.295016 34.197008,32.295016 34.195984,32.295016z M3.7989883,28.495997L5.6989937,28.495997 5.6989937,32.295016 3.7989883,32.295016z M32.296009,26.596022L34.197008,26.596022 34.197008,30.396004 36.094997,30.396004 37.995004,30.396004 39.893986,30.396004 39.89501,30.396004 41.795009,30.396004 41.795009,32.295016 39.89501,32.295016 39.89501,36.094005 41.795009,36.094005 41.795009,43.693006 39.893986,43.693006 39.893986,39.896003 37.995004,39.896003 37.995004,45.594005 36.094997,45.594005 36.094997,47.495006 34.195984,47.495006 34.195984,45.594005 32.296009,45.594005 30.396996,45.594005 28.495996,45.594005 28.495996,43.693006 30.396996,43.693006 32.296009,43.693006 34.195984,43.693006 34.195984,43.692014 36.094997,43.692014 36.094997,41.795016 34.197008,41.795016 34.195984,41.795016 32.296009,41.795016 32.296009,39.896003 30.396996,39.896003 28.495996,39.896003 28.495996,43.693006 26.595991,43.693006 26.595991,41.795016 24.697008,41.795016 24.697008,43.693006 26.595991,43.693006 26.595991,45.594005 24.697008,45.594005 24.695984,45.594005 22.797995,45.594005 22.797995,41.795016 20.896996,41.795016 20.896996,39.896003 22.797995,39.896003 22.797995,41.794024 24.695984,41.794024 24.695984,39.896003 22.797995,39.896003 22.797995,37.995004 24.695984,37.995004 24.695984,36.094998 26.595991,36.094998 26.595991,37.995997 28.495996,37.995997 28.495996,32.295016 30.396996,32.295016 30.396996,28.495997 32.296009,28.495997z M41.796009,26.594998L43.694999,26.594998 43.694999,26.596022 45.594004,26.596022 45.594004,26.594998 47.495003,26.594998 47.495003,30.396004 45.594004,30.396004 45.594004,32.295016 43.694999,32.295016 43.694999,34.196015 45.594004,34.196015 45.594004,34.195024 47.495003,34.195024 47.495003,37.995004 45.594004,37.995004 45.594004,39.896003 43.694999,39.896003 43.693999,39.896003 41.796009,39.896003 41.796009,37.995004 43.693999,37.995004 43.693999,36.094005 41.796009,36.094005 41.796009,30.397027 43.693999,30.397027 43.693999,28.495997 41.796009,28.495997z M24.697008,24.698002L24.697008,26.594998 26.595991,26.594998 26.595991,24.698002z M37.995004,22.797003L39.89501,22.797003 39.89501,24.698002 41.795009,24.698002 41.795009,28.496998 39.893986,28.496998 39.893986,28.495997 37.995004,28.495997 37.995004,26.594998 39.893986,26.594998 39.893986,24.698002 37.995004,24.698002z M20.896996,22.797003L22.797995,22.797003 22.797995,24.698002 20.896996,24.698002z M39.893986,18.998014L41.795009,18.998014 41.795009,20.897003 39.893986,20.897003z M1.9000053,18.998014L3.8000107,18.998014 3.8000107,22.797003 5.6989937,22.797003 5.6989937,24.698002 7.598999,24.698002 7.598999,26.594998 5.6989937,26.594998 5.6989937,26.595999 3.7989883,26.595999 3.7989883,26.594998 1.9000053,26.594998 1.9000053,24.698002 0,24.698002 0,20.89501 1.9000053,20.89501z M18.99699,17.096022L20.896996,17.096022 20.896996,18.997014 18.99699,18.997014z M0,17.096022L1.9000053,17.096022 1.9000053,18.997014 0,18.997014z M41.796009,15.198002L43.694999,15.198002 45.594004,15.198012 47.495003,15.198002 47.495003,17.097015 45.594004,17.097015 45.594004,18.998014 47.495003,18.998014 47.495003,24.698002 45.594004,24.698002 43.694004,24.698012 41.796009,24.698002 41.796009,22.797003 43.694004,22.797003 43.694004,17.097015 41.796009,17.097015z M3.7989883,15.198002L5.6989937,15.198002 7.598999,15.198002 9.4990044,15.198002 9.4990044,17.097015 7.598999,17.097015 7.598999,18.998014 5.6989937,18.998014 5.6989937,17.097015 3.7989883,17.097015z M30.396996,11.399013L32.296009,11.399013 32.296009,15.198002 34.195984,15.198002 34.197008,15.198002 36.094997,15.198002 37.995004,15.198002 37.995004,18.998014 36.094997,18.998014 36.094997,17.097015 34.197008,17.097015 34.195984,17.097015 32.296009,17.097015 32.296009,17.096014 30.396996,17.096014z M26.595991,5.6980019L28.495996,5.6980019 30.396996,5.6980019 30.396996,9.498014 28.495996,9.498014 26.595991,9.498014z M41.796009,3.8000116L43.694999,3.8000116 43.694999,9.497014 41.796009,9.497014z M37.995004,3.8000116L39.893986,3.8000116 39.89501,3.8000116 41.795009,3.8000116 41.795009,9.497014 39.89501,9.497014 39.893986,9.497014 37.995004,9.497014z M3.7989883,3.8000116L5.6989937,3.8000116 7.598999,3.8000116 9.4990044,3.8000116 9.4990044,9.497014 7.598999,9.497014 5.6989937,9.497014 3.7989883,9.497014z M1.9000053,1.8990126L1.9000053,11.39802 3.7989883,11.39802 3.8000107,11.39802 5.6989937,11.39802 7.598999,11.39802 9.4990044,11.39802 11.400005,11.39802 11.400005,1.8990126 9.4990044,1.8990126 7.598999,1.8990126 5.6989937,1.8990126 3.8000107,1.8990126 3.7989883,1.8990126z M30.396996,0.0010232925L32.296009,0.0010232925 32.296009,5.6980019 30.396996,5.6980019z M15.198,0.0010232925L17.098007,0.0010232925 17.098007,3.8000116 18.99699,3.8000116 18.99699,3.7990189 20.896996,3.7990189 22.797995,3.7990189 22.797995,5.6980019 20.896996,5.6980019 20.896996,7.5990005 18.997982,7.5990005 18.997982,9.498014 20.896996,9.498014 20.896996,7.5990005 22.797995,7.5990005 24.697008,7.5990005 24.697008,17.096014 22.797995,17.096014 22.797995,11.399013 20.896996,11.399013 20.896996,15.198002 18.99699,15.198002 18.99699,11.399013 17.098007,11.399013 17.098007,17.097015 15.198,17.097015 15.198,18.998014 17.098007,18.998014 17.098007,22.797003 18.997982,22.797003 18.997982,24.698002 20.896996,24.698002 20.896996,26.594998 18.99699,26.594998 18.99699,24.698002 17.098007,24.698002 15.198,24.698002 15.198,20.896004 13.298994,20.896004 13.298994,20.897003 11.400005,20.897003 11.400005,22.797003 13.298994,22.797003 13.298994,24.698002 11.400005,24.698002 11.400005,26.594998 13.298994,26.594998 13.298994,28.495997 15.198,28.495997 15.198,30.396004 17.098007,30.396004 17.098007,28.495997 15.198,28.495997 15.198,26.594998 17.098007,26.594998 17.098007,26.596022 18.997982,26.596022 18.997982,28.495997 20.896996,28.495997 22.797995,28.495997 22.797995,30.396004 20.896996,30.396004 20.896996,32.295016 18.997982,32.295016 18.99699,32.295016 17.098007,32.295016 17.098007,34.195024 18.99699,34.195024 18.997982,34.195024 20.896996,34.195024 20.896996,32.295016 22.797995,32.295016 22.797995,30.396004 24.695984,30.396004 24.695984,26.594998 22.797995,26.594998 22.797995,24.698002 24.695984,24.698002 24.695984,22.797003 22.797995,22.797003 22.797995,20.897003 20.896996,20.897003 20.896996,18.998014 22.797995,18.998014 22.797995,20.896004 24.695984,20.896004 24.695984,17.097015 26.595991,17.097015 26.595991,11.399013 28.495996,11.399013 28.495996,18.998014 30.396996,18.998014 30.396996,20.896004 32.296009,20.896004 32.296009,20.89501 34.195984,20.89501 34.195984,18.998014 36.094997,18.998014 36.094997,20.897003 34.197008,20.897003 34.197008,22.797003 36.094997,22.797003 36.094997,24.698002 34.197008,24.698002 34.195984,24.698002 32.296009,24.698002 32.296009,22.797003 30.396996,22.797003 30.396996,20.897003 28.495996,20.897003 28.495996,24.698002 30.396996,24.698002 32.296009,24.698002 32.296009,26.594998 30.396996,26.594998 28.495996,26.594998 28.495996,32.295016 26.595991,32.295016 26.595991,30.396004 24.697008,30.396004 24.697008,34.196015 22.797995,34.196015 22.797995,37.995004 20.896996,37.995004 18.997982,37.995004 18.99699,37.995004 17.098007,37.995004 17.098007,34.196015 15.198,34.196015 15.198,32.295016 13.298994,32.295016 13.297995,32.295016 11.400005,32.295016 9.4990044,32.295016 7.598999,32.295016 7.598999,30.396004 9.4990044,30.396004 9.4990044,28.495997 11.400005,28.495997 11.400005,30.396004 13.297995,30.396004 13.297995,28.495997 11.400005,28.495997 11.400005,26.595999 9.4990044,26.595999 9.4990044,28.495997 7.598999,28.495997 7.598999,26.594998 9.4990044,26.594998 9.4990044,24.698002 7.598999,24.698002 7.598999,18.998014 9.4990044,18.998014 9.4990044,17.097015 11.400005,17.097015 11.400005,18.998014 13.297995,18.998014 13.297995,17.097015 11.400005,17.097015 11.400005,15.198002 13.298994,15.198002 13.298994,17.096022 15.198,17.096022 15.198,9.498014 17.098007,9.498014 17.098007,5.6980019 15.198,5.6980019z M41.796009,0L43.693999,0 43.694999,0 45.594004,0 47.495003,0 47.495003,13.297003 45.594004,13.297003 43.694999,13.297003 43.693999,13.297003 41.796009,13.297003 41.796009,11.39802 43.693999,11.39802 43.694999,11.39802 45.594004,11.39802 45.594004,1.8990126 43.694999,1.8990126 43.693999,1.8990126 41.796009,1.8990126z M34.195984,0L36.094997,0 37.995004,0 39.893986,0 39.89501,0 41.795009,0 41.795009,1.8990126 39.89501,1.8990126 39.893986,1.8990126 37.995004,1.8990126 36.094997,1.8990126 36.094997,11.39802 37.995004,11.39802 39.893986,11.39802 39.89501,11.39802 41.795009,11.39802 41.795009,13.297003 39.89501,13.297003 39.893986,13.297003 37.995004,13.297003 36.094997,13.297003 34.195984,13.297003z M24.695984,0L26.595991,0 28.495996,0 28.495996,1.8990126 26.595991,1.8990126 26.595991,3.8000116 24.695984,3.8000116z M0,0L1.9000053,0 3.7989883,0 3.8000107,0 5.6989937,0 7.598999,0 9.4990044,0 11.400005,0 13.298994,0 13.298994,13.297003 11.400005,13.297003 9.4990044,13.297003 7.598999,13.297003 5.6989937,13.297003 3.8000107,13.297003 3.7989883,13.297003 1.9000053,13.297003 0,13.297002z" />
+                            <Setter Property="Path.Width"
+                                    Value="28" />
+                            <Setter Property="Path.Height"
+                                    Value="28" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <SolidColorBrush x:Key="TabControlNormalBorderBrush"
+                     Color="#8C8E94" />
+    <Style x:Key="TabControlStyle1"
+           TargetType="{x:Type TabControl}">
+        <Setter Property="Foreground"
+                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="Padding"
+                Value="4,4,4,4" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="BorderBrush"
+                Value="{StaticResource TabControlNormalBorderBrush}" />
+        <Setter Property="Background"
+                Value="#F9F9F9" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid ClipToBounds="true"
+                          SnapsToDevicePixels="true"
+                          KeyboardNavigation.TabNavigation="Local">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="ColumnDefinition0" />
+                            <ColumnDefinition x:Name="ColumnDefinition1"
+                                              Width="0" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Name="RowDefinition0"
+                                           Height="Auto" />
+                            <RowDefinition x:Name="RowDefinition1"
+                                           Height="*" />
+                        </Grid.RowDefinitions>
+                        <TabPanel x:Name="HeaderPanel"
+                                  Grid.Column="0"
+                                  IsItemsHost="true"
+                                  Margin="2,2,2,0"
+                                  Grid.Row="0"
+                                  KeyboardNavigation.TabIndex="1"
+                                  Panel.ZIndex="1" />
+                        <Border x:Name="ContentPanel"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                Grid.Column="0"
+                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                Grid.Row="1"
+                                KeyboardNavigation.TabIndex="2"
+                                KeyboardNavigation.TabNavigation="Local">
+                            <ContentPresenter x:Name="PART_SelectedContentHost"
+                                              ContentSource="SelectedContent"
+                                              Margin="{TemplateBinding Padding}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="TabStripPlacement"
+                                 Value="Bottom">
+                            <Setter Property="Grid.Row"
+                                    TargetName="HeaderPanel"
+                                    Value="1" />
+                            <Setter Property="Grid.Row"
+                                    TargetName="ContentPanel"
+                                    Value="0" />
+                            <Setter Property="Height"
+                                    TargetName="RowDefinition0"
+                                    Value="*" />
+                            <Setter Property="Height"
+                                    TargetName="RowDefinition1"
+                                    Value="Auto" />
+                            <Setter Property="Margin"
+                                    TargetName="HeaderPanel"
+                                    Value="2,0,2,2" />
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement"
+                                 Value="Left">
+                            <Setter Property="Grid.Row"
+                                    TargetName="HeaderPanel"
+                                    Value="0" />
+                            <Setter Property="Grid.Row"
+                                    TargetName="ContentPanel"
+                                    Value="0" />
+                            <Setter Property="Grid.Column"
+                                    TargetName="HeaderPanel"
+                                    Value="0" />
+                            <Setter Property="Grid.Column"
+                                    TargetName="ContentPanel"
+                                    Value="1" />
+                            <Setter Property="Width"
+                                    TargetName="ColumnDefinition0"
+                                    Value="Auto" />
+                            <Setter Property="Width"
+                                    TargetName="ColumnDefinition1"
+                                    Value="*" />
+                            <Setter Property="Height"
+                                    TargetName="RowDefinition0"
+                                    Value="*" />
+                            <Setter Property="Height"
+                                    TargetName="RowDefinition1"
+                                    Value="0" />
+                            <Setter Property="Margin"
+                                    TargetName="HeaderPanel"
+                                    Value="2,2,0,2" />
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement"
+                                 Value="Right">
+                            <Setter Property="Grid.Row"
+                                    TargetName="HeaderPanel"
+                                    Value="0" />
+                            <Setter Property="Grid.Row"
+                                    TargetName="ContentPanel"
+                                    Value="0" />
+                            <Setter Property="Grid.Column"
+                                    TargetName="HeaderPanel"
+                                    Value="1" />
+                            <Setter Property="Grid.Column"
+                                    TargetName="ContentPanel"
+                                    Value="0" />
+                            <Setter Property="Width"
+                                    TargetName="ColumnDefinition0"
+                                    Value="*" />
+                            <Setter Property="Width"
+                                    TargetName="ColumnDefinition1"
+                                    Value="Auto" />
+                            <Setter Property="Height"
+                                    TargetName="RowDefinition0"
+                                    Value="*" />
+                            <Setter Property="Height"
+                                    TargetName="RowDefinition1"
+                                    Value="0" />
+                            <Setter Property="Margin"
+                                    TargetName="HeaderPanel"
+                                    Value="0,2,2,2" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="TabItemFocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="3,3,3,1"
+                               SnapsToDevicePixels="true"
+                               Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                               StrokeThickness="1"
+                               StrokeDashArray="1 2" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <LinearGradientBrush x:Key="ButtonNormalBackground"
+                         EndPoint="0,1"
+                         StartPoint="0,0">
+        <GradientStop Color="#F3F3F3"
+                      Offset="0" />
+        <GradientStop Color="#EBEBEB"
+                      Offset="0.5" />
+        <GradientStop Color="#DDDDDD"
+                      Offset="0.5" />
+        <GradientStop Color="#CDCDCD"
+                      Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="TabItemHotBackground"
+                         EndPoint="0,1"
+                         StartPoint="0,0">
+        <GradientStop Color="#EAF6FD"
+                      Offset="0.15" />
+        <GradientStop Color="#D9F0FC"
+                      Offset=".5" />
+        <GradientStop Color="#BEE6FD"
+                      Offset=".5" />
+        <GradientStop Color="#A7D9F5"
+                      Offset="1" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="TabItemSelectedBackground"
+                     Color="#F9F9F9" />
+    <SolidColorBrush x:Key="TabItemHotBorderBrush"
+                     Color="#3C7FB1" />
+    <SolidColorBrush x:Key="TabItemDisabledBackground"
+                     Color="#F4F4F4" />
+    <SolidColorBrush x:Key="TabItemDisabledBorderBrush"
+                     Color="#FFC9C7BA" />
+    <Style x:Key="TabItemStyle1"
+           TargetType="{x:Type TabItem}">
+        <Setter Property="FocusVisualStyle"
+                Value="{StaticResource TabItemFocusVisual}" />
+        <Setter Property="Foreground"
+                Value="Black" />
+        <Setter Property="Padding"
+                Value="6,1,6,1" />
+        <Setter Property="BorderBrush"
+                Value="{StaticResource TabControlNormalBorderBrush}" />
+        <Setter Property="Background"
+                Value="{StaticResource ButtonNormalBackground}" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid SnapsToDevicePixels="true">
+                        <Border x:Name="Bd"
+                                BorderThickness="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter x:Name="Content"
+                                              ContentSource="Header"
+                                              HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                              VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="true">
+                            <Setter Property="Background"
+                                    TargetName="Bd"
+                                    Value="{StaticResource TabItemHotBackground}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected"
+                                 Value="true">
+                            <Setter Property="Panel.ZIndex"
+                                    Value="1" />
+                            <Setter Property="Background"
+                                    TargetName="Bd"
+                                    Value="{StaticResource TabItemSelectedBackground}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected"
+                                           Value="false" />
+                                <Condition Property="IsMouseOver"
+                                           Value="true" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="BorderBrush"
+                                    TargetName="Bd"
+                                    Value="{StaticResource TabItemHotBorderBrush}" />
+                        </MultiTrigger>
+                        <Trigger Property="TabStripPlacement"
+                                 Value="Bottom">
+                            <Setter Property="BorderThickness"
+                                    TargetName="Bd"
+                                    Value="1,0,1,1" />
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement"
+                                 Value="Left">
+                            <Setter Property="BorderThickness"
+                                    TargetName="Bd"
+                                    Value="1,1,0,1" />
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement"
+                                 Value="Right">
+                            <Setter Property="BorderThickness"
+                                    TargetName="Bd"
+                                    Value="0,1,1,1" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected"
+                                           Value="true" />
+                                <Condition Property="TabStripPlacement"
+                                           Value="Top" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Margin"
+                                    Value="-2,-2,-2,-1" />
+                            <Setter Property="Margin"
+                                    TargetName="Content"
+                                    Value="0,0,0,1" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected"
+                                           Value="true" />
+                                <Condition Property="TabStripPlacement"
+                                           Value="Bottom" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Margin"
+                                    Value="-2,-1,-2,-2" />
+                            <Setter Property="Margin"
+                                    TargetName="Content"
+                                    Value="0,1,0,0" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected"
+                                           Value="true" />
+                                <Condition Property="TabStripPlacement"
+                                           Value="Left" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Margin"
+                                    Value="-2,-2,-1,-2" />
+                            <Setter Property="Margin"
+                                    TargetName="Content"
+                                    Value="0,0,1,0" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected"
+                                           Value="true" />
+                                <Condition Property="TabStripPlacement"
+                                           Value="Right" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Margin"
+                                    Value="-1,-2,-2,-2" />
+                            <Setter Property="Margin"
+                                    TargetName="Content"
+                                    Value="1,0,0,0" />
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter Property="Background"
+                                    TargetName="Bd"
+                                    Value="{StaticResource TabItemDisabledBackground}" />
+                            <Setter Property="BorderBrush"
+                                    TargetName="Bd"
+                                    Value="{StaticResource TabItemDisabledBorderBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Storyboard x:Key="Flip">
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(csShared:Plane.RotationX)"
+                                       Storyboard.TargetName="Plane">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.2"
+                                  Value="180" />
+        </DoubleAnimationUsingKeyFrames>
+    </Storyboard>
+
+    <Style x:Key="ConfigToggleButtons"
+           TargetType="{x:Type custom:SurfaceToggleButton}">
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Padding"
+                Value="7" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type custom:SurfaceToggleButton}">
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="Press">
+                            <DoubleAnimationUsingKeyFrames BeginTime="0"
+                                                           Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                           Storyboard.TargetName="PressOverlay">
+                                <SplineDoubleKeyFrame KeyTime="0:0:0.1"
+                                                      Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="Release">
+                            <DoubleAnimationUsingKeyFrames BeginTime="0"
+                                                           Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                           Storyboard.TargetName="PressOverlay">
+                                <SplineDoubleKeyFrame KeyTime="0:0:0.25"
+                                                      Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </ControlTemplate.Resources>
+                    <Grid x:Name="Grid"
+                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                          Background="#FF9B9B9B">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked" />
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                                                      Storyboard.TargetName="ButtonBody">
+                                            <EasingColorKeyFrame KeyTime="0"
+                                                                 Value="#4DFF4141" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Indeterminate" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="ButtonBody"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                Background="#4D41FF52" />
+                        <Border x:Name="PressOverlay"
+                                Background="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}"
+                                Opacity="0"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <ContentPresenter x:Name="Content"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                          Margin="{TemplateBinding Padding}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    TargetName="ButtonBody"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="Background"
+                                    TargetName="Grid"
+                                    Value="{Binding AccentBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="0"
+                                                                       Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                                       Storyboard.TargetName="PressOverlay">
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0.1"
+                                                                  Value="1" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="0"
+                                                                       Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                                       Storyboard.TargetName="PressOverlay">
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0.25"
+                                                                  Value="0" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsPressed"
+                                           Value="True" />
+                                <Condition Property="IsChecked"
+                                           Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                                    TargetName="PressOverlay"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled"
+                                           Value="False" />
+                                <Condition Property="IsChecked"
+                                           Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                                    TargetName="ButtonBody"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="Opacity"
+                                    TargetName="Content"
+                                    Value="0.6" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled"
+                                           Value="False" />
+                                <Condition Property="IsChecked"
+                                           Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="Background"
+                                    TargetName="ButtonBody"
+                                    Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type custom:SurfaceColors}}}" />
+                            <Setter Property="Opacity"
+                                    TargetName="Content"
+                                    Value="0.33" />
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.BasedOn>
+            <Style TargetType="{x:Type Control}">
+                <Setter Property="FocusVisualStyle"
+                        Value="{x:Null}" />
+                <Setter Property="SnapsToDevicePixels"
+                        Value="False" />
+                <Setter Property="FontFamily"
+                        Value="Segoe360" />
+                <Setter Property="FontWeight"
+                        Value="Normal" />
+                <Setter Property="FontSize"
+                        Value="17" />
+                <Setter Property="Padding"
+                        Value="6,2,10,10" />
+                <Setter Property="MinHeight"
+                        Value="38" />
+                <Setter Property="MinWidth"
+                        Value="38" />
+                <Setter Property="Margin"
+                        Value="1" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Top" />
+                <Setter Property="BorderThickness"
+                        Value="2" />
+            </Style>
+        </Style.BasedOn>
+    </Style>
+
+</ResourceDictionary>

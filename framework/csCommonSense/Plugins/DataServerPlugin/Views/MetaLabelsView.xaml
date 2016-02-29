@@ -1,0 +1,687 @@
+﻿<UserControl x:Class="csDataServerPlugin.Views.MetaLabelsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:csShared.Controls"
+             xmlns:controls1="http://schemas.microsoft.com/surface/2008"
+             xmlns:csGeoLayers="clr-namespace:csGeoLayers"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dataServer="clr-namespace:DataServer"
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:ratingControl="clr-namespace:csDataServerPlugin.RatingControl"
+             xmlns:sensors="clr-namespace:csGeoLayers.Sensors"
+             xmlns:viewModels="clr-namespace:csDataServerPlugin.ViewModels"
+             xmlns:wpfConverters="clr-namespace:WpfConverters"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:MetaLabelsViewModel}}"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/csCommon;component/Resources/Styles/BlackStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="ControlBaseStyle" TargetType="{x:Type Control}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="SnapsToDevicePixels" Value="False" />
+                <Setter Property="FontFamily" Value="Segoe360" />
+                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="Padding" Value="6,2,10,10" />
+                <Setter Property="MinHeight" Value="38" />
+                <Setter Property="MinWidth" Value="38" />
+                <Setter Property="Margin" Value="1" />
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                <Setter Property="VerticalContentAlignment" Value="Top" />
+                <Setter Property="BorderThickness" Value="2" />
+            </Style>
+            <SolidColorBrush x:Key="ControlHitAreaBrush" Color="#00FFFFFF" />
+            <Style x:Key="BlackCheckBox"
+                   BasedOn="{StaticResource ControlBaseStyle}"
+                   TargetType="{x:Type controls1:SurfaceCheckBox}">
+                <Setter Property="Background" Value="{DynamicResource {x:Static controls1:SurfaceColors.ControlBackgroundBrushKey}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static controls1:SurfaceColors.ControlForegroundBrushKey}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static controls1:SurfaceColors.ControlBorderBrushKey}}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type controls1:SurfaceCheckBox}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Checked">
+                                    <DoubleAnimation Duration="00:00:00.0100000"
+                                                     Storyboard.TargetName="Checkmark"
+                                                     Storyboard.TargetProperty="Opacity"
+                                                     To="1" />
+                                </Storyboard>
+                                <Storyboard x:Key="Unchecked">
+                                    <DoubleAnimation Duration="00:00:00.1500000"
+                                                     From="0.4"
+                                                     Storyboard.TargetName="Checkmark"
+                                                     Storyboard.TargetProperty="Opacity"
+                                                     To="0" />
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Rectangle x:Name="hitArea"
+                                           Grid.ColumnSpan="2"
+                                           Width="{TemplateBinding Width}"
+                                           Height="{TemplateBinding Height}"
+                                           Fill="{StaticResource ControlHitAreaBrush}" />
+                                <BulletDecorator x:Name="bulletDecorator"
+                                                 Grid.Column="0"
+                                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                 RenderTransformOrigin="0.5,0.5">
+                                    <BulletDecorator.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                            <SkewTransform />
+                                            <RotateTransform />
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </BulletDecorator.RenderTransform>
+                                    <BulletDecorator.Bullet>
+                                        <Border x:Name="CheckButtonRect"
+                                                Width="16"
+                                                Height="16"
+                                                Margin="1,6,0,0"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                            <Grid>
+                                                <Path x:Name="Checkmark"
+                                                      Width="10"
+                                                      Height="10"
+                                                      Data="M0,24 L12,0 M0,0 L12,24"
+                                                      Fill="{x:Null}"
+                                                      Opacity="0"
+                                                      Stretch="Fill"
+                                                      Stroke="Black"
+                                                      StrokeEndLineCap="Flat"
+                                                      StrokeStartLineCap="Flat"
+                                                      StrokeThickness="2" />
+                                                <Rectangle x:Name="ThreeStateMark"
+                                                           Width="6"
+                                                           Height="6"
+                                                           Fill="{DynamicResource {x:Static controls1:SurfaceColors.BulletBrushKey}}"
+                                                           Opacity="0" />
+                                            </Grid>
+                                        </Border>
+                                    </BulletDecorator.Bullet>
+                                </BulletDecorator>
+                                <ContentPresenter x:Name="Content"
+                                                  Grid.Column="1"
+                                                  Margin="12,0,10,0"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsThreeState" Value="True" />
+                                        <Condition Property="IsChecked" Value="{x:Null}" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="Checkmark" Property="Opacity" Value="0" />
+                                    <Setter TargetName="ThreeStateMark" Property="Opacity" Value="1" />
+                                </MultiTrigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Checked}" />
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Unchecked}" />
+                                    </Trigger.ExitActions>
+                                    <Setter TargetName="Checkmark" Property="Opacity" Value="1" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource {x:Static controls1:SurfaceColors.ControlBackgroundPressedBrushKey}}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static controls1:SurfaceColors.ControlBorderPressedBrushKey}}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static controls1:SurfaceColors.ControlForegroundPressedBrushKey}}" />
+                                    <Setter TargetName="Checkmark" Property="Stroke" Value="{DynamicResource {x:Static controls1:SurfaceColors.BulletPressedBrushKey}}" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static controls1:SurfaceColors.ControlBorderDisabledBrushKey}}" />
+                                    <Setter Property="Background" Value="{DynamicResource {x:Static controls1:SurfaceColors.ControlBackgroundDisabledBrushKey}}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static controls1:SurfaceColors.ControlForegroundDisabledBrushKey}}" />
+                                    <Setter TargetName="Checkmark" Property="Stroke" Value="{DynamicResource {x:Static controls1:SurfaceColors.BulletDisabledBrushKey}}" />
+                                    <Setter TargetName="ThreeStateMark" Property="Fill" Value="{DynamicResource {x:Static controls1:SurfaceColors.BulletDisabledBrushKey}}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <DataTemplate x:Key="ImageTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <Grid>
+                    <Border Width="50" Height="50">
+                        <csGeoLayers:ucDocument Document="{Binding Document}" />
+                    </Border>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="DatetimeTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <StackPanel Margin="5,0,5,10" Background="{x:Null}">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               Text="{Binding Meta.Title}"
+                               TextWrapping="Wrap" />
+                    <TextBlock Margin="3,0,5,0"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Top"
+                               FontSize="16"
+                               Text="{Binding Data}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+            </DataTemplate>
+
+
+            <DataTemplate x:Key="SensorTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="Value"
+                               Width="100"
+                               Margin="0,0,10,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               FontSize="18.667"
+                               FontWeight="Bold"
+                               Opacity="0.8"
+                               Text="{Binding Sensor.FocusValue}"
+                               TextAlignment="Right"
+                               TextWrapping="Wrap" />
+                    <TextBlock x:Name="Title"
+                               Grid.Column="1"
+                               Margin="0,2,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               FontSize="16"
+                               Text="{Binding Meta.Title}" />
+                    <sensors:ucSensor Grid.Column="1"
+                                      Width="30"
+                                      Height="30"
+                                      Margin="0,0,4,0"
+                                      HorizontalAlignment="Right"
+                                      DataSet="{Binding Sensor}" />
+                </Grid>
+
+            </DataTemplate>
+
+            <DataTemplate x:Key="TextTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <StackPanel Margin="5,0,5,10" Background="{x:Null}">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               Text="{Binding Meta.Title}"
+                               TextWrapping="Wrap" />
+                    <TextBlock Margin="3,0,5,0"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Top"
+                               FontSize="16"
+                               Text="{Binding Data}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="TextareaTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <StackPanel Margin="5,0,5,10" Background="{x:Null}">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               Text="{Binding Meta.Title}"
+                               TextWrapping="Wrap" />
+                    <TextBlock Margin="3,0,5,0"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Top"
+                               FontSize="16"
+                               Text="{Binding Data}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="BBCodeBlockTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <StackPanel Margin="5,0,5,10" Background="{x:Null}">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               Text="{Binding Meta.Title}"
+                               TextWrapping="Wrap" />
+                    <mui:BBCodeBlock Margin="3,0,5,0"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Top"
+                                     BBCode="{Binding Data,
+                                                      Mode=TwoWay}"
+                                     FontSize="16"
+                                     Text="{Binding Data}"
+                                     TextWrapping="Wrap">
+                        <mui:BBCodeBlock.LinkNavigator>
+                            <mui:DefaultLinkNavigator />
+                        </mui:BBCodeBlock.LinkNavigator>
+                    </mui:BBCodeBlock>
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="RatingTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <StackPanel Margin="0,0,10,0"
+                            Background="{x:Null}"
+                            Orientation="Horizontal">
+                    <ratingControl:RatingControl Width="90"
+                                                 Margin="3,0,5,0"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalContentAlignment="Left"
+                                                 CanEdit="{Binding Meta.IsEditable}"
+                                                 FontSize="16"
+                                                 MaxValue="{Binding Meta.MaxValue}"
+                                                 RatingValue="{Binding Data,
+                                                                       Converter={wpfConverters:ConvertStringToInt}}" />
+                    <TextBlock Margin="0,2,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               FontSize="16"
+                               Text="{Binding Meta.Title}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="CheckboxTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <!--  IsChecked="{Binding Data, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged, Converter={csPoiLayers:ConvertNumberToBool}}"  -->
+                    <controls1:SurfaceCheckBox Margin="0,0,10,0"
+                                               HorizontalAlignment="Right"
+                                               VerticalAlignment="Center"
+                                               BorderBrush="Black"
+                                               Foreground="Black"
+                                               IsChecked="{Binding Data,
+                                                                   Mode=TwoWay,
+                                                                   Converter={wpfConverters:ConvertNumberToBool},
+                                                                   NotifyOnSourceUpdated=True,
+                                                                   UpdateSourceTrigger=PropertyChanged}"
+                                               IsEnabled="{Binding Meta.InEditMode}"
+                                               Style="{DynamicResource SurfaceCheckBoxStyle1}" />
+                    <TextBlock x:Name="Title"
+                               Grid.Column="1"
+                               Margin="0,2,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               FontSize="16"
+                               Foreground="Black"
+                               Text="{Binding Meta.Title}" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="NumberTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="Value"
+                               Width="100"
+                               Margin="0,0,10,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               FontSize="18.667"
+                               FontWeight="Bold"
+                               Opacity="0.8"
+                               Text="{Binding Data}"
+                               TextAlignment="Right"
+                               TextWrapping="Wrap" />
+                    <TextBlock x:Name="Title"
+                               Grid.Column="1"
+                               Margin="0,2,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               FontSize="16"
+                               Text="{Binding Meta.Title}" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="NumberEditorTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <Grid Margin="5,0,5,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   Text="{Binding Meta.Title}"
+                                   TextWrapping="Wrap" />
+                        <TextBlock HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   Text="{Binding Data,
+                                                  StringFormat=' (\{0\})'}"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                    <controls1:SurfaceSlider Grid.Row="1"
+                                             Margin="3,0,5,0"
+                                             HorizontalAlignment="Stretch"
+                                             VerticalAlignment="Top"
+                                             AutoToolTipPlacement="TopLeft"
+                                             AutoToolTipPrecision="0"
+                                             IsSnapToTickEnabled="True"
+                                             Maximum="{Binding Meta.MaxValue,
+                                                               FallbackValue=100}"
+                                             Minimum="{Binding Meta.MinValue,
+                                                               FallbackValue=1}"
+                                             Style="{StaticResource BlackSliderStyle}"
+                                             TickFrequency="{Binding Meta.StepSize,
+                                                                     FallbackValue=1}"
+                                             Value="{Binding Data,
+                                                             Mode=TwoWay,
+                                                             NotifyOnSourceUpdated=True,
+                                                             UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="TextEditorTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <Grid Margin="5,0,5,10"
+                      HorizontalAlignment="Stretch"
+                      Background="{x:Null}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               Text="{Binding Meta.Title}"
+                               TextWrapping="Wrap" />
+                    <controls:KeyboardTextBox Grid.Row="1"
+                                              Margin="3,0,5,0"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Top"
+                                              FontSize="16"
+                                              IsEnabled="{Binding Meta.IsEditable}"
+                                              Text="{Binding Data,
+                                                             Mode=TwoWay,
+                                                             NotifyOnSourceUpdated=True,
+                                                             UpdateSourceTrigger=LostFocus}"
+                                              TextWrapping="Wrap" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="DatetimeEditorTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <Grid>
+                    <StackPanel Margin="5,0,5,10" Background="{x:Null}">
+                        <TextBlock HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   Text="{Binding Meta.Title}"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Margin="3,0,5,0"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   FontSize="16"
+                                   Text="{Binding Data}"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <controls1:SurfaceButton x:Name="SelectFocusTime"
+                                                 Width="40"
+                                                 Margin="10,0,0,0"
+                                                 HorizontalAlignment="Left"
+                                                 VerticalAlignment="Top"
+                                                 HorizontalContentAlignment="Center"
+                                                 VerticalContentAlignment="Center"
+                                                 Background="#7F000000"
+                                                 Click="SelectOption_OnClick"
+                                                 FontSize="16"
+                                                 IsEnabled="{Binding Meta.IsEditable}"
+                                                 Padding="4"
+                                                 micro:Message.Attach="[Event Click]=[Action SelectFocus($dataContext,$source)]">
+                            <ed:RegularPolygon Width="20"
+                                               Height="15"
+                                               Margin="4"
+                                               Fill="White"
+                                               InnerRadius="1"
+                                               PointCount="3"
+                                               RenderTransformOrigin="0.5,0.5"
+                                               Stretch="Fill">
+                                <ed:RegularPolygon.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="1" ScaleY="-1" />
+                                        <SkewTransform AngleX="0" AngleY="0" />
+                                        <RotateTransform Angle="0" />
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </ed:RegularPolygon.RenderTransform>
+                            </ed:RegularPolygon>
+                        </controls1:SurfaceButton>
+                    </StackPanel>
+                </Grid>
+
+            </DataTemplate>
+
+            <DataTemplate x:Key="OptionsEditorTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <StackPanel Margin="5,0,5,10">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               Text="{Binding Meta.Title}"
+                               TextWrapping="Wrap" />
+                    <controls1:SurfaceButton x:Name="SelectOption"
+                                             Margin="3,0,5,0"
+                                             HorizontalAlignment="Stretch"
+                                             VerticalAlignment="Top"
+                                             Background="LightBlue"
+                                             Click="SelectOption_OnClick"
+                                             Content="{Binding Data}"
+                                             FontSize="16"
+                                             IsEnabled="{Binding Meta.IsEditable}"
+                                             micro:Message.Attach="[Event Click]=[Action SelectOption($dataContext,$source)]" />
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="TextAreaEditorTemplate" DataType="{x:Type dataServer:MetaLabel}">
+                <StackPanel Margin="5,0,5,10" Background="{x:Null}">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               Text="{Binding Meta.Title}"
+                               TextWrapping="Wrap" />
+                    <controls:KeyboardTextBox Height="125"
+                                              Margin="3,0,5,0"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Top"
+                                              FontSize="16"
+                                              IsEnabled="{Binding Meta.IsEditable}"
+                                              Text="{Binding Data,
+                                                             Mode=TwoWay,
+                                                             NotifyOnSourceUpdated=True,
+                                                             UpdateSourceTrigger=LostFocus}"
+                                              TextWrapping="Wrap" />
+                </StackPanel>
+            </DataTemplate>
+
+            <viewModels:MetaLabelTemplateSelector x:Key="MetaLabelTemplateSelector"
+                                                  BBCodeBlockTemplate="{StaticResource BBCodeBlockTemplate}"
+                                                  BooleanTemplate="{StaticResource CheckboxTemplate}"
+                                                  DatetimeEditorTemplate="{StaticResource DatetimeEditorTemplate}"
+                                                  DatetimeTemplate="{StaticResource DatetimeTemplate}"
+                                                  ImageTemplate="{StaticResource ImageTemplate}"
+                                                  NumberEditorTemplate="{StaticResource NumberEditorTemplate}"
+                                                  NumberTemplate="{StaticResource NumberTemplate}"
+                                                  OptionsEditorTemplate="{StaticResource OptionsEditorTemplate}"
+                                                  OptionsTemplate="{StaticResource TextTemplate}"
+                                                  RatingTemplate="{StaticResource RatingTemplate}"
+                                                  SensorTemplate="{StaticResource SensorTemplate}"
+                                                  TextEditorTemplate="{StaticResource TextEditorTemplate}"
+                                                  TextTemplate="{StaticResource TextTemplate}"
+                                                  TextareaEditorTemplate="{StaticResource TextAreaEditorTemplate}"
+                                                  TextareaTemplate="{StaticResource TextareaTemplate}" />
+
+            <Style x:Key="SurfaceCheckBoxStyle1" TargetType="{x:Type controls1:SurfaceCheckBox}">
+                <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type controls1:SurfaceColors}}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type controls1:SurfaceColors}}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type controls1:SurfaceColors}}}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type controls1:SurfaceCheckBox}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Checked">
+                                    <DoubleAnimation Duration="0:0:0.01"
+                                                     Storyboard.TargetName="Checkmark"
+                                                     Storyboard.TargetProperty="Opacity"
+                                                     To="1" />
+                                </Storyboard>
+                                <Storyboard x:Key="Unchecked">
+                                    <DoubleAnimation Duration="0:0:0.15"
+                                                     From="0.4"
+                                                     Storyboard.TargetName="Checkmark"
+                                                     Storyboard.TargetProperty="Opacity"
+                                                     To="0" />
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Rectangle x:Name="hitArea"
+                                           Grid.ColumnSpan="2"
+                                           Width="{TemplateBinding Width}"
+                                           Height="{TemplateBinding Height}"
+                                           Fill="Transparent" />
+                                <BulletDecorator x:Name="bulletDecorator"
+                                                 Grid.Column="0"
+                                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                    <BulletDecorator.Bullet>
+                                        <Border x:Name="CheckButtonRect"
+                                                Width="16"
+                                                Height="16"
+                                                Margin="1,6,0,0"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                            <Grid>
+                                                <Path x:Name="Checkmark"
+                                                      Width="10"
+                                                      Height="10"
+                                                      Data="M0,24L12,0 M0,0L12,24"
+                                                      Fill="{x:Null}"
+                                                      Opacity="0"
+                                                      Stretch="Fill"
+                                                      Stroke="Black"
+                                                      StrokeEndLineCap="Flat"
+                                                      StrokeStartLineCap="Flat"
+                                                      StrokeThickness="2" />
+                                                <Rectangle x:Name="ThreeStateMark"
+                                                           Width="6"
+                                                           Height="6"
+                                                           Fill="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type controls1:SurfaceColors}}}"
+                                                           Opacity="0" />
+                                            </Grid>
+                                        </Border>
+                                    </BulletDecorator.Bullet>
+                                </BulletDecorator>
+                                <ContentPresenter x:Name="Content"
+                                                  Grid.Column="1"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  Content="{TemplateBinding Content}"
+                                                  ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsThreeState" Value="True" />
+                                        <Condition Property="IsChecked" Value="{x:Null}" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="Checkmark" Property="Opacity" Value="0" />
+                                    <Setter TargetName="ThreeStateMark" Property="Opacity" Value="1" />
+                                </MultiTrigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.01"
+                                                                 Storyboard.TargetName="Checkmark"
+                                                                 Storyboard.TargetProperty="Opacity"
+                                                                 To="1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.15"
+                                                                 From="0.4"
+                                                                 Storyboard.TargetName="Checkmark"
+                                                                 Storyboard.TargetProperty="Opacity"
+                                                                 To="0" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type controls1:SurfaceColors}}}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type controls1:SurfaceColors}}}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type controls1:SurfaceColors}}}" />
+                                    <Setter TargetName="Checkmark" Property="Stroke" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type controls1:SurfaceColors}}}" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="BorderBrush" Value="Gray" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="Black" />
+                                    <Setter TargetName="Checkmark" Property="Stroke" Value="Gray" />
+                                    <Setter TargetName="ThreeStateMark" Property="Fill" Value="Green" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.BasedOn>
+                    <Style TargetType="{x:Type Control}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        <Setter Property="SnapsToDevicePixels" Value="False" />
+                        <Setter Property="FontFamily" Value="Segoe360" />
+                        <Setter Property="FontWeight" Value="Normal" />
+                        <Setter Property="FontSize" Value="17" />
+                        <Setter Property="Padding" Value="6,2,10,10" />
+                        <Setter Property="MinHeight" Value="38" />
+                        <Setter Property="MinWidth" Value="38" />
+                        <Setter Property="Margin" Value="1" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        <Setter Property="VerticalContentAlignment" Value="Top" />
+                        <Setter Property="BorderThickness" Value="2" />
+                    </Style>
+                </Style.BasedOn>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <ItemsControl Margin="0"
+                      Background="{x:Null}"
+                      ItemTemplateSelector="{StaticResource MetaLabelTemplateSelector}"
+                      ItemsSource="{Binding Content}" />
+    </Grid>
+</UserControl>

@@ -1,0 +1,351 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Controls="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro" xmlns:Custom="http://schemas.microsoft.com/surface/2008" xmlns:Utils="clr-namespace:csShared.Utils" xmlns:local="clr-namespace:csDataServerPlugin" xmlns:SlideTab="clr-namespace:csShared.Controls.SlideTab"
+             xmlns:ThirdParty="clr-namespace:csShared.ThirdParty"
+             xmlns:csGeoLayers="clr-namespace:csGeoLayers"
+             xmlns:Views="clr-namespace:csDataServerPlugin.Views" x:Name="userControl" x:Class="csDataServerPlugin.StyleView"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/csCommon;component/Resources/Styles/BlackStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type Control}" x:Key="ControlBaseStyle">
+                <Setter Property="FocusVisualStyle"	
+				Value="{x:Null}"/>
+                <Setter Property="SnapsToDevicePixels"
+				Value="False"/>
+                <Setter Property="FontFamily"
+				Value="Segoe360"/>
+                <Setter Property="FontWeight"
+				Value="Normal"/>
+                <Setter Property="FontSize"
+				Value="17"/>
+                <Setter Property="Padding"
+				Value="6,2,10,10"/>
+                <Setter Property="MinHeight"
+				Value="38"/>
+                <Setter Property="MinWidth"
+				Value="38"/>
+                <Setter Property="Margin"
+				Value="1"/>
+                <Setter Property="HorizontalContentAlignment"
+				Value="Left"/>
+                <Setter Property="VerticalContentAlignment"
+				Value="Top"/>
+                <Setter Property="BorderThickness"
+				Value="2"/>
+            </Style>
+            <SolidColorBrush x:Key="ControlHitAreaBrush"    
+			Color="#00FFFFFF"/>
+            <Style x:Key="BlackCheckBox" TargetType="{x:Type Custom:SurfaceCheckBox}"
+			BasedOn ="{StaticResource ControlBaseStyle}">
+                <Setter Property="Background" 
+				Value="{DynamicResource {x:Static Custom:SurfaceColors.ControlBackgroundBrushKey}}"/>
+                <Setter Property="Foreground" 
+				Value="{DynamicResource {x:Static Custom:SurfaceColors.ControlForegroundBrushKey}}"/>
+                <Setter Property="BorderBrush" 
+				Value="{DynamicResource {x:Static Custom:SurfaceColors.ControlBorderBrushKey}}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Custom:SurfaceCheckBox}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Checked">
+                                    <DoubleAnimation Duration="00:00:00.0100000"
+									Storyboard.TargetName="Checkmark"
+									Storyboard.TargetProperty="Opacity"
+									To="1" />
+                                </Storyboard>
+                                <Storyboard x:Key="Unchecked">
+                                    <DoubleAnimation Duration="00:00:00.1500000"
+									Storyboard.TargetName="Checkmark"
+									Storyboard.TargetProperty="Opacity" 
+									From="0.4"
+									To="0" />
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle  Grid.ColumnSpan="2" 
+								x:Name="hitArea"								
+								Fill="{StaticResource ControlHitAreaBrush}" 
+								Width="{TemplateBinding Width}" 
+								Height="{TemplateBinding Height}"/>
+                                <BulletDecorator Grid.Column="0"
+								VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+								x:Name="bulletDecorator" RenderTransformOrigin="0.5,0.5">
+                                    <BulletDecorator.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </BulletDecorator.RenderTransform>
+                                    <BulletDecorator.Bullet>
+                                        <Border x:Name="CheckButtonRect"
+										Margin="1,6,0,0"
+										Width="16"
+										Height="16"
+										BorderThickness="{TemplateBinding BorderThickness}"
+										BorderBrush="{TemplateBinding BorderBrush}"
+										Background="{TemplateBinding Background}">
+                                            <Grid>
+                                                <Path x:Name="Checkmark"
+												StrokeEndLineCap="Flat"
+												Fill="{x:Null}"
+												Stroke="#E6000000"
+												StrokeStartLineCap="Flat"
+												StrokeThickness="2"
+												Width="10"
+												Height="10"
+												Data="M0,24 L12,0 M0,0 L12,24"
+												Opacity="0"
+												Stretch="Fill" />
+                                                <Rectangle x:Name="ThreeStateMark" 
+												Opacity="0"
+												Fill="{DynamicResource {x:Static Custom:SurfaceColors.BulletBrushKey}}"	                           
+												Width="6"
+												Height="6" />
+                                            </Grid>
+                                        </Border>
+                                    </BulletDecorator.Bullet>
+                                </BulletDecorator>
+                                <ContentPresenter   Grid.Column="1"
+								x:Name="Content"
+								Margin="12,0,10,0"                                       
+								HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+								VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsThreeState"
+										Value="True" />
+                                        <Condition Property="IsChecked"
+										Value="{x:Null}" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="Checkmark"
+									Property="Opacity"
+									Value="0"/>
+                                    <Setter TargetName="ThreeStateMark"	
+									Property="Opacity"
+									Value="1"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsChecked"
+								Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Checked}" />
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Unchecked}" />
+                                    </Trigger.ExitActions>
+                                    <Setter Property="Opacity" TargetName="Checkmark" Value="1"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed"
+								Value="True">
+                                    <Setter Property="Background"
+									Value="{DynamicResource {x:Static Custom:SurfaceColors.ControlBackgroundPressedBrushKey}}"/>
+                                    <Setter Property="BorderBrush"
+									Value="{DynamicResource {x:Static Custom:SurfaceColors.ControlBorderPressedBrushKey}}"/>
+                                    <Setter Property="Foreground"
+									Value="{DynamicResource {x:Static Custom:SurfaceColors.ControlForegroundPressedBrushKey}}"/>
+                                    <Setter TargetName="Checkmark"
+									Property="Stroke"
+									Value="{DynamicResource {x:Static Custom:SurfaceColors.BulletPressedBrushKey}}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled"
+								Value="False">
+                                    <Setter Property ="BorderBrush"
+									Value ="{DynamicResource {x:Static Custom:SurfaceColors.ControlBorderDisabledBrushKey}}"/>
+                                    <Setter Property="Background"
+									Value="{DynamicResource {x:Static Custom:SurfaceColors.ControlBackgroundDisabledBrushKey}}"/>
+                                    <Setter Property="Foreground"
+									Value="{DynamicResource {x:Static Custom:SurfaceColors.ControlForegroundDisabledBrushKey}}"/>
+                                    <Setter TargetName="Checkmark"
+									Property="Stroke"
+									Value ="{DynamicResource {x:Static Custom:SurfaceColors.BulletDisabledBrushKey}}"/>
+                                    <Setter TargetName="ThreeStateMark"
+									Property ="Fill"
+									Value ="{DynamicResource {x:Static Custom:SurfaceColors.BulletDisabledBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+
+    <Grid Margin="0,0,0,15">
+        <StackPanel Margin="0">
+            <TextBlock x:Name="title" Foreground="Black" FontSize="24" Text="{Binding Highlighter.Title}" MinHeight="0" MinWidth="0" FontWeight="Normal" Background="{x:Null}" MaxWidth="275" Margin="1,1,40,1"/>
+            <StackPanel Orientation="Vertical" Visibility="{Binding IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=title}" Margin="30,0,0,0">
+                <TextBlock x:Name="tvVisualType" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Highlighter.VisualType}" VerticalAlignment="Stretch" Foreground="Black" FontSize="17" Visibility="Collapsed"/>
+                <!--<TextBlock x:Name="tbHighlighterType" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Highlighter.HighlighterType}" VerticalAlignment="Stretch" Foreground="Black" FontSize="17"/>-->
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="30,5,0,0">
+            	<Grid x:Name="spMinMaxValue">
+            		<Grid.RowDefinitions>
+            			<RowDefinition/>
+            			<RowDefinition/>
+            		</Grid.RowDefinitions>
+            		<Grid.ColumnDefinitions>
+            			<ColumnDefinition Width="Auto"/>
+            			<ColumnDefinition/>
+            			<ColumnDefinition Width="Auto"/>
+            		</Grid.ColumnDefinitions>
+            		<TextBlock TextWrapping="Wrap" Text="Min Value" Margin="3"/>
+            		<TextBox TextWrapping="Wrap" Text="{Binding Highlighter.MinValue, Mode=TwoWay}" VerticalAlignment="Top" Grid.Column="1" Margin="3" FontSize="18.667"/>
+            		<TextBlock TextWrapping="Wrap" Text="Max Value" Margin="3" Grid.Row="1"/>
+            		<TextBox TextWrapping="Wrap" Text="{Binding Highlighter.MaxValue, Mode=TwoWay}" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" Margin="3" FontSize="18.667"/>
+            		<Custom:SurfaceButton Content="c" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Grid.Column="2"/>
+            	</Grid>
+            </StackPanel>
+        </StackPanel>
+        <Custom:SurfaceToggleButton x:Name="stbExpand" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" IsChecked="{Binding Expanded, Mode=TwoWay}" Style="{DynamicResource SurfaceToggleButtonStyle1}" MinWidth="20" MinHeight="20">
+            <Custom:SurfaceToggleButton.Resources>
+                <!-- ToggleButton -->
+                <Style x:Key="SurfaceToggleButtonStyle1" TargetType="{x:Type Custom:SurfaceToggleButton}" 		
+    				BasedOn="{StaticResource ControlBaseStyle}">
+                    <Setter Property="HorizontalContentAlignment" 
+    					Value="Center"/>
+                    <Setter Property="VerticalContentAlignment" 
+    					Value="Center"/>
+                    <Setter Property="Padding" 
+    					Value="7"/>
+                    <Setter Property="Background" 
+    					Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonBackgroundBrushKey}}"/>
+                    <Setter Property="Foreground" 
+    					Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonForegroundBrushKey}}"/>
+                    <Setter Property="BorderThickness" 
+    					Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Custom:SurfaceToggleButton}">
+                                <ControlTemplate.Resources>
+                                    <Storyboard x:Key="Press">
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+    										Storyboard.TargetName="PressOverlay"
+    										Storyboard.TargetProperty="(UIElement.Opacity)">
+                                            <SplineDoubleKeyFrame KeyTime="00:00:00.1000000"
+    											Value="1" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                    <Storyboard x:Key="Release">
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+    										Storyboard.TargetName="PressOverlay"
+    										Storyboard.TargetProperty="(UIElement.Opacity)">
+                                            <SplineDoubleKeyFrame KeyTime="00:00:00.2500000"
+    											Value="0" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </ControlTemplate.Resources>
+                                <Grid   x:Name="Grid"
+    								Background="{StaticResource ControlHitAreaBrush}"
+    								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <Border  x:Name="ButtonBody"
+    									BorderThickness="{TemplateBinding BorderThickness}"
+    									Background="{TemplateBinding Background}"
+    									BorderBrush="{TemplateBinding BorderBrush}"
+    									SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    <Border x:Name="PressOverlay"    
+    									Background="{DynamicResource {x:Static Custom:SurfaceColors.ButtonBackgroundPressedBrushKey}}"
+    									Opacity="0" 
+    									SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    <ContentPresenter   x:Name="Content"
+    									HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"                               					   
+    									VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+    									SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Grid>
+
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked"
+    									Value="True">
+                                        <Setter Property="Background"
+    										Value="{DynamicResource {x:Static Custom:SurfaceColors.ToggleButtonBackgroundCheckedBrushKey}}"
+    										TargetName="ButtonBody"/>
+                                        <Setter Property="Foreground"
+    										Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonForegroundBrushKey}}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed"
+    									Value="True">
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard Storyboard="{StaticResource Press}" />
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard Storyboard="{StaticResource Release}" />
+                                        </Trigger.ExitActions>
+                                        <Setter Property="Foreground"
+    										Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonForegroundPressedBrushKey}}"/>
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsPressed"
+    											Value="True" />
+                                            <Condition Property="IsChecked"
+    											Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background"
+    										TargetName="PressOverlay"
+    										Value="{DynamicResource {x:Static Custom:SurfaceColors.ToggleButtonBackgroundCheckedPressedBrushKey}}"/>
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsEnabled"
+    											Value="False" />
+                                            <Condition Property="IsChecked"
+    											Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background"
+    										Value="{DynamicResource {x:Static Custom:SurfaceColors.ToggleButtonBackgroundCheckedDisabledBrushKey}}"
+    										TargetName="ButtonBody"/>
+                                        <Setter Property="Opacity"
+    										Value="0.6"
+    										TargetName="Content"/>
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition  Property="IsEnabled"
+    											Value="False" />
+                                            <Condition Property="IsChecked"
+    											Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Foreground"
+    										Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonForegroundDisabledBrushKey}}"/>
+                                        <Setter Property="Background"
+    										Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonBackgroundDisabledBrushKey}}"
+    										TargetName="ButtonBody"/>
+                                        <Setter Property="Opacity"
+    										Value="0.33"
+    										TargetName="Content"/>
+                                    </MultiTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+            </Custom:SurfaceToggleButton.Resources>
+            <Path Data="M30.707001,52.895L63.441002,52.895 63.441002,58.181999 30.707001,58.181999z M0,47.075001L16.922001,47.075001 16.922001,64 0,64z M30.707001,29.372L63.441002,29.372 63.441002,34.66 30.707001,34.66z M0,23.555L16.922001,23.555 16.922001,40.478001 0,40.478001z M30.707001,5.8150005L63.441002,5.8150005 63.441002,11.103 30.707001,11.103z M0,0L16.922001,0 16.922001,16.921 0,16.921z" Stretch="Uniform" Fill="#FF898989" Width="15" Height="15" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="0" />
+                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+        </Custom:SurfaceToggleButton>
+
+    </Grid>
+</UserControl>

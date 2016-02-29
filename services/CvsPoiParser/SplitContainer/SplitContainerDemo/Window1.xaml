@@ -1,0 +1,48 @@
+﻿<!--
+/***********************************************************************
+Copyright DevZest, 2009 (http://www.devzest.com)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+This program is part of WPF Docking, a commercial undo/redo-able
+docking library, which you can download from http://www.devzest.com.
+You can obtain a Free Feature License of WPF Docking through
+installed License Console, FREE OF CHARGE, with the benefit of writing
+proprietary software, along with commercial product quality
+documentation, upgrade and free technical support.
+**********************************************************************/
+-->
+    
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dz="http://schemas.devzest.com/presentation"
+    Title="SplitContainer Demo"
+    Width="300" Height="300">
+    <dz:SplitContainer>
+        <dz:SplitContainer.Child1>
+            <Button Content="Button1"/>
+        </dz:SplitContainer.Child1>
+        <dz:SplitContainer.Child2>
+            <dz:SplitContainer Orientation="Horizontal" ShowsPreview="False">
+                <dz:SplitContainer.Child1>
+                    <Button Content="Button2"/>
+                </dz:SplitContainer.Child1>
+                <dz:SplitContainer.Child2>
+                    <Button Content="Button3"/>
+                </dz:SplitContainer.Child2>
+            </dz:SplitContainer>
+        </dz:SplitContainer.Child2>
+    </dz:SplitContainer>
+</Window>

@@ -1,0 +1,40 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             x:Class="csCommon.Plugins.Dashboards.Toolbox.Events.EventsDashboardView">
+    <Grid>
+        <Grid Margin="10"
+              DataContext="{Binding LastEvent}">
+            <StackPanel Margin="50,-5,0,0">
+                <mui:BBCodeBlock x:Name="tbNotificationHeader"
+                                 HorizontalAlignment="Left"
+                                 TextWrapping="Wrap"
+                                 BBCode="{Binding Name}"
+                                 VerticalAlignment="Top"
+                                 Margin="0"
+                                 Foreground="Black"
+                                 FontSize="22" />
+                <mui:BBCodeBlock x:Name="tbNotificationTitle"
+                                 HorizontalAlignment="Left"
+                                 TextWrapping="Wrap"
+                                 BBCode="{Binding Description}"
+                                 VerticalAlignment="Top"
+                                 FontSize="18"
+                                 Margin="0,0,5,0"
+                                 Foreground="Black" />
+            </StackPanel>
+            <Image HorizontalAlignment="Left"
+                   Width="40"
+                   Height="40"
+                   VerticalAlignment="Top"
+                   Source="{Binding Image}"
+                   Visibility="{Binding ShowImage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Viewbox Width="40"
+                     Height="40"
+                     VerticalAlignment="Top"
+                     HorizontalAlignment="Left">
+                <Path Data="{Binding PathData}"
+                      Fill="White" />
+            </Viewbox>
+        </Grid>
+    </Grid>
+</UserControl>

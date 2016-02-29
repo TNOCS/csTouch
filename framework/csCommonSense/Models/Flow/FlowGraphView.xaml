@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="csModels.Flow.FlowGraphView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="http://schemas.microsoft.com/surface/2008"
+             
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:oxy="http://oxyplot.codeplex.com"
+             xmlns:flow1="clr-namespace:csModels.Flow"
+
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <flow1:FlowStopNameConverter x:Key="FlowStopNameConverter" />
+        <flow1:FlowStopImageConverter x:Key="FlowStopImageConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+        <Style x:Key="TitleStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="NoWrap" />
+            <Setter Property="TextTrimming" Value="None" />
+        </Style>
+        
+    </UserControl.Resources>
+    <Grid >
+
+        <oxy:Plot Visibility="{Binding ChartVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0" Background="Transparent" IsHitTestVisible="False"  Model="{Binding Model}" PlotMargins="0" TitleFontSize="0"  />
+		<Border Visibility="{Binding ShowFocusValue, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<Grid>
+				<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="4.5" VerticalAlignment="Center" FontSize="53.333"/>
+			</Grid>
+			
+		</Border>
+    </Grid>
+</UserControl>

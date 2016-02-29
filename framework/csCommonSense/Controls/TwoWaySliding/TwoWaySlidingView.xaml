@@ -1,0 +1,90 @@
+<UserControl x:Class="csShared.Controls.TwoWaySliding.TwoWaySlidingView"
+       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+       mc:Ignorable="d" 
+       d:DesignHeight="300" d:DesignWidth="300" xmlns:my="http://schemas.microsoft.com/surface/2008"
+       xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+  <UserControl.Resources>
+    <!--<Simulation:BoolToColorConverter x:Key="BoolToColorConverter"/>-->
+  </UserControl.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="40" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <my:SurfaceScrollViewer x:Name="Header" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" Grid.Row="0">
+      <my:SurfaceListBox x:Name="HeaderList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+        <my:SurfaceListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <StackPanel Orientation="Horizontal"/>
+          </ItemsPanelTemplate>
+        </my:SurfaceListBox.ItemsPanel>
+        <my:SurfaceListBox.ItemTemplate>
+          <DataTemplate >
+            <Grid x:Name="GridItems">
+              <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+              </Grid.RowDefinitions>
+              <TextBlock Text="{Binding Category}" TextAlignment="Center" Foreground="Black" Background="{Binding BackColor}" FontFamily="Segoe360" FontSize="18" Grid.Row="0" Height="30" Width="{Binding ColWidthHeader}"/>
+            </Grid>
+          </DataTemplate>
+
+        </my:SurfaceListBox.ItemTemplate>
+      </my:SurfaceListBox>
+    </my:SurfaceScrollViewer>
+    <my:SurfaceScrollViewer x:Name="Collection" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" Grid.Row="1" PanningMode="None">
+      <my:SurfaceListBox x:Name="CollectionList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+        <my:SurfaceListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <StackPanel Orientation="Horizontal"/>
+          </ItemsPanelTemplate>
+        </my:SurfaceListBox.ItemsPanel>
+        <my:SurfaceListBox.ItemTemplate>
+          <DataTemplate >
+            <Grid x:Name="GridItems">
+
+                <my:SurfaceListBox x:Name="lbItems" Height="{Binding ColHeight}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ItemsSource="{Binding Items}" Width="{Binding ColWidth}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.ScrollChanged="lbItemsScrollChanged" SelectionMode="Multiple">
+                <i:Interaction.Triggers>
+                  <i:EventTrigger EventName="SelectionChanged">
+                    <cal:ActionMessage MethodName="TWSSelectionChanged">
+                      <cal:Parameter Value="$dataContext"></cal:Parameter>
+                      <cal:Parameter Value="$eventArgs"></cal:Parameter>
+                    </cal:ActionMessage>
+                  </i:EventTrigger>
+                </i:Interaction.Triggers>
+                  <my:SurfaceListBox.ItemTemplate>
+                    <DataTemplate >
+                      <Grid x:Name="GridItems" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                      <!--<i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                          <cal:ActionMessage MethodName="MEnableParameter">
+                            <cal:Parameter Value="$dataContext"></cal:Parameter>
+                            <cal:Parameter Value="$eventArgs"></cal:Parameter>
+                          </cal:ActionMessage>
+                        </i:EventTrigger>
+                            <i:EventTrigger EventName="Touch">
+                            <cal:ActionMessage MethodName="TEnableParameter">
+                              <cal:Parameter Value="$dataContext"></cal:Parameter>
+                              <cal:Parameter Value="$eventArgs"></cal:Parameter>
+                            </cal:ActionMessage>
+                          </i:EventTrigger>
+                      </i:Interaction.Triggers>-->
+                      <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="30" Height="30" Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Stretch" ></Rectangle> <!--Fill="{Binding Selected, Converter={StaticResource BoolToColorConverter}}"-->
+                      <TextBlock Text="{Binding Name}" Foreground="Black" FontFamily="Segoe360" FontSize="18" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                      </StackPanel>
+                    </Grid>
+                    </DataTemplate>
+                  </my:SurfaceListBox.ItemTemplate>
+                </my:SurfaceListBox>
+            </Grid>
+          </DataTemplate>
+
+        </my:SurfaceListBox.ItemTemplate>
+      </my:SurfaceListBox>
+    </my:SurfaceScrollViewer>
+  </Grid>
+</UserControl>

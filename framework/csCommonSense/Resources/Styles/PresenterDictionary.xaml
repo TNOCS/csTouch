@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:esri="http://schemas.esri.com/arcgis/client/2009"
+                    
+                    xmlns:csShared_Utils="clr-namespace:csShared.Utils;assembly=csCommon"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                    x:Class="csPresenterPlugin.Layers.PDictionary"
+                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                    xmlns:Layers="clr-namespace:csPresenterPlugin.Layers">
+
+
+
+    <Layers:MarginSizeConverter x:Key="MarginSizeConverter" />
+    
+
+    <esri:MarkerSymbol x:Key="FeatureSymbol">
+        <esri:MarkerSymbol.ControlTemplate>
+            <ControlTemplate>
+                <Canvas Width="{Binding Attributes[size]}" Margin="{Binding Attributes[size], Converter={StaticResource MarginSizeConverter}}" Height="{Binding Attributes[size]}" Background="#00000000" PreviewMouseWheel="Canvas_PreviewMouseWheel" PreviewTouchDown="Canvas_PreviewTouchDown" PreviewMouseDown="Canvas_PreviewMouseDown">
+                    <Image Source="{Binding Attributes[image]}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                </Canvas>
+
+            </ControlTemplate>
+        </esri:MarkerSymbol.ControlTemplate>
+    </esri:MarkerSymbol>
+
+    <esri:SimpleMarkerSymbol x:Key="MediumMarkerSymbol" Color="#FF00BB00" Size="12" Style="Circle" />
+
+</ResourceDictionary>

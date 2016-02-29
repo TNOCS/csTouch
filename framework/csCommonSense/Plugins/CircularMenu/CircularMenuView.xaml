@@ -1,0 +1,26 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:csShared="clr-namespace:csShared" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:circularmenu="clr-namespace:csCommon.csMapCustomControls.CircularMenu"
+             mc:Ignorable="d" x:Class="csCommon.Plugins.CircularMenu.CircularMenuView" Width="250" Height="250">
+	<UserControl.Resources>
+		<csShared:AppStateSettings x:Key="AppStateSettingsDataSource1" d:IsDataSource="True"/>
+		<csShared:AppStateSettings x:Key="AppStateSettingsDataSource" />
+<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+	</UserControl.Resources>
+
+    <Grid Visibility="{Binding CirculairMenusVisible, Source={x:Static csShared:AppStateSettings.Instance}, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <circularmenu:CircularMenu Size="225"
+                                   BorderSize="235"
+                                   x:Name="cmMain"
+                                   MenuCenterSize="80"
+                                   ItemSize="40"
+                                   Background="White"
+                                   CenterSize="60"
+                                   ArrowArcSize="22">
+        </circularmenu:CircularMenu>
+    </Grid>
+
+</UserControl>

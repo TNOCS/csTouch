@@ -1,0 +1,57 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+>
+
+    <!-- !!!!!! Note that using geometry mini-language is not working because then the figures are not accessible by code -->
+    <!-- !!!!!! ==> need to use the explicit form -->
+    <!-- another working option is to create the geometry by code -->
+    <PathGeometry x:Key="circle">
+        <PathFigure StartPoint="-1,0" IsClosed="True">
+            <ArcSegment IsLargeArc="True" Point="1,0" Size="1,1"/>
+            <ArcSegment IsLargeArc="True" Point="-1,0" Size="1,1"/>
+        </PathFigure>
+    </PathGeometry>
+
+    <PathGeometry x:Key="square">
+        <PathFigure StartPoint="-1,-1" IsClosed="True">
+            <LineSegment Point="-1,1"/>
+            <LineSegment Point="1,1"/>
+            <LineSegment Point="1,-1"/>
+        </PathFigure>
+    </PathGeometry>
+
+    <PathGeometry x:Key="cross">
+        <PathFigure StartPoint="-1,-1" IsClosed="False" IsFilled="False">
+            <LineSegment Point="1,1"/>
+        </PathFigure>
+        <PathFigure StartPoint="-1,1" IsClosed="False" IsFilled="False">
+            <LineSegment Point="1,-1"/>
+        </PathFigure>
+    </PathGeometry>
+<!--
+    <PathGeometry x:Key="arrow">
+        <PathFigure StartPoint="-2,-1" IsClosed="True">
+            <LineSegment Point="0,0"/>
+            <LineSegment Point="-2,1"/>
+            <LineSegment Point="-1,0"/>
+        </PathFigure>
+    </PathGeometry>
+    -->
+
+    <PathGeometry x:Key="arrow">
+        <PathFigure StartPoint="-1,-1" IsClosed="True">
+            <LineSegment Point="0,0"/>
+            <LineSegment Point="-1,1"/>
+            <LineSegment Point="-1,0"/>
+        </PathFigure>
+    </PathGeometry>
+
+    <PathGeometry x:Key="triangle">
+        <PathFigure StartPoint="0,-1" IsClosed="True">
+            <LineSegment Point="1,1"/>
+            <LineSegment Point="-1,1"/>
+        </PathFigure>
+    </PathGeometry>
+
+</ResourceDictionary>

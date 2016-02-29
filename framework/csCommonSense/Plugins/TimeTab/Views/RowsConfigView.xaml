@@ -1,0 +1,88 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Custom="http://schemas.microsoft.com/surface/2008"
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:views="clr-namespace:iTable.Plugins.TimeTab.Views"
+             xmlns:wpfSpark1="clr-namespace:WPFSpark"
+             x:Class="csTimeTabPlugin.RowsConfigView"
+             d:DesignHeight="1024" x:Name="UserControl"
+             d:DesignWidth="768"
+             mc:Ignorable="d" Background="White">
+	<UserControl.Resources>
+      
+        
+	</UserControl.Resources>
+   
+
+	<Grid x:Name="gMain">
+		
+		<TextBlock TextWrapping="Wrap" Text="Timeline Categories" VerticalAlignment="Top" FontSize="21.333" Background="#FFD1D1D1" Padding="10,0,0,5"/>
+		
+		<!--<Custom:SurfaceListBox ItemsSource="{Binding TimeTab.Rows}" ItemTemplate="{DynamicResource RowTemplate}" Foreground="Black" Margin="0,33.373,0,0" >
+			<Custom:SurfaceListBox.Resources>
+				
+			</Custom:SurfaceListBox.Resources>
+		</Custom:SurfaceListBox>-->
+        <!--<wpfSpark:FluidWrapPanel HorizontalAlignment="Stretch"
+                                 ClipToBounds="False" 
+                                 x:Name="fluidWrapPanel"
+                                 VerticalAlignment="Stretch"
+                                 Background="Transparent"
+                                 ItemHeight="65"
+                                 ItemWidth="265"
+                                 IsComposing="True"
+                                 Orientation="Horizontal"
+                                 DragOpacity="0.75"
+                                 DragScale="1.9">
+            <wpfSpark:FluidWrapPanel.ElementEasing>
+                <BackEase EasingMode="EaseOut"
+                          Amplitude="0.35"></BackEase>
+            </wpfSpark:FluidWrapPanel.ElementEasing>
+            <wpfSpark:FluidWrapPanel.DragEasing>
+                <BackEase EasingMode="EaseOut"
+                          Amplitude="0.65"></BackEase>
+            </wpfSpark:FluidWrapPanel.DragEasing>
+        </wpfSpark:FluidWrapPanel>-->
+        <Custom:SurfaceListBox ItemsSource="{Binding TimelineManager.Rows}" 
+                 HorizontalAlignment="Left"
+                 Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="0,35,0,0" VerticalContentAlignment="Stretch">
+            <Custom:SurfaceListBox.ItemTemplate>
+                <DataTemplate>
+                    <views:RowView DataContext="{Binding}" />
+                   
+                </DataTemplate>
+            </Custom:SurfaceListBox.ItemTemplate>
+            <Custom:SurfaceListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <wpfSpark1:FluidWrapPanel HorizontalAlignment="Stretch"
+                                             Width="Auto"
+                                             ClipToBounds="False"
+                                             Margin="0"
+                                             
+                                             VerticalAlignment="Stretch"
+                                             Background="Transparent"
+                                             ItemHeight="40"
+                                             ItemWidth="325"
+                                             IsComposing="True"
+                                             Orientation="Vertical"
+                                             DragOpacity="0.75"
+                                             DragScale="1.1" SourceUpdated="FluidWrapPanel_SourceUpdated_1">
+                        <wpfSpark1:FluidWrapPanel.ElementEasing>
+                            <BackEase EasingMode="EaseOut"
+                                      Amplitude="0.35"></BackEase>
+                        </wpfSpark1:FluidWrapPanel.ElementEasing>
+                        <wpfSpark1:FluidWrapPanel.DragEasing>
+                            <BackEase EasingMode="EaseOut"
+                                      Amplitude="0.65"></BackEase>
+                        </wpfSpark1:FluidWrapPanel.DragEasing>
+                    </wpfSpark1:FluidWrapPanel>
+                </ItemsPanelTemplate>
+            </Custom:SurfaceListBox.ItemsPanel>
+        </Custom:SurfaceListBox>
+	</Grid>
+</UserControl>

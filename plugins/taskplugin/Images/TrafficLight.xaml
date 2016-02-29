@@ -1,0 +1,57 @@
+<UserControl x:Class="TasksPlugin.Images.TrafficLight"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+    <Viewbox Height="32" Stretch="Uniform">
+        <Canvas Name="svg2"
+                Width="100"
+                Height="100">
+            <Path Name="path4" Fill="#FF000000">
+                <Path.Data>
+                    <PathGeometry Figures="M60 0H40c-5.523 0-10 4.477-10 10v80c0 5.521 4.477 10 10 10h20c5.521 0 10-4.479 10-10V10  C70 4.478 65.521 0 60 0z M66 90c0 3.313-2.688 6-6 6H40c-3.313 0-6-2.688-6-6V10c0-3.313 2.687-6 6-6h20c3.313 0 6 2.687 6 6V90z" FillRule="NonZero" />
+                </Path.Data>
+            </Path>
+            <Path Name="path6" Fill="#FF000000">
+                <Path.Data>
+                    <PathGeometry Figures="M50 68c-7.732 0-13 6.268-13 14h1c0 6.627 5.373 12 12 12s12-5.373 12-12h1C63 74.268 57.732 68 50 68z   M50 92c-5.523 0-10-4.479-10-10s4.477-10 10-10c5.521 0 10 4.479 10 10S55.521 92 50 92z" FillRule="NonZero" />
+                </Path.Data>
+            </Path>
+            <Path Name="path8" Fill="#FF000000">
+                <Path.Data>
+                    <PathGeometry Figures="M50 38c-7.732 0-13 6.268-13 14h1c0 6.626 5.373 12 12 12c6.626 0 12-5.374 12-12h1  C63 44.268 57.732 38 50 38z M50 62c-5.523 0-10-4.479-10-10c0-5.523 4.477-10 10-10c5.521 0 10 4.477 10 10  C60 57.521 55.521 62 50 62z" FillRule="NonZero" />
+                </Path.Data>
+            </Path>
+            <Path Name="path10" Fill="#FF000000">
+                <Path.Data>
+                    <PathGeometry Figures="M50 8c-7.732 0-13 6.268-13 14h1c0 6.627 5.373 12 12 12s12-5.373 12-12h1C63 14.268 57.732 8 50 8z M50 32  c-5.523 0-10-4.477-10-10s4.477-10 10-10c5.521 0 10 4.477 10 10S55.521 32 50 32z" FillRule="NonZero" />
+                </Path.Data>
+            </Path>
+            <Ellipse Name="Middle"
+                     Canvas.Left="41"
+                     Canvas.Top="43"
+                     Width="18"
+                     Height="18"
+                     Fill="#FF000000" />
+            <Ellipse Name="Bottom"
+                     Canvas.Left="41"
+                     Canvas.Top="73"
+                     Width="18"
+                     Height="18"
+                     Fill="#FF000000" />
+            <Ellipse Name="Top"
+                     Canvas.Left="41"
+                     Canvas.Top="43"
+                     Width="18"
+                     Height="18"
+                     Fill="#FF000000">
+                <Ellipse.RenderTransform>
+                    <TranslateTransform X="0" Y="-29.966101" />
+                </Ellipse.RenderTransform>
+            </Ellipse>
+        </Canvas>
+    </Viewbox>
+</UserControl>

@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Content Id="EBA888FC-2842-5C53-77B2-88F0EEE2BFB1" Name="DIS">
+  <settings>
+    <ServiceSetting CanEdit="true" CanCreate="false" SyncDelay="500" ShareOnline="false" TabBarVisible="false" />
+  </settings>
+
+  <MetaLabels>
+    <Name Type="text" Title="Name" CallOut="true" />
+  </MetaLabels>
+
+  <poitypes>
+    <Poi Name="Default">
+      <Style MinResolution="0" MaxResolution="100" FillColor="#FF00FF00" StrokeColor="#00FFFFFF" TitleMode="Bottom" NameLabel="Name" DrawingMode="Point" StrokeWidth="0" IconWidth="32" IconHeight="32" CallOutFillColor="#CC00FF00" CallOutForeground="#00000000" TapMode="CallOutPopup" />
+      <MetaInfoData>
+        <MetaInfo Label="Name" Title="Name" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="id" Title="Identification" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[alt]" Title="Altitude" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[v]" Title="Speed" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+      </MetaInfoData>
+    </Poi>
+
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="QuestionMarkIcon.png" />
+      <Labels>
+        <Name>Missing</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Commandotroepen.png" />
+      <Labels>
+        <Name>Commandotroepen</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Gevechtsveldcontroleradar.png" />
+      <Labels>
+        <Name>Gevechtsveldcontroleradar</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Luchtverdedigingsradar.png" />
+      <Labels>
+        <Name>Luchtverdedigingsradar</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="QuestionMarkIcon.png" />
+      <Labels>
+        <Name>Missing</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Wapenlocatieradar.png" />
+      <Labels>
+        <Name>Wapenlocatieradar</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="UAVRotaryWing.png" />
+      <Labels>
+        <Name>UAVRotaryWing</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="UAV0.png" />
+      <Labels>
+        <Name>UAV</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Geleideantitankraketwerper.png" />
+      <Labels>
+        <Name>Geleideantitankraketwerper</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Granaatwerper.png" />
+      <Labels>
+        <Name>Granaatwerper</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Mortier.png" />
+      <Labels>
+        <Name>Mortier</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Houwitser.png" />
+      <Labels>
+        <Name>Houwitser</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Transporthelikopter.png" />
+      <Labels>
+        <Name>Transporthelikopter</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Helikopter.png" />
+      <Labels>
+        <Name>Helikopter</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Kanon.png" />
+      <Labels>
+        <Name>Kanon</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Mitrailleur.png" />
+      <Labels>
+        <Name>Mitrailleur</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Explosion.png" />
+      <Labels>
+        <Name>Explosion</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="FlyingBomb1.png" />
+      <Labels>
+        <Name>FlyingBomb1</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="FlyingBomb2.png" />
+      <Labels>
+        <Name>FlyingBomb2</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Grenade.png" />
+      <Labels>
+        <Name>Grenade</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="UAV2.png" />
+      <Labels>
+        <Name>UAV2</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="VTMS.png" />
+      <Labels>
+        <Name>VTMS</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="CommandControlCentre.png" />
+      <Labels>
+        <Name>CommandControlCentre</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Fire.png" />
+      <Labels>
+        <Name>Fire</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="PointOfOrigin1.png" />
+      <Labels>
+        <Name>PointOfOrigin1</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="PointOfImpact1.png" />
+      <Labels>
+        <Name>PointOfImpact1</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="PointOfImpact.png" />
+      <Labels>
+        <Name>PointOfImpact</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="GeoLocation.png" />
+      <Labels>
+        <Name>GeoLocation</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="GPSSmall.png" />
+      <Labels>
+        <Name>GPS</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="MegaphoneSmall.png" />
+      <Labels>
+        <Name>Megaphone</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="RadarSmall.png" />
+      <Labels>
+        <Name>Radar</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="RocketSmall.png" />
+      <Labels>
+        <Name>Rocket</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Communications.png" />
+      <Labels>
+        <Name>WLR</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="Communications.png" />
+      <Labels>
+        <Name>Communications</Name>
+      </Labels>
+    </Poi>
+    <Poi PoiTypeId="Default">
+      <Style BaseStyle="default" IconUri="SatelliteSmall.png" />
+      <Labels>
+        <Name>Satellite</Name>
+      </Labels>
+    </Poi>
+
+
+    <Poi Id="e668ac3f-ece7-47d1-b987-668c2200c8ef" PoiId="1:1:225:1:1:3:0" Date="0" Updated="1392808407">
+      <Style DrawingMode="Point" IconWidth="23" IconHeight="23" IconUri="QuestionMarkIcon.png" FillColor="#FF008000" CallOutFillColor="#FFFFFFFF" CallOutForeground="#FF000000" TapMode="CallOutPopup" TitleMode="Bottom" />
+      <Labels>
+        <Name>1:1:225:1:1:3:0</Name>
+      </Labels>
+      <MetaInfoData>
+        <MetaInfo Label="Name" Title="Name" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="id" Title="Identification" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[alt]" Title="Altitude" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[v]" Title="Speed" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+      </MetaInfoData>
+    </Poi>
+    <Poi Id="02646b00-2a26-4aa7-a82a-0fa2323b6f47" PoiId="1:1:222:27:1:0:0" Date="0" Updated="1392808407">
+      <Style DrawingMode="Point" IconWidth="23" IconHeight="23" IconUri="QuestionMarkIcon.png" FillColor="#FF008000" CallOutFillColor="#FFFFFFFF" CallOutForeground="#FF000000" TapMode="CallOutPopup" TitleMode="Bottom" />
+      <Labels>
+        <Name>1:1:222:27:1:0:0</Name>
+      </Labels>
+      <MetaInfoData>
+        <MetaInfo Label="Name" Title="Name" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="id" Title="Identification" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[alt]" Title="Altitude" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[v]" Title="Speed" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+      </MetaInfoData>
+    </Poi>
+    <Poi Id="e906f30b-853d-43ba-bebf-726a2ed91d78" PoiId="3:1:1:4:206:0:0" Date="0" Updated="1392808407">
+      <Style DrawingMode="Point" IconWidth="23" IconHeight="23" IconUri="QuestionMarkIcon.png" FillColor="#FF008000" CallOutFillColor="#FFFFFFFF" CallOutForeground="#FF000000" TapMode="CallOutPopup" TitleMode="Bottom" />
+      <Labels>
+        <Name>3:1:1:4:206:0:0</Name>
+      </Labels>
+      <MetaInfoData>
+        <MetaInfo Label="Name" Title="Name" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="id" Title="Identification" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[alt]" Title="Altitude" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[v]" Title="Speed" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+      </MetaInfoData>
+    </Poi>
+    <Poi Id="ce27b226-6416-496b-bb09-13f0286beb89" PoiId="3:1:225:3:0:1:0" Date="0" Updated="1392808407">
+      <Style DrawingMode="Point" IconWidth="23" IconHeight="23" IconUri="QuestionMarkIcon.png" FillColor="#FF008000" CallOutFillColor="#FFFFFFFF" CallOutForeground="#FF000000" TapMode="CallOutPopup" TitleMode="Bottom" />
+      <Labels>
+        <Name>3:1:225:3:0:1:0</Name>
+      </Labels>
+      <MetaInfoData>
+        <MetaInfo Label="Name" Title="Name" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="id" Title="Identification" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[alt]" Title="Altitude" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[v]" Title="Speed" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+      </MetaInfoData>
+    </Poi>
+    <Poi Id="e654c878-8943-434b-abea-dc9399e81129" PoiId="3:1:225:3:1:1:0" Date="0" Updated="1392808407">
+      <Style DrawingMode="Point" IconWidth="23" IconHeight="23" IconUri="QuestionMarkIcon.png" FillColor="#FF008000" CallOutFillColor="#FFFFFFFF" CallOutForeground="#FF000000" TapMode="CallOutPopup" TitleMode="Bottom" />
+      <Labels>
+        <Name>3:1:225:3:1:1:0</Name>
+      </Labels>
+      <MetaInfoData>
+        <MetaInfo Label="Name" Title="Name" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="id" Title="Identification" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[alt]" Title="Altitude" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[v]" Title="Speed" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+      </MetaInfoData>
+    </Poi>
+    <Poi Id="a8deb4d0-357c-464e-91db-1809636b194b" PoiId="3:1:222:1:205:1:0" Date="0" Updated="1392808407">
+      <Style DrawingMode="Point" IconWidth="23" IconHeight="23" IconUri="QuestionMarkIcon.png" FillColor="#FF008000" CallOutFillColor="#FFFFFFFF" CallOutForeground="#FF000000" TapMode="CallOutPopup" TitleMode="Bottom" />
+      <Labels>
+        <Name>3:1:222:1:205:1:0</Name>
+      </Labels>
+      <MetaInfoData>
+        <MetaInfo Label="Name" Title="Name" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="id" Title="Identification" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[alt]" Title="Altitude" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[v]" Title="Speed" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+      </MetaInfoData>
+    </Poi>
+    <Poi Id="8b602a4a-6fa8-4d37-a0c4-2e84ae3bd3af" PoiId="3:1:222:1:246:1:0" Date="0" Updated="1392808407">
+      <Style DrawingMode="Point" IconWidth="23" IconHeight="23" IconUri="QuestionMarkIcon.png" FillColor="#FF008000" CallOutFillColor="#FFFFFFFF" CallOutForeground="#FF000000" TapMode="CallOutPopup" TitleMode="Bottom" />
+      <Labels>
+        <Name>3:1:222:1:246:1:0</Name>
+      </Labels>
+      <MetaInfoData>
+        <MetaInfo Label="Name" Title="Name" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="id" Title="Identification" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[alt]" Title="Altitude" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[v]" Title="Speed" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+      </MetaInfoData>
+    </Poi>
+    <Poi Id="619d2d35-7e1e-4520-891a-565ae901962f" PoiId="3:1:102:4:246:1:0" Date="0" Updated="1392808407">
+      <Style DrawingMode="Point" IconWidth="23" IconHeight="23" IconUri="QuestionMarkIcon.png" FillColor="#FF008000" CallOutFillColor="#FFFFFFFF" CallOutForeground="#FF000000" TapMode="CallOutPopup" TitleMode="Bottom" />
+      <Labels>
+        <Name>3:1:102:4:246:1:0</Name>
+      </Labels>
+      <MetaInfoData>
+        <MetaInfo Label="Name" Title="Name" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="id" Title="Identification" Type="text" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[alt]" Title="Altitude" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+        <MetaInfo Label="[v]" Title="Speed" Type="sensor" VisibleInCallOut="true" CanEdit="false" IsSearchable="false" />
+      </MetaInfoData>
+    </Poi>
+
+  </poitypes>
+  <pois />
+  <eventtypes />
+  <events />
+  <tracks />
+  <tasks />
+</Content>

@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ExcelService.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="WorkbookFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\dev\cs\cs\services\ExcelService\ExcelService\Workbooks</Value>
+    </Setting>
+    <Setting Name="UsernameHeader" Type="System.String" Scope="User">
+      <Value Profile="(Default)">CS-Username</Value>
+    </Setting>
+    <Setting Name="ServiceName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ExcelAsAService</Value>
+    </Setting>
+    <Setting Name="ServiceServerUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://*:8080/</Value>
+    </Setting>
+    <Setting Name="ConsoleServerUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:8080/</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

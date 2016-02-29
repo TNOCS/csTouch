@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="csGeoLayers.ucDocument"
+       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       x:Name="UserControl"
+       d:DesignHeight="300"
+       d:DesignWidth="300"
+       mc:Ignorable="d">
+
+  <UserControl.Resources>
+    <!-- <csGeoLayers_PresCsv:DocumentPrivacyBrushConverter x:Key="DocumentPrivacyBrushConverter"/> -->
+    <Storyboard x:Key="sbRotateText" RepeatBehavior="Forever" />
+  </UserControl.Resources>
+  <UserControl.Triggers>
+    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+      <BeginStoryboard Storyboard="{StaticResource sbRotateText}" />
+    </EventTrigger>
+  </UserControl.Triggers>
+
+  <Grid x:Name="LayoutRoot"
+     HorizontalAlignment="Stretch"
+     VerticalAlignment="Stretch">
+
+    <!-- <Controls:WebControl x:Name="iWebPage" Margin="10" Width="1024" Height="768" Visibility="Collapsed"></Controls:WebControl> -->
+    <MediaElement x:Name="IMedia"
+           Margin="10"
+           HorizontalAlignment="Stretch"
+           VerticalAlignment="Stretch"
+           IsMuted="True"
+           Visibility="Collapsed" />
+    <!-- <DocumentViewer x:Name="iDocument" Visibility="Collapsed" Margin="10"></DocumentViewer> -->
+
+    <Image x:Name="iMain"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        Stretch="Uniform"
+        Visibility="Collapsed" />
+
+  </Grid>
+</UserControl>

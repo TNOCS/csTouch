@@ -1,0 +1,74 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="http://schemas.microsoft.com/surface/2008"
+    xmlns:cal="http://www.caliburnproject.org"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:flow1="clr-namespace:csModels.Flow"
+             xmlns:wpfConverters="clr-namespace:WpfConverters"
+             x:Class="csModels.Flow.FlowView"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <flow1:FlowStopNameConverter x:Key="FlowStopNameConverter" />
+        <flow1:FlowStopImageConverter x:Key="FlowStopImageConverter"/>
+        <flow1:EtaChartConverter x:Key="EtaChartConverter"/>
+        <flow1:FlowViewSelector x:Key="FlowViewSelector" />
+        <wpfConverters:ReverseBooleanVisibilityConverter x:Key="ReverseBooleanVisibilityConverter" />
+        
+        <Style x:Key="TitleStyle" TargetType="{x:Type TextBlock}">
+        	<Setter Property="TextWrapping" Value="NoWrap" />
+        	<Setter Property="TextTrimming" Value="None" />
+        </Style>
+
+        <DataTemplate x:Key="ListViewTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <controls:SurfaceButton Width="30" Height="Auto" Margin="0" VerticalAlignment="Top" cal:Message.Attach="[Event Click]=[Action SelectFlow($dataContext)]" Background="{x:Null}">
+                    <Image Source="{Binding Converter={StaticResource FlowStopImageConverter}}" />
+                </controls:SurfaceButton>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="{Binding Converter={StaticResource FlowStopNameConverter}}" FontWeight="Bold" />
+                    <TextBlock Text="{Binding EtaString}" FontSize="12" />
+
+                </StackPanel>
+
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="ChartViewTemplate">
+            <Grid>
+                <TextBlock Text="{Binding Converter={StaticResource FlowStopNameConverter}}" FontSize="40" Foreground="Gray"  />
+            <Viewbox HorizontalAlignment="Stretch" Height="40" VerticalAlignment="Stretch" Stretch="Fill" >
+                    <Canvas Width="1000" Height="110" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#22000000">
+                <Rectangle Canvas.Left="{Binding FlowBarLeft}" Width="{Binding FlowBarWidth}" Height="110"  Fill="#88000000" />
+                        <TextBlock Canvas.Left="{Binding FlowBarLeft}" Text="{Binding FlowString}" FontSize="30" Foreground="White" />
+                    </Canvas>
+            </Viewbox>
+                
+            </Grid>
+
+        </DataTemplate>
+
+    </UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+
+        <controls:SurfaceListBox ItemsSource="{Binding FooView}" Visibility="{Binding IsChecked, Converter={StaticResource ReverseBooleanVisibilityConverter}, ElementName=surfaceCheckBox}" ItemTemplateSelector="{StaticResource FlowViewSelector}" Margin="10"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1" />
+        <controls:SurfaceListBox ItemsSource="{Binding FooView}" Visibility="{Binding IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=surfaceCheckBox}" ItemTemplate="{StaticResource ChartViewTemplate}" Margin="10"  HorizontalContentAlignment="Stretch"  VerticalContentAlignment="Stretch" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+
+        <StackPanel VerticalAlignment="Top">
+			<controls:SurfaceCheckBox x:Name="surfaceCheckBox" Content="Show Chart" Margin="0" Foreground="#CC000000"/>
+		</StackPanel>
+       
+	</Grid>
+</UserControl>

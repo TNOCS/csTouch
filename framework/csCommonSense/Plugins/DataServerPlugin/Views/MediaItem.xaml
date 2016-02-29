@@ -1,0 +1,24 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Custom="http://schemas.microsoft.com/surface/2008" x:Class="csDataServerPlugin.Views.MediaItem" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<Grid Margin="10,0">
+		<Image x:Name="iMedia" MaxHeight="100" MaxWidth="100" />
+		<Custom:SurfaceButton x:Name="PlayButton" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Background="#4DFFFFFF" Visibility="Collapsed" Click="PlayButton_Click">
+			<Path Data="M39.549999,16.180009L42.160999,16.180009 42.160999,28.402009 39.549999,28.402009z M45.549999,11.300009L48.160999,11.300009 48.160999,33.300008 45.549999,33.300008z M51.220001,7.6800084L53.831001,7.6800084 53.831001,36.846009 51.220001,36.846009z M31.99904,0L31.99904,21.940938 31.99904,43.881997 16.549597,32.911531 14.667,31.57385 14.667,31.612008 0,31.612008 0,12.390009 14.551773,12.390009 16.549597,10.970469z" Stretch="Uniform" Fill="#FF000000" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+      <Path.RenderTransform>
+        <TransformGroup>
+          <TransformGroup.Children>
+            <RotateTransform Angle="0" />
+            <ScaleTransform ScaleX="1" ScaleY="1" />
+          </TransformGroup.Children>
+        </TransformGroup>
+      </Path.RenderTransform>
+    </Path>
+			</Custom:SurfaceButton>
+	</Grid>
+</UserControl>

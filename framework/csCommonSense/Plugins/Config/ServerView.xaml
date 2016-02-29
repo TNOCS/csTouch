@@ -1,0 +1,318 @@
+﻿<UserControl x:Class="csCommon.Plugins.Config.ServerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:controls1="clr-namespace:csShared.Controls"
+             xmlns:utils="clr-namespace:csShared.Utils"
+             xmlns:presentation="http://schemas.microsoft.com/surface/2008"
+             xmlns:utils1="clr-namespace:csCommon.Utils"
+             xmlns:wpfConverters="clr-namespace:WpfConverters"
+             mc:Ignorable="d" MinWidth="400" MinHeight="400">
+	<UserControl.Resources>
+		<wpfConverters:ReverseBooleanVisibilityConverter x:Key="ReverseBooleanVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <wpfConverters:BooleanActiveOpacityConverter x:Key="BooleanActiveOpacityConverter"/>
+        <DataTemplate x:Key="ConnectionTemplate">
+        	<Grid Opacity="{Binding Available, Converter={StaticResource BooleanActiveOpacityConverter}}" Margin="0">
+        		<Grid.ColumnDefinitions>
+        			<ColumnDefinition Width="40"/>
+        			<ColumnDefinition/>
+        			<ColumnDefinition Width="Auto"/>
+        		</Grid.ColumnDefinitions>
+        		<StackPanel Grid.Column="1">
+        			<TextBlock Margin="0" TextWrapping="Wrap" d:LayoutOverrides="Width" FontSize="18.667">
+        				<TextBlock.Text>
+        					<MultiBinding StringFormat=" {0} ({1})">
+        						<Binding Path="Server" />
+        						<Binding Path="Port" />
+        					</MultiBinding>
+        				</TextBlock.Text>
+        			</TextBlock>
+        			<StackPanel Orientation="Horizontal" Visibility="{Binding Available, Converter={StaticResource BooleanToVisibilityConverter}}">
+        				<TextBlock Margin="5,0,0,0" TextWrapping="Wrap" Foreground="{DynamicResource EnabledBrush}">
+        					<TextBlock.Text>Available</TextBlock.Text>
+        				</TextBlock>
+        				<TextBlock TextWrapping="Wrap" Text="and Connected" Visibility="{Binding Current, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="5,0,0,0" Foreground="#FF00AA2E"/>
+        			</StackPanel>
+        			<TextBlock Margin="5,0,0,0" TextWrapping="Wrap" Foreground="{DynamicResource DisabledBrush}" Visibility="{Binding Available, Converter={StaticResource ReverseBooleanVisibilityConverter}}">
+        				<TextBlock.Text>Not available</TextBlock.Text>
+        			</TextBlock>
+        		</StackPanel>
+        		<StackPanel Grid.Column="2" Orientation="Horizontal" d:LayoutOverrides="Height" Margin="0,5,5,5">
+        			<presentation:SurfaceButton x:Name="Remove" cal:Message.Attach="Remove($dataContext)" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Stretch" Width="50" HorizontalContentAlignment="Center" IsEnabled="{Binding CanDelete}" Padding="4,2" VerticalContentAlignment="Center" Style="{DynamicResource ButtonStyle}">
+        				<Image Width="25" Height="Auto" Source="/csCommon;component/Resources/Icons/appbar.delete.white.png"/>
+        			</presentation:SurfaceButton>
+        			<presentation:SurfaceButton x:Name="Connect" cal:Message.Attach="Connect($dataContext)" HorizontalAlignment="Right" Margin="10,0,0,0" VerticalAlignment="Stretch" Width="50" HorizontalContentAlignment="Center" IsEnabled="{Binding Available}" Padding="4,2" VerticalContentAlignment="Center" Style="{DynamicResource ButtonStyle}">
+        				<Image Width="20" Height="Auto" Source="/csCommon;component/Resources/Icons/link.png" Margin="0"/>
+        			</presentation:SurfaceButton>
+        		</StackPanel>
+        		<Border Width="40" Height="40" Margin="0" Background="#FF494949" >
+        			<Grid Margin="0">
+        				<Grid HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" Width="Auto" Visibility="{Binding Current, Converter={StaticResource BooleanToVisibilityConverter}}" Background="#FF00AA2E"/>
+        				<Path Data="M40.454,58.724L57.969883,58.724C58.88139,58.724 59.620998,59.464864 59.620998,60.369599 59.620998,61.279634 58.88139,62.018998 57.969883,62.018998L40.454,62.018998z M1.6496172,58.724L19.170001,58.724 19.170001,62.018998 1.6496172,62.018998C0.73826218,62.018998 0,61.279634 0,60.369599 0,59.464864 0.73826218,58.724 1.6496172,58.724z M28.15736,50.678002L31.45414,50.678002 31.45414,56.744584 36.574009,56.744584C37.338305,56.748384,37.9725,57.383901,37.975,58.146924L37.975,62.602757C37.9725,63.361981,37.338305,64.000001,36.574009,64.000001L23.045591,64.000001C22.283696,64.000001,21.651,63.361981,21.647,62.602757L21.647,58.146924C21.651,57.383901,22.283696,56.748384,23.045591,56.744584L28.15736,56.744584z M12.3907,39.538999C11.110921,39.538999 10.072001,40.576867 10.072,41.852948 10.072001,43.131635 11.110921,44.167001 12.3907,44.167001 13.661281,44.167001 14.704001,43.131635 14.704001,41.852948 14.704001,40.576867 13.661281,39.538999 12.3907,39.538999z M6.9702334,36.054999L51.749714,36.054999C52.485306,36.054999,53.083,36.651307,53.083,37.388312L53.083,46.626691C53.083,47.363595,52.485306,47.96,51.749714,47.96L6.9702334,47.96C6.2333026,47.96,5.6370006,47.363595,5.6369996,46.626691L5.6369996,37.388312C5.6370006,36.651307,6.2333026,36.054999,6.9702334,36.054999z M12.1772,5.4740001L46.847897,5.4740001C47.34,5.4739998,47.744999,5.8802567,47.744999,6.3816062L47.744999,26.734881C47.744999,27.238791,47.34,27.645,46.847897,27.645L12.1772,27.645C11.683801,27.645,11.284,27.238791,11.284,26.734881L11.284,6.3816062C11.284,5.8802567,11.683801,5.4739998,12.1772,5.4740001z M10.307582,3.0208168C9.4546318,3.0208163,8.7502816,3.7512051,8.750282,4.654996L8.750282,28.324441C8.7502816,29.226851,9.4546318,29.961261,10.307582,29.961261L48.578396,29.961261C49.436497,29.961261,50.136997,29.226851,50.136997,28.324441L50.136997,4.654996C50.136997,3.7512051,49.436497,3.0208163,48.578396,3.0208168z M9.1448123,0L49.598,0C51.537998,0,53.106998,1.6158595,53.106998,3.6068535L53.106998,29.747657C53.106998,31.737281,51.537998,33.348001,49.598,33.348001L9.1448123,33.348001C7.2046309,33.348001,5.6370001,31.737281,5.6369996,29.747657L5.6369996,3.6068535C5.6370001,1.6158595,7.2046309,0,9.1448123,0z" Stretch="Uniform" Fill="#FFF4F4F4" RenderTransformOrigin="0.5,0.5" Margin="5">
+        					<Path.RenderTransform>
+        						<TransformGroup>
+        							<RotateTransform Angle="0" />
+        							<ScaleTransform ScaleX="1" ScaleY="1" />
+        						</TransformGroup>
+        					</Path.RenderTransform>
+        				</Path>
+        			</Grid>
+        		</Border>
+        		<TextBlock TextWrapping="Wrap" Text="✓" VerticalAlignment="Top" d:LayoutOverrides="Width" FontSize="21.333" TextAlignment="Center" Visibility="Collapsed"/>
+        	</Grid>
+        </DataTemplate>
+        <Style TargetType="{x:Type Control}" x:Key="ControlBaseStyle">
+        	<Setter Property="FocusVisualStyle"	
+        		Value="{x:Null}"/>
+        	<Setter Property="SnapsToDevicePixels"
+        		Value="False"/>
+        	<Setter Property="FontFamily"
+        		Value="Segoe360"/>
+        	<Setter Property="FontWeight"
+        		Value="Normal"/>
+        	<Setter Property="FontSize"
+        		Value="17"/>
+        	<Setter Property="Padding"
+        		Value="6,2,10,10"/>
+        	<Setter Property="MinHeight"
+        		Value="38"/>
+        	<Setter Property="MinWidth"
+        		Value="38"/>
+        	<Setter Property="Margin"
+        		Value="1"/>
+        	<Setter Property="HorizontalContentAlignment"
+        		Value="Left"/>
+        	<Setter Property="VerticalContentAlignment"
+        		Value="Top"/>
+        	<Setter Property="BorderThickness"
+        		Value="2"/>
+        </Style>
+        <Style x:Key="ButtonStyle"
+    		TargetType="{x:Type presentation:SurfaceButton}" 
+    		BasedOn="{StaticResource ControlBaseStyle}">
+        	<Setter Property="IsTabStop"
+        		Value="False" />
+        	<Setter Property="Focusable"
+        		Value="True" />
+        	<Setter Property="Background"
+        		Value="{DynamicResource {x:Static presentation:SurfaceColors.ButtonBackgroundBrushKey}}" />
+        	<Setter Property="Foreground"
+        		Value="{DynamicResource {x:Static presentation:SurfaceColors.ButtonForegroundBrushKey}}" />
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="{x:Type presentation:SurfaceButton}">
+        				<ControlTemplate.Resources>
+        					<Storyboard x:Key="Press">
+        						<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+        							Storyboard.TargetName="PressOverlay"
+        							Storyboard.TargetProperty="(UIElement.Opacity)">
+        							<SplineDoubleKeyFrame KeyTime="00:00:00.1000000"
+        								Value="1" />
+        						</DoubleAnimationUsingKeyFrames>
+        					</Storyboard>
+        					<Storyboard x:Key="Release">
+        						<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+        							Storyboard.TargetName="PressOverlay"
+        							Storyboard.TargetProperty="(UIElement.Opacity)">
+        							<SplineDoubleKeyFrame KeyTime="00:00:00.1500000"
+        								Value="0" />
+        						</DoubleAnimationUsingKeyFrames>
+        					</Storyboard>
+        				</ControlTemplate.Resources>
+        				<Grid x:Name="Grid"
+        					SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+        					<Rectangle  x:Name="ButtonBody"
+        						SnapsToDevicePixels ="{TemplateBinding SnapsToDevicePixels}" Fill="#4D000000"/>
+        					<Rectangle  x:Name="PressOverlay"
+        						Opacity="0"
+        						Fill ="{DynamicResource {x:Static presentation:SurfaceColors.ButtonBackgroundPressedBrushKey}}" 							             
+        						SnapsToDevicePixels ="{TemplateBinding SnapsToDevicePixels}"/>
+        					<ContentPresenter  x:Name="Content"
+        						Margin="{TemplateBinding Padding}"  
+        						HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"		                                                                           
+        						VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+        						SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        				</Grid>
+
+        				<ControlTemplate.Triggers>
+        					<Trigger Property="IsPressed"
+        						Value="True">
+        						<Trigger.EnterActions>
+        							<BeginStoryboard Storyboard="{StaticResource Press}" />
+        						</Trigger.EnterActions>
+        						<Trigger.ExitActions>
+        							<BeginStoryboard Storyboard="{StaticResource Release}" />
+        						</Trigger.ExitActions>
+        						<Setter Property="Foreground"
+        							Value="{DynamicResource {x:Static presentation:SurfaceColors.ButtonForegroundPressedBrushKey}}"/>
+        					</Trigger>
+        					<Trigger Property="IsEnabled"
+        						Value="False">
+        						<Setter Property="Fill"
+        							Value="{DynamicResource {x:Static presentation:SurfaceColors.ButtonBackgroundDisabledBrushKey}}"
+        							TargetName="ButtonBody" />
+        						<Setter Property="Foreground"
+        							Value="{DynamicResource {x:Static presentation:SurfaceColors.ButtonForegroundDisabledBrushKey}}"/>
+        						<Setter Property="Opacity"
+        							Value="0.33"
+        							TargetName="Content" />
+        					</Trigger>
+        				</ControlTemplate.Triggers>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        </Style>
+       
+        <Style x:Key="ConfigToggleButtons" TargetType="{x:Type presentation:SurfaceToggleButton}">
+        	<Setter Property="HorizontalContentAlignment" Value="Center"/>
+        	<Setter Property="VerticalContentAlignment" Value="Center"/>
+        	<Setter Property="Padding" Value="7"/>
+        	<Setter Property="Background" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type presentation:SurfaceColors}}}"/>
+        	<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type presentation:SurfaceColors}}}"/>
+        	<Setter Property="BorderThickness" Value="0"/>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="{x:Type presentation:SurfaceToggleButton}">
+        				<ControlTemplate.Resources>
+        					<Storyboard x:Key="Press">
+        						<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+        							<SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+        						</DoubleAnimationUsingKeyFrames>
+        					</Storyboard>
+        					<Storyboard x:Key="Release">
+        						<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+        							<SplineDoubleKeyFrame KeyTime="0:0:0.25" Value="0"/>
+        						</DoubleAnimationUsingKeyFrames>
+        					</Storyboard>
+        				</ControlTemplate.Resources>
+        				<Grid x:Name="Grid" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Background="#FF9B9B9B">
+        					<Border x:Name="ButtonBody" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        					<Border x:Name="PressOverlay" Background="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type presentation:SurfaceColors}}}" Opacity="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        					<ContentPresenter x:Name="Content" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        				</Grid>
+        				<ControlTemplate.Triggers>
+        					<Trigger Property="IsChecked" Value="True">
+        						<Setter Property="Background" TargetName="ButtonBody" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type presentation:SurfaceColors}}}"/>
+        						<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type presentation:SurfaceColors}}}"/>
+        						<Setter Property="Background" TargetName="Grid" Value="{Binding AccentBrush}"/>
+        					</Trigger>
+        					<Trigger Property="IsPressed" Value="True">
+        						<Trigger.EnterActions>
+        							<BeginStoryboard>
+        								<Storyboard>
+        									<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+        										<SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+        									</DoubleAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</BeginStoryboard>
+        						</Trigger.EnterActions>
+        						<Trigger.ExitActions>
+        							<BeginStoryboard>
+        								<Storyboard>
+        									<DoubleAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressOverlay">
+        										<SplineDoubleKeyFrame KeyTime="0:0:0.25" Value="0"/>
+        									</DoubleAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</BeginStoryboard>
+        						</Trigger.ExitActions>
+        						<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type presentation:SurfaceColors}}}"/>
+        					</Trigger>
+        					<MultiTrigger>
+        						<MultiTrigger.Conditions>
+        							<Condition Property="IsPressed" Value="True"/>
+        							<Condition Property="IsChecked" Value="True"/>
+        						</MultiTrigger.Conditions>
+        						<Setter Property="Background" TargetName="PressOverlay" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type presentation:SurfaceColors}}}"/>
+        					</MultiTrigger>
+        					<MultiTrigger>
+        						<MultiTrigger.Conditions>
+        							<Condition Property="IsEnabled" Value="False"/>
+        							<Condition Property="IsChecked" Value="True"/>
+        						</MultiTrigger.Conditions>
+        						<Setter Property="Background" TargetName="ButtonBody" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type presentation:SurfaceColors}}}"/>
+        						<Setter Property="Opacity" TargetName="Content" Value="0.6"/>
+        					</MultiTrigger>
+        					<MultiTrigger>
+        						<MultiTrigger.Conditions>
+        							<Condition Property="IsEnabled" Value="False"/>
+        							<Condition Property="IsChecked" Value="False"/>
+        						</MultiTrigger.Conditions>
+        						<Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type presentation:SurfaceColors}}}"/>
+        						<Setter Property="Background" TargetName="ButtonBody" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type presentation:SurfaceColors}}}"/>
+        						<Setter Property="Opacity" TargetName="Content" Value="0.33"/>
+        					</MultiTrigger>
+        				</ControlTemplate.Triggers>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+            <Style.BasedOn>
+                <Style TargetType="{x:Type Control}">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="SnapsToDevicePixels" Value="False"/>
+                    <Setter Property="FontFamily" Value="Segoe360"/>
+                    <Setter Property="FontWeight" Value="Normal"/>
+                    <Setter Property="FontSize" Value="17"/>
+                    <Setter Property="Padding" Value="6,2,10,10"/>
+                    <Setter Property="MinHeight" Value="38"/>
+                    <Setter Property="MinWidth" Value="38"/>
+                    <Setter Property="Margin" Value="1"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="VerticalContentAlignment" Value="Top"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Style>
+            </Style.BasedOn>
+        </Style>
+    </UserControl.Resources>
+
+	<Grid Margin="0" Background="White">
+		<Grid Background="White">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Available Servers" VerticalAlignment="Top" Style="{DynamicResource ConfigHeader}" Grid.Row="1" Margin="10,0,0,0"/>
+			<presentation:SurfaceListBox x:Name="Connections" Grid.Row="1" HorizontalContentAlignment="Stretch" ItemTemplate="{DynamicResource ConnectionTemplate}" Background="{x:Null}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="0,38,0,0"/>
+			<Grid Margin="10,10,0,10">
+				<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Server Settings" VerticalAlignment="Top" Style="{DynamicResource ConfigHeader}"/>
+				<StackPanel Orientation="Vertical" Margin="0,44,0,0">
+					<Grid Margin="0">
+						<StackPanel Margin="50,0,10,5" Orientation="Vertical">
+							<TextBlock TextWrapping="Wrap" Text="Change Username" FontSize="18.667" Height="24.83"/>
+							<Grid VerticalAlignment="Top" Margin="0,5,0,0">
+								<controls1:KeyboardTextBox x:Name="Username" Watermark="Username" Margin="0,0,67,0" TextWrapping="Wrap" FontSize="16" VerticalContentAlignment="Center"/>
+								<presentation:SurfaceButton x:Name="ChangeUsername" HorizontalAlignment="Right" Style="{DynamicResource ButtonStyle}" Height="40" BorderThickness="0" Padding="10,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Content="Save" VerticalContentAlignment="Center" Margin="0"/>
+							</Grid>
+						</StackPanel>
+						<presentation:SurfaceButton x:Name="AddServer3" Margin="0,5,0,0" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Width="40" Height="40" BorderThickness="0" Padding="0" HorizontalContentAlignment="Center" VerticalAlignment="Top">
+							<Path Data="M14.422,20.653999C16.252522,21.738554 18.38153,22.370129 20.660732,22.370129 22.936034,22.370129 25.058243,21.741255 26.888963,20.6618 26.595376,21.643559 26.452783,23.104397 27.148053,24.93252 27.848521,26.781344 27.779426,28.848957 27.614133,30.202999 26.615476,28.880156 24.412371,27.562512 21.084614,26.898438 16.837296,26.049673 15.093872,22.664316 14.422,20.653999z M28.085736,20.073L29.843657,20.073C36.184836,20.073,41.323001,25.21368,41.323001,31.552277L41.323001,33.071899 41.323001,36.077149 41.323001,37.260765C41.323001,38.529087,40.29569,39.555,39.027373,39.555L33.037698,39.555 33.037698,30.989769 28.40624,30.989769C28.634143,29.640747 28.887845,27.010607 27.980334,24.61467 27.095023,22.281334 27.749831,20.677109 28.085736,20.073z M11.478873,20.073L13.330553,20.073C13.840847,21.981829 15.617028,26.713703 20.907169,27.771019 24.42813,28.474131 26.398108,29.875151 27.066001,30.989769L22.034757,30.989769 22.034757,39.555 2.2955647,39.555C1.0272694,39.555,0,38.529087,0,37.260765L0,36.077149 0,33.071899 0,31.552277C0,25.21368,5.1378837,20.073,11.478873,20.073z M20.660451,0C26.205266,8.1473601E-08 30.696,4.4948703 30.696,10.0391 30.696,15.5834 26.205266,20.073 20.660451,20.073 15.116933,20.073 10.626,15.5834 10.626,10.0391 10.626,4.4948703 15.116933,8.1473601E-08 20.660451,0z" Stretch="Uniform" Fill="#FFF7F7F7" Margin="5" RenderTransformOrigin="0.5,0.5"/>
+						</presentation:SurfaceButton>
+					</Grid>
+					<Grid Margin="0">
+						<StackPanel Margin="50,0,10,5" Orientation="Vertical">
+							<TextBlock TextWrapping="Wrap" Text="Add Server" FontSize="18.667" Margin="0,6,0,0"/>
+							<Grid VerticalAlignment="Top" Margin="0,5,0,0">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition/>
+									<ColumnDefinition Width="Auto"/>
+									<ColumnDefinition Width="Auto"/>
+								</Grid.ColumnDefinitions>
+								<controls1:KeyboardTextBox x:Name="Server" Watermark="Server" Margin="0" TextWrapping="Wrap" Text="localhost" FontSize="16" VerticalContentAlignment="Center"/>
+								<controls1:KeyboardTextBox x:Name="Port" Watermark="Host" Width="100" TextWrapping="Wrap" Text="4000" FontSize="16" VerticalContentAlignment="Center" Margin="10,0,0,0" Grid.Column="1"/>
+								<presentation:SurfaceButton x:Name="AddServer" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Height="40" BorderThickness="0" Padding="10,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Content="Save" VerticalContentAlignment="Center" Margin="10,0,0,0" Grid.Column="2"/>
+							</Grid>
+						</StackPanel>
+						<presentation:SurfaceButton x:Name="AddServer2" Margin="0,5,0,0" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Width="40" Height="40" BorderThickness="0" Padding="0" HorizontalContentAlignment="Center" VerticalAlignment="Top">
+							<Path Data="M40.454,58.724L57.969883,58.724C58.88139,58.724 59.620998,59.464864 59.620998,60.369599 59.620998,61.279634 58.88139,62.018998 57.969883,62.018998L40.454,62.018998z M1.6496172,58.724L19.170001,58.724 19.170001,62.018998 1.6496172,62.018998C0.73826218,62.018998 0,61.279634 0,60.369599 0,59.464864 0.73826218,58.724 1.6496172,58.724z M28.15736,50.678002L31.45414,50.678002 31.45414,56.744584 36.574009,56.744584C37.338305,56.748384,37.9725,57.383901,37.975,58.146924L37.975,62.602757C37.9725,63.361981,37.338305,64.000001,36.574009,64.000001L23.045591,64.000001C22.283696,64.000001,21.651,63.361981,21.647,62.602757L21.647,58.146924C21.651,57.383901,22.283696,56.748384,23.045591,56.744584L28.15736,56.744584z M12.3907,39.538999C11.110921,39.538999 10.072001,40.576867 10.072,41.852948 10.072001,43.131635 11.110921,44.167001 12.3907,44.167001 13.661281,44.167001 14.704001,43.131635 14.704001,41.852948 14.704001,40.576867 13.661281,39.538999 12.3907,39.538999z M6.9702334,36.054999L51.749714,36.054999C52.485306,36.054999,53.083,36.651307,53.083,37.388312L53.083,46.626691C53.083,47.363595,52.485306,47.96,51.749714,47.96L6.9702334,47.96C6.2333026,47.96,5.6370006,47.363595,5.6369996,46.626691L5.6369996,37.388312C5.6370006,36.651307,6.2333026,36.054999,6.9702334,36.054999z M12.1772,5.4740001L46.847897,5.4740001C47.34,5.4739998,47.744999,5.8802567,47.744999,6.3816062L47.744999,26.734881C47.744999,27.238791,47.34,27.645,46.847897,27.645L12.1772,27.645C11.683801,27.645,11.284,27.238791,11.284,26.734881L11.284,6.3816062C11.284,5.8802567,11.683801,5.4739998,12.1772,5.4740001z M10.307582,3.0208168C9.4546318,3.0208163,8.7502816,3.7512051,8.750282,4.654996L8.750282,28.324441C8.7502816,29.226851,9.4546318,29.961261,10.307582,29.961261L48.578396,29.961261C49.436497,29.961261,50.136997,29.226851,50.136997,28.324441L50.136997,4.654996C50.136997,3.7512051,49.436497,3.0208163,48.578396,3.0208168z M9.1448123,0L49.598,0C51.537998,0,53.106998,1.6158595,53.106998,3.6068535L53.106998,29.747657C53.106998,31.737281,51.537998,33.348001,49.598,33.348001L9.1448123,33.348001C7.2046309,33.348001,5.6370001,31.737281,5.6369996,29.747657L5.6369996,3.6068535C5.6370001,1.6158595,7.2046309,0,9.1448123,0z" Stretch="Uniform" Fill="#FFF7F7F7" Margin="5" RenderTransformOrigin="0.5,0.5"/>
+						</presentation:SurfaceButton>
+					</Grid>
+				</StackPanel>
+			</Grid>
+		</Grid>
+		<!--<Button x:Name="ClickMeButton" Width="100" Height="50" Content="Click Me" HorizontalAlignment="Right" />-->
+	</Grid>
+
+</UserControl>
+

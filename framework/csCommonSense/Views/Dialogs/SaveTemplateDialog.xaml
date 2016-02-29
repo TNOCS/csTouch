@@ -1,0 +1,59 @@
+﻿<Window x:Class="csCommon.Views.Dialogs.SaveTemplateDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dialogs="clr-namespace:csCommon.Views.Dialogs"
+        Title="Save Templates" Width="500" Height="400"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance dialogs:SaveTemplateDialog}">
+    
+        <Grid Margin="10,10,10,10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <GroupBox Grid.Row="0">
+            <GroupBox.Header>1. Select the labels to save templates for</GroupBox.Header>
+            <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="True">
+                <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Dock="Top" LastChildFill="False">
+                    <Button Name="SelectNoneButton" Content="None" DockPanel.Dock="Right" Margin="5,0,0,0" Width="40" Click="SelectNoneButton_OnClick"/>
+                    <Button Name="SelectAllButton" Content="All" DockPanel.Dock="Right" Width="40" Click="SelectAllButton_OnClick"/>
+                </DockPanel>
+                <ScrollViewer Margin="5,10,5,5">
+                    <ListBox Name="LabelsList" SelectionMode="Multiple"/>
+                </ScrollViewer>
+            </DockPanel>
+            </GroupBox>
+
+            <GroupBox Margin="0,0,0,10" Grid.Row="1">
+                <GroupBox.Header>2. Select a destination to save to</GroupBox.Header>
+                <Grid Margin="5,10,5,5"  IsSharedSizeScope="True">
+                    <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" SharedSizeGroup="radioGroup"/>
+                    <RowDefinition Height="Auto" SharedSizeGroup="radioGroup"/>
+                    <RowDefinition Height="Auto" SharedSizeGroup="radioGroup"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton Name="RadioCurrentTemplate" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" GroupName="RadioExistingNew" Content="Update current template(s), if any are set" Click="RadioExistingNewTemplate_OnClick"/>
+                    <RadioButton Name="RadioExistingTemplate" VerticalAlignment="Center"  Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" GroupName="RadioExistingNew" Content="Update or add to existing template" Click="RadioExistingNewTemplate_OnClick"/>
+                    <RadioButton Name="RadioNewTemplate" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="0,5,10,0" GroupName="RadioExistingNew" Content="Add to new template" IsChecked="True" Click="RadioExistingNewTemplate_OnClick"/>
+                    <ComboBox Name="ComboExistingTemplate" VerticalAlignment="Stretch"  Grid.Row="1" Grid.Column="1" IsEditable="False" IsEnabled="False"/>
+                    <TextBox Name="TextNewTemplate" VerticalAlignment="Stretch"  Grid.Row="2" Grid.Column="1" Margin="0,5,0,0" Text="Unnamed" Focusable="True"/>
+                </Grid>
+            </GroupBox>
+
+            <DockPanel Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="False">
+            <Button Name="OpenTemplateFolderButton" DockPanel.Dock="Left" Content="Open template folder" Margin="0,0,5,0" MinWidth="60" Click="OpenTemplateFolderButton_OnClick"/>
+            <Button Name="CancelButton" DockPanel.Dock="Right" Content="Cancel" MinWidth="60" Click="CancelButton_OnClick"/>
+            <Button Name="SaveButton" DockPanel.Dock="Right" Content="Save" Margin="0,0,5,0" MinWidth="60" Click="SaveButton_OnClick" Height="22" VerticalAlignment="Top"/>
+            </DockPanel>
+        </Grid>
+
+    
+</Window>

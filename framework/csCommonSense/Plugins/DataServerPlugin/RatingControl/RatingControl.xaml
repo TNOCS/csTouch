@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="csDataServerPlugin.RatingControl.RatingControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UniformGrid Columns="5">
+        <UniformGrid.Resources>
+            <ControlTemplate x:Key="starTemplate" TargetType="{x:Type ToggleButton}">
+                <Viewbox>
+                    <Path x:Name="star"
+                          Data="M1540.22,2082.07L1546.95,2102.78 1568.73,2102.78 1551.11,2115.58 1557.84,2136.29 1540.22,2123.49 1522.6,2136.29 1529.33,2115.58 1511.71,2102.78 1533.49,2102.78 1540.22,2082.07z"
+                          Stretch="Uniform"
+                          Fill="Gray" />
+                </Viewbox>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter TargetName="star" Property="Fill" Value="Gold" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </UniformGrid.Resources>
+
+        <ToggleButton Tag="1" Cursor="Hand" Template="{StaticResource starTemplate}"
+                      Click="RatingButtonClickEventHandler" />
+        <ToggleButton Tag="2" Cursor="Hand" Template="{StaticResource starTemplate}"
+                      Click="RatingButtonClickEventHandler" />
+        <ToggleButton Tag="3" Cursor="Hand" Template="{StaticResource starTemplate}"
+                      Click="RatingButtonClickEventHandler" />
+        <ToggleButton Tag="4" Cursor="Hand" Template="{StaticResource starTemplate}"
+                      Click="RatingButtonClickEventHandler" />
+        <ToggleButton Tag="5" Cursor="Hand" Template="{StaticResource starTemplate}"
+                      Click="RatingButtonClickEventHandler" />
+    </UniformGrid>
+</UserControl>

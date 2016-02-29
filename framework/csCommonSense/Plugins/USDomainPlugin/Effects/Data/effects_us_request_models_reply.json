@@ -1,0 +1,27 @@
+{
+ "Models": [
+  {
+   "Description": "Neutral Gas Dispersion: Explosive mass",
+   "Family": 1,
+   "Name": "Neutral Gas Dispersion: Explosive mass",
+   "Version": "v2014.12.Unkown"
+  },{
+   "Description": "BLEVE (Static or Dynamic model)",
+   "Family": 2,
+   "Name": "BLEVE (Static or Dynamic model)",
+  },{
+   "Description": "Pool fire",
+   "Family": 2,
+   "Name": "Pool fire",
+  },{
+   "Description": "Jet Fire (Chamberlain model)",
+   "Family": 2,
+   "Name": "Jet Fire (Chamberlain model)",
+   "Version": "v2014.12.Unkown"
+  },{
+   "Description": "Dense gas release; toxic",
+   "Family": 1,
+   "Name": "Dense Gas Dispersion: Toxic dose",
+   "Version": "v2014.12.Unkown"
+  }]
+}

@@ -1,0 +1,12 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation" xmlns:local="clr-namespace:csCommon"
+             xmlns:cal="http://www.caliburnproject.org"
+             x:Class="csCommon.DataServerView">
+  
+
+	<Grid>
+     <Border Visibility="Collapsed" Width="400" Height="50" Margin="0,20,300,0" Background="Green" HorizontalAlignment="Right" VerticalAlignment="Top">
+         <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="Hash" Foreground="White"></TextBlock>
+     </Border>
+    </Grid>
+
+</UserControl>

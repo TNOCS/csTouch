@@ -1,0 +1,77 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:esri="http://schemas.esri.com/arcgis/client/2009"
+                    x:Class="csDataServerPlugin.Resources.PDictionary"
+                    xmlns:local="clr-namespace:csDataServerPlugin"
+                    xmlns:wpfConverters="clr-namespace:WpfConverters"
+                    xmlns:csShared="clr-namespace:csShared">
+
+    <esri:MarkerSymbol x:Key="ImageSymbol">
+        <esri:MarkerSymbol.ControlTemplate>
+            <ControlTemplate>
+                <local:ucPoiIcon Graphic="{Binding Attributes[Graphic]}" />
+            </ControlTemplate>
+        </esri:MarkerSymbol.ControlTemplate>
+    </esri:MarkerSymbol>
+
+    <esri:FillSymbol x:Key="TouchFillSymbol">
+        <esri:FillSymbol.ControlTemplate>
+            <ControlTemplate>
+                <Grid>
+                    <Path x:Name="Element"
+                          TouchDown="FillSymbolTouchDown"
+                          MouseDown="FillSymbolMouseDown"
+                          Fill="{Binding Attributes[Fill]}"
+                          Stroke="{Binding Attributes[BorderBrush]}"
+                          StrokeThickness="{Binding Attributes[BorderThickness]}" />
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Background="#A0FFFFFF"
+                               FontWeight="Bold"
+                               RenderTransformOrigin="0.5,0.5"
+                               Text="{Binding Attributes[PoI].Name}"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" >
+                        <TextBlock.Visibility>
+                            <MultiBinding Converter="{wpfConverters:ConvertTitleResolutionToVisibility}">
+                                <Binding Path="Attributes[PoI]" />
+                                <Binding Source="{x:Static csShared:AppStateSettings.Instance}" Path="Instance.ViewDef.MapControl.Resolution" />
+                            </MultiBinding>
+                        </TextBlock.Visibility>
+                    </TextBlock>
+                </Grid>
+            </ControlTemplate>
+        </esri:FillSymbol.ControlTemplate>
+    </esri:FillSymbol>
+
+    <esri:LineSymbol x:Key="TouchLineSymbol">
+        <esri:LineSymbol.ControlTemplate>
+            <ControlTemplate>
+                <Grid>
+                    <Path x:Name="Element"
+                          TouchDown="FillSymbolTouchDown"
+                          MouseDown="FillSymbolMouseDown"
+                          Stroke="{Binding Attributes[BorderBrush]}"
+                          StrokeThickness="{Binding Attributes[BorderThickness]}" />
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Background="#A0FFFFFF"
+                               FontWeight="Bold"
+                               RenderTransformOrigin="0.5,0.5"
+                               Text="{Binding Attributes[PoI].Name}"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" >
+                        <TextBlock.Visibility>
+                            <MultiBinding Converter="{wpfConverters:ConvertTitleResolutionToVisibility}">
+                                <Binding Path="Attributes[PoI]" />
+                                <Binding Source="{x:Static csShared:AppStateSettings.Instance}" Path="Instance.ViewDef.MapControl.Resolution" />
+                            </MultiBinding>
+                        </TextBlock.Visibility>
+                    </TextBlock>
+                </Grid>
+            </ControlTemplate>
+        </esri:LineSymbol.ControlTemplate>
+    </esri:LineSymbol>
+
+
+</ResourceDictionary>

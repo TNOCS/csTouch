@@ -1,0 +1,209 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation" xmlns:local="clr-namespace:csCommon" xmlns:Presentation="clr-namespace:Microsoft.Surface.Presentation;assembly=Microsoft.Surface.Presentation" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:csShared_Utils="clr-namespace:csShared.Utils" xmlns:Custom="http://schemas.microsoft.com/surface/2008" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" xmlns:Microsoft_Surface_Presentation_Generic="clr-namespace:Microsoft.Surface.Presentation.Generic;assembly=Microsoft.Surface.Presentation.Generic"
+			 xmlns:SlideTab="clr-namespace:csShared.Controls.SlideTab" xmlns:csCommon_Controls="clr-namespace:csCommon.Controls" x:Name="userControl" mc:Ignorable="d" x:Class=" csGeoLayers.Plugins.Layers.NewLayerView" d:DesignHeight="550" d:DesignWidth="550" >
+	<UserControl.Resources>
+		<Style x:Key="TabItemStyle1" TargetType="{x:Type SlideTab:SlideTabItem}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource TabItemFocusVisual}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TabControlNormalBorderBrush}"/>
+            <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type SlideTab:SlideTabItem}">
+                        <Grid SnapsToDevicePixels="true" Margin="0,0,5,-1">
+                            <Border x:Name="Bd"  Height="30" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Padding="{TemplateBinding Padding}" Background="White">
+                                <ContentPresenter ContentSource="Header" />
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter Property="Panel.ZIndex" Value="1"/>
+                                <Setter Property="Background" TargetName="Bd" Value="{x:Null}"/>
+                            </Trigger>
+                            <Trigger Property="Selector.IsSelected" Value="True"/>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource TabItemDisabledBackground}"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource TabItemDisabledBorderBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+	</UserControl.Resources>
+    <Grid>
+    	<SlideTab:SlideTabControl Background="White" BorderThickness="0" Margin="3" Visibility="Collapsed">
+    		<SlideTab:SlideTabItem Header="Online" Style="{DynamicResource TabItemStyle1}" Background="Black" Foreground="Black" Width="100" FontSize="16"/>
+    		<SlideTab:SlideTabItem Header="Poi Service" Style="{DynamicResource TabItemStyle1}" Foreground="Black" Width="100" Background="Black" FontSize="16">
+    			<Grid Background="White"/>
+    		</SlideTab:SlideTabItem>
+    		<SlideTab:SlideTabItem Header="Custom" Style="{DynamicResource TabItemStyle1}" Foreground="Black" Width="100" Background="Black" FontSize="16">
+    			<Grid Background="White"/>
+    		</SlideTab:SlideTabItem>
+    	</SlideTab:SlideTabControl>
+    	<Grid Background="White" Margin="5">
+    		<Grid.RowDefinitions>
+    			<RowDefinition Height="Auto"/>
+    			<RowDefinition/>
+    		</Grid.RowDefinitions>
+    		<Grid VerticalAlignment="Top" Margin="4">
+    			<Grid.ColumnDefinitions>
+    				<ColumnDefinition/>
+    				<ColumnDefinition Width="Auto"/>
+    			</Grid.ColumnDefinitions>
+    			<StackPanel Orientation="Vertical">
+    				<TextBlock TextWrapping="Wrap" Text="Search online content layers" FontSize="24"/>
+    				<Custom:SurfaceTextBox x:Name="OnlineSearchKeyword" Margin="0" TextWrapping="Wrap" Background="#E6FFFFFF" BorderBrush="#33000000" Foreground="Black"/>
+    			</StackPanel>
+    			<Custom:SurfaceButton x:Name="OnlineSearch" Content="Search" HorizontalAlignment="Left" Margin="10,0,0,0" d:LayoutOverrides="Height" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White" Background="{Binding AccentBrush}"/>
+    		</Grid>
+    		<Custom:SurfaceListBox x:Name="Result" d:LayoutOverrides="Height" Grid.Row="1" ItemsSource="{Binding Result}" ItemTemplate="{DynamicResource DataTemplate1}" ItemContainerStyle="{DynamicResource SurfaceListBoxItemStyle1}" HorizontalContentAlignment="Stretch" Background="White" Foreground="Black">
+    			<Custom:SurfaceListBox.Resources>
+    				<DataTemplate x:Key="DataTemplate1">
+    					<Grid>
+    						<TextBlock Margin="0" TextWrapping="Wrap" Text="{Binding Title}" d:LayoutOverrides="Width, Height" Foreground="Black"/>
+    						<Custom:SurfaceButton x:Name="sbAdd" Content="Add" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Stretch" d:LayoutOverrides="Width, Height" Click="SbAddClick" Background="{Binding AccentBrush}"/>
+    					</Grid>
+    				</DataTemplate>
+    				<Style TargetType="{x:Type Control}" x:Key="ControlBaseStyle">
+    					<Setter Property="FocusVisualStyle"	
+    						Value="{x:Null}"/>
+    					<Setter Property="SnapsToDevicePixels"
+    						Value="False"/>
+    					<Setter Property="FontFamily"
+    						Value="Segoe360"/>
+    					<Setter Property="FontWeight"
+    						Value="Normal"/>
+    					<Setter Property="FontSize"
+    						Value="17"/>
+    					<Setter Property="Padding"
+    						Value="6,2,10,10"/>
+    					<Setter Property="MinHeight"
+    						Value="38"/>
+    					<Setter Property="MinWidth"
+    						Value="38"/>
+    					<Setter Property="Margin"
+    						Value="1"/>
+    					<Setter Property="HorizontalContentAlignment"
+    						Value="Left"/>
+    					<Setter Property="VerticalContentAlignment"
+    						Value="Top"/>
+    					<Setter Property="BorderThickness"
+    						Value="2"/>
+    				</Style>
+    				<SolidColorBrush x:Key="ControlHitAreaBrush"    
+    					Color="#00FFFFFF"/>
+    				<Style x:Key="SurfaceListBoxItemStyle1" TargetType="{x:Type Custom:SurfaceListBoxItem}"
+    					BasedOn="{StaticResource ControlBaseStyle}">
+    					<Setter Property="Background" 
+    						Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemBackgroundBrushKey}}"/>
+    					<Setter Property="Foreground" 
+    						Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemForegroundBrushKey}}"/>
+    					<Setter Property="BorderThickness" 
+    						Value="0"/>
+    					<!--<Setter Property="HorizontalContentAlignment"
+    						Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" />-->
+    					<Setter Property="Template">
+    						<Setter.Value>
+    							<ControlTemplate TargetType="{x:Type Custom:SurfaceListBoxItem}">
+    								<ControlTemplate.Resources>
+    									<Storyboard x:Key="Press">
+    										<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+    											Storyboard.TargetName="PressOverlay"
+    											Storyboard.TargetProperty="(UIElement.Opacity)">
+    											<SplineDoubleKeyFrame KeyTime="00:00:00.1000000"
+    												Value="1" />
+    										</DoubleAnimationUsingKeyFrames>
+    									</Storyboard>
+    									<Storyboard x:Key="Release">
+    										<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+    											Storyboard.TargetName="PressOverlay"
+    											Storyboard.TargetProperty="(UIElement.Opacity)">
+    											<SplineDoubleKeyFrame KeyTime="00:00:00.2500000"
+    												Value="0" />
+    										</DoubleAnimationUsingKeyFrames>
+    									</Storyboard>
+    								</ControlTemplate.Resources>
+    								<Grid   x:Name="Grid"
+    									Background="{StaticResource ControlHitAreaBrush}"
+    									SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+    									<Border  x:Name="ButtonBody"
+    										BorderThickness="{TemplateBinding BorderThickness}"
+    										BorderBrush="{TemplateBinding BorderBrush}"
+    										SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Background="#4D747474"/>
+    									<Border x:Name="PressOverlay"    
+    										Background="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemBackgroundPressedBrushKey}}"
+    										Opacity="0" 
+    										SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+    									<ContentPresenter   x:Name="Content"										
+    										Margin="{TemplateBinding Padding}"
+    										HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"                               					   
+    										VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+    										SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+    								</Grid>
+    								<ControlTemplate.Triggers>
+    									<Trigger Property="IsSelected"		  
+    										Value="True">
+    										<Setter Property="Background" 
+    											TargetName="ButtonBody" 
+    											Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemSelectionBackgroundBrushKey}}"/>
+    										<Setter Property="Background" 
+    											TargetName="PressOverlay" 
+    											Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemSelectionBackgroundPressedBrushKey}}"/>
+    									</Trigger>
+    									<Trigger Property="IsPressed"
+    										Value="True">
+    										<Trigger.EnterActions>
+    											<BeginStoryboard Storyboard="{StaticResource Press}" />
+    										</Trigger.EnterActions>
+    										<Trigger.ExitActions>
+    											<BeginStoryboard Storyboard="{StaticResource Release}" />
+    										</Trigger.ExitActions>
+    										<Setter Property="Foreground"
+    											Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemForegroundPressedBrushKey}}"/>
+    									</Trigger>
+    									<MultiTrigger>
+    										<MultiTrigger.Conditions>
+    											<Condition Property="IsEnabled"
+    												Value="False" />
+    											<Condition Property="IsSelected"
+    												Value="True" />
+    										</MultiTrigger.Conditions>
+    										<Setter Property="Background"
+    											Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemSelectionBackgroundDisabledBrushKey}}"
+    											TargetName="ButtonBody"/>
+    										<Setter Property="Foreground"
+    											Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemForegroundDisabledBrushKey}}"/>
+    										<Setter Property="Opacity"
+    											TargetName="Content"
+    											Value="0.6"/>
+    									</MultiTrigger>
+    									<MultiTrigger>
+    										<MultiTrigger.Conditions>
+    											<Condition  Property="IsEnabled"
+    												Value="False" />
+    											<Condition Property="IsSelected"
+    												Value="False" />
+    										</MultiTrigger.Conditions>
+    										<Setter Property="Background"
+    											Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemBackgroundDisabledBrushKey}}"
+    											TargetName="ButtonBody"/>
+    										<Setter Property="Foreground"
+    											Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemForegroundDisabledBrushKey}}"/>
+    										<Setter Property="Opacity"
+    											TargetName="Content"
+    											Value="0.33"/>
+    									</MultiTrigger>
+    								</ControlTemplate.Triggers>
+    							</ControlTemplate>
+    						</Setter.Value>
+    					</Setter>
+    				</Style>
+    			</Custom:SurfaceListBox.Resources>
+    		</Custom:SurfaceListBox>
+    	</Grid>
+    </Grid>
+
+</UserControl>

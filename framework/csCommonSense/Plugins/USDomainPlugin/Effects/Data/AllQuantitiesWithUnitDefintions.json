@@ -1,0 +1,1012 @@
+{
+ "QuantitiesWithUnits": [
+  {
+   "Quantity": "Length",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "m",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "micron",
+     "Offset": 0,
+     "Factor": 1000000
+    },{
+     "UnitSymbol": "mm",
+     "Offset": 0,
+     "Factor": 1000
+    },{
+     "UnitSymbol": "cm",
+     "Offset": 0,
+     "Factor": 100
+    },{
+     "UnitSymbol": "dm",
+     "Offset": 0,
+     "Factor": 10
+    },{
+     "UnitSymbol": "km",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "nautical mile",
+     "Offset": 0,
+     "Factor": 0.000539956803455724
+    },{
+     "UnitSymbol": "ft",
+     "Offset": 0,
+     "Factor": 3.28083333334646
+    },{
+     "UnitSymbol": "inch",
+     "Offset": 0,
+     "Factor": 39.3700787401575
+    },{
+     "UnitSymbol": "yd",
+     "Offset": 0,
+     "Factor": 1.09361329833771
+    },{
+     "UnitSymbol": "statute mile",
+     "Offset": 0,
+     "Factor": 0.000621371192237334
+    }]
+  },{
+   "Quantity": "Mass",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "kg",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "ton (metric)",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "ton (UK)",
+     "Offset": 0,
+     "Factor": 0.000984203533290685
+    },{
+     "UnitSymbol": "quarter (28 lb)",
+     "Offset": 0,
+     "Factor": 0.078736437648615
+    },{
+     "UnitSymbol": "g",
+     "Offset": 0,
+     "Factor": 1000
+    },{
+     "UnitSymbol": "kiloton (metric)",
+     "Offset": 0,
+     "Factor": 1E-6
+    },{
+     "UnitSymbol": "lb",
+     "Offset": 0,
+     "Factor": 2.20462262184878
+    },{
+     "UnitSymbol": "stone",
+     "Offset": 0,
+     "Factor": 0.15747304441777
+    },{
+     "UnitSymbol": "ton (US)",
+     "Offset": 0,
+     "Factor": 0.00110231131092439
+    },{
+     "UnitSymbol": "oz",
+     "Offset": 0,
+     "Factor": 35.2739907229404
+    }]
+  },{
+   "Quantity": "Time",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "s",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "min",
+     "Offset": 0,
+     "Factor": 0.0166666666666667
+    },{
+     "UnitSymbol": "h",
+     "Offset": 0,
+     "Factor": 0.000277777777777778
+    },{
+     "UnitSymbol": "ms",
+     "Offset": 0,
+     "Factor": 1000
+    },{
+     "UnitSymbol": "week",
+     "Offset": 0,
+     "Factor": 1.65343915343915E-6
+    },{
+     "UnitSymbol": "year",
+     "Offset": 0,
+     "Factor": 3.16880878140289E-8
+    },{
+     "UnitSymbol": "day",
+     "Offset": 0,
+     "Factor": 1.15740740740741E-5
+    }]
+  },{
+   "Quantity": "Temperature",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "K",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "\u00b0C",
+     "Offset": -273.15,
+     "Factor": 1
+    },{
+     "UnitSymbol": "\u00b0F",
+     "Offset": -459.67,
+     "Factor": 1.8
+    },{
+     "UnitSymbol": "\u00b0R",
+     "Offset": 0,
+     "Factor": 1.8
+    }]
+  },{
+   "Quantity": "Force",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "N",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "kN",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "kgf",
+     "Offset": 0,
+     "Factor": 0.101971621297793
+    },{
+     "UnitSymbol": "dyne",
+     "Offset": 0,
+     "Factor": 100000
+    },{
+     "UnitSymbol": "lbf",
+     "Offset": 0,
+     "Factor": 0.224809024733489
+    },{
+     "UnitSymbol": "short ton force",
+     "Offset": 0,
+     "Factor": 0.000112404471549856
+    }]
+  },{
+   "Quantity": "Pressure",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "Pa",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "bar",
+     "Offset": 0,
+     "Factor": 1E-5
+    },{
+     "UnitSymbol": "MPa",
+     "Offset": 0,
+     "Factor": 1E-6
+    },{
+     "UnitSymbol": "kPa",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "Ba",
+     "Offset": 0,
+     "Factor": 10
+    },{
+     "UnitSymbol": "atm",
+     "Offset": 0,
+     "Factor": 9.86923266716013E-6
+    },{
+     "UnitSymbol": "mm Hg",
+     "Offset": 0,
+     "Factor": 0.0075006168270417
+    },{
+     "UnitSymbol": "hPa",
+     "Offset": 0,
+     "Factor": 0.01
+    },{
+     "UnitSymbol": "mbar",
+     "Offset": 0,
+     "Factor": 0.01
+    },{
+     "UnitSymbol": "psi",
+     "Offset": 0,
+     "Factor": 0.000145037743897283
+    },{
+     "UnitSymbol": "ft H2O",
+     "Offset": 0,
+     "Factor": 0.000334562292153176
+    }]
+  },{
+   "Quantity": "Energy",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "J",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "kJ",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "MJ",
+     "Offset": 0,
+     "Factor": 1E-6
+    },{
+     "UnitSymbol": "erg",
+     "Offset": 0,
+     "Factor": 10000000
+    },{
+     "UnitSymbol": "cal",
+     "Offset": 0,
+     "Factor": 0.238845896627496
+    },{
+     "UnitSymbol": "Btu",
+     "Offset": 0,
+     "Factor": 0.000947813394498891
+    },{
+     "UnitSymbol": "kW*h",
+     "Offset": 0,
+     "Factor": 2.77777777777778E-7
+    }]
+  },{
+   "Quantity": "Energy flux",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "W",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "kW",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "MW",
+     "Offset": 0,
+     "Factor": 1E-6
+    },{
+     "UnitSymbol": "erg\/s",
+     "Offset": 0,
+     "Factor": 10000000
+    },{
+     "UnitSymbol": "cal\/s",
+     "Offset": 0,
+     "Factor": 0.238845896627496
+    },{
+     "UnitSymbol": "hp (metric)",
+     "Offset": 0,
+     "Factor": 0.00135962115516133
+    },{
+     "UnitSymbol": "hp",
+     "Offset": 0,
+     "Factor": 0.00134102209244049
+    },{
+     "UnitSymbol": "Btu\/s",
+     "Offset": 0,
+     "Factor": 0.000947816987913438
+    }]
+  },{
+   "Quantity": "Energy emission",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "W\/m2",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "kW\/m2",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "cal\/s*m2",
+     "Offset": 0,
+     "Factor": 0.238845896627496
+    },{
+     "UnitSymbol": "hp\/ft2",
+     "Offset": 0,
+     "Factor": 0.000124585511788873
+    },{
+     "UnitSymbol": "Btu\/s*ft2",
+     "Offset": 0,
+     "Factor": 8.80550661161464E-5
+    }]
+  },{
+   "Quantity": "Area",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "m2",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "km2",
+     "Offset": 0,
+     "Factor": 1E-6
+    },{
+     "UnitSymbol": "ha",
+     "Offset": 0,
+     "Factor": 0.0001
+    },{
+     "UnitSymbol": "ft2",
+     "Offset": 0,
+     "Factor": 10.7638687066351
+    },{
+     "UnitSymbol": "acre",
+     "Offset": 0,
+     "Factor": 0.000247105163015276
+    },{
+     "UnitSymbol": "yd2",
+     "Offset": 0,
+     "Factor": 1.19599004630108
+    },{
+     "UnitSymbol": "inch2",
+     "Offset": 0,
+     "Factor": 1550.0031000062
+    },{
+     "UnitSymbol": "square statute mile",
+     "Offset": 0,
+     "Factor": 3.8610215854E-7
+    }]
+  },{
+   "Quantity": "Volume",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "m3",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "gal (UK)",
+     "Offset": 0,
+     "Factor": 220
+    },{
+     "UnitSymbol": "ft3",
+     "Offset": 0,
+     "Factor": 35.3145
+    },{
+     "UnitSymbol": "liter",
+     "Offset": 0,
+     "Factor": 1000
+    },{
+     "UnitSymbol": "pint (UK)",
+     "Offset": 0,
+     "Factor": 1759.75476057657
+    },{
+     "UnitSymbol": "pint (US)",
+     "Offset": 0,
+     "Factor": 2113.37853145553
+    },{
+     "UnitSymbol": "gal (US)",
+     "Offset": 0,
+     "Factor": 264.172051241558
+    },{
+     "UnitSymbol": "bbl",
+     "Offset": 0,
+     "Factor": 6.28981076758366
+    },{
+     "UnitSymbol": "fl oz (US)",
+     "Offset": 0,
+     "Factor": 33814.0222016107
+    },{
+     "UnitSymbol": "fl oz (UK)",
+     "Offset": 0,
+     "Factor": 35195.033276904
+    },{
+     "UnitSymbol": "km3",
+     "Offset": 0,
+     "Factor": 1E-9
+    },{
+     "UnitSymbol": "cu yd",
+     "Offset": 0,
+     "Factor": 1.3079506193144
+    },{
+     "UnitSymbol": "cu in",
+     "Offset": 0,
+     "Factor": 61023.7440947323
+    },{
+     "UnitSymbol": "cu mi",
+     "Offset": 0,
+     "Factor": 2.39911416910039E-10
+    }]
+  },{
+   "Quantity": "Velocity",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "m\/s",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "cm\/s",
+     "Offset": 0,
+     "Factor": 100
+    },{
+     "UnitSymbol": "km\/h",
+     "Offset": 0,
+     "Factor": 3.6
+    },{
+     "UnitSymbol": "ft\/s",
+     "Offset": 0,
+     "Factor": 3.28083989501312
+    },{
+     "UnitSymbol": "mph",
+     "Offset": 0,
+     "Factor": 2.2369362920544
+    },{
+     "UnitSymbol": "mph (nautical)",
+     "Offset": 0,
+     "Factor": 1.94384617178935
+    }]
+  },{
+   "Quantity": "Acceleration",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "m\/s2",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "ft\/s2",
+     "Offset": 0,
+     "Factor": 3.28083989501312
+    },{
+     "UnitSymbol": "km\/s2",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "mph\/s",
+     "Offset": 0,
+     "Factor": 2.2369362920544
+    },{
+     "UnitSymbol": "mps2",
+     "Offset": 0,
+     "Factor": 0.00062137119224
+    }]
+  },{
+   "Quantity": "Mass rate",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "kg\/s",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "g\/s",
+     "Offset": 0,
+     "Factor": 1000
+    },{
+     "UnitSymbol": "kg\/h",
+     "Offset": 0,
+     "Factor": 3600
+    },{
+     "UnitSymbol": "ton (metric)\/h",
+     "Offset": 0,
+     "Factor": 3.6
+    },{
+     "UnitSymbol": "lb\/s",
+     "Offset": 0,
+     "Factor": 2.20462262184878
+    },{
+     "UnitSymbol": "lb\/h",
+     "Offset": 0,
+     "Factor": 7936.69690548188
+    }]
+  },{
+   "Quantity": "Volume rate",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "m3\/s",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "l\/h",
+     "Offset": 0,
+     "Factor": 3600000
+    },{
+     "UnitSymbol": "l\/s",
+     "Offset": 0,
+     "Factor": 1000
+    },{
+     "UnitSymbol": "m3\/h",
+     "Offset": 0,
+     "Factor": 3600
+    },{
+     "UnitSymbol": "gal (US)\/s",
+     "Offset": 0,
+     "Factor": 264.172051241558
+    },{
+     "UnitSymbol": "gal (US)\/h",
+     "Offset": 0,
+     "Factor": 951019.38446961
+    }]
+  },{
+   "Quantity": "Density",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "kg\/m3",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "g\/m3",
+     "Offset": 0,
+     "Factor": 1000
+    },{
+     "UnitSymbol": "mg\/m3",
+     "Offset": 0,
+     "Factor": 1000000
+    },{
+     "UnitSymbol": "g\/l",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "g\/cm3",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "lb\/ft3",
+     "Offset": 0,
+     "Factor": 0.0624279620335609
+    },{
+     "UnitSymbol": "lb\/m3",
+     "Offset": 0,
+     "Factor": 2.20462262184878
+    },{
+     "UnitSymbol": "mg\/l",
+     "Offset": 0,
+     "Factor": 1000
+    },{
+     "UnitSymbol": "kg\/l",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "kg\/l",
+     "Offset": NAN,
+     "Factor": NAN
+    }]
+  },{
+   "Quantity": "Concentration",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "kg\/m3",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "mg\/m3",
+     "Offset": 0,
+     "Factor": 1000000
+    },{
+     "UnitSymbol": "g\/cm3",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "g\/m3",
+     "Offset": 0,
+     "Factor": 1000
+    },{
+     "UnitSymbol": "lb\/ft3",
+     "Offset": 0,
+     "Factor": 0.0624279620335609
+    },{
+     "UnitSymbol": "lb\/m3",
+     "Offset": 0,
+     "Factor": 2.20462262184878
+    },{
+     "UnitSymbol": "lb\/m3",
+     "Offset": NAN,
+     "Factor": NAN
+    },{
+     "UnitSymbol": "lb\/m3",
+     "Offset": NAN,
+     "Factor": NAN
+    },{
+     "UnitSymbol": "lb\/m3",
+     "Offset": NAN,
+     "Factor": NAN
+    }]
+  },{
+   "Quantity": "Elasticity",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "N\/m",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "dyne\/cm",
+     "Offset": 0,
+     "Factor": 1000
+    }]
+  },{
+   "Quantity": "Viscosity",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "Pa*s",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "P",
+     "Offset": 0,
+     "Factor": 10
+    },{
+     "UnitSymbol": "cP",
+     "Offset": 0,
+     "Factor": 1000
+    },{
+     "UnitSymbol": "\u00b5P",
+     "Offset": 0,
+     "Factor": 10000000
+    }]
+  },{
+   "Quantity": "Enthalpy",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "J\/kg",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "cal\/kg",
+     "Offset": 0,
+     "Factor": 0.238845896627496
+    },{
+     "UnitSymbol": "cal\/g",
+     "Offset": 0,
+     "Factor": 0.000238845896627496
+    },{
+     "UnitSymbol": "kcal\/kg",
+     "Offset": 0,
+     "Factor": 0.000238845896627496
+    },{
+     "UnitSymbol": "Btu\/lb",
+     "Offset": 0,
+     "Factor": 0.000429922613929493
+    },{
+     "UnitSymbol": "Btu\/lb",
+     "Offset": NAN,
+     "Factor": NAN
+    }]
+  },{
+   "Quantity": "Entropy",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "J\/kg*K",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "cal\/kg*\u00b0C",
+     "Offset": 0,
+     "Factor": 0.238845896627496
+    },{
+     "UnitSymbol": "cal\/g*\u00b0C",
+     "Offset": 0,
+     "Factor": 0.000238845896627496
+    },{
+     "UnitSymbol": "kcal\/kg*\u00b0C",
+     "Offset": 0,
+     "Factor": 0.000238845896627496
+    },{
+     "UnitSymbol": "kcal\/kg*\u00b0C",
+     "Offset": NAN,
+     "Factor": NAN
+    }]
+  },{
+   "Quantity": "Heat capacity",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "J\/kg*K",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "cal\/kg*\u00b0C",
+     "Offset": 0,
+     "Factor": 0.238845896627496
+    },{
+     "UnitSymbol": "cal\/g*\u00b0C",
+     "Offset": 0,
+     "Factor": 0.000238845896627496
+    },{
+     "UnitSymbol": "kcal\/kg*\u00b0C",
+     "Offset": 0,
+     "Factor": 0.000238845896627496
+    },{
+     "UnitSymbol": "Btu\/lb*\u00b0F",
+     "Offset": 0,
+     "Factor": 0.000238845896627496
+    },{
+     "UnitSymbol": "Btu\/lb*\u00b0F",
+     "Offset": NAN,
+     "Factor": NAN
+    }]
+  },{
+   "Quantity": "Heat transfer coeff",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "W\/m\/K",
+     "Offset": 0,
+     "Factor": 1
+    }]
+  },{
+   "Quantity": "Toxic dose",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "s*(kg\/m3)^n",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "s*(kg\/m3)^n",
+     "Offset": NAN,
+     "Factor": NAN
+    },{
+     "UnitSymbol": "s*(kg\/m3)^n",
+     "Offset": NAN,
+     "Factor": NAN
+    }]
+  },{
+   "Quantity": "Heat radiation dose",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "s*(W\/m2)^4\/3",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "s*(kW\/m2)^4\/3",
+     "Offset": 0,
+     "Factor": 9.99999999999999E-5
+    },{
+     "UnitSymbol": "TDU",
+     "Offset": 0,
+     "Factor": 9.99999999999999E-5
+    },{
+     "UnitSymbol": "min*(kW\/m2)^4\/3",
+     "Offset": 0,
+     "Factor": 1.66666666666667E-6
+    },{
+     "UnitSymbol": "(cal\/m2)^4\/3",
+     "Offset": 0,
+     "Factor": 0.148191642860527
+    },{
+     "UnitSymbol": "s*(hp\/ft2)^4\/3",
+     "Offset": 0,
+     "Factor": 6.22238273501346E-6
+    },{
+     "UnitSymbol": "(Btu\/ft2)^4\/3",
+     "Offset": 0,
+     "Factor": 3.91747105850608E-6
+    }]
+  },{
+   "Quantity": "Angle",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "rad",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "deg",
+     "Offset": 0,
+     "Factor": 57.2957795130823
+    },{
+     "UnitSymbol": "grad",
+     "Offset": 0,
+     "Factor": 63.6619772367581
+    }]
+  },{
+   "Quantity": "Frequency",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "Hz",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "\/minute",
+     "Offset": 0,
+     "Factor": 60
+    },{
+     "UnitSymbol": "\/hour",
+     "Offset": 0,
+     "Factor": 3600
+    },{
+     "UnitSymbol": "\/day",
+     "Offset": 0,
+     "Factor": 86400
+    },{
+     "UnitSymbol": "\/year",
+     "Offset": 0,
+     "Factor": 31536000
+    }]
+  },{
+   "Quantity": "Time Fraction",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "-",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "%",
+     "Offset": 0,
+     "Factor": 100
+    },{
+     "UnitSymbol": "hours\/day",
+     "Offset": 0,
+     "Factor": 24
+    },{
+     "UnitSymbol": "hours\/week",
+     "Offset": 0,
+     "Factor": 168
+    },{
+     "UnitSymbol": "days\/week",
+     "Offset": 0,
+     "Factor": 7
+    },{
+     "UnitSymbol": "days\/year",
+     "Offset": 0,
+     "Factor": 365
+    }]
+  },{
+   "Quantity": "Distribution",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "\/m2",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "\/km2",
+     "Offset": 0,
+     "Factor": 1000000
+    },{
+     "UnitSymbol": "\/ha",
+     "Offset": 0,
+     "Factor": 10000
+    },{
+     "UnitSymbol": "\/sq. yard",
+     "Offset": 0,
+     "Factor": 0.83613
+    },{
+     "UnitSymbol": "\/acre",
+     "Offset": 0,
+     "Factor": 4046.86
+    },{
+     "UnitSymbol": "\/square statute mile",
+     "Offset": 0,
+     "Factor": 2589990
+    }]
+  },{
+   "Quantity": "Dimensionless",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "-",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "%",
+     "Offset": 0,
+     "Factor": 100
+    }]
+  },{
+   "Quantity": "Molecular weight",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "kg\/kmol",
+     "Offset": 0,
+     "Factor": 1
+    }]
+  },{
+   "Quantity": "Risk frequency",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "\/year",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "\/km.year",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "\/m.year",
+     "Offset": 0,
+     "Factor": 0.001
+    },{
+     "UnitSymbol": "\/mile.year",
+     "Offset": 0,
+     "Factor": 1.609344
+    },{
+     "UnitSymbol": "\/nautical mile.year",
+     "Offset": 0,
+     "Factor": 1.852
+    }]
+  },{
+   "Quantity": "Inverse length",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "1\/m",
+     "Offset": 0,
+     "Factor": 1
+    }]
+  },{
+   "Quantity": "Rotation freq",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "rad\/s",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "rpm",
+     "Offset": 0,
+     "Factor": 9.54929658551372
+    }]
+  },{
+   "Quantity": "Pressure impulse",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "Pa*s",
+     "Offset": 0,
+     "Factor": 1
+    }]
+  },{
+   "Quantity": "Mass flux",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "kg\/m2*s",
+     "Offset": 0,
+     "Factor": 1
+    }]
+  },{
+   "Quantity": "Thermal conductivity",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "W\/m*K",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "cal\/s*m*\u00b0C",
+     "Offset": 0,
+     "Factor": 0.238845896627496
+    }]
+  },{
+   "Quantity": "Dipole moment",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "c-m",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "D",
+     "Offset": 0,
+     "Factor": 3.33564095198152E-30
+    }]
+  },{
+   "Quantity": "Molar volume",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "m3\/kmol",
+     "Offset": 0,
+     "Factor": 1
+    }]
+  },{
+   "Quantity": "Molar area",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "m2\/kmol",
+     "Offset": 0,
+     "Factor": 1
+    }]
+  },{
+   "Quantity": "Solubility",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "(J\/m3)^(1\/2)",
+     "Offset": 0,
+     "Factor": 1
+    }]
+  },{
+   "Quantity": "Probit a",
+   "UnitDefinitions": [
+    {
+     "UnitSymbol": "s*kg\/m3",
+     "Offset": 0,
+     "Factor": 1
+    },{
+     "UnitSymbol": "s*kg\/m3",
+     "Offset": NAN,
+     "Factor": NAN
+    },{
+     "UnitSymbol": "s*kg\/m3",
+     "Offset": NAN,
+     "Factor": NAN
+    }]
+  }]
+}

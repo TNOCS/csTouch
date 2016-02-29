@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="csCommon.Plugins.ServicesPlugin.ServiceInstanceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="http://schemas.microsoft.com/surface/2008"
+             xmlns:wpfConverters="clr-namespace:WpfConverters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Height="75">
+            <StackPanel Margin="0" Orientation="Horizontal" Visibility="{Binding Instance.IsAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <controls:SurfaceButton x:Name="Stop" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Background="#BF000000" 
+                                        Visibility="{Binding Instance.IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Margin="5,5,5,0">
+                        <Path Data="M0,0L64,0 64,64 0,64z" Stretch="Uniform" Fill="#FFF4F4F4" Width="20" Height="20" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                        <TextBlock TextWrapping="Wrap" Text="Stop Service" Margin="5,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                    </StackPanel>
+                </controls:SurfaceButton>
+                <controls:SurfaceButton x:Name="Start" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Background="#BF000000" 
+                                        Visibility="{Binding Instance.IsRunning, Converter={wpfConverters:ConvertBoolToVisibility}, ConverterParameter=False}">
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Margin="5,5,5,0">
+                        <Path Data="F1M1188.2,1715.23L1169.93,1728.57 1151.66,1741.9 1151.66,1715.23 1151.66,1688.57 1169.93,1701.9 1188.2,1715.23z" Stretch="Uniform" Fill="#FFF4F4F4" Width="20" Height="20" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                        <TextBlock TextWrapping="Wrap" Text="Start Service" Margin="5,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                    </StackPanel>
+                </controls:SurfaceButton>
+                <controls:SurfaceButton x:Name="Clear" HorizontalAlignment="Left" Margin="5,5,5,0" VerticalAlignment="Top" Background="#BF000000">
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Margin="5,5,5,0">
+                        <Path Data="M41.66254,22.659482L25.770635,39.857334C25.770635,39.857334,36.811951,56.565493,38.182119,59.965517L42.612736,57.395483C42.612736,57.395483 39.402367,51.256006 37.602091,49.706369 37.602091,49.706369 35.921824,47.406813 38.862259,48.246567 38.862259,48.246567 45.593092,53.775755 46.483221,54.386042L50.953758,50.386473C50.953758,50.386473,50.353706,49.00625,49.433546,47.856472L44.162857,41.927423C44.162857,41.927423 43.222797,40.027239 45.313028,40.687323 45.313028,40.687323 50.933735,45.19709 54.564199,46.326853L58.024721,41.617399C58.024721,41.617399 51.56382,35.417871 51.073769,34.248075 51.073769,34.248075 49.943619,33.218402 51.56382,33.027993 51.56382,33.027993 58.164633,37.597813 60.645048,37.377621 60.645048,37.377621 62.745291,33.487905 62.615271,33.168115 62.615271,33.168115 44.783054,24.789135 41.66254,22.659482z M41.102533,17.700056C47.203281,23.049088 63.63542,29.438537 63.63542,29.438537 68.235975,30.528262 66.245733,34.297876 66.245733,34.297876 58.344709,53.076124 39.5623,63.374819 39.5623,63.374819 36.231921,65.69488 34.641754,60.675402 34.641754,60.675402 30.821201,53.056108 21.11001,39.747482 21.11001,39.747482z M3.8394279,0.001115799C4.1157207,-0.011383057,4.3957653,0.081111908,4.615799,0.28110123L22.788616,16.840264C22.978645,17.010256,23.068659,17.230245,23.108666,17.460233L27.129289,13.050456C30.509813,11.170551,33.400261,12.760471,33.400261,12.76047L38.10099,16.170298 18.818001,37.149237 15.457479,32.539471C13.427165,28.299685,15.78753,25.479827,15.787531,25.479827L19.158054,21.780015C18.928017,21.760015,18.707983,21.690019,18.517954,21.520028L0.35513878,4.960865C-0.08493042,4.5608854,-0.12493706,3.8709202,0.28512764,3.4309425L3.0855618,0.35109901C3.2905941,0.13110924,3.5631351,0.013616562,3.8394279,0.001115799z" Stretch="Uniform" Fill="#FFF4F4F4" Width="20" Height="20" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                        <TextBlock TextWrapping="Wrap" Text="Clear Output" Margin="5,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                    </StackPanel>
+                </controls:SurfaceButton>
+            </StackPanel>
+        </Grid>
+
+
+        <controls:SurfaceScrollViewer HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1" BorderBrush="#FF6E6E6E" BorderThickness="1" Margin="5">
+            <ItemsControl ItemsSource="{Binding Instance.Output}" HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+        </controls:SurfaceScrollViewer>
+
+
+        <!--<Button x:Name="ClickMeButton" Width="100" Height="50" Content="Click Me" HorizontalAlignment="Right" />-->
+    </Grid>
+</UserControl>

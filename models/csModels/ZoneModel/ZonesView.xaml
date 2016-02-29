@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="csModels.ZoneModel.ZonesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:controls="http://schemas.microsoft.com/surface/2008"
+             xmlns:controls1="clr-namespace:csShared.Controls;assembly=csCommon"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:zoneModel="clr-namespace:csModels.ZoneModel"
+             d:DataContext="{d:DesignInstance zoneModel:ZonesViewModel}"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="TitleStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="NoWrap" />
+            <Setter Property="TextTrimming" Value="None" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:SurfaceListBox x:Name="Zones"
+                                 HorizontalContentAlignment="Stretch"
+                                 VerticalContentAlignment="Stretch">
+            <controls:SurfaceListBox.ItemTemplate>
+                <DataTemplate DataType="zoneModel:Zone">
+                    <Grid>
+                        <TextBlock Foreground="{Binding Color}" Text="{Binding Title}" />
+                        <controls:SurfaceButton x:Name="sbDelete"
+                                                Margin="1"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                cal:Message.Attach="[Event Click]=[Action RemoveZone($dataContext)]">
+                            <Path Width="15"
+                                  Height="15"
+                                  Margin="0,0,0,0"
+                                  Data="M33.977998,27.684L33.977998,58.102997 41.373998,58.102997 41.373998,27.684z M14.841999,27.684L14.841999,58.102997 22.237998,58.102997 22.237998,27.684z M4.0319996,22.433001L52.183,22.433001 52.183,63.999001 4.0319996,63.999001z M15.974,0L40.195001,0 40.195001,7.7260003 56.167001,7.7260003 56.167001,16.000999 0,16.000999 0,7.7260003 15.974,7.7260003z"
+                                  Fill="#FF000000"
+                                  RenderTransformOrigin="0.5,0.5"
+                                  Stretch="Uniform" />
+                        </controls:SurfaceButton>
+                    </Grid>
+                </DataTemplate>
+            </controls:SurfaceListBox.ItemTemplate>
+        </controls:SurfaceListBox>
+
+        <Grid Grid.Row="1" Height="40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <controls1:KeyboardTextBox x:Name="ZoneName"
+                                       HorizontalAlignment="Stretch"
+                                       FontSize="18" />
+            <controls:SurfaceButton Grid.Column="1" cal:Message.Attach="[Event Click]=[Action SelectColor($source)]">
+                <!--
+                    Foreground="{Binding SelectedColor}" >
+                    Content="{Binding SelectedColor}">
+                -->
+                <Ellipse Width="26"
+                         Height="26"
+                         Fill="{Binding SelectedColor}" />
+            </controls:SurfaceButton>
+
+            <controls:SurfaceButton x:Name="AddZone"
+                                    Grid.Column="2"
+                                    VerticalContentAlignment="Bottom">
+                Add Zone
+            </controls:SurfaceButton>
+        </Grid>
+    </Grid>
+</UserControl>

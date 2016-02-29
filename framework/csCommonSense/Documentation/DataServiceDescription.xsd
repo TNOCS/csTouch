@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataServiceDescription" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+
+  <xs:simpleType name="DrawingModes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Image"/>
+      <xs:enumeration value="Point"/>
+      <xs:enumeration value="Square"/>
+      <xs:enumeration value="Rectangle"/>
+      <xs:enumeration value="Line"/>
+      <xs:enumeration value="Circle"/>
+      <xs:enumeration value="Freehand"/>
+      <xs:enumeration value="Polyline"/>
+      <xs:enumeration value="Polygon"/>
+      <xs:enumeration value="MultiPolygon"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TapModes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="CallOut"/>
+      <xs:enumeration value="CallOutPopup"/>
+      <xs:enumeration value="Popup"/>
+      <xs:enumeration value="OpenMedia"/>
+      <xs:enumeration value="Zoom"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="MetaTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="text"/>
+      <xs:enumeration value="number"/>
+      <xs:enumeration value="boolean"/>
+      <xs:enumeration value="bit"/>
+      <xs:enumeration value="sensor"/>
+      <xs:enumeration value="xml"/>
+      <xs:enumeration value="textarea"/>
+      <xs:enumeration value="bbcode"/>
+      <xs:enumeration value="rating"/>
+      <xs:enumeration value="options"/>
+      <xs:enumeration value="unknown"/>
+      <xs:enumeration value="image"/>
+      <xs:enumeration value="datetime"/>
+      <xs:enumeration value="mediafolder"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="CallOutOrientations">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Top"/>
+      <xs:enumeration value="Right"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="CallOutTimeOut">
+    <xs:annotation>
+      <xs:documentation>The time in seconds a callout is opened.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="200000"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="HighlighterTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FilterThreshold"/>
+      <xs:enumeration value="Highlight"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SelectionMode">
+    <xs:annotation>
+      <xs:documentation>Determines whether none|one|multiple PoI can be selected.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Single"/>
+      <xs:enumeration value="Multiple"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SelectionTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Label"/>
+      <xs:enumeration value="Sensor"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ValueTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="String"/>
+      <xs:enumeration value="Number"/>
+      <xs:enumeration value="Percentage"/>
+      <xs:enumeration value="PercentageLimitedRange"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ThresholdTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Equal"/>
+      <xs:enumeration value="NotEqual"/>
+      <xs:enumeration value="Less"/>
+      <xs:enumeration value="LessOrEqual"/>
+      <xs:enumeration value="GreaterOrEqual"/>
+      <xs:enumeration value="Greater"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="VisualTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ShowSelected"/>
+      <xs:enumeration value="FillColor"/>
+      <xs:enumeration value="StrokeColor"/>
+      <xs:enumeration value="StrokeWidth"/>
+      <xs:enumeration value="SymbolSize"/>
+      <xs:enumeration value="Opacity"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TitleModes">
+    <xs:annotation>
+      <xs:documentation>
+        This type indicates the position of the title label.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Bottom"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TaskState">
+    <xs:annotation>
+      <xs:documentation>
+        This type indicates the task state.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Open"/>
+      <xs:enumeration value="Inprogress"/>
+      <xs:enumeration value="Finished"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PaletteType">
+    <xs:annotation>
+      <xs:documentation>The palette type enumeration.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Gradient"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="guid">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="resolution">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="-1"/>
+      <!--<xs:maxInclusive value="120"/>-->
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="decimalLatitude">
+    <xs:annotation>
+      <xs:documentation>The latitude of the location, expressed in decimal degrees.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="-90.0"/>
+      <xs:maxInclusive value="90.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="decimalLongitude">
+    <xs:annotation>
+      <xs:documentation>The longitude of the location, expressed in decimal degrees.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="-180.0"/>
+      <xs:maxInclusive value="180.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="decimalAltitude">
+    <xs:annotation>
+      <xs:documentation>The altitude of the location, expressed in meters.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="-100000000.0"/>
+      <xs:maxInclusive value="100000000.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="StopValues">
+    <xs:annotation>
+      <xs:documentation>The relative palette stop values.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0.0"/>
+      <xs:maxInclusive value="1.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Opacity">
+    <xs:annotation>
+      <xs:documentation>The opacity value [0-1].</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0.0"/>
+      <xs:maxInclusive value="1.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="IconSize">
+    <xs:annotation>
+      <xs:documentation>The allowable icon sizes (width and height).</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="200"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="StrokeWidths">
+    <xs:annotation>
+      <xs:documentation>The allowable stroke widths.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="200"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="bool">
+    <xs:annotation>
+      <xs:documentation>A regular bool doesn't accept True or False. This one does.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="True"/>
+      <xs:enumeration value="False"/>
+      <xs:enumeration value="true"/>
+      <xs:enumeration value="false"/>
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="AddModes">
+    <xs:annotation>
+      <xs:documentation>Add modes enum.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Silent"/>
+      <xs:enumeration value="EditFirst"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="Labels">
+    <xs:sequence>
+      <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--   <xs:element name="Labels">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+ -->
+  <xs:element name="Content">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="settings" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ServiceSetting" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="Description"      type="xs:string"/>
+                  <xs:attribute name="CanEdit"          type="bool">
+                    <xs:annotation>
+                      <xs:documentation>If true, you can edit the POI's attributes.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="CanCreate"        type="bool">
+                    <xs:annotation>
+                      <xs:documentation>If true, you can create new POIs.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="SyncDelay"        type="xs:integer"/>
+                  <xs:attribute name="ShareOnline"      type="bool">
+                    <xs:annotation>
+                      <xs:documentation>If true, when loading the service, inmediately share it.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="TabBarVisible"    type="bool">
+                    <xs:annotation>
+                      <xs:documentation>If true, show the bottom tab bar, so the user can drag POIs on the map surface.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="ShowTimeline"     type="bool"/>
+                  <xs:attribute name="ShowAnalysis"     type="bool"/>
+                  <xs:attribute name="SublayersVisible" type="bool">
+                    <xs:annotation>
+                      <xs:documentation>If true, inmediately show the sub layers too.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="OpenTab"          type="bool">
+                    <xs:annotation>
+                      <xs:documentation>After loading the service, open the tab explicitly.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="BackupInterval"   type="xs:integer">
+                    <xs:annotation>
+                      <xs:documentation>In case of 0 or absence, only manual backups are possible, otherwise it's the time in minutes between backups.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="FilterLocation"   type="bool">
+                    <xs:annotation>
+                      <xs:documentation>If true, only show POIs in the layers menu when they are within the current extent.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="MinResolution"    type="resolution"/>
+                  <xs:attribute name="MaxResolution"    type="resolution"/>
+                  <xs:attribute name="SelectionMode"    type="SelectionMode"/>
+                  <xs:attribute name="LayerOrder"       type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation>Comma or semi-colon separated list of layer names, which defines the order in which layers are displayed. The order starts at the bottom, working up.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="Icon" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation>Icon used in for displaying the service in the list. Defaults to layer.png, and should reside in the _Media folder.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="poitypes">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" minOccurs="0" name="Poi" type="Poi"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="pois" >
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" minOccurs="0" name="Poi" type="Poi"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="eventtypes" type="eventtypes" minOccurs="0" maxOccurs="1" msdata:Ordinal="2" />
+        <xs:element minOccurs="0" maxOccurs="1" name="tasks">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" minOccurs="0" name="Task">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" msdata:Ordinal="1" name="Description" type="xs:string"/>
+                    <xs:element maxOccurs="1" minOccurs="0" name="Labels" type="Labels"/>
+                    <xs:element maxOccurs="1" minOccurs="0" name="AllMedia">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element maxOccurs="1" minOccurs="0" name="Media">
+                            <xs:complexType>
+                              <xs:attribute name="Id"    type="guid"/>
+                              <xs:attribute name="Title" type="xs:string"/>
+                              <xs:attribute name="Type"  type="xs:string"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="Id"     type="xs:string"/>
+                  <xs:attribute name="Date"   type="xs:string"/>
+                  <xs:attribute name="Title"  type="xs:string"/>
+                  <xs:attribute name="TaskId" type="xs:string"/>
+                  <xs:attribute name="State"  type="TaskState"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="Id" type="guid" />
+      <xs:attribute name="Name" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+
+    <xs:complexType name="Style">
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="AnalysisMetaInfo">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" minOccurs="0" name="Highlights">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="Highlight" type="Highlight"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="Name" type="xs:string"/>
+      <xs:attribute name="NameLabel" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The label that is used to resolve the name.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="InnerTextLabel" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The label that is used to specify the inner text of a symbol. Can either be a string or refer to a label.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="InnerTextColor" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The foreground text color for the inner text, e.g. Red.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="CallOutMaxWidth" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The max width of the call out (nullable double).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="CallOutMinHeight" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The min height of the call out (nullable double).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="FillColor" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The background color of a POI.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="FillOpacity" type="Opacity">
+        <xs:annotation>
+          <xs:documentation>The background opacity of a POI.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="StrokeColor" type="xs:string"/>
+      <xs:attribute name="StrokeWidth" type="StrokeWidths"/>
+      <xs:attribute name="DrawingMode" type="DrawingModes">
+        <xs:annotation>
+          <xs:documentation>Indicates how we should draw a POI, e.g. as a POINT, in which case you can use highlighters and inner text to animate the POI, or image, in which a static image is used for the POI.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Category" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The POI category or section, as used in the tap bar, e.g. for drawing or help.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="IconWidth" type="IconSize"/>
+      <xs:attribute name="IconHeight" type="IconSize"/>
+      <xs:attribute name="CallOutFillColor" type="xs:string"/>
+      <xs:attribute name="CallOutForeground" type="xs:string"/>
+      <xs:attribute name="CallOutOrientation" type="CallOutOrientations"/>
+      <xs:attribute name="CallOutTimeOut" type="CallOutTimeOut"/>
+      <xs:attribute name="ShowOnTimeline" type="bool">
+        <xs:annotation>
+          <xs:documentation>If true, adding a POI to the map is shown on the time line.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="CanTrack" type="bool"/>
+      <xs:attribute name="TapMode" type="TapModes">
+        <xs:annotation>
+          <xs:documentation>Specifies what a POI should do when tapped.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="TitleMode" type="TitleModes">
+        <xs:annotation>
+          <xs:documentation>Where should we display the title.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="MinResolution" type="resolution"/>
+      <xs:attribute name="MaxResolution" type="resolution">
+        <xs:annotation>
+          <xs:documentation>At what resolution should I hide the POI.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="MaxTitleResolution" type="resolution">
+        <xs:annotation>
+          <xs:documentation>At what map resolution should I hide the title.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="AddMode" type="AddModes"/>
+      <xs:attribute name="CanRotate" type="bool"/>
+      <xs:attribute name="CanDelete" type="bool"/>
+      <xs:attribute name="CanEdit" type="bool"/>
+      <xs:attribute name="CanMove" type="bool"/>
+      <xs:attribute name="IconUri" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Specifies the name of the image in the _Media folder.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+
+  <xs:complexType name="MetaInfoData">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="MetaInfo">
+        <xs:complexType>
+          <xs:attribute name="Section" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The section title in the callout.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Title" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The title in the callout.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Label" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The label that is used to resolve the value.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Type" type="MetaTypes"/>
+          <xs:attribute name="Description" type="xs:string"/>
+          <xs:attribute name="MinValue" type="xs:double"/>
+          <xs:attribute name="MaxValue" type="xs:double"/>
+          <xs:attribute name="DefaultValue" type="xs:string"/>
+          <xs:attribute name="StringFormat" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>When displaying the value, use this to format it, e.g. {0:0,0} when you want to use a thousand separator and no decimals. Only valid for Type="number".</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="VisibleInCallOut" type="bool"/>
+          <xs:attribute name="CanEdit" type="bool"/>
+          <xs:attribute name="IsSearchable" type="bool"/>
+          <xs:attribute name="Options" type="xs:string"/>
+          <xs:attribute name="EditActive" type="bool">
+            <xs:annotation>
+              <xs:documentation>When true, you can edit the information also without being in edit mode.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Poi">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Style" type="Style"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="Labels" type="Labels"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="MetaInfoData" type="MetaInfoData"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="Position">
+        <xs:complexType>
+          <xs:attribute name="lon" type="decimalLongitude"/>
+          <xs:attribute name="lat" type="decimalLatitude"/>
+          <xs:attribute name="alt" type="decimalAltitude"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" msdata:Ordinal="4" name="Points" type="xs:string"/>
+    </xs:sequence>
+    <xs:attribute name="Id" type="guid"/>
+    <xs:attribute name="PoiId" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Refers to the name of a base style.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="PoiTypeId" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Specifies the name of the base style.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Name" type="xs:string"/>
+    <xs:attribute name="Priority" type="xs:integer"/>
+    <xs:attribute name="UserId" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Name of the user that created the PoI.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="IsDeleted" type="bool">
+      <xs:annotation>
+        <xs:documentation>Specifies whether the PoI is already deleted (although it still exists in the service).</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Date" type="xs:long"/>
+    <xs:attribute name="Updated" type="xs:long">
+      <xs:annotation>
+        <xs:documentation>Update time in ticks.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Layer" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Name of the (sub-)layer that the PoI should be placed in.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="MaxItems" type="xs:integer">
+      <xs:annotation>
+        <xs:documentation>When set, limits the number of times a PoI can be placed on the map (in a service).</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="IsVisibleInMenu" type="bool">
+      <xs:annotation>
+        <xs:documentation>Although typically true, when false, you hide the PoI type in the menu, so a user cannot drag it on the map. Normally only used for default PoI types.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="WKT" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Well-Known-Text representation of a PoI.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="eventtypes">
+    <xs:sequence>
+      <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Palette">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="PaletteStop">
+        <xs:complexType>
+          <xs:attribute name="Color" type="xs:string"/>
+          <xs:attribute name="StopValue" type="StopValues"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Type" type="PaletteType"/>
+  </xs:complexType>
+
+  <xs:complexType name="Highlight">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Palette" type="Palette"/>
+    </xs:sequence>
+    <xs:attribute name="Title" type="xs:string"/>
+    <xs:attribute name="StringValue" type="xs:string"/>
+    <xs:attribute name="PoiType" type="xs:string"/>
+    <xs:attribute name="Category" type="xs:string"/>
+    <xs:attribute name="IsActive" type="bool"/>
+    <xs:attribute name="ShowInGui" type="bool"/>
+    <xs:attribute name="HighlighterType" type="HighlighterTypes"/>
+    <xs:attribute name="VisualType" type="VisualTypes"/>
+    <xs:attribute name="SelectionCriteria" type="xs:string"/>
+    <xs:attribute name="MinValue" type="xs:double"/>
+    <xs:attribute name="MaxValue" type="xs:double"/>
+    <xs:attribute name="SelectionType" type="SelectionTypes"/>
+    <xs:attribute name="ValueType" type="ValueTypes"/>
+    <xs:attribute name="ThresHoldValue" type="xs:double"/>
+    <xs:attribute name="ThresholdType" type="ThresholdTypes"/>
+  </xs:complexType>
+
+  <!--   <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="MetaInfo" />
+        <xs:element ref="Content" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+ -->
+</xs:schema>

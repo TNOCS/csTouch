@@ -1,0 +1,246 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:Controls="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation" xmlns:csShared="clr-namespace:csShared;assembly=csCommon" xmlns:Controls1="clr-namespace:csCommon.Controls;assembly=csCommon" xmlns:Custom="http://schemas.microsoft.com/surface/2008"
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro" x:Class="csRemoteScreenPlugin.RemoteScreenView"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+    	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    	<!-- Base Grid style for 55 dpi -->
+    	<Style TargetType="{x:Type Control}" x:Key="ControlBaseStyle">
+    		<Setter Property="FocusVisualStyle"	
+    			Value="{x:Null}"/>
+    		<Setter Property="SnapsToDevicePixels"
+    			Value="False"/>
+    		<Setter Property="FontFamily"
+    			Value="Segoe360"/>
+    		<Setter Property="FontWeight"
+    			Value="Normal"/>
+    		<Setter Property="FontSize"
+    			Value="17"/>
+    		<Setter Property="Padding"
+    			Value="6,2,10,10"/>
+    		<Setter Property="MinHeight"
+    			Value="38"/>
+    		<Setter Property="MinWidth"
+    			Value="38"/>
+    		<Setter Property="Margin"
+    			Value="1"/>
+    		<Setter Property="HorizontalContentAlignment"
+    			Value="Left"/>
+    		<Setter Property="VerticalContentAlignment"
+    			Value="Top"/>
+    		<Setter Property="BorderThickness"
+    			Value="2"/>
+    	</Style>
+<!-- ButtonBase -->
+    	<Style x:Key="MetroButtonStyle"
+    		TargetType="{x:Type Custom:SurfaceToggleButton}" 
+    		BasedOn="{StaticResource ControlBaseStyle}">
+    		<Setter Property="IsTabStop"
+    			Value="False" />
+    		<Setter Property="Focusable"
+    			Value="True" />
+    		<Setter Property="Background"
+    			Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonBackgroundBrushKey}}" />
+    		<Setter Property="Foreground"
+    			Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonForegroundBrushKey}}" />
+    		<Setter Property="Template">
+    			<Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Custom:SurfaceToggleButton}">
+    					<ControlTemplate.Resources>
+    						<Storyboard x:Key="Press">
+    							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+    								Storyboard.TargetName="PressOverlay"
+    								Storyboard.TargetProperty="(UIElement.Opacity)">
+    								<SplineDoubleKeyFrame KeyTime="00:00:00.1000000"
+    									Value="1" />
+    							</DoubleAnimationUsingKeyFrames>
+    						</Storyboard>
+    						<Storyboard x:Key="Release">
+    							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+    								Storyboard.TargetName="PressOverlay"
+    								Storyboard.TargetProperty="(UIElement.Opacity)">
+    								<SplineDoubleKeyFrame KeyTime="00:00:00.1500000"
+    									Value="0" />
+    							</DoubleAnimationUsingKeyFrames>
+    						</Storyboard>
+    					</ControlTemplate.Resources>
+    					<Grid x:Name="Grid"
+    						SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+    						<Rectangle  x:Name="ButtonBody"
+    							Fill ="{TemplateBinding Background}"
+    							SnapsToDevicePixels ="{TemplateBinding SnapsToDevicePixels}"/>
+    						<Rectangle  x:Name="PressOverlay"
+    							Opacity="0"
+    							Fill ="{DynamicResource {x:Static Custom:SurfaceColors.ButtonBackgroundPressedBrushKey}}" 							             
+    							SnapsToDevicePixels ="{TemplateBinding SnapsToDevicePixels}"/>
+    						<ContentPresenter  x:Name="Content"
+    							Margin="{TemplateBinding Padding}"  
+    							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"		                                                                           
+    							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+    							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+    					</Grid>
+
+    					<ControlTemplate.Triggers>
+                    		<Trigger Property="IsChecked" Value="False">
+                    			<Setter Property="Opacity" TargetName="Grid" Value="0.5"/>
+                    		</Trigger>
+                    		<Trigger Property="IsPressed"
+                    			Value="True">
+                    			<Trigger.EnterActions>
+                    				<BeginStoryboard Storyboard="{StaticResource Press}" />
+                    			</Trigger.EnterActions>
+                    			<Trigger.ExitActions>
+                    				<BeginStoryboard Storyboard="{StaticResource Release}" />
+                    			</Trigger.ExitActions>
+                    			<Setter Property="Foreground"
+                    				Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonForegroundPressedBrushKey}}"/>
+                    		</Trigger>
+                    		<Trigger Property="IsEnabled"
+                    			Value="False">
+                    			<Setter Property="Fill"
+                    				Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonBackgroundDisabledBrushKey}}"
+                    				TargetName="ButtonBody" />
+                    			<Setter Property="Foreground"
+                    				Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonForegroundDisabledBrushKey}}"/>
+                    			<Setter Property="Opacity"
+                    				Value="0.33"
+                    				TargetName="Content" />
+                    		</Trigger>
+                    	</ControlTemplate.Triggers>
+    				</ControlTemplate>
+    			</Setter.Value>
+    		</Setter>
+    	</Style>
+    	<Style x:Key="MetroButtonSimpleStyle"
+    		TargetType="{x:Type Custom:SurfaceButton}" 
+    		BasedOn="{StaticResource ControlBaseStyle}">
+    		<Setter Property="IsTabStop"
+    			Value="False" />
+    		<Setter Property="Focusable"
+    			Value="True" />
+    		<Setter Property="Background"
+    			Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonBackgroundBrushKey}}" />
+    		<Setter Property="Foreground"
+    			Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonForegroundBrushKey}}" />
+    		<Setter Property="Template">
+    			<Setter.Value>
+    				<ControlTemplate TargetType="{x:Type Custom:SurfaceButton}">
+    					<ControlTemplate.Resources>    						
+    						<Storyboard x:Key="Release">
+    							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+    								Storyboard.TargetName="PressOverlay"
+    								Storyboard.TargetProperty="(UIElement.Opacity)">
+    								<SplineDoubleKeyFrame KeyTime="00:00:00.1500000"
+    									Value="0" />
+    							</DoubleAnimationUsingKeyFrames>
+    						</Storyboard>
+    					</ControlTemplate.Resources>
+    					<Grid x:Name="Grid"
+    						SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+    						<Rectangle  x:Name="ButtonBody"
+    							Fill ="{TemplateBinding Background}"
+    							SnapsToDevicePixels ="{TemplateBinding SnapsToDevicePixels}"/>
+    						<Rectangle  x:Name="PressOverlay"
+    							Opacity="0"
+    							Fill ="{DynamicResource {x:Static Custom:SurfaceColors.ButtonBackgroundPressedBrushKey}}" 							             
+    							SnapsToDevicePixels ="{TemplateBinding SnapsToDevicePixels}"/>
+    						<ContentPresenter  x:Name="Content"
+    							Margin="{TemplateBinding Padding}"  
+    							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"		                                                                           
+    							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+    							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+    					</Grid>
+
+    					<ControlTemplate.Triggers>    						
+    						<Trigger Property="IsEnabled"
+    							Value="False">
+    							<Setter Property="Fill"
+    								Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonBackgroundDisabledBrushKey}}"
+    								TargetName="ButtonBody" />
+    							<Setter Property="Foreground"
+    								Value="{DynamicResource {x:Static Custom:SurfaceColors.ButtonForegroundDisabledBrushKey}}"/>
+    							<Setter Property="Opacity"
+    								Value="0.33"
+    								TargetName="Content" />
+    						</Trigger>
+    					</ControlTemplate.Triggers>
+    				</ControlTemplate>
+    			</Setter.Value>
+    		</Setter>
+    	</Style>
+
+</UserControl.Resources>
+    <Grid x:Name="gMain">
+    	<Grid.ColumnDefinitions>
+    		<ColumnDefinition Width="50"/>
+    		<ColumnDefinition/>
+    	</Grid.ColumnDefinitions>
+        <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Visibility="Collapsed">
+            <Grid>
+                <InkPresenter x:Name="inkStrokes" Width="Auto" Height="Auto">
+                    <Image x:Name="bs" />
+                    <!--<InkPresenter.RenderTransform>
+                        <RotateTransform Angle="-90" />
+                    </InkPresenter.RenderTransform>
+                    <InkPresenter.RenderTransformOrigin>
+                        <Point X="0.5" Y="0.5" />
+                    </InkPresenter.RenderTransformOrigin>-->
+                </InkPresenter>            
+            </Grid>
+        </Viewbox>
+        <StackPanel Background="#7F000000" Margin="0" Visibility="Collapsed">
+            <Controls:SurfaceButton x:Name="bConnect" Background="{x:Null}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0"  >
+            	<Image Source="Resources\Icons\camera.png"/>
+            </Controls:SurfaceButton>
+            <Controls:SurfaceButton x:Name="ScreenOn" BorderThickness="0" Background="{x:Null}"  >
+            	<Image Source="Resources\Icons\appbar.play.png"/>
+            </Controls:SurfaceButton>
+			<Controls:SurfaceButton x:Name="ScreenOff" BorderThickness="0" Background="{x:Null}"  >
+            	<Image Source="..\Images\appbar.pause.png"/>
+            </Controls:SurfaceButton>
+
+        </StackPanel>
+        <Grid Margin="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Background="White">
+        	<WrapPanel Margin="10">
+                <Custom:SurfaceToggleButton x:Name="Follow2D" cal:Message.Attach="Follow2D($eventArgs)" Margin="5" Background="{Binding AccentBrush}" Width="80" Height="80" Style="{DynamicResource MetroButtonStyle}">
+        			<Grid Width="70" Height="70">
+        				<Image Source="/csRemoteScreenPlugin;component/Images/globe.png" Width="40" Height="40" VerticalAlignment="Top" Margin="0,10,0,0"/>
+        				<TextBlock TextWrapping="Wrap" Text="Follow Map" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Bottom" TextAlignment="Center" Foreground="White"/>
+        			</Grid>
+        		</Custom:SurfaceToggleButton >
+        		<!--<Custom:SurfaceToggleButton x:Name="Follow3D" Margin="5" Background="{Binding AccentBrush}" Width="80" Height="80" Style="{DynamicResource MetroButtonStyle}">
+        			<Grid Width="70" Height="70">
+        				<Image Source="/csRemoteScreenPlugin;component/Images/camera.png" Width="40" Height="40" VerticalAlignment="Top" Margin="0,10,0,0"/>
+        				<TextBlock TextWrapping="Wrap" Text="Follow 3D" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Bottom" TextAlignment="Center" Foreground="White"/>
+        			</Grid>
+        		</Custom:SurfaceToggleButton>-->
+        		<Custom:SurfaceButton x:Name="FollowScreen" Margin="5" Background="{Binding AccentBrush}" Width="80" Height="80" Style="{DynamicResource MetroButtonSimpleStyle}">
+        			<Grid Width="70" Height="70">
+        				<Image Source="/csRemoteScreenPlugin;component/Images/monitor.png" Width="40" Height="40" VerticalAlignment="Top" Margin="0,10,0,0"/>
+        				<TextBlock TextWrapping="Wrap" Text="Follow Screen" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Bottom" TextAlignment="Center" Foreground="White"/>
+        			</Grid>
+        		</Custom:SurfaceButton>
+                <Custom:SurfaceButton x:Name="Exit" Margin="5" Background="{Binding AccentBrush}" Width="80" Height="80" Style="{DynamicResource MetroButtonSimpleStyle}">
+                    <Grid Width="70" Height="70">
+                        <Image Source="/csRemoteScreenPlugin;component/Images/exit.png" Width="40" Height="40" VerticalAlignment="Top" Margin="0,10,0,0"/>
+                        <TextBlock TextWrapping="Wrap" Text="Close App" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Bottom" TextAlignment="Center" Foreground="White"/>
+                    </Grid>
+                </Custom:SurfaceButton>
+                <Custom:SurfaceToggleButton x:Name="FilterClient" IsChecked="{Binding IsFiltered}" Margin="5" Background="{Binding AccentBrush}" Width="80" Height="80" Style="{DynamicResource MetroButtonStyle}">
+                    <Grid Width="70" Height="70">
+                        <Image Source="/csRemoteScreenPlugin;component/Images/remote.png" Width="40" Height="40" VerticalAlignment="Top" Margin="0,10,0,0"/>
+                        <TextBlock TextWrapping="Wrap" Text="Control" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Bottom" TextAlignment="Center" Foreground="White"/>
+                    </Grid>
+                </Custom:SurfaceToggleButton>
+               
+              
+                
+            </WrapPanel>
+        </Grid>
+        
+    </Grid>
+</UserControl>

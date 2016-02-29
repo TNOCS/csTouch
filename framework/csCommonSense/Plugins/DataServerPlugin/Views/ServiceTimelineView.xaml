@@ -1,0 +1,243 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Controls="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro" xmlns:Custom="http://schemas.microsoft.com/surface/2008" xmlns:Utils="clr-namespace:csShared.Utils" xmlns:local="clr-namespace:csDataServerPlugin" xmlns:SlideTab="clr-namespace:csShared.Controls.SlideTab"
+             xmlns:ThirdParty="clr-namespace:csShared.ThirdParty"
+             xmlns:csGeoLayers="clr-namespace:csGeoLayers"
+             xmlns:Views="clr-namespace:csDataServerPlugin.Views"
+             xmlns:Controls3="clr-namespace:csShared.Controls" x:Name="userControl" x:Class="csDataServerPlugin.ServiceTimelineView"
+             mc:Ignorable="d">
+	<UserControl.Resources>
+        <local:PriorityColorConverter x:Key="PriorityColorConverter"></local:PriorityColorConverter>
+		<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+		<DataTemplate x:Key="TimelineItemTemplate">
+			<Grid Background="{x:Null}">
+				<Image HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Source="{Binding EffectiveStyle.Picture}" Margin="5,5,0,0"/>
+				<StackPanel Grid.Column="1" Margin="35,0,0,0" Orientation="Vertical" HorizontalAlignment="Stretch">
+					<TextBlock x:Name="Title" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding TimelineString}" VerticalAlignment="Top" Height="Auto" Foreground="Black"/>
+					<ItemsControl x:Name="MediaItems" Height="Auto" ItemsSource="{Binding AllMedia}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}" ItemTemplate="{DynamicResource DataTemplate1}">
+						<ItemsControl.Resources>
+							<ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
+								<StackPanel IsItemsHost="True" Orientation="Horizontal"/>
+							</ItemsPanelTemplate>
+							<DataTemplate x:Key="DataTemplate1">
+								<Grid>
+									<Views:MediaItem HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Media="{Binding}" />                
+								</Grid>
+							</DataTemplate>
+						</ItemsControl.Resources>
+						<ItemsControl.Visibility>
+							<Binding Converter="{StaticResource BooleanToVisibilityConverter}" ElementName="MediaItems" Path="ShowMedia.IsChecked"/>
+						</ItemsControl.Visibility>
+					</ItemsControl>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock x:Name="sender" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding UserId}" VerticalAlignment="Top" Height="Auto" Foreground="Black" FontSize="9.333" Margin="0,0,5,0"/>
+						<TextBlock x:Name="Date" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding FormattedTimeStamp}" VerticalAlignment="Top" Height="Auto" Foreground="Black" FontSize="9.333" Margin="10,0,0,0"/>
+					</StackPanel>
+				</StackPanel>
+				<Border  Margin="0" VerticalAlignment="Top" MinWidth="20" MinHeight="20" HorizontalAlignment="Right" Visibility="Collapsed" >
+					<Custom:SurfaceButton x:Name="Zoom" cal:Message.Attach="[Event Click]=[Action Zoom($dataContext)]" Visibility="{Binding HasPosition, Converter={StaticResource BooleanToVisibilityConverter}}" Height="29" Margin="0" Width="33" >
+						<Path Data="F1M1937.77,2316.51L1924.92,2300.18C1929.1,2294.35 1929.14,2286.25 1924.48,2280.33 1918.84,2273.15 1908.45,2271.92 1901.27,2277.56 1894.1,2283.2 1892.86,2293.59 1898.5,2300.77 1903.23,2306.77 1911.26,2308.6 1917.96,2305.74L1930.77,2322.02 1937.77,2316.51z M1903.81,2296.59C1900.48,2292.35 1901.21,2286.21 1905.45,2282.87 1909.69,2279.53 1915.84,2280.26 1919.17,2284.51 1922.51,2288.75 1921.78,2294.89 1917.54,2298.23 1913.29,2301.57 1907.15,2300.84 1903.81,2296.59z" Stretch="Uniform" Fill="#FF898989" Width="17" Height="17" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+							<Path.RenderTransform>
+								<TransformGroup>
+									<RotateTransform Angle="0" />
+									<ScaleTransform ScaleX="1" ScaleY="1" />
+								</TransformGroup>
+							</Path.RenderTransform>
+						</Path>
+					</Custom:SurfaceButton>
+				</Border>
+                <Custom:SurfaceButton x:Name="Priority" cal:Message.Attach="[Event Click]=[Action SetPriority($dataContext,$source)]" Content="{Binding PoiPriority}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0" Background="{Binding PoiPriority, Converter={StaticResource PriorityColorConverter}}"/>
+			</Grid>
+		</DataTemplate>
+	</UserControl.Resources>
+
+    <Grid>
+    	<Grid.RowDefinitions>
+    		<RowDefinition Height="Auto"/>
+    		<RowDefinition/>
+    	</Grid.RowDefinitions>
+        <Border x:Name="bNewMessage" Margin="5" Background="#FFB6B6B6" BorderThickness="0,0,0,1" BorderBrush="Black">
+    		<StackPanel Orientation="Vertical">
+                <Controls3:KeyboardTextBox x:Name="NewMessage" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" MinHeight="75" Foreground="Black" Background="#E6FFFFFF" >
+                    <Controls3:KeyboardTextBox.Resources>
+
+    					
+                    </Controls3:KeyboardTextBox.Resources>
+                </Controls3:KeyboardTextBox>
+    			<Grid Margin="-3,0,0,0">
+    				<Grid.ColumnDefinitions>
+    					<ColumnDefinition/>
+    					<ColumnDefinition Width="Auto"/>
+    				</Grid.ColumnDefinitions>
+    				<Custom:SurfaceButton x:Name="SendMessage" Content="Send" Margin="3" HorizontalContentAlignment="Stretch" Grid.Column="1"/>
+    				<Custom:SurfaceToggleButton x:Name="To" cal:Message.Attach="[Event Click]=[Action SendTo($source)]" Content="To All" Margin="3" HorizontalContentAlignment="Stretch"/>
+    			</Grid>
+                
+    			<Grid Visibility="{Binding IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=To}">
+    				<Custom:SurfaceListBox x:Name="Clients" cal:Message.Attach="[Event SelectionChanged]=[Action SelectionChanged($source)]" ItemTemplate="{DynamicResource ClientTemplate}" SelectionMode="Multiple">
+    					<Custom:SurfaceListBox.Resources>
+    						<DataTemplate x:Key="ClientTemplate">
+    							<Grid>
+    								<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Top"/>
+    							</Grid>
+    						</DataTemplate>
+    					</Custom:SurfaceListBox.Resources>
+    				</Custom:SurfaceListBox>
+    			</Grid>
+    		</StackPanel>
+    	</Border>
+        <Custom:SurfaceListBox ItemsSource="{Binding Service.TimeLine}" Grid.Row="1" ItemTemplate="{DynamicResource TimelineItemTemplate}" ItemContainerStyle="{DynamicResource SurfaceListBoxItemStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden" ItemsPanel="{DynamicResource ItemsPanelTemplate1}" Height="600" HorizontalContentAlignment="Stretch" MinHeight="0" VerticalContentAlignment="Stretch" Background="{x:Null}">
+        	<Custom:SurfaceListBox.Resources>
+<!-- Base Grid style for 55 dpi -->
+        		<Style TargetType="{x:Type Control}" x:Key="ControlBaseStyle">
+        			<Setter Property="FocusVisualStyle"	
+        				Value="{x:Null}"/>
+        			<Setter Property="SnapsToDevicePixels"
+        				Value="False"/>
+        			<Setter Property="FontFamily"
+        				Value="Segoe360"/>
+        			<Setter Property="FontWeight"
+        				Value="Normal"/>
+        			<Setter Property="FontSize"
+        				Value="17"/>
+        			<Setter Property="Padding"
+        				Value="6,2,10,10"/>
+        			<Setter Property="MinHeight"
+        				Value="38"/>
+        			<Setter Property="MinWidth"
+        				Value="38"/>
+        			<Setter Property="Margin"
+        				Value="1"/>
+        			<Setter Property="HorizontalContentAlignment"
+        				Value="Left"/>
+        			<Setter Property="VerticalContentAlignment"
+        				Value="Top"/>
+        			<Setter Property="BorderThickness"
+        				Value="2"/>
+        		</Style>
+
+<!-- public section -->
+        		<SolidColorBrush x:Key="ControlHitAreaBrush"    
+        			Color="#00FFFFFF"/>
+
+<!-- ListBoxItem -->
+        		<Style x:Key="SurfaceListBoxItemStyle1" TargetType="{x:Type Custom:SurfaceListBoxItem}"
+        			BasedOn="{StaticResource ControlBaseStyle}">
+        			<Setter Property="Background" 
+        				Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemBackgroundBrushKey}}"/>
+        			<Setter Property="Foreground" 
+        				Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemForegroundBrushKey}}"/>
+        			<Setter Property="BorderThickness" 
+        				Value="0"/>
+        			<!--<Setter Property="HorizontalContentAlignment"
+        				Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" />-->
+        			<Setter Property="Template">
+        				<Setter.Value>
+        					<ControlTemplate TargetType="{x:Type Custom:SurfaceListBoxItem}">
+        						<ControlTemplate.Resources>
+        							<Storyboard x:Key="Press">
+        								<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+        									Storyboard.TargetName="PressOverlay"
+        									Storyboard.TargetProperty="(UIElement.Opacity)">
+        									<SplineDoubleKeyFrame KeyTime="00:00:00.1000000"
+        										Value="1" />
+        								</DoubleAnimationUsingKeyFrames>
+        							</Storyboard>
+        							<Storyboard x:Key="Release">
+        								<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+        									Storyboard.TargetName="PressOverlay"
+        									Storyboard.TargetProperty="(UIElement.Opacity)">
+        									<SplineDoubleKeyFrame KeyTime="00:00:00.2500000"
+        										Value="0" />
+        								</DoubleAnimationUsingKeyFrames>
+        							</Storyboard>
+        						</ControlTemplate.Resources>
+        						<Grid   x:Name="Grid"
+        							Background="{StaticResource ControlHitAreaBrush}"
+        							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+        							<Border  x:Name="ButtonBody"
+        								BorderThickness="{TemplateBinding BorderThickness}"
+        								Background="{TemplateBinding Background}"
+        								BorderBrush="{TemplateBinding BorderBrush}"
+        								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        							<Border x:Name="PressOverlay"    
+        								Background="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemBackgroundPressedBrushKey}}"
+        								Opacity="0" 
+        								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+        							<ContentPresenter   x:Name="Content"										
+        								Margin="{TemplateBinding Padding}"
+        								HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"                               					   
+        								VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+        								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        						</Grid>
+        						<ControlTemplate.Triggers>
+        							<Trigger Property="IsSelected"		  
+        								Value="True">
+        								<Setter Property="Background" 
+        									TargetName="ButtonBody" 
+        									Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemSelectionBackgroundBrushKey}}"/>
+        								<Setter Property="Background" 
+        									TargetName="PressOverlay" 
+        									Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemSelectionBackgroundPressedBrushKey}}"/>
+        							</Trigger>
+        							<Trigger Property="IsPressed"
+        								Value="True">
+        								<Trigger.EnterActions>
+        									<BeginStoryboard Storyboard="{StaticResource Press}" />
+        								</Trigger.EnterActions>
+        								<Trigger.ExitActions>
+        									<BeginStoryboard Storyboard="{StaticResource Release}" />
+        								</Trigger.ExitActions>
+        								<Setter Property="Foreground"
+        									Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemForegroundPressedBrushKey}}"/>
+        							</Trigger>
+        							<MultiTrigger>
+        								<MultiTrigger.Conditions>
+        									<Condition Property="IsEnabled"
+        										Value="False" />
+        									<Condition Property="IsSelected"
+        										Value="True" />
+        								</MultiTrigger.Conditions>
+        								<Setter Property="Background"
+        									Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemSelectionBackgroundDisabledBrushKey}}"
+        									TargetName="ButtonBody"/>
+        								<Setter Property="Foreground"
+        									Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemForegroundDisabledBrushKey}}"/>
+        								<Setter Property="Opacity"
+        									TargetName="Content"
+        									Value="0.6"/>
+        							</MultiTrigger>
+        							<MultiTrigger>
+        								<MultiTrigger.Conditions>
+        									<Condition  Property="IsEnabled"
+        										Value="False" />
+        									<Condition Property="IsSelected"
+        										Value="False" />
+        								</MultiTrigger.Conditions>
+        								<Setter Property="Background"
+        									Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemBackgroundDisabledBrushKey}}"
+        									TargetName="ButtonBody"/>
+        								<Setter Property="Foreground"
+        									Value="{DynamicResource {x:Static Custom:SurfaceColors.ListBoxItemForegroundDisabledBrushKey}}"/>
+        								<Setter Property="Opacity"
+        									TargetName="Content"
+        									Value="0.33"/>
+        							</MultiTrigger>
+        						</ControlTemplate.Triggers>
+        					</ControlTemplate>
+        				</Setter.Value>
+        			</Setter>
+        		</Style>
+        		<ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
+        			<VirtualizingStackPanel IsItemsHost="True" CanVerticallyScroll="True"/>
+        		</ItemsPanelTemplate>
+
+
+        	</Custom:SurfaceListBox.Resources>
+        </Custom:SurfaceListBox>
+	</Grid>
+</UserControl>

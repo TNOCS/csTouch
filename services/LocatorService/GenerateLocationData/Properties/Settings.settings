@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="GenerateLocationData.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CbsConnectionString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Server=127.0.0.1;Port=5432;User Id=bag_user;Password=bag4all;Database=cbs;SearchPath=public</Value>
+    </Setting>
+    <Setting Name="BagConnectionString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Server=127.0.0.1;Port=5432;User Id=bag_user;Password=bag4all;Database=bag;SearchPath=bag8jan2014,public</Value>
+    </Setting>
+    <Setting Name="OsmConnectionString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Server=127.0.0.1;Port=5432;User Id=bag_user;Password=bag4all;Database=osm_nl;SearchPath=public</Value>
+    </Setting>
+    <Setting Name="SolrConnectionString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

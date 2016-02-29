@@ -1,0 +1,646 @@
+{
+ "Parameters": [
+  {
+   "IsResult": false,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "",
+   "Description": "Chemical name",
+   "ParameterType": 6,
+   "Name": "Chemical name",
+   "Data": {
+    "Chemical": {},
+    "Value": "{2992B1B6-D82F-4156-942E-A931808CA01C}"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": false,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m3",
+   "Description": "Vessel volume",
+   "ParameterType": 1,
+   "Name": "Vessel volume",
+   "Data": {
+    "Min": 0,
+    "Max" : NaN,
+    "MaxInclusive": false,
+    "Value": 100,
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Volume"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "kg",
+   "Description": "Initial mass in vessel",
+   "ParameterType": 1,
+   "Name": "Initial mass in vessel",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Mass"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "kg",
+   "Description": "Total mass involved in BLEVE",
+   "ParameterType": 1,
+   "Name": "Total mass involved in BLEVE",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Mass"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "s",
+   "Description": "Duration of the Fire Ball",
+   "ParameterType": 1,
+   "Name": "Duration of the Fire Ball",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Time"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m",
+   "Description": "Max Diameter of the Fire Ball",
+   "ParameterType": 1,
+   "Name": "Max Diameter of the Fire Ball",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m",
+   "Description": "Max Height of the Fire Ball",
+   "ParameterType": 1,
+   "Name": "Max Height of the Fire Ball",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "W\/m2",
+   "Description": "Surface emissive power (max)",
+   "ParameterType": 1,
+   "Name": "Surface emissive power (max)",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m",
+   "Description": "1 kW\/m2 Heat radiation distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation first contour at",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m",
+   "Description": "3 kW\/m2 Heat radiation distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation second contour at",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m",
+   "Description": "10 kW\/m2 Heat radiation distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation third contour at",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "W\/m2",
+   "Description": "(Max) heat radiation level at Xd",
+   "ParameterType": 1,
+   "Name": "Heat radiation level at location",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "-",
+   "Description": "(Max) Viewfactor at Xd",
+   "ParameterType": 1,
+   "Name": "View factor",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "-",
+   "Description": "Atmospheric transmissivity at Xd",
+   "ParameterType": 1,
+   "Name": "Atmospheric transmissivity",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "s*(W\/m2)^4\/3",
+   "Description": "Heat radiation dose at Xd",
+   "ParameterType": 1,
+   "Name": "Heat Radiation Dose",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Heat radiation dose"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "-",
+   "Description": "Percentage first degree Burns",
+   "ParameterType": 1,
+   "Name": "Percentage Fatality 1st Degree Burns",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "-",
+   "Description": "Percentage second degree Burns",
+   "ParameterType": 1,
+   "Name": "Percentage Fatality 2nd Degree Burns",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "-",
+   "Description": "Percentage lethal Burns",
+   "ParameterType": 1,
+   "Name": "Percentage Fatality 3rd Degree Burns",
+   "Data": {
+    "Min": 0,
+    "Max": 1,
+    "MaxInclusive": true,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "K",
+   "Description": "Flame temperature",
+   "ParameterType": 1,
+   "Name": "Flame temperature",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Temperature"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m",
+   "Description": "1% First degree burns distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation first degree distance",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m",
+   "Description": "1% Second degree burns distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation second degree distance",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m",
+   "Description": "1% Third degree (Lethal) burns distance",
+   "ParameterType": 1,
+   "Name": "Heat radiation third degree distance",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "Pa",
+   "Description": "Peak overpressure at Xd",
+   "ParameterType": 1,
+   "Name": "Peak overpressure",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Pressure"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "Pa*s",
+   "Description": "Pressure impulse at Xd",
+   "ParameterType": 1,
+   "Name": "Pressure impulse at Xd",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Pressure impulse"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m",
+   "Description": "Distance from BLEVE center to treshold overpressure",
+   "ParameterType": 1,
+   "Name": "Dist. from center mass of cloud at threshold overpressure",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "W\/m2",
+   "Description": "Heat radiation",
+   "ParameterType": 5,
+   "Name": "Heat radiation vs. distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "s*(W\/m2)^4\/3",
+   "Description": "Heat load",
+   "ParameterType": 5,
+   "Name": "Heat load vs. distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Heat radiation dose"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "-",
+   "Description": "First Degree Burns",
+   "ParameterType": 5,
+   "Name": "First Degree Burns vs. Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "-",
+   "Description": "Second Degree Burns",
+   "ParameterType": 5,
+   "Name": "Second Degree Burns vs. Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "-",
+   "Description": "Third Degree (Lethal) Burns",
+   "ParameterType": 5,
+   "Name": "Lethal Burns (Third Degree) vs. Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "Pa",
+   "Description": "Overpressure",
+   "ParameterType": 5,
+   "Name": "Overpressure vs Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Pressure"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "Pa*s",
+   "Description": "Pressure impulse",
+   "ParameterType": 5,
+   "Name": "Pressure impulse vs Distance",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Pressure impulse"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "Pa",
+   "Description": "Overpressure",
+   "ParameterType": 5,
+   "Name": "Overpressure vs Time",
+   "Data": {
+    "XUnit": "s",
+    "Value": "",
+    "XQuantity": "Time"
+   },
+   "ValueQuantity": "Pressure"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "W\/m2",
+   "Description": "Thermal Heat Radiation",
+   "ParameterType": 5,
+   "Name": "Thermal Heat Radiation vs. Time",
+   "Data": {
+    "XUnit": "s",
+    "Value": "",
+    "XQuantity": "Time"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m",
+   "Description": "Diameter of the Fire Ball",
+   "ParameterType": 5,
+   "Name": "Diameter of the Fire Ball vs. Time",
+   "Data": {
+    "XUnit": "s",
+    "Value": "",
+    "XQuantity": "Time"
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "m",
+   "Description": "Height of the Fire Ball",
+   "ParameterType": 5,
+   "Name": "Height of the Fire Ball vs. Time",
+   "Data": {
+    "XUnit": "s",
+    "Value": "",
+    "XQuantity": "Time"
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "-",
+   "Description": "Viewfactor of the Fire Ball",
+   "ParameterType": 5,
+   "Name": "Viewfactor of the Fire Ball vs. Time",
+   "Data": {
+    "XUnit": "s",
+    "Value": "",
+    "XQuantity": "Time"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "-",
+   "Description": "Atmospheric Transmittance",
+   "ParameterType": 5,
+   "Name": "Atmospheric Transmittance vs. Time",
+   "Data": {
+    "XUnit": "s",
+    "Value": "",
+    "XQuantity": "Time"
+   },
+   "ValueQuantity": "Dimensionless"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "W\/m2",
+   "Description": "Surface Emissive Power",
+   "ParameterType": 5,
+   "Name": "Surface Emissive Power vs. Time",
+   "Data": {
+    "XUnit": "s",
+    "Value": "",
+    "XQuantity": "Time"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "W\/m2",
+   "Description": "1 kW\/m2 Heat radiation contour",
+   "ParameterType": 3,
+   "Name": "First heat radiation contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "W\/m2",
+   "Description": "3 kW\/m2 Heat radiation contour",
+   "ParameterType": 3,
+   "Name": "Second heat radiation contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "W\/m2",
+   "Description": "10 kW\/m2 Heatradiation contour",
+   "ParameterType": 3,
+   "Name": "Third heat radiation contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "Energy emission"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "",
+   "Description": "1% first degree burns",
+   "ParameterType": 3,
+   "Name": "1% first degree burns contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "",
+   "Description": "1% second degree burns",
+   "ParameterType": 3,
+   "Name": "1% second degree burns contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "",
+   "Description": "1% lethal burns",
+   "ParameterType": 3,
+   "Name": "1% lethal burns contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "",
+   "Description": "Fire ball",
+   "ParameterType": 3,
+   "Name": "Fire ball contour",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": true,
+   "ModelName": "BLEVE (Static or Dynamic model)",
+   "ValueUnit": "",
+   "Description": "Overpressure plot",
+   "ParameterType": 3,
+   "Name": "Overpressure contour plot",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "No units"
+  }]
+}

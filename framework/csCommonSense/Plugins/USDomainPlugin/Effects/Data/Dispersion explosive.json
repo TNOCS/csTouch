@@ -1,0 +1,536 @@
+{
+ "Parameters": [
+  {
+   "IsResult": false,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "",
+   "Description": "Chemical name",
+   "ParameterType": 6,
+   "Name": "Chemical name",
+   "Data": {
+    "Chemical": {},
+    "Value": "-"
+   },
+   "ValueQuantity": "No units"
+  },{
+   "IsResult": false,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg",
+   "Description": "Total mass released",
+   "ParameterType": 1,
+   "Name": "Total mass released",
+   "Data": {
+    "Min": 0,
+    "MaxInclusive": false,
+    "Value": 10000,
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Mass"
+  },{
+   "IsResult": false,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m\/s",
+   "Description": "Wind speed at 10 m height",
+   "ParameterType": 1,
+   "Name": "Wind speed at 10m",
+   "Data": {
+    "Min": 0,
+    "MaxInclusive": false,
+    "Value": 2,
+    "MinInclusive": false
+   },
+   "ValueQuantity": "Velocity"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg\/m3",
+   "Description": "Threshold concentration",
+   "ParameterType": 1,
+   "Name": "Threshold concentration",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Maximum distance to threshold concentration",
+   "ParameterType": 1,
+   "Name": "Maximum distance to threshold concentration",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg",
+   "Description": "Explosive mass at time t",
+   "ParameterType": 1,
+   "Name": "Total explosive mass at time t",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Mass"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Height to LEL at time t",
+   "ParameterType": 1,
+   "Name": "Height to LEL at time t",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Length of cloud (between LEL) at time t",
+   "ParameterType": 1,
+   "Name": "Length LEL contour at time t",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Width of cloud (between LEL) at time t",
+   "ParameterType": 1,
+   "Name": "Width LEL contour at time t",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Offset between release location and LEL at time t",
+   "ParameterType": 1,
+   "Name": "Offset LEL contour at time t",
+   "Data": {
+
+
+    "MaxInclusive": false,
+
+    "MinInclusive": false
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg",
+   "Description": "Maximum explosive mass",
+   "ParameterType": 1,
+   "Name": "Maximum explosive mass",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Mass"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "s",
+   "Description": "...at time tmem",
+   "ParameterType": 1,
+   "Name": "...at time tmem",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Time"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "s",
+   "Description": "Start time where 95% of maximum of explosive mass is reached",
+   "ParameterType": 1,
+   "Name": "Start time where 95% of maximum of explosive mass is reached",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Time"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "s",
+   "Description": "Time where explosive mass starts decreasing below 95% of max",
+   "ParameterType": 1,
+   "Name": "Time where explosive mass starts decreasing below 95% of max",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Time"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Length of cloud (between LEL) at time tmem",
+   "ParameterType": 1,
+   "Name": "Length LEL contour at time tmem",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Width of cloud (between LEL) at time tmem",
+   "ParameterType": 1,
+   "Name": "Width LEL contour at time tmem",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Offset between release location and LEL at time tmem",
+   "ParameterType": 1,
+   "Name": "Offset LEL contour at time tmem",
+   "Data": {
+
+
+    "MaxInclusive": false,
+
+    "MinInclusive": false
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m2",
+   "Description": "Maximum area of explosive cloud",
+   "ParameterType": 1,
+   "Name": "Maximum area of explosive cloud",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Area"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "s",
+   "Description": "...at time tmac",
+   "ParameterType": 1,
+   "Name": "...at time tmac",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Time"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg",
+   "Description": "Explosive mass at time tmac",
+   "ParameterType": 1,
+   "Name": "Explosive mass at time tmac",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Mass"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Length of cloud (between LEL) at time tmac",
+   "ParameterType": 1,
+   "Name": "Length of cloud (between LEL) at time tmac",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Width of cloud (between LEL) at time tmac",
+   "ParameterType": 1,
+   "Name": "Width of cloud (between LEL) at time tmac",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Offset between release location and LEL at time tmac",
+   "ParameterType": 1,
+   "Name": "Offset between release location and LEL at time tmac",
+   "Data": {
+
+
+    "MaxInclusive": false,
+
+    "MinInclusive": false
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Offset between release centre and cloud centre at time tmac",
+   "ParameterType": 1,
+   "Name": "Offset between release centre and cloud centre",
+   "Data": {
+
+
+    "MaxInclusive": false,
+
+    "MinInclusive": false
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "1\/m",
+   "Description": "Inverse Monin-Obukhov length (1\/L) used",
+   "ParameterType": 1,
+   "Name": "Inverse Monin-Obukhov length (1\/L) used",
+   "Data": {
+
+
+    "MaxInclusive": false,
+
+    "MinInclusive": false
+   },
+   "ValueQuantity": "Inverse length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m",
+   "Description": "Mixing height used",
+   "ParameterType": 1,
+   "Name": "Mixing height used",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Length"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m\/s",
+   "Description": "Stand. dev. of turbulent velocity in vert. direction used",
+   "ParameterType": 1,
+   "Name": "Stand. dev. of turbulent velocity in vert. direction used",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Velocity"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m\/s",
+   "Description": "Stand. dev. of turbulent velocity in horiz. direction used",
+   "ParameterType": 1,
+   "Name": "Stand. dev. of turbulent velocity in horiz. direction used",
+   "Data": {
+    "Min": 0,
+
+    "MaxInclusive": false,
+
+    "MinInclusive": true
+   },
+   "ValueQuantity": "Velocity"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg",
+   "Description": "Explosive mass",
+   "ParameterType": 5,
+   "Name": "Explosive mass vs. Time (Dispersion)",
+   "Data": {
+    "XUnit": "s",
+    "Value": "",
+    "XQuantity": "Time"
+   },
+   "ValueQuantity": "Mass"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "m2",
+   "Description": "Area",
+   "ParameterType": 5,
+   "Name": "Area of the cloud above LEL vs. Time",
+   "Data": {
+    "XUnit": "s",
+    "Value": "",
+    "XQuantity": "Time"
+   },
+   "ValueQuantity": "Area"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg\/m3",
+   "Description": "Maximum concentration",
+   "ParameterType": 5,
+   "Name": "Maximum concentration vs. Downwind distance at (Yd, Zd)",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg\/m3",
+   "Description": "Concentration",
+   "ParameterType": 5,
+   "Name": "Concentration vs. Downwind distance at time t and (Yd, Zd)",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg\/m3",
+   "Description": "Concentration",
+   "ParameterType": 5,
+   "Name": "Concentration vs. Time at (Xd, Yd, Zd)",
+   "Data": {
+    "XUnit": "s",
+    "Value": "",
+    "XQuantity": "Time"
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg\/m3",
+   "Description": "Maximum concentration at y=0, z=Hr",
+   "ParameterType": 5,
+   "Name": "Max conc. vs. Downwind distance at center at release height",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg\/m3",
+   "Description": "Maximum concentration at y=0, z=0",
+   "ParameterType": 5,
+   "Name": "Max conc. vs. Downwind distance at center at the ground",
+   "Data": {
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "kg\/m3",
+   "Description": "LEL Concentration Contour at time tmac",
+   "ParameterType": 3,
+   "Name": "LEL Concentration Contour at Tmac",
+   "Data": {
+    "Value": "POLYGON (())"
+   },
+   "ValueQuantity": "Concentration"
+  },{
+   "IsResult": true,
+   "ModelName": "Neutral Gas Dispersion: Explosive mass",
+   "ValueUnit": "",
+   "Description": "Concentration profile grid",
+   "ParameterType": 8,
+   "Name": "Concentration profile grid",
+   "Data": {
+    "YQuantity": "Length",
+    "YUnit": "m",
+    "XUnit": "m",
+    "Value": "",
+    "XQuantity": "Length"
+   },
+   "ValueQuantity": "No units"
+  }]
+}
