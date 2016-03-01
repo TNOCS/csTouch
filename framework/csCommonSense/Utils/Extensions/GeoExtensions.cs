@@ -11,11 +11,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Windows;
 using System.Windows.Input;
 
 namespace csShared.Utils
 {
+    using DocumentFormat.OpenXml.Drawing;
+
+    using Graphic = ESRI.ArcGIS.Client.Graphic;
+    using Point = System.Windows.Point;
+    using Position = DataServer.Position;
+
     public static class GeometryExtensionMethods
     {
         public static readonly WebMercator MyWebMercator = new WebMercator();
@@ -197,6 +202,68 @@ namespace csShared.Utils
 
     public static class GeoExtensions
     {
+        public static WebMercator MercatorConverter = new WebMercator();
+        /// <summary>
+        /// Converts ESRI Geometry to Common Sense lat/lon list
+        /// </summary>
+        /// <param name="pEsriGraphics"></param>
+        /// <returns></returns>
+        public static IList<System.Windows.Point> ToLatLonPoints(this ESRI.ArcGIS.Client.Geometry.Geometry pEsriGeometry)
+        {
+            var result = new List<System.Windows.Point>();
+            if (pEsriGeometry == null) return result;
+            
+            if (pEsriGeometry is Polyline)
+            {
+                var source = pEsriGeometry as Polyline;
+                foreach (var path in source.Paths)
+                {
+                    foreach (var po in path)
+                    {
+                        var r = MercatorConverter.ToGeographic(po) as MapPoint;
+                        if (r == null) continue;
+                        result.Add(new Point(r.X, r.Y));
+                    }
+                }
+            }
+            if (pEsriGeometry is Polyline)
+            {
+                var source = pEsriGeometry as Polyline;
+                foreach (var path in source.Paths)
+                {
+                    foreach (var po in path)
+                    {
+                        var r = MercatorConverter.ToGeographic(po) as MapPoint;
+                        if (r == null) continue;
+                        result.Add(new Point(r.X, r.Y));
+                    }
+                }
+            }
+
+            if (pEsriGeometry is Polygon)
+            {
+                var source = pEsriGeometry as Polygon;
+                foreach (var path in source.Rings)
+                {
+                    foreach (var po in path)
+                    {
+                        var r = MercatorConverter.ToGeographic(po) as MapPoint;
+                        if (r == null) continue;
+                        result.Add(new Point(r.X, r.Y));
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static Position ToLatLonCenterPoint(this ESRI.ArcGIS.Client.Geometry.Geometry pEsriGeometry)
+        {
+            if (pEsriGeometry is MapPoint) return (pEsriGeometry as ESRI.ArcGIS.Client.Geometry.MapPoint).ToPosition();
+            if (pEsriGeometry == null) return null;
+            return pEsriGeometry.Extent.GetCenter().ToPosition();
+        }
+
+
         /// <summary>
         ///     Convert the envelope to a list of four points, i.e. I don't close the surface
         ///     (last and first point are NOT the same).

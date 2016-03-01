@@ -31,6 +31,8 @@ using Point = System.Windows.Point;
 
 namespace csDataServerPlugin
 {
+    using csCommon.Utils;
+
     [Export(typeof(IPlugin))]
     public class DataServerPlugin : PropertyChangedBase, IPlugin
     {
@@ -142,23 +144,7 @@ namespace csDataServerPlugin
 
         }
 
-        private void AppState_Drop(object sender, DropEventArgs e)
-        {
-            if (!(e.EventArgs.Cursor.Data is DataSet)) return;
-            var sp = (e.EventArgs.Cursor.Data) as DataSet;
-            var pvm = new PlotViewModel();
-            if (sp.Sensor != null) pvm.DisplayName = "Sensor Data";
-            sp.Grouping = GroupingOptions.none;
-
-            pvm.DataSets.Add(sp);
-            var fe = FloatingHelpers.CreateFloatingElement(sp.Title, e.Pos, new Size(450, 350), pvm);
-            fe.CanStream = true;
-            fe.CanFullScreen = true;
-            fe.AllowStream = true;
-            AppState.FloatingItems.AddFloatingElement(fe);
-
-
-        }
+        
 
         private void ServicesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -422,13 +408,10 @@ namespace csDataServerPlugin
             //    ModelInstance = new DataServicesSelectionViewModel { Plugin = this }
             //};
             //AppState.AddStartPanelTabItem(s);
-            AppState.Drop += AppState_Drop;
-
+            
             IsRunning = true;
             EventList = new EventList{ Name = "Data server plugin"};
             AppState.EventLists.AddEventList(EventList);
-
-            AppStateSettings.Instance.Drop += InstanceDrop;
 
             //foreach (var st in Dsb.Services.Where(k => k.IsSubscribed))
             //{
@@ -437,6 +420,7 @@ namespace csDataServerPlugin
 
             AppState.DataServer = Dsb;
         }
+        
 
         private void InitShapeLayer()
         {
@@ -488,8 +472,9 @@ namespace csDataServerPlugin
         public void Pause()
         {
             IsRunning = false;
-            AppStateSettings.Instance.Drop -= InstanceDrop;
         }
+
+
 
         public void Stop()
         {
@@ -499,72 +484,11 @@ namespace csDataServerPlugin
             IsRunning = false;
             AppState.DashboardStateStates.DashboardActivated -= Dashboards_DashboardActivated;
             AppState.DashboardStateStates.RemoveHandler(SetDashboard);
-
-            AppStateSettings.Instance.Drop -= InstanceDrop;
         }
 
-        private void InstanceDrop(object sender, DropEventArgs e)
-        {
-            var poiType = e.EventArgs.Cursor.Data as PoI;
-            if (poiType == null) return;
-            if (!poiType.Data.ContainsKey("layer")) return;
-            var pos = e.EventArgs.Cursor.GetPosition(AppState.ViewDef.MapControl);
-            var position = AppStateSettings.Instance.ViewDef.ViewToWorld(pos.X, pos.Y);
 
-            var newPoi = new PoI
-            {
-                PoiTypeId = poiType.ContentId,
-                PoiType   = poiType,
-                UserId    = AppStateSettings.Instance.Imb.Status.Name,
-                Name      = poiType.PoiId,
-                Date      = DateTime.Now,
-                Layer     = poiType.Layer,
-                Position  = new Position(position.Y, position.X)
-            };
-            foreach (var poiLabel in poiType.Labels) newPoi.Labels[poiLabel.Key] = poiLabel.Value;
-            foreach (var pl in poiType.EffectiveMetaInfo) if (pl.DefaultValue != null && !newPoi.Labels.ContainsKey(pl.Label)) newPoi.Labels[pl.Label] = pl.DefaultValue;
-            newPoi.MetaInfo = null;
-            var poiLayer = poiType.Data["layer"] as dsLayer;
-            if (poiLayer == null) return;
 
-            newPoi.Service = poiLayer.Service;
-
-            if (poiType.NEffectiveStyle.AddMode.Value == AddModes.EditFirst)
-            {
-                var pp = new PoiPopupViewModel { PoI = newPoi, Layer = poiLayer, Service = poiLayer.Service };
-               
-
-                   // poiLayer.OpenPoiPopup(newPoi);
-                    var s = new Size(400, 650);
-                var kmlpoint = new KmlPoint(newPoi.Position.Longitude, newPoi.Position.Latitude);
-                var pt = AppStateSettings.Instance.ViewDef.MapPoint(kmlpoint);
-
-                if (pt.X <= AppStateSettings.Instance.MainBorder.ActualWidth / 2)
-                    pt.X += s.Width / 2 + 25;
-                else
-                    pt.X -= s.Width / 2 + 25;
-                    pt.Y = AppStateSettings.Instance.MainBorder.ActualHeight/2;
-                var fe = FloatingHelpers.CreateFloatingElement(poiType.Name, pt, s, pp);
-
-                newPoi.Data["FloatingElement"] = fe;
-                pp.IsNewPoi                    = true;
-                pp.FeElement                   = fe;
-                AppStateSettings.Instance.FloatingItems.AddFloatingElement(fe);
-            }
-            else
-            {
-                if (newPoi.NEffectiveStyle.AddMode == AddModes.OpenAfter)
-                {
-                    newPoi.OpenOnAdd = true;                    
-                }
-                
-                poiLayer.Service.PoIs.Add(newPoi);
-                poiLayer.Service.UpdateContentList();
-
-                
-                
-            }
-        }
+     
 
         private void DsbUnSubscribed(object sender, ServiceSubscribeEventArgs e)
         {

@@ -11,6 +11,7 @@ namespace csShared.TabItems
     {
         bottom,
         left,
+        [Obsolete("MenuRight is made collapsed (invisible), see StartPanelView.xaml")]
         right
     }
 

@@ -76,9 +76,6 @@
     <Compile Include="WpfFact\WpfTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\csCommonSense\CommonSense.csproj">
       <Project>{acaf8963-c1db-4f83-8c88-ada9c39580d4}</Project>
       <Name>CommonSense</Name>

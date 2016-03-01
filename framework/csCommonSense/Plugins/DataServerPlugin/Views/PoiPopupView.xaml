@@ -3,7 +3,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:s="http://schemas.microsoft.com/surface/2008"
-             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:slideTab="clr-namespace:csShared.Controls.SlideTab"
              xmlns:views="clr-namespace:csDataServerPlugin.Views"
              xmlns:controls="clr-namespace:csShared.Controls"

@@ -43,16 +43,20 @@ namespace csCommon.Utils.IO
                 {
                     foreach (Type t in asm.GetTypes())
                     {
-                        if (ti.IsAssignableFrom(t) || (ti.IsGenericType && IsAssignableToGenericType(t, ti)))
+                        if (!t.IsAbstract) // Cannot instance an abstract class
                         {
-                            try
+                            if (ti.IsAssignableFrom(t) ||
+                                (ti.IsGenericType && IsAssignableToGenericType(t, ti)))
                             {
-                                var obj = (T)Activator.CreateInstance(t);
-                                AssemblyClasses.Add(obj);
-                            }
-                            catch (Exception e)
-                            {
-                                // Ignore.
+                                try
+                                {
+                                    var obj = (T) Activator.CreateInstance(t);
+                                    AssemblyClasses.Add(obj);
+                                }
+                                catch (Exception e)
+                                {
+                                    // Ignore.
+                                }
                             }
                         }
                     }

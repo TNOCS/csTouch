@@ -420,5 +420,15 @@ namespace csDataServerPlugin
             //eb.Name = "test";
             //Layer.Service.Events.Add(eb);
         }
+
+        /// <summary>
+        /// When PoI is pressed for long time
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BCircleIconLongTapped(object sender, EventArgs e)
+        {
+            if ((PoI != null) && (PoI.Service is PoiService)) (PoI.Service as PoiService).RaisePoiLongTapped(PoI);
+        }
     }
 }

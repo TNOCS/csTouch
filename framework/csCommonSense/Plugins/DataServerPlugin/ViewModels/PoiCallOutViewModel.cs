@@ -136,7 +136,7 @@ namespace csDataServerPlugin.ViewModels
             if (lcArgs.OldValue == lcArgs.NewValue) return;
             var mll = Poi.GetMetaLabels();
             var ml = mll.FirstOrDefault(k => k.Meta.Label == ((LabelChangedEventArgs)e).Label);
-            if (ml != null && !ml.Meta.EditActive && Poi.NEffectiveStyle.TapMode != TapMode.CallOutEdit)
+            if (ml != null && !InEditMode && !ml.Meta.EditActive && Poi.NEffectiveStyle.TapMode != TapMode.CallOutEdit)
                 UpdateCallOut();
         }
 

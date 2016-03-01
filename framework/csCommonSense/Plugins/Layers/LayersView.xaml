@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:SlideTab="clr-namespace:csShared.Controls.SlideTab"
              xmlns:System="clr-namespace:System;assembly=mscorlib"
-             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:csCommon="clr-namespace:csCommon"
              xmlns:csDataServerPlugin="clr-namespace:csDataServerPlugin"
              xmlns:custom="http://schemas.microsoft.com/surface/2008"

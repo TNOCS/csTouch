@@ -7,7 +7,7 @@
              xmlns:ThirdParty="clr-namespace:csShared.ThirdParty"
              xmlns:Utils="clr-namespace:csShared.Utils"
              xmlns:Views="clr-namespace:csDataServerPlugin.Views"
-             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:csGeoLayers="clr-namespace:csGeoLayers"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:csDataServerPlugin"

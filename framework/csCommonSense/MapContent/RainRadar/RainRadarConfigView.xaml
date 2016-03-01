@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:csShared_Utils="clr-namespace:csShared.Utils" 
              xmlns:Custom="http://schemas.microsoft.com/surface/2008" 
-             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:utils="clr-namespace:csCommon.Utils"
              xmlns:wpfConverters="clr-namespace:WpfConverters"
              mc:Ignorable="d" 

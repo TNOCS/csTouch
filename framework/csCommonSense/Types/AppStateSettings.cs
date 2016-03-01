@@ -17,6 +17,7 @@ using csCommon.MapPlugins.Search;
 using csCommon.Plugins.DashboardPlugin;
 using DataServer;
 using ESRI.ArcGIS.Client;
+using Humanizer;
 using IMB3;
 using IMB3.ByteBuffers;
 using csCommon;
@@ -36,6 +37,16 @@ using Media = csImb.Media;
 
 namespace csShared
 {
+    using csCommon.Utils;
+
+    using csDataServerPlugin;
+
+    using csEvents.Sensors;
+
+    using Zandmotor.Controls.Plot;
+
+    using Position = DataServer.Position;
+
     public delegate void CommandRecognizedHandler(string speech);
 
     public class Command
@@ -103,13 +114,16 @@ namespace csShared
         public event EventHandler ActivePluginChanged;
         public event EventHandler DataServerChanged;
 
-        private static EventAggregator eventAggregator;
+        private static EventAggregator _eventAggregator;
 
         /// <summary>
         /// Caliburn Micro's event aggregator, ideal to send events between VM.
         /// </summary>
         /// <see cref="http://sonyarouje.com/tag/event-aggregator/"/>
-        public EventAggregator EventAggregator => eventAggregator ?? (eventAggregator = new EventAggregator());
+        public EventAggregator EventAggregator
+        {
+            get { return _eventAggregator ?? (_eventAggregator = new EventAggregator()); }
+        }
 
         #endregion
 
@@ -310,6 +324,7 @@ namespace csShared
         private bool dockedFloatingElementsVisible                 = true;
         private ObservableCollection<string> excludedStartTabItems = new ObservableCollection<string>();
         private ObservableCollection<string> filteredStartTabItems = new ObservableCollection<string>();
+        private csImb.csImb imb                                    = new csImb.csImb(); // Initialization data is obtained from App.config
         private bool bottomTabMenuVisible                          = true;
         private bool leftTabMenuVisible                            = true;
 
@@ -617,20 +632,25 @@ namespace csShared
             {
                 if (IsAccessibleFolder(FileStore.GetLocalFolder()))
                 {
-                    var templateFolder = Path.Combine(FileStore.GetLocalFolder(), "Templates");
-                    if (File.Exists(templateFolder)) return templateFolder;
-                    try
+                    string templateFolder = Path.Combine(FileStore.GetLocalFolder(), "Templates");
+                    if (! File.Exists(templateFolder))
                     {
-                        Directory.CreateDirectory(templateFolder);
-                    }
-                    catch (Exception)
-                    {
-                        return CacheFolder;
+                        try
+                        {
+                            Directory.CreateDirectory(templateFolder);
+                        }
+                        catch (Exception e)
+                        {
+                            return CacheFolder;
+                        }
                     }
                     return templateFolder;
                 }
-                return CacheFolder;
-            }
+                else
+                {
+                    return CacheFolder;
+                }
+            }    
         }
 
 
@@ -652,7 +672,7 @@ namespace csShared
                         Directory.CreateDirectory(cacheFolder);
                         cacheFolderSolved = IsAccessibleFolder(cacheFolder); // It should exist, so let's see whether we can write to it.
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         cacheFolderSolved = false;
                     }
@@ -678,8 +698,10 @@ namespace csShared
             try
             {
                 // Try to get access to the directory, and see whether we can create files and folders.
-                var accessControlList = Directory.GetAccessControl(cacheFolder);
-                var accessRules = accessControlList?.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
+                DirectorySecurity accessControlList = Directory.GetAccessControl(cacheFolder);
+                if (accessControlList == null)
+                    return false;
+                var accessRules = accessControlList.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
                 if (accessRules == null)
                     return false;
 
@@ -691,15 +713,10 @@ namespace csShared
                 {
                     if ((FileSystemRights.Read & rule.FileSystemRights) != FileSystemRights.Read) continue;
 
-                    switch (rule.AccessControlType)
-                    {
-                        case AccessControlType.Allow:
-                            readAllow = true;
-                            break;
-                        case AccessControlType.Deny:
-                            readDeny = true;
-                            break;
-                    }
+                    if (rule.AccessControlType == AccessControlType.Allow)
+                        readAllow = true;
+                    else if (rule.AccessControlType == AccessControlType.Deny)
+                        readDeny = true;
                 }
 
                 // Create dir allow/deny
@@ -707,20 +724,15 @@ namespace csShared
                 {
                     if ((FileSystemRights.CreateDirectories & rule.FileSystemRights) != FileSystemRights.CreateDirectories) continue;
 
-                    switch (rule.AccessControlType)
-                    {
-                        case AccessControlType.Allow:
-                            createDirAllow = true;
-                            break;
-                        case AccessControlType.Deny:
-                            createDirDeny = true;
-                            break;
-                    }
+                    if (rule.AccessControlType == AccessControlType.Allow)
+                        createDirAllow = true;
+                    else if (rule.AccessControlType == AccessControlType.Deny)
+                        createDirDeny = true;
                 }
 
                 return (readAllow && !readDeny) && (createDirAllow && !createDirDeny);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
@@ -759,7 +771,11 @@ namespace csShared
             }
         }
 
-        public csImb.csImb Imb { get; set; } = new csImb.csImb();
+        public csImb.csImb Imb
+        {
+            get { return imb; }
+            set { imb = value; }
+        }
 
         public ObservableCollection<string> FilteredStartTabItems
         {
@@ -807,7 +823,7 @@ namespace csShared
         private void OnFullScreenFloatingElementChanged(FloatingElement value)
         {
             var handler = FullScreenFloatingElementChanged;
-            handler?.Invoke(value, null);
+            if (handler != null) handler(value, null);
         }
 
         public ObservableCollection<MenuItem> MainMenuItems
@@ -1384,8 +1400,6 @@ namespace csShared
 
             MainMenuItems.CollectionChanged += MainMenuItems_CollectionChanged;
 
-            Drop += InstanceDrop;
-
             if (!mapplugins) return;
 
             // TODO These plugins must be en/disabled in the config, or simply bundled or not with the assembly.
@@ -1536,13 +1550,117 @@ namespace csShared
             TimelineManager.EventsVisible = Config.GetBool("Timeline.EventsVisible", true);
         }
 
-        private static void InstanceDrop(object sender, DropEventArgs se)
+        /// <summary>
+        /// Create an POI instance from POI type. Used when icon is dragged on map.
+        /// </summary>
+        /// <param name="pPoiType"></param>
+        /// <param name="pPosition"></param>
+        public static void CreatePoiByPoiType(PoI pPoiType, Position pPosition)
         {
-            var document = se.EventArgs.Cursor.Data as Document;
-            if (document == null) return;
+            if (!pPoiType.Data.ContainsKey("layer")) return;
+            var newPoi = new PoI
+            {
+                PoiTypeId = pPoiType.ContentId,
+                PoiType = pPoiType,
+                UserId = AppStateSettings.Instance.Imb.Status.Name,
+                Name = pPoiType.PoiId,
+                Date = DateTime.Now,
+                Layer = pPoiType.Layer,
+                Position = pPosition
+            };
+            foreach (var poiLabel in pPoiType.Labels) newPoi.Labels[poiLabel.Key] = poiLabel.Value;
+            foreach (var pl in pPoiType.EffectiveMetaInfo) if (pl.DefaultValue != null && !newPoi.Labels.ContainsKey(pl.Label)) newPoi.Labels[pl.Label] = pl.DefaultValue;
+            newPoi.MetaInfo = null;
+            var poiLayer = pPoiType.Data["layer"] as dsLayer;
+            if (poiLayer == null) return;
+
+            newPoi.Service = poiLayer.Service;
+
+            if (pPoiType.NEffectiveStyle.AddMode.Value == AddModes.EditFirst)
+            {
+                var pp = new PoiPopupViewModel { PoI = newPoi, Layer = poiLayer, Service = poiLayer.Service };
+
+
+                // poiLayer.OpenPoiPopup(newPoi);
+                var s = new Size(400, 650);
+                var kmlpoint = new KmlPoint(newPoi.Position.Longitude, newPoi.Position.Latitude);
+                var pt = AppStateSettings.Instance.ViewDef.MapPoint(kmlpoint);
+
+                if (pt.X <= AppStateSettings.Instance.MainBorder.ActualWidth / 2)
+                    pt.X += s.Width / 2 + 25;
+                else
+                    pt.X -= s.Width / 2 + 25;
+                pt.Y = AppStateSettings.Instance.MainBorder.ActualHeight / 2;
+                var fe = FloatingHelpers.CreateFloatingElement(pPoiType.Name, pt, s, pp);
+
+                newPoi.Data["FloatingElement"] = fe;
+                pp.IsNewPoi = true;
+                pp.FeElement = fe;
+                AppStateSettings.Instance.FloatingItems.AddFloatingElement(fe);
+            }
+            else
+            {
+                if (newPoi.NEffectiveStyle.AddMode == AddModes.OpenAfter)
+                {
+                    newPoi.OpenOnAdd = true;
+                }
+
+                poiLayer.Service.PoIs.Add(newPoi);
+                poiLayer.Service.UpdateContentList();
+            }
+        }
+
+        private void InstanceDrop(object sender, DropEventArgs se)
+        {
+           if (se.EventArgs == null) return;
+            object draggedObject = se.EventArgs.Cursor.Data;
+            // Convcert screen position to lat/lon position
+            var pos = se.EventArgs.Cursor.GetPosition(Instance.ViewDef.MapControl);
+            var position = Instance.ViewDef.ViewToWorld(pos.X, pos.Y);
+            var latlon = new Position(position.Y, position.X);
+            // Is it document?
+            var document = draggedObject as Document;
+            if (document != null)
+            {
+                DocumentDroppedOnMap(document, se.Orientation, se.Pos);
+                return;
+            }
+            // Is it PoI type?
+            var poiType = draggedObject as PoI;
+            if (poiType != null)
+            {
+                CreatePoiByPoiType(poiType, latlon);
+            };
+
+            // DataSet?
+            var dataSet = draggedObject as DataSet;
+            if (dataSet != null)
+            {
+                DataSetDroppedOnMap(dataSet, se.Pos);
+            }
+
+        }
+
+        private void DataSetDroppedOnMap(DataSet pDataSet, Point pPoint)
+        {
+
+            var pvm = new PlotViewModel();
+            if (pDataSet.Sensor != null) pvm.DisplayName = "Sensor Data";
+            pDataSet.Grouping = GroupingOptions.none;
+            pvm.DataSets.Add(pDataSet);
+            var fe = FloatingHelpers.CreateFloatingElement(pDataSet.Title, pPoint, new Size(450, 350), pvm);
+            fe.CanStream = true;
+            fe.CanFullScreen = true;
+            fe.AllowStream = true;
+            FloatingItems.AddFloatingElement(fe);
+        }
+
+
+        private static void DocumentDroppedOnMap(Document pDocument, double pOrientation, Point pPoint)
+        {
             var fe = new FloatingElement
             {
-                Document = document,
+                Document = pDocument,
                 OpacityDragging = 0.5,
                 OpacityNormal = 1.0,
                 CanDrag = true,
@@ -1550,12 +1668,13 @@ namespace csShared
                 CanMove = true,
                 CanRotate = true,
                 CanScale = true,
-                StartOrientation = (document.OriginalRotation.HasValue)
-                                       ? document.OriginalRotation + 90
-                                       : se.Orientation,
+                StartOrientation =
+                    (pDocument.OriginalRotation.HasValue)
+                        ? pDocument.OriginalRotation + 90
+                        : pOrientation,
                 Background = Brushes.DarkOrange,
                 //MaxSize = new Size(500, (500.0 / pf.Width) * pf.Height),                                 
-                StartPosition = se.Pos,
+                StartPosition = pPoint,
                 StartSize = new Size(400, 400),
                 Width = 500,
                 Height = 500,
@@ -1563,21 +1682,22 @@ namespace csShared
                 RemoveOnEdge = true,
                 Contained = true,
                 CanFullScreen = true,
-                Title = document.Name,
+                Title = pDocument.Name,
                 Foreground = Brushes.White,
                 DockingStyle = DockingStyles.None,
                 CanStream = true,
-                ShareUrl = document.ShareUrl
-
+                ShareUrl = pDocument.ShareUrl
             };
-            if (!string.IsNullOrEmpty(document.ShareUrl)) fe.Contracts.Add("link", document.ShareUrl.Replace("^", string.Empty).Replace(" ", "%20"));
-            if (!string.IsNullOrEmpty(document.OriginalUrl)) fe.Contracts.Add("document", document.OriginalUrl.Replace("^", string.Empty));
+            if (!string.IsNullOrEmpty(pDocument.ShareUrl)) fe.Contracts.Add("link", pDocument.ShareUrl.Replace("^", string.Empty).Replace(" ", "%20"));
+            if (!string.IsNullOrEmpty(pDocument.OriginalUrl)) fe.Contracts.Add("document", pDocument.OriginalUrl.Replace("^", string.Empty));
             Instance.FloatingItems.Add(fe);
         }
 
-        public void StartDrop(DropEventArgs e)
+        public void StartDrop(DropEventArgs se)
         {
-            if (Drop != null) Drop(this, e);
+            InstanceDrop(this, se);
+            var handle = Drop;
+            if (handle != null) handle(this, se);
         }
 
         public void SendDocument(ImbClientStatus client, Document d)
@@ -1635,12 +1755,12 @@ namespace csShared
                     CanMinimize = false; // Remove minimize button, too. TODO improve: remove the minimize toggle button completely.
                 }
 
-                var mainWindow = Application.Current.MainWindow;
+                Window mainWindow = Application.Current.MainWindow;
                 mainWindow.WindowStyle = FullScreen ? WindowStyle.None : WindowStyle.SingleBorderWindow;
                 if (mainWindow.WindowStyle.Equals(WindowStyle.None))
                 {
                     mainWindow.WindowState = WindowState.Maximized;
-                    var windowCollection = Application.Current.Windows;
+                    WindowCollection windowCollection = Application.Current.Windows;
                     foreach (Window window in windowCollection)
                     {
                         if (window != mainWindow)

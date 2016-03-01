@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:events="clr-namespace:csCommon.Plugins.Events"
-             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:csEvents="clr-namespace:csEvents"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:wpfConverters="clr-namespace:WpfConverters"

@@ -112,6 +112,18 @@ namespace csShared.Geo.Esri
             {
                 //DbCommand cmd = _connection.CreateCommand();
                 //cmd.CommandText = String.Format("INSERT INTO {0} VALUES(@Level, @Col, @Row, @Image);","tiles");
+                using (var command = new SQLiteCommand(connection))
+                {
+                    command.CommandText = string.Format(
+                        CultureInfo.InvariantCulture,
+                        @"SELECT [tile_data] FROM [tiles] WHERE zoom_level = {0} AND tile_column = {1} AND tile_row = {2};",
+                        level, col, row);
+                    var tileObj = command.ExecuteScalar();
+                    if (tileObj != null)
+                    {
+                        return; // Tile already cached ...
+                    }
+                }
                 using (var cmd = connection.CreateCommand())
                 {
                     cmd.CommandText = @"INSERT INTO tiles VALUES(@Level, @Col, @Row, @Image);";

@@ -32,10 +32,10 @@ using System.Xml.Serialization;
 using csCommon.Types.DataServer.PoI;
 using csGeoLayers;
 using csShared.Controls.Popups.MenuPopup;
-using csWebDotNetLib;
-using IO.Swagger.Model;
+//using csWebDotNetLib;
+//using IO.Swagger.Model;
 using Newtonsoft.Json.Linq;
-using Layer = IO.Swagger.Model.Layer;
+//using Layer = IO.Swagger.Model.Layer;
 
 
 namespace DataServer
@@ -64,6 +64,7 @@ namespace DataServer
         //public AudioRecorder Recorder;
 
         public event EventHandler<TappedEventArgs> Tapped;
+        public event EventHandler<PoI> PoiLongTapped;
 
         public PoiService()
         {
@@ -235,7 +236,7 @@ namespace DataServer
             res.Settings.OpenTab = openTab;
             res.Settings.Icon    = "layer.png";
 
-            dataServer.Services.Add(res);
+            dataServer.AddService(res, Mode.client);
 
             return res;
         }
@@ -1208,7 +1209,7 @@ namespace DataServer
                     Name = client.Status.Name,
                     UserId = client.Status.Name,
                     Date = AppState.TimelineManager.CurrentTime,
-                    Style = meStylePoIType.NEffectiveStyle
+                    Style = meStylePoIType.NEffectiveStyle as PoIStyle // TODO Should this not be clone?
                 };
 
             //if (Me.Style == null) return;
@@ -1219,11 +1220,12 @@ namespace DataServer
                 if (PoITypes.Any(k => k.ContentId == Me.PoiTypeId))
                 {
                     Me.PoiType = PoITypes.FirstOrDefault(k => k.ContentId == Me.PoiTypeId) as PoI;
-                    Me.Style = Me.NEffectiveStyle.Clone() as PoIStyle;
+                    Me.Style = Me.NEffectiveStyle.CloneStyle();
                     if (Me.Style != null)
                     {
-                        Me.Style.CanDelete =
-                            Me.NEffectiveStyle.CanEdit = Me.NEffectiveStyle.CanMove = Me.NEffectiveStyle.CanRotate = false;
+                        Me.Style.CanDelete = false;
+                        Me.UpdateEffectiveStyle();
+                        Debug.Assert(false, "this code was called, but doesnt make sence to set on NEffectiveStyle (overwritten):Me.NEffectiveStyle.CanEdit = Me.NEffectiveStyle.CanMove = Me.NEffectiveStyle.CanRotate = false;");
                     }
 
                     //Me.Models = new List<Model>()
@@ -1554,332 +1556,332 @@ namespace DataServer
             return p;
         }
 
-        public static void SyncPoi(PoI p, Feature f, csWebApi api)
-        {
-            if (!p.Data.ContainsKey("cs") || p.Data["cs"] == null)
-            {
-                p.Data["cs"] = f;
-            }
-            var posChanged = Observable.FromEventPattern<PositionEventArgs>(ev => p.PositionChanged += ev,
-                ev => p.PositionChanged -= ev);
-            posChanged.Throttle(TimeSpan.FromSeconds(1)).Subscribe(k =>
-            {
-                var coords = f.Geometry.Coordinates as JArray;
-                if (coords != null && ((double)coords[0] != p.Position.Longitude || (double)coords[1] != p.Position.Latitude) )
-                {
-                    ((JArray)f.Geometry.Coordinates)[0] = p.Position.Longitude;
-                    ((JArray)f.Geometry.Coordinates)[1] = p.Position.Latitude;
-                    //var c = ((JArray) f.Geometry.Coordinates).Select(x => (double) x).ToList();
-                    //c[0] = p.Position.Longitude;
-                    //c[1] = p.Position.Latitude;
-                    //f.Geometry.Coordinates = c;
-                    var t = api.features.UpdateFeatureAsync(f, p.Service.Id.ToString(), f.Id);
-                }
-            });
-        }
+        //public static void SyncPoi(PoI p, Feature f, csWebApi api)
+        //{
+        //    if (!p.Data.ContainsKey("cs") || p.Data["cs"] == null)
+        //    {
+        //        p.Data["cs"] = f;
+        //    }
+        //    var posChanged = Observable.FromEventPattern<PositionEventArgs>(ev => p.PositionChanged += ev,
+        //        ev => p.PositionChanged -= ev);
+        //    posChanged.Throttle(TimeSpan.FromSeconds(1)).Subscribe(k =>
+        //    {
+        //        var coords = f.Geometry.Coordinates as JArray;
+        //        if (coords != null && ((double)coords[0] != p.Position.Longitude || (double)coords[1] != p.Position.Latitude) )
+        //        {
+        //            ((JArray)f.Geometry.Coordinates)[0] = p.Position.Longitude;
+        //            ((JArray)f.Geometry.Coordinates)[1] = p.Position.Latitude;
+        //            //var c = ((JArray) f.Geometry.Coordinates).Select(x => (double) x).ToList();
+        //            //c[0] = p.Position.Longitude;
+        //            //c[1] = p.Position.Latitude;
+        //            //f.Geometry.Coordinates = c;
+        //            var t = api.features.UpdateFeatureAsync(f, p.Service.Id.ToString(), f.Id);
+        //        }
+        //    });
+        //}
 
-        private Subscription sub;
+        //private Subscription sub;
         public new void MakeOnline()
         {
             if (client != null && client.Enabled && client.IsConnected)
             {
                 base.MakeOnline();
             }
-            else if (csWebApi.Instance.IsConnected)
-            {
-                var webApi = csWebApi.Instance;
-                var layer = new IO.Swagger.Model.Layer()
-                {
-                    Id = this.Id.ToString(),
-                    Description = "iTable shared layer",
-                    Dynamic = true,
-                    Title = this.Name,
-                    Type = "dynamicgeojson",
-                    TypeUrl = "/api/resources/" + this.Layer.Parent.ID
-                };
+            //else if (csWebApi.Instance.IsConnected)
+            //{
+            //    var webApi = csWebApi.Instance;
+            //    var layer = new IO.Swagger.Model.Layer()
+            //    {
+            //        Id = this.Id.ToString(),
+            //        Description = "iTable shared layer",
+            //        Dynamic = true,
+            //        Title = this.Name,
+            //        Type = "dynamicgeojson",
+            //        TypeUrl = "/api/resources/" + this.Layer.Parent.ID
+            //    };
 
-                layer.Features = new List<Feature>();
+            //    layer.Features = new List<Feature>();
 
-                var r = new Resource() {Id = this.Layer.Parent.ID ,FeatureTypes = new Dictionary<string, FeatureType>()};
-                var props = new Dictionary<string,MetaInfo>();
-                this.PoITypes.ForEach(pt =>
-                {
-                    if (r.FeatureTypes.ContainsKey(pt.PoiId))
-                    {
-                        return;
-                    }
+            //    var r = new Resource() {Id = this.Layer.Parent.ID ,FeatureTypes = new Dictionary<string, FeatureType>()};
+            //    var props = new Dictionary<string,MetaInfo>();
+            //    this.PoITypes.ForEach(pt =>
+            //    {
+            //        if (r.FeatureTypes.ContainsKey(pt.PoiId))
+            //        {
+            //            return;
+            //        }
 
-                    var myKeys = new List<string>();
-                    if (pt.MetaInfo != null)
-                    {
-                        pt.MetaInfo.ForEach(mi =>
-                        {
-                            if (props.ContainsKey(mi.Label))
-                            {
-                                props[mi.Label] = mi;
-                            }
-                            else
-                            {
-                                props.Add(mi.Label, mi);
-                            }
+            //        var myKeys = new List<string>();
+            //        if (pt.MetaInfo != null)
+            //        {
+            //            pt.MetaInfo.ForEach(mi =>
+            //            {
+            //                if (props.ContainsKey(mi.Label))
+            //                {
+            //                    props[mi.Label] = mi;
+            //                }
+            //                else
+            //                {
+            //                    props.Add(mi.Label, mi);
+            //                }
 
-                            myKeys.Add(mi.Label);
-                        });
-                    }
+            //                myKeys.Add(mi.Label);
+            //            });
+            //        }
 
-                    var style = pt.NEffectiveStyle;
-                    var featureType = new FeatureType()
-                    {
-                        Id = pt.PoiId,
-                        Name = pt.Name,
-                        PropertyTypeKeys = string.Join(";", myKeys),
-                        ShowAllProperties = false,
-                        Style = new FeatureTypeStyle()
-                        {
-                            IconUri = !string.IsNullOrWhiteSpace(style.Icon)?"images/" + this.Layer.Parent.ID + "/" + style.Icon:null,
-                            FillColor = style.FillColor.ToString(),
-                            FillOpacity = style.FillOpacity,
-                            IconHeight = style.IconHeight,
-                            IconWidth = style.IconWidth,
-                            NameLabel = style.NameLabel,
-                            DrawingMode = style.DrawingMode.ToString(),
-                            Stroke = style.StrokeWidth,
-                            StrokeColor = style.StrokeColor.ToString(),
-                        }
-                    };
-                    r.FeatureTypes.Add(pt.PoiId, featureType);
-                });
+            //        var style = pt.NEffectiveStyle;
+            //        var featureType = new FeatureType()
+            //        {
+            //            Id = pt.PoiId,
+            //            Name = pt.Name,
+            //            PropertyTypeKeys = string.Join(";", myKeys),
+            //            ShowAllProperties = false,
+            //            Style = new FeatureTypeStyle()
+            //            {
+            //                IconUri = !string.IsNullOrWhiteSpace(style.Icon)?"images/" + this.Layer.Parent.ID + "/" + style.Icon:null,
+            //                FillColor = style.FillColor.ToString(),
+            //                FillOpacity = style.FillOpacity,
+            //                IconHeight = style.IconHeight,
+            //                IconWidth = style.IconWidth,
+            //                NameLabel = style.NameLabel,
+            //                DrawingMode = style.DrawingMode.ToString(),
+            //                Stroke = style.StrokeWidth,
+            //                StrokeColor = style.StrokeColor.ToString(),
+            //            }
+            //        };
+            //        r.FeatureTypes.Add(pt.PoiId, featureType);
+            //    });
 
-                if (props.Count > 0)
-                {
-                    r.PropertyTypeData = new Dictionary<string, PropertyType>();
-                    foreach (var p in props)
-                    {
-                        var prop = new PropertyType()
-                        {
-                            Label = p.Key,
-                            Type = p.Value.Type.ToString(),
-                            Description = p.Value.Description,
-                            Title = p.Value.Title,
-                            CanEdit = p.Value.IsEditable,
-                            //DefaultValue = p.Value.DefaultValue,
-                            IsSearchable = p.Value.IsSearchable,
-                            MaxValue = p.Value.MaxValue,
-                            MinValue = p.Value.MinValue,
-                            Section = p.Value.Section=="Info"?null:p.Value.Section,
-                            StringFormat = p.Value.StringFormat,
-                            VisibleInCallout = p.Value.VisibleInCallOut
-                        };
-                        r.PropertyTypeData.Add(p.Key, prop);
-                    }
-                }
-                webApi.resources.AddResource(r);
+            //    if (props.Count > 0)
+            //    {
+            //        r.PropertyTypeData = new Dictionary<string, PropertyType>();
+            //        foreach (var p in props)
+            //        {
+            //            var prop = new PropertyType()
+            //            {
+            //                Label = p.Key,
+            //                Type = p.Value.Type.ToString(),
+            //                Description = p.Value.Description,
+            //                Title = p.Value.Title,
+            //                CanEdit = p.Value.IsEditable,
+            //                //DefaultValue = p.Value.DefaultValue,
+            //                IsSearchable = p.Value.IsSearchable,
+            //                MaxValue = p.Value.MaxValue,
+            //                MinValue = p.Value.MinValue,
+            //                Section = p.Value.Section=="Info"?null:p.Value.Section,
+            //                StringFormat = p.Value.StringFormat,
+            //                VisibleInCallout = p.Value.VisibleInCallOut
+            //            };
+            //            r.PropertyTypeData.Add(p.Key, prop);
+            //        }
+            //    }
+            //    webApi.resources.AddResource(r);
 
 
-                this.PoIs.OfType<PoI>().ForEach(p =>
-                {
-                    var f = WebApiService.GetFeatureFromPoi(p);
-                    SyncPoi(p,f,webApi);
-                    layer.Features.Add(f);
-                });
+            //    this.PoIs.OfType<PoI>().ForEach(p =>
+            //    {
+            //        var f = WebApiService.GetFeatureFromPoi(p);
+            //        SyncPoi(p,f,webApi);
+            //        layer.Features.Add(f);
+            //    });
 
                 
 
-                webApi.layers.AddLayer(layer);
-                var availablePoIs = new List<string>();
-                this.PoIs.CollectionChanged += (es, tp) =>
-                {
+            //    webApi.layers.AddLayer(layer);
+            //    var availablePoIs = new List<string>();
+            //    this.PoIs.CollectionChanged += (es, tp) =>
+            //    {
 
-                    if (!IsInitialized) return;
+            //        if (!IsInitialized) return;
 
-                    if (tp.OldItems != null)
-                    {
-                        foreach (var p in tp.OldItems.OfType<PoI>().Where(p=>p.Data.ContainsKey("cs")))
-                        {
-                            availablePoIs.Remove(p.Id.ToString());
-                            var feature = p.Data["cs"] as Feature;
+            //        if (tp.OldItems != null)
+            //        {
+            //            foreach (var p in tp.OldItems.OfType<PoI>().Where(p=>p.Data.ContainsKey("cs")))
+            //            {
+            //                availablePoIs.Remove(p.Id.ToString());
+            //                var feature = p.Data["cs"] as Feature;
                             
-                            webApi.features.DeleteFeature(feature.Id, Id.ToString());
-                        }
-                    }
+            //                webApi.features.DeleteFeature(feature.Id, Id.ToString());
+            //            }
+            //        }
 
-                    if (tp.NewItems != null)
-                    {
-                        foreach (global::DataServer.PoI p in tp.NewItems)
-                        {
-                            var newp = (!availablePoIs.Contains(p.Id.ToString()));
-                            if (newp)
-                            {
-                                if (IsInitialized)
-                                {
-                                    var f = WebApiService.GetFeatureFromPoi(p);
-                                    SyncPoi(p, f, webApi);
-                                    webApi.features.AddFeature(this.Id.ToString(), f);
+            //        if (tp.NewItems != null)
+            //        {
+            //            foreach (global::DataServer.PoI p in tp.NewItems)
+            //            {
+            //                var newp = (!availablePoIs.Contains(p.Id.ToString()));
+            //                if (newp)
+            //                {
+            //                    if (IsInitialized)
+            //                    {
+            //                        var f = WebApiService.GetFeatureFromPoi(p);
+            //                        SyncPoi(p, f, webApi);
+            //                        webApi.features.AddFeature(this.Id.ToString(), f);
 
-                                }
-                                availablePoIs.Add(p.Id.ToString());
-                            }
+            //                    }
+            //                    availablePoIs.Add(p.Id.ToString());
+            //                }
 
 
-                        }
-                    }
-                    // foreach (va)
-                };
-                AppStateSettings.Instance.TriggerNotification("You started sharing " + Name,
-                    pathData: MenuHelpers.LayerIcon);
-                AppStateSettings.Instance.ViewDef.UpdateLayers();
-                sub = webApi.GetLayerSubscription(this.Id.ToString());
-                sub.LayerCallback += (e, s) =>
-                {
-                    switch (s.action)
-                    {
-                        case LayerUpdateAction.deleteFeature:
+            //            }
+            //        }
+            //        // foreach (va)
+            //    };
+            //    AppStateSettings.Instance.TriggerNotification("You started sharing " + Name,
+            //        pathData: MenuHelpers.LayerIcon);
+            //    AppStateSettings.Instance.ViewDef.UpdateLayers();
+            //    sub = webApi.GetLayerSubscription(this.Id.ToString());
+            //    sub.LayerCallback += (e, s) =>
+            //    {
+            //        switch (s.action)
+            //        {
+            //            case LayerUpdateAction.deleteFeature:
 
-                            var dp =
-                                PoIs.FirstOrDefault(
-                                    k => k.Data.ContainsKey("cs") && ((Feature)k.Data["cs"]).Id == s.featureId);
-                            if (dp != null)
-                            {
-                                RemovePoi(dp);
-                                availablePoIs.Remove(dp.Id.ToString());
-                            }
-                            break;
-                        case LayerUpdateAction.updateFeature:
-                            var f = WebApiService.GetFeature((JObject)s.item);
-                            // find feature
-                            var p = PoIs.FirstOrDefault(k => k.Data.ContainsKey("cs") && ((Feature)k.Data["cs"]).Id == f.Id);
-                            if (p != null)
-                            {
-                                // update poi
-                                UpdateCsWebApiFeature(f, (global::DataServer.PoI)p, layer);
-                                TriggerContentChanged(p);
-                            }
-                            else
-                            {
-                                // add poi  
-                                var g = Guid.NewGuid();
-                                availablePoIs.Add(g.ToString());
-                                var np = AddCsWebApiFeature(f, g, layer);
+            //                var dp =
+            //                    PoIs.FirstOrDefault(
+            //                        k => k.Data.ContainsKey("cs") && ((Feature)k.Data["cs"]).Id == s.featureId);
+            //                if (dp != null)
+            //                {
+            //                    RemovePoi(dp);
+            //                    availablePoIs.Remove(dp.Id.ToString());
+            //                }
+            //                break;
+            //            case LayerUpdateAction.updateFeature:
+            //                var f = WebApiService.GetFeature((JObject)s.item);
+            //                // find feature
+            //                var p = PoIs.FirstOrDefault(k => k.Data.ContainsKey("cs") && ((Feature)k.Data["cs"]).Id == f.Id);
+            //                if (p != null)
+            //                {
+            //                    // update poi
+            //                    UpdateCsWebApiFeature(f, (global::DataServer.PoI)p, layer);
+            //                    TriggerContentChanged(p);
+            //                }
+            //                else
+            //                {
+            //                    // add poi  
+            //                    var g = Guid.NewGuid();
+            //                    availablePoIs.Add(g.ToString());
+            //                    var np = AddCsWebApiFeature(f, g, layer);
 
-                            }
-                            break;
-                    }
-                };
+            //                }
+            //                break;
+            //        }
+            //    };
 
-                /*
-                this.PoIs.OfType<PoI>().ForEach(poi=>
-                {
-                    var f = WebApiService.GetFeatureFromPoi(poi);
-                    webApi.features.AddFeature(layer.Id, f);
-                });*/
+            //    /*
+            //    this.PoIs.OfType<PoI>().ForEach(poi=>
+            //    {
+            //        var f = WebApiService.GetFeatureFromPoi(poi);
+            //        webApi.features.AddFeature(layer.Id, f);
+            //    });*/
                 
                 
-                /*
-                foreach (var f in layer.Features)
-                {
-                    var p = AddCsWebApiFeature(f, Guid.NewGuid(), layer);
-                    availablePoIs.Add(p.Id.ToString());
-                }*/
+            //    /*
+            //    foreach (var f in layer.Features)
+            //    {
+            //        var p = AddCsWebApiFeature(f, Guid.NewGuid(), layer);
+            //        availablePoIs.Add(p.Id.ToString());
+            //    }*/
 
 
-                IsLoading = false;
+            //    IsLoading = false;
 
-                ContentLoaded = true;
+            //    ContentLoaded = true;
 
-                Execute.OnUIThread(() => Layer.IsLoading = false);
-                IsLocal = true;
-                Mode = Mode.server;
-                IsShared = true;
-                PoIs.FinishBatch();
-            }
+            //    Execute.OnUIThread(() => Layer.IsLoading = false);
+            //    IsLocal = true;
+            //    Mode = Mode.server;
+            //    IsShared = true;
+            //    PoIs.FinishBatch();
+            //}
         }
 
-        private global::DataServer.PoI AddCsWebApiFeature(Feature f, Guid id, Layer layer)
-        {
-            var p = new global::DataServer.PoI { Service = this, Id = id, PoiTypeId = f.Type ?? (string)f.Properties["featureTypeId"] };
-            UpdateCsWebApiFeature(f, p, layer);
+        //private global::DataServer.PoI AddCsWebApiFeature(Feature f, Guid id, Layer layer)
+        //{
+        //    var p = new global::DataServer.PoI { Service = this, Id = id, PoiTypeId = f.Type ?? (string)f.Properties["featureTypeId"] };
+        //    UpdateCsWebApiFeature(f, p, layer);
 
-            var webApi = csWebApi.Instance;
-            PoIs.Add(p);
-            p.Deleted += (o, s) => { if (IsInitialized) webApi.features.DeleteFeature(f.Id, Name); };
+        //    var webApi = csWebApi.Instance;
+        //    PoIs.Add(p);
+        //    p.Deleted += (o, s) => { if (IsInitialized) webApi.features.DeleteFeature(f.Id, Name); };
 
-            p.LabelChanged += (sender, args) =>
-            {
-                f.Properties[args.Label] = args.NewValue;
-                var t = webApi.features.UpdateFeatureAsync(f, layer.Id, f.Id);
-            };
+        //    p.LabelChanged += (sender, args) =>
+        //    {
+        //        f.Properties[args.Label] = args.NewValue;
+        //        var t = webApi.features.UpdateFeatureAsync(f, layer.Id, f.Id);
+        //    };
 
-            var posChanged = Observable.FromEventPattern<PositionEventArgs>(ev => p.PositionChanged += ev,
-                ev => p.PositionChanged -= ev);
-            posChanged.Throttle(TimeSpan.FromSeconds(1)).Subscribe(k =>
-            {
-                if (f.Geometry.Coordinates is JArray)
-                {
-                    var coordinates = (JArray) f.Geometry.Coordinates;
-                    var lng = (double)coordinates[0];
-                    var lat = (double)coordinates[1];
-                    if (lng != p.Position.Longitude || lat != p.Position.Latitude)
-                    {
-                        ((JArray)f.Geometry.Coordinates)[0] = p.Position.Longitude;
-                        ((JArray)f.Geometry.Coordinates)[1] = p.Position.Latitude;
-                        //var c = ((JArray) f.Geometry.Coordinates).Select(x => (double) x).ToList();
-                        //c[0] = p.Position.Longitude;
-                        //c[1] = p.Position.Latitude;
-                        //f.Geometry.Coordinates = c;
-                        var t = webApi.features.UpdateFeatureAsync(f, layer.Id, f.Id);
-                    }
-                }
-            });
-            return p;
-        }
+        //    var posChanged = Observable.FromEventPattern<PositionEventArgs>(ev => p.PositionChanged += ev,
+        //        ev => p.PositionChanged -= ev);
+        //    posChanged.Throttle(TimeSpan.FromSeconds(1)).Subscribe(k =>
+        //    {
+        //        if (f.Geometry.Coordinates is JArray)
+        //        {
+        //            var coordinates = (JArray) f.Geometry.Coordinates;
+        //            var lng = (double)coordinates[0];
+        //            var lat = (double)coordinates[1];
+        //            if (lng != p.Position.Longitude || lat != p.Position.Latitude)
+        //            {
+        //                ((JArray)f.Geometry.Coordinates)[0] = p.Position.Longitude;
+        //                ((JArray)f.Geometry.Coordinates)[1] = p.Position.Latitude;
+        //                //var c = ((JArray) f.Geometry.Coordinates).Select(x => (double) x).ToList();
+        //                //c[0] = p.Position.Longitude;
+        //                //c[1] = p.Position.Latitude;
+        //                //f.Geometry.Coordinates = c;
+        //                var t = webApi.features.UpdateFeatureAsync(f, layer.Id, f.Id);
+        //            }
+        //        }
+        //    });
+        //    return p;
+        //}
 
-        private void UpdateCsWebApiFeature(Feature f, global::DataServer.PoI p, Layer layer)
-        {
-            p.Data["cs"] = f;
+        //private void UpdateCsWebApiFeature(Feature f, global::DataServer.PoI p, Layer layer)
+        //{
+        //    p.Data["cs"] = f;
 
-            if (f.Geometry.Type == "Point")
-            {
-                if (f.Geometry.Coordinates is object[])
-                {
-                    var co = (object[])f.Geometry.Coordinates;
-                    f.Geometry.Coordinates = new JArray(co);
-                }
-                var c = ((JArray)f.Geometry.Coordinates).Select(x => (double)x).ToList();
+        //    if (f.Geometry.Type == "Point")
+        //    {
+        //        if (f.Geometry.Coordinates is object[])
+        //        {
+        //            var co = (object[])f.Geometry.Coordinates;
+        //            f.Geometry.Coordinates = new JArray(co);
+        //        }
+        //        var c = ((JArray)f.Geometry.Coordinates).Select(x => (double)x).ToList();
 
-                if (p.Position == null || p.Position.Longitude != c[0] || p.Position.Latitude != c[1])
-                {
-                    p.Position = new Position(c[0], c[1]);
-                }
-            }
-            if (layer.DefaultFeatureType != null)
-            {
-                p.PoiTypeId = layer.DefaultFeatureType;
-            }
-            var t = this.PoITypes.FirstOrDefault((pt) => p.PoiTypeId == pt.PoiId);
+        //        if (p.Position == null || p.Position.Longitude != c[0] || p.Position.Latitude != c[1])
+        //        {
+        //            p.Position = new Position(c[0], c[1]);
+        //        }
+        //    }
+        //    if (layer.DefaultFeatureType != null)
+        //    {
+        //        p.PoiTypeId = layer.DefaultFeatureType;
+        //    }
+        //    var t = this.PoITypes.FirstOrDefault((pt) => p.PoiTypeId == pt.PoiId);
 
-            //var type = AppState.f
-            //p.PoiTypeId = 
-            f.Properties.ForEach((v) =>
-            {
-                p.Labels[v.Key] = v.Value.ToString();
-                var mt = t?.MetaInfo?.FirstOrDefault((mi) => mi.Id == v.Key);
-                if (mt != null)
-                {
-                    if (mt.Type == MetaTypes.datetime)
-                    {
-                        p.TimelineString = this.Layer.ID;
-                        DateTime dd;
-                        if (DateTime.TryParse(v.Value.ToString(), out dd))
-                        {
-                            p.Date = dd;
-                            this.Events.Add(p);
-                        }
+        //    //var type = AppState.f
+        //    //p.PoiTypeId = 
+        //    f.Properties.ForEach((v) =>
+        //    {
+        //        p.Labels[v.Key] = v.Value.ToString();
+        //        var mt = t?.MetaInfo?.FirstOrDefault((mi) => mi.Id == v.Key);
+        //        if (mt != null)
+        //        {
+        //            if (mt.Type == MetaTypes.datetime)
+        //            {
+        //                p.TimelineString = this.Layer.ID;
+        //                DateTime dd;
+        //                if (DateTime.TryParse(v.Value.ToString(), out dd))
+        //                {
+        //                    p.Date = dd;
+        //                    this.Events.Add(p);
+        //                }
 
-                    }
-                }
-            });
-            p.ForceUpdate(true,false);
-        }
+        //            }
+        //        }
+        //    });
+        //    p.ForceUpdate(true,false);
+        //}
 
         public bool IsShared { get; set; }
 
@@ -1897,6 +1899,12 @@ namespace DataServer
         public void RemoveAllPois()
         {
             while (PoIs.Any()) RemovePoi(PoIs[0]);
+        }
+
+        public void RaisePoiLongTapped(PoI pPoI)
+        {
+            var handler = PoiLongTapped;
+            if (handler != null) handler(this, pPoI);
         }
     }
 

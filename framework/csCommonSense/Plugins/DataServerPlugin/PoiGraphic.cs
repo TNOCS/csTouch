@@ -285,6 +285,11 @@ namespace csDataServerPlugin
             }
         }
 
+        public void LongTapped(MapPoint tapPos)
+        {
+            var tappedPosition = (MapPoint)wm.ToGeographic(tapPos);
+        }
+
         public void Tapped(MapPoint tapPos)
         {
             if (DateTime.Now < lastTap.AddMilliseconds(500)) return;

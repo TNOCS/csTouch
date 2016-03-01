@@ -15,11 +15,13 @@ using csShared.Utils;
 
 namespace DataServer
 {
+    using csCommon.Types.DataServer.PoI;
+
     // TODO REVIEW: There is a file called PoiStyle that contains various enums, and a file called NPoIStyle that contains a class called PoIStyle.
 
     [ProtoContract]
     [DebuggerDisplay("Name: {Name}; IconUri: {IconUri}; Icon: {Icon}; Picture: {Picture}")]
-    public class PoIStyle : PropertyChangedBase, IConvertibleXmlWithSettings 
+    public class PoIStyle : PropertyChangedBase, IConvertibleXmlWithSettings, IReadonlyPoIStyle
     {
         public const string DefaultNameLabel = "Name";
 
@@ -843,7 +845,7 @@ namespace DataServer
 
         public static int Count;
         public static long Mergetime;
-        public static PoIStyle MergeStyle(PoIStyle s1, PoIStyle s2)
+        public static PoIStyle MergeStyle(IReadonlyPoIStyle s1, IReadonlyPoIStyle s2)
         {
             Count += 1;
             //Stopwatch sw = new Stopwatch();
@@ -856,27 +858,27 @@ namespace DataServer
                 callOutFillColor   = s2.CallOutFillColor.HasValue ? s2.CallOutFillColor : s1.CallOutFillColor,
                 callOutForeground  = s2.CallOutForeground.HasValue ? s2.CallOutForeground : s1.CallOutForeground,
                 callOutOrientation = s2.CallOutOrientation.HasValue ? s2.CallOutOrientation : s1.CallOutOrientation,
-                callOutTimeOut     = s2.CallOutTimeOut.HasValue ? s2.callOutTimeOut : s1.callOutTimeOut,
-                canDelete          = s2.canDelete.HasValue ? s2.canDelete : s1.canDelete,
-                canEdit            = s2.canEdit.HasValue ? s2.canEdit : s1.canEdit,
-                canMove            = s2.canMove.HasValue ? s2.canMove : s1.canMove,
-                canRotate          = s2.canRotate.HasValue ? s2.canRotate : s1.canRotate,
-                drawingMode        = s2.drawingMode.HasValue ? s2.drawingMode : s1.drawingMode,
+                callOutTimeOut     = s2.CallOutTimeOut.HasValue ? s2.CallOutTimeOut : s1.CallOutTimeOut,
+                canDelete          = s2.CanDelete.HasValue ? s2.CanDelete : s1.CanDelete,
+                canEdit            = s2.CanEdit.HasValue ? s2.CanEdit : s1.CanEdit,
+                canMove            = s2.CanMove.HasValue ? s2.CanMove : s1.CanMove,
+                canRotate          = s2.CanRotate.HasValue ? s2.CanRotate : s1.CanRotate,
+                drawingMode        = s2.DrawingMode.HasValue ? s2.DrawingMode : s1.DrawingMode,
                 icon               = (string.IsNullOrEmpty(s2.Icon)) ? s1.Icon : s2.Icon,
                 iconHeight         = s2.IconHeight.HasValue ? s2.IconHeight : s1.IconHeight,
-                iconWidth          = s2.iconWidth.HasValue ? s2.IconHeight : s1.IconHeight,
+                iconWidth          = s2.IconWidth.HasValue ? s2.IconHeight : s1.IconHeight,
                 maxResolution      = s2.MaxResolution.HasValue ? s2.MaxResolution : s1.MaxResolution,
-                maxTitleResolution = s2.MaxTitleResolution.HasValue ? s2.maxTitleResolution : s1.maxTitleResolution,
+                maxTitleResolution = s2.MaxTitleResolution.HasValue ? s2.MaxTitleResolution : s1.MaxTitleResolution,
                 minResolution      = s2.MinResolution.HasValue ? s2.MinResolution : s1.MinResolution,
-                nameLabel          = (string.IsNullOrEmpty(s2.NameLabel)) ? s1.nameLabel : s2.nameLabel,
+                nameLabel          = (string.IsNullOrEmpty(s2.NameLabel)) ? s1.NameLabel : s2.NameLabel,
                 innerTextLabel     = (string.IsNullOrEmpty(s2.InnerTextLabel)) ? s1.InnerTextLabel : s2.InnerTextLabel,
-                showOnTimeline     = !string.IsNullOrEmpty(s2.ShowOnTimeline) ? s2.showOnTimeline : s1.showOnTimeline,
-                strokeColor        = s2.strokeColor.HasValue ? s2.strokeColor : s1.strokeColor,
-                strokeOpacity      = s2.strokeOpacity.HasValue ? s2.strokeOpacity : s1.strokeOpacity,
-                strokeWidth        = s2.strokeWidth.HasValue ? s2.strokeWidth : s1.strokeWidth,
-                tapMode            = s2.tapMode.HasValue ? s2.tapMode : s1.tapMode,
-                timelineBehaviour  = s2.TimelineBehaviour.HasValue ? s2.TimelineBehaviour : s1.timelineBehaviour,
-                titleMode          = s2.TitleMode.HasValue ? s2.titleMode : s1.titleMode,
+                showOnTimeline     = !string.IsNullOrEmpty(s2.ShowOnTimeline) ? s2.ShowOnTimeline : s1.ShowOnTimeline,
+                strokeColor        = s2.StrokeColor.HasValue ? s2.StrokeColor : s1.StrokeColor,
+                strokeOpacity      = s2.StrokeOpacity.HasValue ? s2.StrokeOpacity : s1.StrokeOpacity,
+                strokeWidth        = s2.StrokeWidth.HasValue ? s2.StrokeWidth : s1.StrokeWidth,
+                tapMode            = s2.TapMode.HasValue ? s2.TapMode : s1.TapMode,
+                timelineBehaviour  = s2.TimelineBehaviour.HasValue ? s2.TimelineBehaviour : s1.TimelineBehaviour,
+                titleMode          = s2.TitleMode.HasValue ? s2.TitleMode : s1.TitleMode,
                 visible            = s2.Visible.HasValue ? s2.Visible : s1.Visible,
                 picture            = s2.Picture ?? s1.Picture,
                 fillColor          = s2.FillColor.HasValue ? s2.FillColor : s1.FillColor,
@@ -892,10 +894,15 @@ namespace DataServer
                 SubTitles =         string.IsNullOrEmpty(s2.SubTitles) ? s1.SubTitles : s2.SubTitles
             };
             // If the name label is specified by a style, do not overwrite it.
-            if (r.nameLabel == DefaultNameLabel && !string.IsNullOrEmpty(s1.nameLabel)) r.nameLabel = s1.nameLabel;
+            if (r.nameLabel == DefaultNameLabel && !string.IsNullOrEmpty(s1.NameLabel)) r.nameLabel = s1.NameLabel;
             //sw.Stop();
             //Mergetime += sw.ElapsedTicks;
             return r;
+        }
+
+        public PoIStyle CloneStyle()
+        {
+            return Clone() as PoIStyle;
         }
 
         public object Clone()

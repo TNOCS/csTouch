@@ -35,6 +35,10 @@ using csShared.Documents;
 
 namespace DataServer
 {
+    using System.Windows.Data;
+
+    using csCommon.Types.DataServer.PoI;
+
     [ProtoContract]
     public class BaseContent : PropertyChangedBase, IContent, IComparable, IConvertibleGeoJson, ITextSearchable
     {
@@ -213,39 +217,70 @@ namespace DataServer
         [ProtoMember(9, OverwriteList = true)]
         public List<MetaInfo> MetaInfo { get; set; }
 
-        public BaseContent PoiType { get; set; }
+        public BaseContent PoiType { get; set; } // See method LookupPropertyPoiTypeInPoITypes()
 
         [XmlIgnore]
         public PoIStyle NAnalysisStyle { get; set; }
 
+        /// <summary>
+        /// NEffectiveStyle is a calculated style, don't change any values in the NEffectiveStyle style
+        /// Any manually changes will be overwritten in next merge!
+        /// Merge order of style
+        /// * Default style (hardcoded values)
+        /// * NEffectiveStyle of POI type (if found)
+        /// * POI style (if defined)
+        /// * NAnalysisStyle
+        /// 
+        /// Casting IReadonlyPoIStyle to PoIStyle will make properties writeable (not recommended)
+        /// </summary>
         [XmlIgnore]
-        public PoIStyle NEffectiveStyle
+        public IReadonlyPoIStyle NEffectiveStyle
         {
             get
             {
-                if (nEffectiveStyle != null) return nEffectiveStyle;
-                var r = PoIStyle.GetBasicStyle();
-                if (service == null) return r;
+                if (nEffectiveStyle != null) return nEffectiveStyle; // used cached calculated style
+                var resultStyle = PoIStyle.GetBasicStyle(); //As default (fallback) use hardcoded default style
+                LookupPropertyPoiTypeInPoITypes(); // Set property PoiType if not set
 
-                if (PoiType == null && !String.IsNullOrEmpty(PoiTypeId))
+                // If there is a PoI Type and has PoI type a style? Merge it!
+                if (PoiType != null && PoiType.Style != null)
                 {
-                    PoiType = ((PoiService)service).PoITypes.FirstOrDefault(k => k.ContentId == PoiTypeId);
+                    resultStyle = PoIStyle.MergeStyle(resultStyle, PoiType.NEffectiveStyle);
                 }
 
-                if (PoiType != null && PoiType.Style != null) r = PoIStyle.MergeStyle(r, PoiType.NEffectiveStyle);
-
+                // Has the PoI a style? Merge the it!
                 if (Style != null)
                 {
-                    r = PoIStyle.MergeStyle(r, Style);
+                    resultStyle = PoIStyle.MergeStyle(resultStyle, Style);
                 }
 
-                if (NAnalysisStyle != null) r = PoIStyle.MergeStyle(r, NAnalysisStyle);
+                // Has the PoI a NAnalysisStyle style? Merge the it!
+                if (NAnalysisStyle != null)
+                {
+                    resultStyle = PoIStyle.MergeStyle(resultStyle, NAnalysisStyle);
+                }
 
-                nEffectiveStyle = r;
+                nEffectiveStyle = resultStyle; // Cache final merged style!
 
                 NotifyOfPropertyChange(() => InnerText);
                 NotifyOfPropertyChange(() => Name);
-                return r;
+                return resultStyle;
+            }
+        }
+
+        /// <summary>
+        /// Look up PoiTypeId in the Service.PoITypes (if found, property PoiType is set)
+        /// </summary>
+        private void LookupPropertyPoiTypeInPoITypes()
+        {
+            if ((Service is PoiService /* Need service to lookup PoIType */) && 
+                (!String.IsNullOrEmpty(PoiTypeId) /* Need PoIType id to lookup*/ ))
+            {
+                var lookup = ((PoiService)Service).PoITypes.FirstOrDefault(k => k.ContentId == PoiTypeId);
+                if ((PoiType == null) || (!PoiType.Equals(lookup)))
+                {
+                    PoiType = lookup; // Only call when value is changed
+                }
             }
         }
 

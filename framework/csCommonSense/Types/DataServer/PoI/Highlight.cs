@@ -21,6 +21,8 @@ using ProtoBuf;
 
 namespace PoiServer.PoI
 {
+    using System.Windows.Media.Imaging;
+
     [ProtoContract, ProtoInclude(100, typeof(KeywordFilter))]
     [DebuggerDisplay("{Title}: Select {SelectionCriteria} of type {SelectionType} as {ValueType} and display it as {VisualType}.")]
     public class Highlight : PropertyChangedBase, IConvertibleXml
@@ -735,9 +737,38 @@ namespace PoiServer.PoI
                             if (SelectionCriteria != null && bc.Labels.ContainsKey(SelectionCriteria))
                             {
                                 var newIcon = GetIcon(this, bc.Labels[SelectionCriteria]);
-                                if (File.Exists(Path.Combine(bc.Service.MediaFolder, newIcon))) 
-                                    bc.NAnalysisStyle.Icon = newIcon;
-                                //else Debug.Assert(false, "Icon not found!!!");
+                                if (File.Exists(Path.Combine(bc.Service.MediaFolder, newIcon))) bc.NAnalysisStyle.Icon = newIcon;
+                                else 
+                                {
+                                    // Icon (newIcon) not found in media directory, create default error icon (to show on the map)
+                                    try
+                                    {
+                                        var icon_not_found = "icon_not_found_" + newIcon;
+                                        if (!File.Exists(Path.Combine(bc.Service.MediaFolder, icon_not_found)))
+                                        {
+                                            
+                                            var errorIcon =
+                                                new BitmapImage(
+                                                    new Uri(
+                                                        "pack://application:,,,/csCommon;component/Resources/Icons/IconNotFound.png"));
+
+                                            var encoder = new PngBitmapEncoder();
+                                            encoder.Frames.Add(BitmapFrame.Create((BitmapImage)errorIcon));
+                                            using (
+                                                var filestream =
+                                                    new FileStream(
+                                                        Path.Combine(bc.Service.MediaFolder, icon_not_found),
+                                                        FileMode.Create)) encoder.Save(filestream);
+                                        }
+                                        bc.NAnalysisStyle.Icon = icon_not_found;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        // Dont care
+                                    }
+
+                                    
+                                }
                             }
                             break;
                         case VisualTypes.StrokeWidth:

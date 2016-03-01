@@ -319,7 +319,7 @@ namespace csCommon
                             }
                         }
                     }
-                    else
+                    else if (layer != null)
                     {
                         nl = new sLayer
                         {
@@ -655,7 +655,10 @@ namespace csCommon
                 ParseLayers(AppState.ViewDef.Layers, ref startLayer, "Layers", false);
                 ParseLayers(AppState.ViewDef.BaseLayers, ref startLayer, "BaseLayers", true);                
                 CleanUpLayers(ref startLayer);
-                ParseLayers(AppState.ViewDef.EsriLayers, ref startLayer, "BaseLayers", true);
+                if (AppState.ViewDef.EsriLayers != null) // When is EsriLayers set??
+                {
+                    ParseLayers(AppState.ViewDef.EsriLayers, ref startLayer, "BaseLayers", true);
+                }
                 NotifyOfPropertyChange(() => StartLayer);
                 //Layers = AppState.ViewDef.Layers;
                 if (view != null)

@@ -86,6 +86,7 @@
                                           IconMoved="BCircleIconMoved"
                                           IconReleased="BCircleIconReleased"
                                           IconTapped="BCircleIconTapped"
+                                          IconLongTapped="BCircleIconLongTapped"
                                           RootToolTip="User">
                     <mapIconMenu1:MapMenuItem.Header>
                         <Grid RenderTransformOrigin="0.5, 0.5">
@@ -107,10 +108,20 @@
                                    Width="{Binding Attributes[PoI].NEffectiveStyle.IconWidth}"
                                    Height="{Binding Attributes[PoI].NEffectiveStyle.IconHeight}"
                                    RenderTransformOrigin="0.5, 0.5"
-                                   Source="{Binding Attributes[PoI].NEffectiveStyle.Picture}">
+                                   >
                                 <Image.RenderTransform>
                                     <ScaleTransform ScaleX="0.75" ScaleY="0.75" />
                                 </Image.RenderTransform>
+                                <Image.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Setter Property="Source" Value="{Binding Attributes[PoI].NEffectiveStyle.Picture}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Attributes[PoI].NEffectiveStyle.Picture}" Value="{x:Null}">
+                                                <Setter Property="Source" Value="/csCommon;component/Resources/Icons/IconNotFound.png" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
                             </Image>
                             <TextBlock x:Name="InnerText"
                                        HorizontalAlignment="Center"

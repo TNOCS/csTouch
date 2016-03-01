@@ -39,14 +39,18 @@ namespace csCommon.csMapCustomControls.MapIconMenu
             CommandManager.RegisterClassCommandBinding(typeof(MapMenuItem), bindingExpand);
         }
 
+        private const int iconLongTappedTimerInMSec = 1500;
+
         public FrameworkElement RelativeElement;
         public event IconMovedEventHandler IconMoved;
         public event IconTapedEventHandler IconTapped;
+        public event EventHandler          IconLongTapped;
         public event IconMovedEventHandler IconReleased;
         public event IconMovedEventHandler IconStartMoving;
         public event IconMovedEventHandler IconMoveCompleted;
 
         private DispatcherTimer timeoutTimer;
+        private DispatcherTimer iconLongTappedTimer;
         private DateTime mouseTime;
         private DateTime touchTime;
 
@@ -425,17 +429,10 @@ namespace csCommon.csMapCustomControls.MapIconMenu
             if (RelativeElement != null && !isTouch)
             {
                 var p = e.GetPosition(RelativeElement);
-                if (mouseTime.AddMilliseconds(200) > DateTime.Now)
-                {
-                    if (IconTapped != null) IconTapped(this, new IconMovedEventArgs { Position = p });
-                    //MapMenuCommands.ToggleExpansion.Execute(null, this);
-                }
-                if (IconReleased != null) IconReleased(this, new IconMovedEventArgs { Position = p });
-                if (Moving)
-                {
-                    Moving = false;
-                    if (IconMoveCompleted != null) IconMoveCompleted(this, new IconMovedEventArgs() { Position = p });
-                }
+                FireConditionalIconTappedEvent(p, mouseTime, false);
+                FireIconReleasedEvent(p);
+                FireIconMoveCompletedEvent(p);
+
             }
 
             if (mouseTime.AddMilliseconds(200) > DateTime.Now)
@@ -450,19 +447,9 @@ namespace csCommon.csMapCustomControls.MapIconMenu
         {
             e.TouchDevice.Updated -= TouchDeviceUpdated;
             var p = e.GetTouchPoint(RelativeElement).Position;
-            if (touchTime.AddMilliseconds(200) > DateTime.Now)
-            {
-                if (RelativeElement != null && IconTapped != null) IconTapped(this, new IconMovedEventArgs { Position = p });
-                RaiseTapEvent();
-
-                //MapMenuCommands.ToggleExpansion.Execute(null, this);
-            }
-            if (IconReleased != null) IconReleased(this, new IconMovedEventArgs { Position = p });
-            if (Moving)
-            {
-                Moving = false;
-                if (IconMoveCompleted != null) IconMoveCompleted(this, new IconMovedEventArgs() { Position = p });
-            }
+            FireConditionalIconTappedEvent(p, touchTime, true);
+            FireIconReleasedEvent(p);
+            FireIconMoveCompletedEvent(p);
             isTouch = false;
         }
 
@@ -472,19 +459,17 @@ namespace csCommon.csMapCustomControls.MapIconMenu
             if (RelativeElement != null && touchTime.AddMilliseconds(200) < DateTime.Now)
             {
                 var p = e.GetTouchPoint(RelativeElement).Position;
-                if (!Moving)
-                {
-                    Moving = true;
-                    if (IconStartMoving != null) IconStartMoving(this, new IconMovedEventArgs() { Position = p });
-                }
-                if (IconMoved != null) IconMoved(this, new IconMovedEventArgs { Position = p });
-
+                FireIconStartMovingEvent(p);
+                FireIconMovedEvent(p);
             }
             e.Handled = true;
         }
 
+       
+
         private void MCenterButtonPreviewTouchDown(object sender, TouchEventArgs e)
         {
+            FireIconTouchedEvent();
             isTouch = true;
             SetLastTouch();
             touchTime = DateTime.Now;
@@ -499,12 +484,9 @@ namespace csCommon.csMapCustomControls.MapIconMenu
             var td = (TouchDevice)sender;
             if (RelativeElement == null || touchTime.AddMilliseconds(200) >= DateTime.Now) return;
             var p = td.GetTouchPoint(RelativeElement).Position;
-            if (!Moving)
-            {
-                Moving = true;
-                if (IconStartMoving != null) IconStartMoving(this, new IconMovedEventArgs() { Position = p });
-            }
-            if (IconMoved != null) IconMoved(this, new IconMovedEventArgs { Position = p });
+            FireIconStartMovingEvent(p);
+            FireIconMovedEvent(p);
+            
         }
 
         private void MCenterButtonPreviewMouseMove(object sender, MouseEventArgs e)
@@ -513,12 +495,8 @@ namespace csCommon.csMapCustomControls.MapIconMenu
             SetLastTouch();
             if (RelativeElement == null || mouseTime.AddMilliseconds(200) >= DateTime.Now) return;
             var p = e.GetPosition(RelativeElement);
-            if (!Moving)
-            {
-                Moving = true;
-                if (IconStartMoving != null) IconStartMoving(this, new IconMovedEventArgs() { Position = p });
-            }
-            if (IconMoved != null) IconMoved(this, new IconMovedEventArgs { Position = p });
+            FireIconStartMovingEvent(p);
+            FireIconMovedEvent(p);
         }
 
         private void MCenterButtonPreviewMouseUp(object sender, MouseButtonEventArgs e)
@@ -529,6 +507,7 @@ namespace csCommon.csMapCustomControls.MapIconMenu
 
         private void MCenterButtonPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            FireIconTouchedEvent();
             //if (_mm != null && _mm.MenuEnabled && !isTouch)
             if (!isTouch)
             {
@@ -575,11 +554,7 @@ namespace csCommon.csMapCustomControls.MapIconMenu
         {
             get
             {
-                if (null != _mAlignPanel)
-                {
-                    return _mAlignPanel.AlignReferencePoint;
-                }
-                return new Point();
+                return (_mAlignPanel != null) ? _mAlignPanel.AlignReferencePoint : new Point();
             }
         }
 
@@ -618,15 +593,7 @@ namespace csCommon.csMapCustomControls.MapIconMenu
             if (null != _mPanel)
             {
                 // The really really nice way is to check neighbour arragements and clip in a way such that we don't draw over it
-                if (mm.Radius != 0.0)
-                {
-                    _mPanel.Radius = mm.Radius;
-                }
-                else
-                {
-                    _mPanel.Radius = Math.Max(_mCenterButton.DesiredSize.Height, _mCenterButton.DesiredSize.Width) * 1.50;
-                }
-
+                _mPanel.Radius = (mm.Radius != 0.0) ? mm.Radius :  Math.Max(_mCenterButton.DesiredSize.Height, _mCenterButton.DesiredSize.Width) * 1.50;
             }
 
 
@@ -644,16 +611,7 @@ namespace csCommon.csMapCustomControls.MapIconMenu
                 if (null != _mPanel)
                 {
                     // The really really nice way is to check neighbour arragements and clip in a way such that we don't draw over it
-
-
-                    if (mm.Radius != 0.0)
-                    {
-                        _mPanel.Radius = mm.Radius;
-                    }
-                    else
-                    {
-                        _mPanel.Radius = Math.Max(_mCenterButton.DesiredSize.Height, _mCenterButton.DesiredSize.Width) * 1.50;
-                    }
+                    _mPanel.Radius = (mm.Radius != 0.0) ? mm.Radius : Math.Max(_mCenterButton.DesiredSize.Height, _mCenterButton.DesiredSize.Width) * 1.50;
                 }
 
 
@@ -675,18 +633,13 @@ namespace csCommon.csMapCustomControls.MapIconMenu
 
         private bool CanToggleExpand()
         {
-            if (null != Items && Items.Count > 0)
-            {
-                return true;
-            }
-
-            return false;
+            return  (Items != null && Items.Count > 0);
         }
 
         // Executed event handler.
         private static void ToggleCommandHandler(object target, ExecutedRoutedEventArgs e)
         {
-            if (null != target && target is MapMenuItem)
+            if (target is MapMenuItem)
             {
                 ((MapMenuItem)target).ToggleExpand();
             }
@@ -695,15 +648,109 @@ namespace csCommon.csMapCustomControls.MapIconMenu
         // CanExecute event handler.
         private static void CanToggleHandler(object target, CanExecuteRoutedEventArgs e)
         {
-            if (null != target && target is MapMenuItem)
+            if (target is MapMenuItem)
             {
                 e.CanExecute = ((MapMenuItem)target).CanToggleExpand();
             }
         }
 
 
+#region Fire events
+
+        private void FireIconTouchedEvent()
+        {
+            StartLongTappedTimer();
+            // No event for this (yet)
+        }
+
+         private void FireConditionalIconTappedEvent(Point pPosition, DateTime pLastTouch, bool pRaiseTapEvent)
+         {
+             StopLongTappedTimer();
+             var touchedTime = new TimeSpan(DateTime.Now.Ticks - pLastTouch.Ticks);
+             if (touchedTime.TotalMilliseconds < 200)
+             {
+                var handler = IconTapped;
+                if (handler != null) handler(this, new IconMovedEventArgs { Position = pPosition });
+                if (pRaiseTapEvent) RaiseTapEvent();
+
+                //MapMenuCommands.ToggleExpansion.Execute(null, this);
+             }
+        }
+
+        private void FireIconReleasedEvent(Point pPosition)
+        {
+            var handler = IconReleased;
+            if (handler != null) handler(this, new IconMovedEventArgs { Position = pPosition });
+        }
+
+        private void FireIconMoveCompletedEvent(Point pPosition)
+        {
+            if (Moving) // IconStartMoving event was fired?
+            {
+                Moving = false;
+                var handler = IconMoveCompleted;
+                if (handler != null) handler(this, new IconMovedEventArgs() { Position = pPosition });
+            }
+        }
+
+        private void FireIconStartMovingEvent(Point pPosition)
+        {
+            if (!Moving) // Event already fired
+            {
+                Moving = true;
+                StopLongTappedTimer();
+                var handler = IconStartMoving;
+                if (handler != null) handler(this, new IconMovedEventArgs() { Position = pPosition });
+            }
+        }
+
+        private void FireIconMovedEvent(Point pPosition)
+        {
+            StopLongTappedTimer();
+            var handler = IconMoved;
+            if (handler != null) handler(this, new IconMovedEventArgs { Position = pPosition });
+        }
+
+        private void FireIconLongTapped()
+        {
+            // TODO: Add position as event argument? Not needed for dialog
+            var handler = IconLongTapped;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+#endregion
+
+        /// <summary>
+        /// The icon is clicked (mouse or touch) set timer to wait for x msec (while icon still touched); then fire event
+        /// </summary>
+        private void StartLongTappedTimer()
+        {
+            StopLongTappedTimer();
+            iconLongTappedTimer = new DispatcherTimer(DispatcherPriority.Background)
+            {
+                Interval = new TimeSpan(0, 0, 0, 0, iconLongTappedTimerInMSec)
+            };
+            iconLongTappedTimer.Tick += LongTappedTimerElapsed;
+            iconLongTappedTimer.Start();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void StopLongTappedTimer()
+        {
+            if (iconLongTappedTimer != null)
+            {
+                iconLongTappedTimer.Stop();
+                iconLongTappedTimer.Tick -= LongTappedTimerElapsed;
+            }
+        }
 
 
+        private void LongTappedTimerElapsed(object sender, EventArgs e)
+        {
+            StopLongTappedTimer();
+            FireIconLongTapped();
+        }
     }
 
     public delegate void IconMovedEventHandler(object sender, IconMovedEventArgs e);

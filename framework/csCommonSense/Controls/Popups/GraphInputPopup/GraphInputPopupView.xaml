@@ -4,7 +4,7 @@
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
        xmlns:Custom="http://schemas.microsoft.com/surface/2008" xmlns:oxy="http://oxyplot.codeplex.com"
-       xmlns:CaliburnFramework_Framework="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+       xmlns:CaliburnFramework_Framework="http://www.caliburnproject.org"
        x:Class="csShared.Controls.Popups.GraphInputPopup.GraphInputPopupView" 
        mc:Ignorable="d" 
        d:DesignHeight="75" d:DesignWidth="300">

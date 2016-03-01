@@ -217,8 +217,11 @@ namespace csShared.Utils
 
             try {
                 if (WriteToLogFile) {
-                    using (var logFile = File.AppendText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log.csv"))) {
-                        logFile.WriteLine(s.Replace('|', ';'));
+                    lock (Lck) {
+                        using (var logFile = File.AppendText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log.csv")))
+                        {
+                            logFile.WriteLine(s.Replace('|', ';'));
+                        }
                     }
                 }
             }

@@ -22,6 +22,12 @@ using System.Collections.Generic;
 
 namespace SharpMap.Geometries
 {
+    using csShared.Utils;
+
+    using DataServer;
+
+    using ESRI.ArcGIS.Client.Geometry;
+
     /// <summary>
     /// Bounding box type with double precision
     /// </summary>
@@ -542,6 +548,15 @@ namespace SharpMap.Geometries
         public Point GetCentroid()
         {
             return (_Min + _Max)*.5f;
+        }
+
+        // The gis map uses EPSG:3857 (900913) need to convert it to EPSG:4326 (lat/lon)
+        private static SpatialReference defaultSpatialRef = new SpatialReference(900913);
+        public Position GetCentroidLatLon()
+        {
+            var center = GetCentroid();
+            var a = new MapPoint(center.X, center.Y); // Web_Mercator projection (EPSG:3857 (900913))
+            return a.ToPosition();
         }
 
         /// <summary>

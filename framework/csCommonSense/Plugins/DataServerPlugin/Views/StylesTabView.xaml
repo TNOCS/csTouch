@@ -4,7 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Controls="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
-             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro" xmlns:Custom="http://schemas.microsoft.com/surface/2008" xmlns:Utils="clr-namespace:csShared.Utils" xmlns:local="clr-namespace:csDataServerPlugin" xmlns:SlideTab="clr-namespace:csShared.Controls.SlideTab"
+             xmlns:cal="http://www.caliburnproject.org" xmlns:Custom="http://schemas.microsoft.com/surface/2008" xmlns:Utils="clr-namespace:csShared.Utils" xmlns:local="clr-namespace:csDataServerPlugin" xmlns:SlideTab="clr-namespace:csShared.Controls.SlideTab"
              xmlns:ThirdParty="clr-namespace:csShared.ThirdParty"
              xmlns:csGeoLayers="clr-namespace:csGeoLayers"
              xmlns:Views="clr-namespace:csDataServerPlugin.Views" x:Name="userControl" x:Class="csDataServerPlugin.StylesTabView"

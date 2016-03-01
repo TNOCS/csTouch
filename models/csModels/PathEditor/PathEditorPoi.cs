@@ -97,18 +97,19 @@ namespace csModels.PathEditor
             {
                 Poi.Deleted += (sender, e) => OnPoiDeleted(Poi, TrackPoiType.Route);
 
-                Poi.Style = Poi.NEffectiveStyle.Clone() as PoIStyle;
-                if (Poi.Style != null)
-                {
-                    Poi.Style.Icon        = string.Empty;
-                    Poi.Style.DrawingMode = DrawingModes.Polyline;
-                    Poi.Style.FillColor   = Colors.Transparent;
-                }
-                Poi.Layer += "_path";
-                start = new Point(Poi.Position.Longitude, Poi.Position.Latitude);
-                Poi.Points.Add(start);
-                Poi.UpdateEffectiveStyle();
-                Poi.TriggerUpdated();
+                // TODO Missing Clone method
+                //Poi.Style = Poi.NEffectiveStyle.Clone() as PoIStyle;
+                //if (Poi.Style != null)
+                //{
+                //    Poi.Style.Icon        = string.Empty;
+                //    Poi.Style.DrawingMode = DrawingModes.Polyline;
+                //    Poi.Style.FillColor   = Colors.Transparent;
+                //}
+                //Poi.Layer += "_path";
+                //start = new Point(Poi.Position.Longitude, Poi.Position.Latitude);
+                //Poi.Points.Add(start);
+                //Poi.UpdateEffectiveStyle();
+                //Poi.TriggerUpdated();
             });
         }
 

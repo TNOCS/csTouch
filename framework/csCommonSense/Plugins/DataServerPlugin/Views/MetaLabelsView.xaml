@@ -8,7 +8,7 @@
              xmlns:dataServer="clr-namespace:DataServer"
              xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:micro="http://www.caliburnproject.org"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:ratingControl="clr-namespace:csDataServerPlugin.RatingControl"
              xmlns:sensors="clr-namespace:csGeoLayers.Sensors"

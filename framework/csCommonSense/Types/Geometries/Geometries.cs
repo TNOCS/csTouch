@@ -22,6 +22,7 @@ namespace csCommon.Types.Geometries
 
     public enum GeometryEnum
     {
+        Empty,
         Point,
         LineString,
         Polygon,
@@ -30,11 +31,28 @@ namespace csCommon.Types.Geometries
         MultiPolygon
     }
 
+
+
     public abstract class BaseGeometry
     {
+
+        public static GeometryEnum GetGeometryType(BaseGeometry pGeometry)
+        {
+            if (pGeometry == null) return GeometryEnum.Empty;
+            if (pGeometry is LineString) return GeometryEnum.LineString;
+            if (pGeometry is Point) return GeometryEnum.Point;
+            if (pGeometry is Polygon) return GeometryEnum.Polygon;
+            if (pGeometry is MultiPoint) return GeometryEnum.MultiPoint;
+            if (pGeometry is MultiLineString) return GeometryEnum.MultiLineString;
+            if (pGeometry is MultiPolygon) return GeometryEnum.MultiPolygon;
+            throw new NotImplementedException();
+        }
+
         // public GeometryEnum Genum { get; set; } // TODO This is weird. Why set an enum AND create derived classes.
 
-        public virtual bool IsRegion { get {  return false; } }
+        public virtual bool IsRegion { get { return false; } }
+
+        public virtual Point GetCenterPoint() {  return new Point(0,0); }
 
         public abstract bool Contains(Point p);
 
@@ -79,7 +97,7 @@ namespace csCommon.Types.Geometries
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             if (other.GetType() != GetType()) return false;
-            return Equals((Point) other);
+            return Equals((Point)other);
         }
 
         protected bool Equals(Point other)
@@ -92,10 +110,15 @@ namespace csCommon.Types.Geometries
             unchecked
             {
                 int hashCode = X.GetHashCode();
-                hashCode = (hashCode*397) ^ Y.GetHashCode();
-                hashCode = (hashCode*397) ^ Z.GetHashCode();
+                hashCode = (hashCode * 397) ^ Y.GetHashCode();
+                hashCode = (hashCode * 397) ^ Z.GetHashCode();
                 return hashCode;
             }
+        }
+
+        public override Point GetCenterPoint()
+        {
+            return this;
         }
     }
 
@@ -108,26 +131,26 @@ namespace csCommon.Types.Geometries
             if (Line.Count < 3) return false;
             if (!Line.First().Equals(Line.Last())) return false; // Not a closed shape.
 
-// METHOD USING GRAPHICS REGION
-//
-//            var points = new PointF[Line.Count];
-//            var types = new byte[Line.Count];
-//            int index = 0;
-//            foreach (Point point in Line)
-//            {
-//                points[index] = new PointF((float) point.X, (float) point.Y);
-//                types[index] = 1;
-//                    // Endpoint of a line: http://msdn.microsoft.com/en-us/library/system.drawing.drawing2d.graphicspath.pathtypes(v=vs.110).aspx
-//                index++;
-//            }
-//
-//            var graphicsPath = new GraphicsPath(points, types, FillMode.Alternate);
-//            var region = new Region(graphicsPath);
-//
-//            var pF = new PointF {X = (float) p.X, Y = (float) p.Y};
-//            return region.IsVisible(pF);
-//        }
-//
+            // METHOD USING GRAPHICS REGION
+            //
+            //            var points = new PointF[Line.Count];
+            //            var types = new byte[Line.Count];
+            //            int index = 0;
+            //            foreach (Point point in Line)
+            //            {
+            //                points[index] = new PointF((float) point.X, (float) point.Y);
+            //                types[index] = 1;
+            //                    // Endpoint of a line: http://msdn.microsoft.com/en-us/library/system.drawing.drawing2d.graphicspath.pathtypes(v=vs.110).aspx
+            //                index++;
+            //            }
+            //
+            //            var graphicsPath = new GraphicsPath(points, types, FillMode.Alternate);
+            //            var region = new Region(graphicsPath);
+            //
+            //            var pF = new PointF {X = (float) p.X, Y = (float) p.Y};
+            //            return region.IsVisible(pF);
+            //        }
+            //
 
             // METHOD USING SIMPLE ALGORITHM: https://social.msdn.microsoft.com/Forums/windows/en-us/95055cdc-60f8-4c22-8270-ab5f9870270a/determine-if-the-point-is-in-the-polygon-c
             bool inside = false;
@@ -149,8 +172,8 @@ namespace csCommon.Types.Geometries
                 }
 
                 if ((newPoint.X < p.X) == (p.X <= oldPoint.X)
-                    && (p.Y - p1.Y)*(p2.X - p1.X)
-                    < (p2.Y - p1.Y)*(p.X - p1.X))
+                    && (p.Y - p1.Y) * (p2.X - p1.X)
+                    < (p2.Y - p1.Y) * (p.X - p1.X))
                 {
                     inside = !inside;
                 }
@@ -171,7 +194,7 @@ namespace csCommon.Types.Geometries
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((LineString) obj);
+            return Equals((LineString)obj);
         }
 
         public override int GetHashCode()
@@ -208,7 +231,7 @@ namespace csCommon.Types.Geometries
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((Polygon) obj);
+            return Equals((Polygon)obj);
         }
 
         public override int GetHashCode()
@@ -236,7 +259,7 @@ namespace csCommon.Types.Geometries
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((MultiPoint) obj);
+            return Equals((MultiPoint)obj);
         }
 
         public override int GetHashCode()
@@ -264,7 +287,7 @@ namespace csCommon.Types.Geometries
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((MultiLineString) obj);
+            return Equals((MultiLineString)obj);
         }
 
         public override int GetHashCode()
@@ -293,7 +316,7 @@ namespace csCommon.Types.Geometries
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == this.GetType() && Equals((MultiPolygon) obj);
+            return obj.GetType() == this.GetType() && Equals((MultiPolygon)obj);
         }
 
         public override int GetHashCode()
@@ -322,7 +345,7 @@ namespace csCommon.Types.Geometries
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((CircularString) obj);
+            return Equals((CircularString)obj);
         }
 
         public override int GetHashCode()
@@ -350,7 +373,8 @@ namespace csCommon.Types.Geometries
             var pc = new PointCollection();
             if (points.Count == 0) return pc;
 
-            switch (convert) {
+            switch (convert)
+            {
                 case null:
                     foreach (var p in points) pc.Add(new MapPoint(p.X, p.Y));
                     break;
@@ -441,19 +465,19 @@ namespace csCommon.Types.Geometries
                     sb.Remove(sb.Length - 1, 1); // remove the last comma
                     sb.Append(")");
                     break;
-                    //This works:
-                    //var polyLine = shape as ShapePolyLine;
-                    //if (polyLine == null) return string.Empty;
-                    //sb.Append("MULTIPOLYGON(");
-                    //foreach (var part in polyLine.Parts)
-                    //{
-                    //    sb.Append("((");
-                    //    ConvertPointsToString(sb, part, projection);
-                    //    sb.Append(")),");
-                    //}
-                    //sb.Remove(sb.Length - 1, 1); // remove the last comma
-                    //sb.Append(")");
-                    //break;
+                //This works:
+                //var polyLine = shape as ShapePolyLine;
+                //if (polyLine == null) return string.Empty;
+                //sb.Append("MULTIPOLYGON(");
+                //foreach (var part in polyLine.Parts)
+                //{
+                //    sb.Append("((");
+                //    ConvertPointsToString(sb, part, projection);
+                //    sb.Append(")),");
+                //}
+                //sb.Remove(sb.Length - 1, 1); // remove the last comma
+                //sb.Append(")");
+                //break;
             }
             return sb.ToString();
         }
@@ -469,7 +493,7 @@ namespace csCommon.Types.Geometries
                 // POINT(123.45 543.21)
                 var shapePoint = geometry as Point;
                 if (shapePoint == null) return string.Empty;
-                sb.AppendFormat(CultureInfo.InvariantCulture, "POINT({0} {1})", shapePoint.X, shapePoint.Y);                
+                sb.AppendFormat(CultureInfo.InvariantCulture, "POINT({0} {1})", shapePoint.X, shapePoint.Y);
             }
             else if (geometry as MultiPoint != null)
             {
@@ -478,7 +502,7 @@ namespace csCommon.Types.Geometries
                 if (multiPoint == null) return string.Empty;
                 sb.Append("MULTIPOINT(");
                 ConvertPointsToString(sb, multiPoint.Points, projection);
-                sb.Append(")");                
+                sb.Append(")");
             }
             else if (geometry as Polygon != null)
             {
@@ -497,7 +521,7 @@ namespace csCommon.Types.Geometries
                     sb.Append("),");
                 }
                 sb.Remove(sb.Length - 1, 1); // remove the last comma
-                sb.Append(")");                
+                sb.Append(")");
             }
             else if (geometry as MultiPolygon != null)
             {
@@ -522,7 +546,7 @@ namespace csCommon.Types.Geometries
                     sb.Append("),");
                 }
                 sb.Remove(sb.Length - 1, 1); // remove the last comma
-                sb.Append(")");                
+                sb.Append(")");
             }
             else if (geometry as LineString != null)
             {
@@ -655,7 +679,7 @@ namespace csCommon.Types.Geometries
         {
             var result = new Polygon();
             wkt = wkt.Replace(isPolygonZ ? "POLYGON Z" : "POLYGON", "");
-            string[] points = wkt.Split(new[] {"),("}, StringSplitOptions.None);
+            string[] points = wkt.Split(new[] { "),(" }, StringSplitOptions.None);
             foreach (string p in points)
             {
                 result.LineStrings.Add(ParseLineString(p));
@@ -679,7 +703,7 @@ namespace csCommon.Types.Geometries
         {
             var result = new MultiLineString();
             wkt = wkt.Replace("MULTILINESTRING", "");
-            string[] points = wkt.Split(new[] {"),("}, StringSplitOptions.None);
+            string[] points = wkt.Split(new[] { "),(" }, StringSplitOptions.None);
             foreach (string p in points)
             {
                 result.Lines.Add(ParseLineString(p));
@@ -691,7 +715,7 @@ namespace csCommon.Types.Geometries
         {
             var result = new MultiPolygon();
             wkt = wkt.Replace("MULTIPOLYGON", "");
-            string[] points = wkt.Split(new[] {")),(("}, StringSplitOptions.None);
+            string[] points = wkt.Split(new[] { ")),((" }, StringSplitOptions.None);
             foreach (string p in points)
             {
                 result.Polygons.Add(ParsePolygon(p));

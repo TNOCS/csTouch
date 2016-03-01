@@ -7,6 +7,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Caliburn.Micro;
 using csCommon.Types.DataServer.Interfaces;
+using DocumentFormat.OpenXml.Drawing;
 using ESRI.ArcGIS.Client.Geometry;
 using ESRI.ArcGIS.Client.Projection;
 using Gavaghan.Geodesy;
@@ -315,7 +316,7 @@ namespace DataServer
 
         public override string ToString()
         {
-            return string.Format("Position ({0:0.000}, {1:0.000}, {2:0.0}, {3:0.0}, {4:0.0}, {5:0.0})", Latitude,
+            return string.Format(CultureInfo.InvariantCulture, "Position ({0:0.000}, {1:0.000}, {2:0.0}, {3:0.0}, {4:0.0}, {5:0.0})", Latitude,
                 Longitude, Altitude, Speed, Course, Elevation);
         }
 
@@ -329,6 +330,15 @@ namespace DataServer
         public MapPoint ToWebMercator()
         {
             return WebMercator.FromGeographic(ToMapPoint()) as MapPoint;
+        }
+
+        /// <summary>
+        /// Try not to use this function! Use MapPoint 
+        /// </summary>
+        /// <returns></returns>
+        public System.Windows.Point ToPoint()
+        {
+            return new System.Windows.Point(Longitude, Latitude);
         }
 
         /// <summary>

@@ -651,10 +651,8 @@ namespace csDataServerPlugin
                         g.SetGeometry(m);
 
                         //if (p.NEffectiveStyle.FillColor.HasValue)
-                        if (p.NEffectiveStyle.IconHeight == null)
-                            p.NEffectiveStyle.IconHeight = 26;
-                        if (p.NEffectiveStyle.IconWidth == null)
-                            p.NEffectiveStyle.IconWidth = 26;
+                        Debug.Assert(p.NEffectiveStyle.IconHeight != null, "NEffectiveStyle.IconHeight is null, should always have default value (PoIStyle.GetBasicStyle()).  ");
+                        Debug.Assert(p.NEffectiveStyle.IconWidth != null, "NEffectiveStyle.IconWidth is null, should always have default value. (PoIStyle.GetBasicStyle())");
                         g.Symbol = new SimpleMarkerSymbol
                         {
                             Style = SimpleMarkerSymbol.SimpleMarkerStyle.Circle,

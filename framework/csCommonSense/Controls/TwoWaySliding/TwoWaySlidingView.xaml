@@ -5,7 +5,7 @@
        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
        mc:Ignorable="d" 
        d:DesignHeight="300" d:DesignWidth="300" xmlns:my="http://schemas.microsoft.com/surface/2008"
-       xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+       xmlns:cal="http://www.caliburnproject.org"
        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
   <UserControl.Resources>
     <!--<Simulation:BoolToColorConverter x:Key="BoolToColorConverter"/>-->

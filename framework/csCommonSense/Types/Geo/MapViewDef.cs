@@ -21,6 +21,7 @@ using Point = SharpMap.Geometries.Point;
 
 namespace csShared.Geo
 {
+
     public class GeoPointerArgs : EventArgs
     {
         public MapPoint Position { get; set; }
@@ -163,6 +164,13 @@ namespace csShared.Geo
             if (handler != null) handler(this, a);
         }
 
+        /// <summary>
+        /// Center to the location, highlight the location, keeping the same map resolution.
+        /// </summary>
+        public void CenterMapOnWgs84Point(DataServer.Position pCenterPosition)
+        {
+            PanAndPoint(new System.Windows.Point(pCenterPosition.Longitude, pCenterPosition.Latitude), true);
+        }
         /// <summary>
         /// Center to the location, highlight the location, keeping the same map resolution.
         /// </summary>

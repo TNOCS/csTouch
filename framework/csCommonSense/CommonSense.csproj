@@ -293,6 +293,7 @@
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Reactive.Core, Version=2.0.20823.0, Culture=neutral, PublicKeyToken=f300afd708cefcd3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\System.Reactive.Core.dll</HintPath>
@@ -348,6 +349,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonSenseBootstrapper.cs" />
     <Compile Include="Controls\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
     </Compile>
@@ -459,6 +461,7 @@
     <Compile Include="Plugins\EsriMap\Esri\WebTileProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\HlaRest\HlaRestService.cs" />
     <Compile Include="Plugins\SearchPlugin\APIs\MGRSSearch.cs" />
     <Compile Include="Plugins\StreamingVideoPlugin\ImbCommands\BaseCommand.cs" />
     <Compile Include="Plugins\StreamingVideoPlugin\ImbCommands\DisplayVideoCmd.cs" />
@@ -581,6 +584,7 @@
     <Compile Include="Types\DataServer\PoI\IO\XmlIO.cs" />
     <Compile Include="Types\DataServer\PoI\IO\ZipExporter.cs" />
     <Compile Include="Types\DataServer\PoI\IO\ZipImporter.cs" />
+    <Compile Include="Types\DataServer\PoI\IReadonlyPoiStyle.cs" />
     <Compile Include="Types\DataServer\PoI\Templates\ITemplateObject.cs" />
     <Compile Include="Types\DataServer\PoI\IO\PoiServiceExporterUtil.cs" />
     <Compile Include="Types\DataServer\PoI\IO\PoiServiceImporters.cs" />
@@ -593,7 +597,6 @@
     <Compile Include="Types\DataServer\PoI\GeoJsonService.cs" />
     <Compile Include="Types\DataServer\PoI\ShapeService.cs" />
     <Compile Include="Types\DataServer\PoI\Templates\TemplateStore.cs" />
-    <Compile Include="Types\DataServer\PoI\WebApiService.cs" />
     <Compile Include="Types\DataServer\PoI\XElementExt.cs" />
     <Compile Include="Types\DataServer\SensorCollection.cs" />
     <Compile Include="Types\DataServer\SensorCollectionSet.cs" />
@@ -660,6 +663,7 @@
     <Compile Include="Types\TextAnalysis\Stopwords.cs" />
     <Compile Include="Types\TextAnalysis\WordHistogram.cs" />
     <Compile Include="Utils\BaseWPFHelpers.cs" />
+    <Compile Include="Utils\CaliburnLogging.cs" />
     <Compile Include="Utils\Collections\BinarySorter.cs" />
     <Compile Include="Utils\Collections\ConcurrentKeyCollection.cs" />
     <Compile Include="Utils\Collections\ConcurrentObservableBase.cs" />
@@ -816,6 +820,7 @@
     <Compile Include="Utils\CoordinateTypeUtils.cs" />
     <Compile Include="Utils\CoordinateUtils.cs" />
     <Compile Include="Utils\DebouncedProcessor.cs" />
+    <Compile Include="Utils\CreatePoiByPoiTypeEventArgs.cs" />
     <Compile Include="Utils\DebugLogger.cs" />
     <Compile Include="Utils\DownloadCache.cs" />
     <Compile Include="Utils\DropEventArgs.cs" />
@@ -1294,6 +1299,42 @@
     <Resource Include="Plugins\USDomainPlugin\icons\usdomains-1.png" />
     <Resource Include="Plugins\USDomainPlugin\icons\usdomains.png" />
     <Resource Include="Plugins\USDomainPlugin\Effects\Data\wkttestshape.txt" />
+    <None Include="ArcGISRuntime10.2.5\client32\ArcGISRuntimeLogging.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\client32\esrigps.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\client32\log4cxx.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\client32\msvcp120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\client32\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\client32\RuntimeCoreNET.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\client64\ArcGISRuntimeLogging.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\client64\esrigps.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\client64\log4cxx.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\client64\msvcp120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\client64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\client64\RuntimeCoreNET.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="PoiLayers\Sketch\_Media\layer.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1305,6 +1346,7 @@
     <Resource Include="Resources\Icons\Compassblack.png" />
     <Resource Include="Resources\Icons\Twitter-Bird.png" />
     <Resource Include="Resources\Icons\ie.png" />
+    <Resource Include="Resources\Icons\IconNotFound.png" />
     <Resource Include="Resources\Icons\Wrong.png" />
     <Resource Include="Resources\Icons\chart2.png" />
     <Resource Include="Resources\Icons\Book-Open.png" />
@@ -1314,6 +1356,387 @@
     <Resource Include="Resources\Icons\appbar.laser.white.png" />
     <Resource Include="Resources\Icons\OpenWindow.png" />
     <Resource Include="Resources\Icons\SecurityCamera.png" />
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\image_renderer_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\image_renderer_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\image_renderer_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\image_renderer_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\image_renderer_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\image_renderer_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\image_renderer_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\magnifier_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\magnifier_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\magnifier_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\magnifier_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\magnifier_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\magnifier_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\magnifier_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\offscreen_buffer_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\offscreen_buffer_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\offscreen_buffer_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\offscreen_buffer_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\offscreen_buffer_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\offscreen_buffer_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\offscreen_buffer_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\screen_image_renderer_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\screen_image_renderer_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\screen_image_renderer_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\screen_image_renderer_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\screen_image_renderer_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\screen_image_renderer_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\screen_image_renderer_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_pick_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_pick_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_pick_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_pick_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_pick_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_pick_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_pick_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_area_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_halo_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_halo_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_halo_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_halo_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_halo_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_halo_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_halo_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_pick_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_pick_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_pick_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_pick_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_pick_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_pick_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_pick_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_line_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_halo_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_halo_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_halo_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_halo_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_halo_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_halo_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_halo_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_pick_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_pick_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_pick_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_pick_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_pick_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_pick_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_pick_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\seq_render_point_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_draw_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_draw_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_draw_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_draw_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_draw_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_draw_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_draw_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_grid_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_grid_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_grid_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_grid_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_grid_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_grid_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\simple_grid_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_coor_to_tex_coor_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_coor_to_tex_coor_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_coor_to_tex_coor_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_coor_to_tex_coor_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_coor_to_tex_coor_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_coor_to_tex_coor_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_coor_to_tex_coor_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_advanced_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_advanced_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_advanced_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_advanced_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_advanced_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_advanced_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_ps_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_ps_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_ps_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_vs_1_1.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_vs_2_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_vs_3_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\shaders\tex_quad_shader_program_vs_4_0.cso">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\symbols\app6b\app6b.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\symbols\app6b\messagetypes\chemlight.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\symbols\app6b\messagetypes\positionreport.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\symbols\app6b\messagetypes\spotreport.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\symbols\hydrographic_s57\hydrographic_s57.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\symbols\mil2525c\messagetypes\Chemlight.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\symbols\mil2525c\messagetypes\PositionReport.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\symbols\mil2525c\messagetypes\SpotReport.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ArcGISRuntime10.2.5\resources\symbols\mil2525c\mil2525c.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\Icons\SecurityCamera.svg" />
     <Resource Include="Resources\Icons\radial_sliders.png" />
     <Content Include="x64\SQLite.Interop.dll">
@@ -2155,12 +2578,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\services\csWebDotNetLib\csWebDotNetLib.csproj">
-      <Project>{72b8d275-8f6d-4f03-b0fb-5742fe115117}</Project>
-      <Name>csWebDotNetLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
