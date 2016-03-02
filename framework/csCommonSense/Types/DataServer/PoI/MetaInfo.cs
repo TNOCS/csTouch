@@ -73,7 +73,7 @@ namespace DataServer
             set { stepSize = value; }
         }
 
-        private bool visibleInCallOut;
+        private bool visibleInCallOut = true;
         [ProtoMember(7)]
         public bool VisibleInCallOut
         {

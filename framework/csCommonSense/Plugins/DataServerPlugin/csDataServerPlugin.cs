@@ -530,8 +530,6 @@ namespace csDataServerPlugin
                     s.Settings.PropertyChanged += (t, f) => UpdateLayerTabs(s, layer);
                 }
 
-
-
                 layer.PropertyChanged += (e, sf) =>
                 {
                     if (sf.PropertyName == "DetailTabVisible")
@@ -544,7 +542,6 @@ namespace csDataServerPlugin
                 if (string.IsNullOrEmpty(s.RelativeFolder))
                 {
                     AppState.ViewDef.Layers.ChildLayers.Add(layer);
-
                 }
                 else
                 {

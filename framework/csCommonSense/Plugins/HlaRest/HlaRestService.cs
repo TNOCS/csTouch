@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Windows.Media;
 using csGeoLayers;
 using csShared;
 using Caliburn.Micro;
@@ -22,8 +21,8 @@ namespace csCommon.Plugins.HlaRest
 {
     public class HlaRestService
     {
-        public const string SERVICENAME = "HLA";
-        public const int PollingIntervalMillis = 0;
+        public const string SERVICENAME = "Tracks";
+        public const int PollingIntervalMillis = 3000;
 
         private static WebMercator _mercator = new WebMercator();
 
@@ -32,111 +31,40 @@ namespace csCommon.Plugins.HlaRest
         private DataServerBase _dataServer;
 
         public PoiService PoiService { get; private set; }
-        private PoI _poiType;
 
         public HlaRestService(DataServerBase dataServer, AppStateSettings appState)
         {
             _dataServer = dataServer;
             _appState = appState;
-        }
 
-        public void Init(string server)
-        {
             if (_dataServer == null) return;
             if (PoiService != null) return;
 
-            PoiService = PoiService.CreateService(_dataServer, SERVICENAME, Guid.NewGuid(), true, false, true);
-            var poiTypes = new List<PoI>();
+            PoiService = PoiService.CreateService(_dataServer, SERVICENAME, new Guid("EEEEEEEE-487E-4B0A-B3AE-64A0B38855D9"), true, false, true);
+            PoiService.HasSensorData = false;
+            PoiService.Initialized += (e, f) =>
+            {
+                PoiService.Settings.TabBarVisible = false;
+                PoiService.Settings.AutoStart = true;
+                PoiService.Settings.FilterLocation = true;
+                PoiService.Settings.SelectionMode = SelectionMode.Single;
+                PoiService.Layer.CanStop = false;
+                //HlaBridgePoiService.Settings.SelectionMode = SelectionMode.Single;
+                //HlaBridgePoiService.Layer.UseClusterer = true;
+                //HlaBridgePoiService.SaveXml(true);
+            };
+        }
 
-            var pt = PoiService.AddPoiType("NEUTRAL_HUMAN", DrawingModes.Image, Colors.White, Colors.Black, 2, "UserIdentity_NeutralHuman.png", 15);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("NEUTRAL_VEHICLE_SMALL", DrawingModes.Image, Colors.White, Colors.Black, 2, "UserIdentity_Neutral.png", 15);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("NEUTRAL_AIRCRAFT", DrawingModes.Image, Colors.White, Colors.Black, 2, "track.png", 15);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            pt.AddMetaInfo("Test", "testLabel", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("NEUTRAL_VEHICLE_SMALL", DrawingModes.Image, Colors.White, Colors.Black, 2, "UserIdentity_Neutral.png", 15);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("FRIENDLY_HUMAN", DrawingModes.Image, Colors.White, Colors.Black, 2, "UserIdentity_FriendlyHuman.png", 30);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("FRIENDLY_VEHICLE_SMALL", DrawingModes.Image, Colors.White, Colors.Black, 2, "UserIdentity_Friendly.png", 30);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("FRIENDLY_AIRCRAFT", DrawingModes.Image, Colors.White, Colors.Black, 2, "track.png", 15);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            pt.AddMetaInfo("Test", "testLabel", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("HOSTILE_HUMAN", DrawingModes.Image, Colors.White, Colors.Black, 2, "UserIdentity_HostileHuman.png", 15);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("HOSTILE_VEHICLE_SMALL", DrawingModes.Image, Colors.White, Colors.Black, 2, "UserIdentity_Hostile.png", 15);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}");
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("HOSTILE_AIRCRAFT", DrawingModes.Image, Colors.White, Colors.Black, 2, "track.png", 15);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("PENDING_HUMAN", DrawingModes.Image, Colors.White, Colors.Black, 2, "UserIdentity_PendingHuman.png", 15);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("PENDING_VEHICLE_SMALL", DrawingModes.Image, Colors.White, Colors.Black, 2, "UserIdentity_Pending.png", 15);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("TrackType", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            pt = PoiService.AddPoiType("PENDING_AIRCRAFT", DrawingModes.Image, Colors.White, Colors.Black, 2, "track.png", 15);
-            pt.AddMetaInfo("Speed", "speed", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Altitude", "altitude", MetaTypes.number, false, true, "Info", null, 0, 500, "{0:N0}", false, false);
-            pt.AddMetaInfo("Type", "trackType", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            pt.AddMetaInfo("Test", "testLabel", MetaTypes.text, false, true, "Info", null, double.NaN, double.NaN, "{0}", false, true);
-            poiTypes.Add(pt);
-
-            _graphicsLayer = new GraphicsLayer {ID = SERVICENAME};
+        public void Init(string server, List<string> restLabels)//, List<PoI> poiTypes)
+        {
+            _restLabels = restLabels;
+            _graphicsLayer = new GraphicsLayer { ID = SERVICENAME };
             _graphicsLayer.Initialize();
 
             PoiService.Layer.ChildLayers.Insert(0, _graphicsLayer);
             _appState.ViewDef.UpdateLayers();
 
-
-            _client = new HttpClient {BaseAddress = new Uri(server)};
+            _client = new HttpClient { BaseAddress = new Uri(server) };
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             PoiService.Start();
@@ -150,7 +78,7 @@ namespace csCommon.Plugins.HlaRest
 
         private List<string> _restLabels = new List<string>();
 
-        public void StartPollingPois()
+        public void StartPollingPois(Action<PoI> poiCallback = null)
         {
             if (_pollPois) return;
 
@@ -162,15 +90,19 @@ namespace csCommon.Plugins.HlaRest
                 {
                     _currTimestamp = DateTime.Now;
                     PoiService.PoIs.StartBatch();
+                    totalPois = 0;
 
                     var pois = await PollPois(nPois, (poi) =>
                     {
+
+                        totalPois++;
                         var servicePoi = PoiService.PoIs.FirstOrDefault(p => p.PoiId == poi.PoiId);
 
                         if (servicePoi == null)
                         {
                             if (poi.Position.Latitude != 0 && poi.Position.Longitude != 0)
                             {
+                                poiCallback?.Invoke(poi);
                                 poi.LabelChanged += PoiOnLabelChanged;
                                 PoiService.PoIs.Add(poi);
                             }
@@ -179,27 +111,24 @@ namespace csCommon.Plugins.HlaRest
                         {
                             if (servicePoi.Position.Latitude != poi.Position.Latitude && servicePoi.Position.Longitude != poi.Position.Longitude)
                             {
-                                servicePoi.Position = poi.Position;                                
+                                servicePoi.Position = poi.Position;
                             }
-
 
                             Execute.OnUIThread(() =>
                             {
                                 var prevNotifying = poi.IsNotifying;
                                 servicePoi.IsNotifying = false;
-                                poi.Labels.ForEach((kvp) =>
+                                poi.Labels.ForEach(label =>
                                 {
-                                    var prev = servicePoi.Labels[kvp.Key];
-                                    if (prev != kvp.Value)
+                                    var prev = servicePoi.Labels[label.Key];
+                                    if (prev != label.Value)
                                     {
-                                        servicePoi.Labels[kvp.Key] = kvp.Value;
-
-                                        servicePoi.TriggerLabelChanged(kvp.Key, prev, kvp.Value);
+                                        servicePoi.Labels[label.Key] = label.Value;
+                                        servicePoi.TriggerLabelChanged(label.Key, prev, label.Value);
                                     }
                                 });
                                 servicePoi.IsNotifying = prevNotifying;
                             });
-
                         }
                     });
 
@@ -212,16 +141,14 @@ namespace csCommon.Plugins.HlaRest
                         Debug.WriteLine("Finished loading {0} pois from rest service", totalPois);
                     }
 
-
                     var idleDuration = PollingIntervalMillis - (int)cycleDuration.TotalMilliseconds;
 
                     if (idleDuration > 0)
                     {
-                        Debug.WriteLine("Wait for {0}s", idleDuration/1000);
+                        Debug.WriteLine("Wait for {0:0.0}s", idleDuration / 1000F);
                         await Task.Delay(TimeSpan.FromMilliseconds(idleDuration));
                     }
                     PoiService.PoIs.FinishBatch();
-
                 }
                 var duration = DateTime.Now - startTimestamp;
                 Debug.WriteLine("Loading took {0}m", duration.TotalMinutes);
@@ -230,7 +157,7 @@ namespace csCommon.Plugins.HlaRest
 
         private async void PoiOnLabelChanged(object sender, LabelChangedEventArgs labelChangedEventArgs)
         {
-            var poi = (PoI) sender;
+            var poi = (PoI)sender;
             if (poi.IsNotifying)
             {
                 var entityUpdate = new JObject
@@ -242,7 +169,7 @@ namespace csCommon.Plugins.HlaRest
 
                 if (!string.IsNullOrWhiteSpace(labelChangedEventArgs.Label) && labelChangedEventArgs.OldValue != labelChangedEventArgs.NewValue)
                 {
-                    if (!_restLabels.Contains(labelChangedEventArgs.Label))
+                    if (_restLabels.Contains(labelChangedEventArgs.Label))
                     {
                         properties[labelChangedEventArgs.Label] = labelChangedEventArgs.NewValue;
                     }
@@ -250,9 +177,9 @@ namespace csCommon.Plugins.HlaRest
                     {
                         poi.Labels.ForEach(label =>
                         {
-                            if (!_restLabels.Contains(label.Key))
+                            if (_restLabels.Contains(label.Key))
                             {
-                                properties[label.Key] = label.Value ;
+                                properties[label.Key] = label.Value;
                             }
                         });
                     }
@@ -261,8 +188,6 @@ namespace csCommon.Plugins.HlaRest
                     // post to rest service
                     await _client.PutAsync($"api/HlaEntities/{poi.ContentId}", new StringContent(body));
                 }
-
-                
             }
         }
 
@@ -284,7 +209,7 @@ namespace csCommon.Plugins.HlaRest
             var jBody = JObject.Parse(body);
 
             var features = jBody["features"].OfType<JObject>();
-            var pois = features.Select(f=>ParseFeature(f, parseFeatureCallback)).ToArray();
+            var pois = features.Select(f => ParseFeature(f, parseFeatureCallback)).ToArray();
 
             return pois;
         }
@@ -294,25 +219,26 @@ namespace csCommon.Plugins.HlaRest
             var poi = new PoI();
             var prevNotifying = poi.IsNotifying;
             poi.IsNotifying = false;
-            poi.PoiId = (string) feature["properties"]["entityIdentifier"];//Guid.Parse((string)feature["properties"]["id"]);
+            poi.PoiId = (string)feature["properties"]["entityIdentifier"];//Guid.Parse((string)feature["properties"]["id"]);
             //poi.Name = (string) feature["properties"]["Name"];
             //poi.ContentId = (string) feature["properties"]["Bame"];
             poi.Service = PoiService;
-            poi.Position = new Position((float) feature["geometry"]["coordinates"][0],
-                (float) feature["geometry"]["coordinates"][1]);
-            poi.PoiTypeId = (string)feature["properties"]["featureTypeId"];
+            poi.Position = new Position((float)feature["geometry"]["coordinates"][0],
+                (float)feature["geometry"]["coordinates"][1]);
+            var featureTypeId = (string)feature["properties"]["featureTypeId"];
+            var pt = PoiService.PoITypes.FirstOrDefault(poiType => string.Equals(poiType.ContentId, featureTypeId));
+            poi.PoiTypeId = pt == null ? PoiService.PoITypes[0].ContentId : pt.ContentId;
             poi.IsNotifying = prevNotifying;
 
             feature["properties"].OfType<JProperty>().ForEach(prop =>
             {
-                if (!_restLabels.Contains(prop.Name))
-                {
-                    _restLabels.Add(prop.Name);
-                }
+                //if (!_restLabels.Contains(prop.Name))
+                //{
+                //    _restLabels.Add(prop.Name);
+                //}
                 poi.Labels.Add(prop.Name, (string)prop.Value);
             });
             //poi.Labels.Add("speed", (string)feature["properties"]["speed"]);
-            
 
             callback?.Invoke(poi);
 
