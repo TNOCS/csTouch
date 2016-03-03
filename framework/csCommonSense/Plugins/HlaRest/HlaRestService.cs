@@ -22,7 +22,7 @@ namespace csCommon.Plugins.HlaRest
     public class HlaRestService
     {
         public const string SERVICENAME = "Tracks";
-        public const int PollingIntervalMillis = 3000;
+        public const int PollingIntervalMillis = 5000;
 
         private static WebMercator _mercator = new WebMercator();
 
@@ -94,7 +94,6 @@ namespace csCommon.Plugins.HlaRest
 
                     var pois = await PollPois(nPois, (poi) =>
                     {
-
                         totalPois++;
                         var servicePoi = PoiService.PoIs.FirstOrDefault(p => p.PoiId == poi.PoiId);
 
@@ -143,12 +142,13 @@ namespace csCommon.Plugins.HlaRest
 
                     var idleDuration = PollingIntervalMillis - (int)cycleDuration.TotalMilliseconds;
 
+                    PoiService.PoIs.FinishBatch();
+
                     if (idleDuration > 0)
                     {
                         Debug.WriteLine("Wait for {0:0.0}s", idleDuration / 1000F);
                         await Task.Delay(TimeSpan.FromMilliseconds(idleDuration));
                     }
-                    PoiService.PoIs.FinishBatch();
                 }
                 var duration = DateTime.Now - startTimestamp;
                 Debug.WriteLine("Loading took {0}m", duration.TotalMinutes);
@@ -158,11 +158,12 @@ namespace csCommon.Plugins.HlaRest
         private async void PoiOnLabelChanged(object sender, LabelChangedEventArgs labelChangedEventArgs)
         {
             var poi = (PoI)sender;
-            if (poi.IsNotifying)
+            if (poi.IsNotifying && poi.Labels.ContainsKey("trackId"))
             {
                 var entityUpdate = new JObject
                 {
-                    {"EntityId", poi.ContentId },
+                    {"TrackId", poi.Labels["trackId"] },
+                    //{"EntityId", poi.ContentId },
                     {"properties", new JObject() }
                 };
                 var properties = (JObject)entityUpdate["properties"];
@@ -186,7 +187,8 @@ namespace csCommon.Plugins.HlaRest
 
                     var body = JsonConvert.SerializeObject(entityUpdate, Formatting.None);
                     // post to rest service
-                    await _client.PutAsync($"api/HlaEntities/{poi.ContentId}", new StringContent(body));
+                    await _client.PutAsync($"api/HlaEntities/{poi.Labels["trackId"]}", new StringContent(body));
+                    //await _client.PutAsync($"api/HlaEntities/{poi.ContentId}", new StringContent(body));
                 }
             }
         }
@@ -199,19 +201,27 @@ namespace csCommon.Plugins.HlaRest
         public async Task<PoI[]> PollPois(int nPois = 5, Action<PoI> parseFeatureCallback = null)
         {
             //var response = await _client.GetAsync("pois?npois=" + nPois);
-            var response = await _client.GetAsync("api/HlaEntities");
-            if (response.StatusCode != HttpStatusCode.OK)
+            try
             {
+                var response = await _client.GetAsync("api/HlaEntities");
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    return new PoI[0];
+                }
+                var body = await response.Content.ReadAsStringAsync();
+
+                var jBody = JObject.Parse(body);
+
+                var features = jBody["features"].OfType<JObject>();
+                var pois = features.Select(f => ParseFeature(f, parseFeatureCallback)).ToArray();
+
+                return pois;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
                 return new PoI[0];
             }
-            var body = await response.Content.ReadAsStringAsync();
-
-            var jBody = JObject.Parse(body);
-
-            var features = jBody["features"].OfType<JObject>();
-            var pois = features.Select(f => ParseFeature(f, parseFeatureCallback)).ToArray();
-
-            return pois;
         }
 
         protected PoI ParseFeature(JObject feature, Action<PoI> callback)
