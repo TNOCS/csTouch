@@ -47,7 +47,6 @@ namespace DataServer
         public List<CallOutAction> CalloutActions = new List<CallOutAction>();
 
         private string contentId;
-        private Dictionary<string, object> data = new Dictionary<string, object>();
         private long dateLong;
         private bool expanded;
         private BaseGeometry geometry;
@@ -59,7 +58,6 @@ namespace DataServer
         private Dictionary<string, string> labels = new Dictionary<string, string>();
         private string layer = string.Empty;
         private int? maxItems;
-        private Dictionary<string, IModelPoiInstance> modelInstances = new Dictionary<string, IModelPoiInstance>();
         private List<Model> models;
         private PoIStyle nEffectiveStyle;
         private PoIStyle nstyle;
@@ -75,10 +73,7 @@ namespace DataServer
         private long updatedLong;
         private WordHistogram keywords;
 
-        public string FormattedTimeStamp
-        {
-            get { return Date.ToString(CultureInfo.InvariantCulture); }
-        }
+        public string FormattedTimeStamp => Date.ToString(CultureInfo.InvariantCulture);
 
         [XmlAttribute("name")]
         public string Name
@@ -100,7 +95,7 @@ namespace DataServer
             {
                 if (string.IsNullOrEmpty(NEffectiveStyle.SubTitles)) return string.Empty;
                 var res = string.Empty;
-                var st = NEffectiveStyle.SubTitles.Split(new[] { ',', ';' });
+                var st = NEffectiveStyle.SubTitles.Split(',', ';');
                 foreach (var s in st)
                 {
                     if (!Labels.ContainsKey(s) || string.IsNullOrEmpty(Labels[s])) continue;
@@ -136,11 +131,7 @@ namespace DataServer
         }
 
         [XmlIgnore]
-        public Dictionary<string, IModelPoiInstance> ModelInstances
-        {
-            get { return modelInstances; }
-            set { modelInstances = value; }
-        }
+        public Dictionary<string, IModelPoiInstance> ModelInstances { get; set; } = new Dictionary<string, IModelPoiInstance>();
 
         [XmlIgnore]
         public List<MetaInfo> EffectiveMetaInfo
@@ -166,10 +157,7 @@ namespace DataServer
             }
         }
 
-        public bool HasMedia
-        {
-            get { return AllMedia.Any(); }
-        }
+        public bool HasMedia => AllMedia.Any();
 
         [ProtoMember(6)]
         [XmlAttribute, DefaultValue(0)]
@@ -243,7 +231,7 @@ namespace DataServer
                 LookupPropertyPoiTypeInPoITypes(); // Set property PoiType if not set
 
                 // If there is a PoI Type and has PoI type a style? Merge it!
-                if (PoiType != null && PoiType.Style != null)
+                if (PoiType?.Style != null)
                 {
                     resultStyle = PoIStyle.MergeStyle(resultStyle, PoiType.NEffectiveStyle);
                 }
@@ -273,14 +261,12 @@ namespace DataServer
         /// </summary>
         private void LookupPropertyPoiTypeInPoITypes()
         {
-            if ((Service is PoiService /* Need service to lookup PoIType */) && 
-                (!String.IsNullOrEmpty(PoiTypeId) /* Need PoIType id to lookup*/ ))
+            var poiService = Service as PoiService;
+            if ((poiService == null) || (string.IsNullOrEmpty(PoiTypeId))) return;
+            var lookup = poiService.PoITypes.FirstOrDefault(k => k.ContentId == PoiTypeId);
+            if ((PoiType == null) || (!PoiType.Equals(lookup)))
             {
-                var lookup = ((PoiService)Service).PoITypes.FirstOrDefault(k => k.ContentId == PoiTypeId);
-                if ((PoiType == null) || (!PoiType.Equals(lookup)))
-                {
-                    PoiType = lookup; // Only call when value is changed
-                }
+                PoiType = lookup; // Only call when value is changed
             }
         }
 
@@ -304,10 +290,7 @@ namespace DataServer
         }
 
         [ProtoIgnore]
-        public bool HasKeywords
-        {
-            get { return keywords != null && keywords.DistinctWords.Any(); }
-        }
+        public bool HasKeywords => keywords != null && keywords.DistinctWords.Any();
 
         [ProtoIgnore]
         public WordHistogram Keywords // Generates keywords if none are present!
@@ -360,10 +343,7 @@ namespace DataServer
         }
 
         [ProtoIgnore]
-        public long IndexId
-        {
-            get { return FullText.GetHashCode(); } // TODO Cache this, this is slow.
-        }
+        public long IndexId => FullText.GetHashCode();
 
         [ProtoMember(13), XmlAttribute]
         public string PoiTypeId
@@ -563,11 +543,7 @@ namespace DataServer
         ///     Needed to maintain the PoI's state in the View.
         /// </summary>
         [XmlIgnore]
-        public Dictionary<string, object> Data
-        {
-            get { return data; }
-            set { data = value; }
-        }
+        public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
 
         [XmlIgnore]
         public Service Service
@@ -576,20 +552,17 @@ namespace DataServer
             set
             {
                 service = value;
-                if (service as PoiService != null)
+                var s = service as PoiService;
+                if (s != null)
                 {
-                    var s = service as PoiService;
                     var pl = s.Layer as dsStaticLayer;
-                    if (pl != null)
-                    {
-                        var subl = pl.GetSubLayer(Layer);
-                        if (subl != null)
-                            subl.PropertyChanged += (o, e) =>
-                            {
-                                if (e.PropertyName == "Visible")
-                                    IsVisible = subl.Visible;
-                            };
-                    }
+                    var subl = pl?.GetSubLayer(Layer);
+                    if (subl != null)
+                        subl.PropertyChanged += (o, e) =>
+                        {
+                            if (e.PropertyName == "Visible")
+                                IsVisible = subl.Visible;
+                        };
                 }
                 NotifyOfPropertyChange(() => Service);
             }
@@ -603,10 +576,7 @@ namespace DataServer
         public bool FilterReset { get; set; }
 
         [XmlAttribute, DefaultValue(false)]
-        public bool HasPosition
-        {
-            get { return (Position != null || Points.Any()); }
-        }
+        public bool HasPosition => (Position != null || Points.Any());
 
         /// <summary>
         ///     What is the relevance of this Poi (not used for syncing)
@@ -650,7 +620,7 @@ namespace DataServer
         protected virtual void OnDeleted()
         {
             var handler = Deleted;
-            if (handler != null) handler(this, EventArgs.Empty);
+            handler?.Invoke(this, EventArgs.Empty);
         }
 
         internal void TriggerDeleted() { OnDeleted(); }
@@ -668,10 +638,7 @@ namespace DataServer
             }
         }
 
-        public virtual string XmlNodeId
-        {
-            get { return "Base"; }
-        }
+        public virtual string XmlNodeId => "Base";
 
         [ProtoMember(2), XmlAttribute, DefaultValue(0)]
 
@@ -783,7 +750,7 @@ namespace DataServer
         public void TriggerPositionChanged()
         {
             var handler = PositionChanged;
-            if (handler != null) handler(this, new PositionEventArgs { Position = position });
+            handler?.Invoke(this, new PositionEventArgs { Position = position });
             //if (handler != null) Execute.OnUIThread(() => handler(this, new PositionEventArgs { Position = position }));
         }
 
@@ -798,11 +765,10 @@ namespace DataServer
         protected void HasChanged()
         {
             var handler = Changed;
-            if (handler != null) handler(this, null);
+            handler?.Invoke(this, null);
         }
 
         public event EventHandler<PositionEventArgs> PositionChanged;
-
 
         public event EventHandler<LabelChangedEventArgs> LabelChanged;
 
@@ -818,14 +784,14 @@ namespace DataServer
         public void OnLabelChanged(string key, string old = "", string newvalue = "")
         {
             var handler = LabelChanged;
-            if (handler != null) handler(this, new LabelChangedEventArgs { Label = key, OldValue = old, NewValue = newvalue });
+            handler?.Invoke(this, new LabelChangedEventArgs { Label = key, OldValue = old, NewValue = newvalue });
         }
 
         public event EventHandler<LabelChangedEventArgs> DataChanged;
         public void OnDataChanged(string key, string old = "", string newvalue = "")
         {
             var handler = DataChanged;
-            if (handler != null) handler(this, new LabelChangedEventArgs { Label = key, OldValue = old, NewValue = newvalue });
+            handler?.Invoke(this, new LabelChangedEventArgs { Label = key, OldValue = old, NewValue = newvalue });
         }
 
         public ObservableCollection<MetaLabel> GetMetaLabels()
@@ -891,10 +857,7 @@ namespace DataServer
         {
             var ps = service as PoiService;
             Updated = DateTime.Now;
-            if (ps != null)
-            {
-                ps.TriggerContentChanged(this);
-            }
+            ps?.TriggerContentChanged(this);
         }
 
         public void TriggerUpdated(bool visibility = true)
@@ -909,7 +872,7 @@ namespace DataServer
             else
             {
                 var ds = (ps.Layer as dsLayer);
-                if (ds != null) ds.UpdatePoi((PoI)this); //else Debug.Assert(false, "invalid cast");
+                ds?.UpdatePoi((PoI)this); //else Debug.Assert(false, "invalid cast");
             }
         }
 
@@ -968,7 +931,7 @@ namespace DataServer
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                if (Style == null || String.IsNullOrEmpty(Style.Icon)) return;
+                if (string.IsNullOrEmpty(Style?.Icon)) return;
                 if (!Service.store.HasFile(Service.MediaFolder, Style.Icon))
                 {
                     Service.RequestData("_Media\\" + Style.Icon, IconImageReceived);
@@ -978,7 +941,7 @@ namespace DataServer
                     Style.PictureByteArray = Service.store.GetBytes(Service.MediaFolder, Style.Icon);
                     if (Style.PictureByteArray != null)
                     {
-                        if (Style.Icon.ToLower().EndsWith(".png"))
+                        if (Style.Icon.ToLower().EndsWith(".png", StringComparison.InvariantCultureIgnoreCase))
                         {
                             FileStore.LoadImage(Style.PictureByteArray, this);
                         }
@@ -1077,7 +1040,7 @@ namespace DataServer
                 var xkeywords = res.Element("Keywords");
                 if (xkeywords != null)
                 {
-                    Keywords = new WordHistogram(null);
+                    Keywords = new WordHistogram();
                     Keywords.FromXml(xkeywords);
                 }
 
@@ -1089,7 +1052,7 @@ namespace DataServer
                         newStyle.FromXml(res.Element("Style"), directoryName, false); //, Service.Settings); // TODO REVIEW: Settings were ignored.
                         Style = newStyle;
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         // OK, keep the old style.
                     }
@@ -1236,7 +1199,7 @@ namespace DataServer
 
         public void StartRotation()
         {
-            if (RotationStarted != null) RotationStarted(this, null);
+            RotationStarted?.Invoke(this, null);
         }
 
         public void AddSensorData(string sensor, DateTime date, double value, string description = "", bool trigger = true)
@@ -1379,7 +1342,7 @@ namespace DataServer
 
         public void Select()
         {
-            if (this.Data.ContainsKey("graphic"))
+            if (Data.ContainsKey("graphic"))
             {
                 var pg = (PoiGraphic)Data["graphic"];
                 pg.OpenPopup(null, TapMode.CallOut);
@@ -1414,7 +1377,7 @@ namespace DataServer
             }
 
             //var pt = ((PoiService) service).PoITypes.FirstOrDefault(k => k.ContentId == PoiTypeId);
-            if (Style != null) Style.Analysis.Highlights.Add(hl);
+            Style?.Analysis.Highlights.Add(hl);
 
             return hl;
         }
@@ -1426,7 +1389,7 @@ namespace DataServer
         public void GetEffectiveAnalysis(BaseContent p, ref AnalysisMetaInfo a)
         {
             if (p.PoiType != null) GetEffectiveAnalysis(p.PoiType, ref a);
-            if (p.Style != null && p.Style.Analysis != null) a.Highlights.AddRange(p.Style.Analysis.Highlights);
+            if (p.Style?.Analysis != null) a.Highlights.AddRange(p.Style.Analysis.Highlights);
         }
 
         /// <summary>
@@ -1503,9 +1466,7 @@ namespace DataServer
             foreach (var label in Labels)
             {
                 var key = label.Key;
-                var mi = EffectiveMetaInfo == null
-                    ? null
-                    : EffectiveMetaInfo.FirstOrDefault(m => String.Equals(m.Label, key));
+                var mi = EffectiveMetaInfo?.FirstOrDefault(m => string.Equals(m.Label, key));
                 var dealtWith = false;
                 if (mi == null) mi = new MetaInfo { Type = MetaTypes.text };
                 switch (mi.Type)
@@ -1588,7 +1549,7 @@ namespace DataServer
                 if (startWithComma) builder.Append(", ");
                 builder.AppendFormat("\"{0}\":\"{1}\"", name, value);
             }
-            catch
+            catch (Exception)
             {
                 // Nothing. Property simply is missing.
             }
@@ -1604,7 +1565,7 @@ namespace DataServer
                 if (tokenS != null)
                 {
                     // First, convert the JSON to XML.
-                    var styleNode = JsonConvert.DeserializeXmlNode("{style:" + tokenS.ToString() + "}");
+                    var styleNode = JsonConvert.DeserializeXmlNode("{style:" + tokenS + "}");
                     var styleDoc = styleNode.ToXDocument();
                     var xElement = styleDoc.Element(XName.Get("style"));
                     if (xElement != null)
@@ -1612,7 +1573,7 @@ namespace DataServer
                         // Convert child nodes to attributes.
                         foreach (var el in xElement.Elements())
                         {
-                            xElement.Add(new XAttribute(PoI.UppercaseFirst(el.Name), (string)el));
+                            xElement.Add(new XAttribute(UppercaseFirst(el.Name), (string)el));
                         }
                         xElement.Elements().Remove();
                         // Parse the style.
@@ -1714,13 +1675,13 @@ namespace DataServer
             JToken keywordToken;
             if (geoJsonObject.TryGetValue("keywords", out keywordToken))
             {
-                var histogram = new WordHistogram(null);
+                var histogram = new WordHistogram();
                 histogram.FromGeoJson(keywordToken.ToString(Formatting.None), false); // Not very efficient.
                 Keywords = histogram;
             }
 
             var wkt = (new WellKnownTextIO().FromGeoJson(geoJsonObject["geometry"].ToString(Formatting.None), false)).ToString(); // TODO More efficiency if we allow JObjects as input.                
-            if (!String.IsNullOrEmpty(wkt))
+            if (!string.IsNullOrEmpty(wkt))
             {
                 poi.WktText = wkt;
             }

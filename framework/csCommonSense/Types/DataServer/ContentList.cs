@@ -16,16 +16,15 @@ namespace DataServer
     public class ContentList : BindableCollection<BaseContent>, ITextSearchableCollection<BaseContent>, ITextSearchable
     {
         [NonSerialized]
-        private readonly object queueLock = new object();
+        readonly object queueLock = new object();
         [NonSerialized]
         private readonly List<BaseContent> sendQueue = new List<BaseContent>();
         private bool isRessetable;
         private DateTime lastSend = DateTime.Now;
         [NonSerialized]
-        private Timer sendTimer;
-       
-        [NonSerialized]
-        private bool sendtimerRunning;
+        private Timer sendTimer; // TODO Check: sendTimer is assigned but never used...
+
+        [NonSerialized] private bool sendtimerRunning;
 
         private int isBatchLoading;
 
@@ -44,7 +43,7 @@ namespace DataServer
         public void StartBatch()
         {
             IsBatchLoading += 1;
-            if (BatchStarted != null) BatchStarted(this, null);
+            BatchStarted?.Invoke(this, null);
 
             /*if (isBatchLoading == 1)
             {
@@ -60,8 +59,7 @@ namespace DataServer
             {
                 IsNotifying = true;
             }*/
-            if (BatchFinished != null) BatchFinished(this, null);
-            
+            BatchFinished?.Invoke(this, null);
         }
         //{
         //    //Enable the cross acces to this collection elsewhere
@@ -100,7 +98,8 @@ namespace DataServer
             }
             catch (Exception e)
             {
-                Logger.Log("Data Server","Error adding item " + item.ContentId,e.Message,Logger.Level.Error);
+                if (item != null)
+                    Logger.Log("Data Server","Error adding item " + item.ContentId,e.Message,Logger.Level.Error);
             }            
         }
 
@@ -223,7 +222,7 @@ namespace DataServer
 
         public void SendContentMessage(ContentMessage cm)
         {
-            if (Service == null || Service.serviceChannel == null) return;
+            if (Service?.serviceChannel == null) return;
             var content = cm.ConvertToStream().ToArray();
             Service.serviceChannel.SignalBuffer(0, content);
         }
@@ -244,17 +243,14 @@ namespace DataServer
             }
         }
 
-        public long IndexId
-        {
-            get { return FullText.GetHashCode(); } // TODO This can be cached.
-        }
+        public long IndexId => FullText.GetHashCode();
 
         public string FullText
         {
             get
             {
-                StringBuilder sb = new StringBuilder();
-                foreach (BaseContent baseContent in Items)
+                var sb = new StringBuilder();
+                foreach (var baseContent in Items)
                 {
                     sb.Append(baseContent.FullText ?? "").Append(" ");                
                 }
