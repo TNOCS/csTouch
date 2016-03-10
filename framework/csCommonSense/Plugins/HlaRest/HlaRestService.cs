@@ -80,7 +80,7 @@ namespace csCommon.Plugins.HlaRest
         private bool pollPois;
         private DateTime currTimestamp;
         private HttpClient client;
-        private const int NumberOfPois = 1000;
+        // private const int NumberOfPois = 1000;
         private const double Tolerance = 0.000001;
         private int totalPois;
 
@@ -100,8 +100,9 @@ namespace csCommon.Plugins.HlaRest
                     PoiService.PoIs.StartBatch();
                     totalPois = 0;
                     var now = DateTime.Now;
+                    //var poisToUpdate = new List<dynamic>();
 
-                    await PollPois(NumberOfPois, poi =>
+                    await PollPois(poi =>
                     {
                         totalPois++;
                         var servicePoi = PoiService.PoIs.FirstOrDefault(p => p.PoiId == poi.PoiId);
@@ -125,7 +126,7 @@ namespace csCommon.Plugins.HlaRest
 
                             Execute.OnUIThread(() =>
                             {
-                                var prevNotifying = poi.IsNotifying;
+                                var prevNotifying = servicePoi.IsNotifying;
                                 servicePoi.IsNotifying = false;
                                 poi.Labels.ForEach(label =>
                                 {
@@ -139,6 +140,28 @@ namespace csCommon.Plugins.HlaRest
                         }
                     });
 
+                    //Execute.OnUIThread(() =>
+                    //{
+                    //    poisToUpdate.ForEach(pois =>
+                    //    {
+                    //        var servicePoi = pois.ServicePoi as BaseContent;
+                    //        var poi = pois.BasePoi as PoI;
+
+                    //        if (poi == null || servicePoi == null) return;
+
+                    //        var prevNotifying = servicePoi.IsNotifying;
+                    //        servicePoi.IsNotifying = false;
+                    //        poi.Labels.ForEach(label =>
+                    //        {
+                    //            var prev = servicePoi.Labels[label.Key];
+                    //            if (prev == label.Value) return;
+                    //            servicePoi.Labels[label.Key] = label.Value;
+                    //            servicePoi.TriggerLabelChanged(label.Key, prev, label.Value);
+                    //        });
+                    //        servicePoi.IsNotifying = prevNotifying;
+                    //    });
+                    //});
+
                     var cycleDuration = DateTime.Now - currTimestamp;
                     Debug.WriteLine("{0} pois loaded ({1}s)", totalPois, cycleDuration.TotalSeconds);
 
@@ -150,12 +173,12 @@ namespace csCommon.Plugins.HlaRest
 
                     var idleDuration = pollingIntervalMillis - (int)cycleDuration.TotalMilliseconds;
 
-                    PoiService.PoIs.FinishBatch();
-
                     RemoveOldPois();
 
+                    PoiService.PoIs.FinishBatch();
+
                     if (idleDuration <= 0) continue;
-                    // Debug.WriteLine("Wait for {0:0.0}s", idleDuration / 1000F);
+                    Debug.WriteLine("Wait for {0:0.0}s", idleDuration / 1000F);
                     await Task.Delay(TimeSpan.FromMilliseconds(idleDuration));
                 }
                 // var duration = DateTime.Now - startTimestamp;
@@ -233,7 +256,7 @@ namespace csCommon.Plugins.HlaRest
             pollPois = false;
         }
 
-        public async Task<PoI[]> PollPois(int nPois = 5, Action<PoI> parseFeatureCallback = null)
+        public async Task<PoI[]> PollPois(Action<PoI> parseFeatureCallback = null)
         {
             //var response = await _client.GetAsync("pois?npois=" + NumberOfPois);
             try
