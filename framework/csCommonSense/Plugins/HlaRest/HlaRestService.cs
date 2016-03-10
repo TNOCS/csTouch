@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,7 +12,7 @@ using csShared;
 using Caliburn.Micro;
 using DataServer;
 using ESRI.ArcGIS.Client;
-using ESRI.ArcGIS.Client.Projection;
+//using ESRI.ArcGIS.Client.Projection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Position = DataServer.Position;
@@ -21,26 +22,27 @@ namespace csCommon.Plugins.HlaRest
 {
     public class HlaRestService
     {
-        public const string SERVICENAME = "Tracks";
-        public const int PollingIntervalMillis = 5000;
+        public const string ServiceName = "Tracks";
+        private readonly int pollingIntervalMillis = 1000 * AppStateSettings.Instance.Config.GetInt("REST.PollingIntervalInSeconds", 5);
+        private readonly ConcurrentDictionary<string, DateTime> poiUpdateTimes = new ConcurrentDictionary<string, DateTime>();
+        private readonly TimeSpan poiKeepAliveTime = new TimeSpan(0, 0, AppStateSettings.Instance.Config.GetInt("REST.PoiKeepAliveTimeInSeconds", 5));
 
-        private static WebMercator _mercator = new WebMercator();
+        //private static WebMercator _mercator = new WebMercator();
 
-        private AppStateSettings _appState;
-        private GraphicsLayer _graphicsLayer;
-        private DataServerBase _dataServer;
-
-        public PoiService PoiService { get; private set; }
+        private readonly AppStateSettings appState;
+        private GraphicsLayer graphicsLayer;
+        private readonly DataServerBase dataServer;
+        public PoiService PoiService { get; }
 
         public HlaRestService(DataServerBase dataServer, AppStateSettings appState)
         {
-            _dataServer = dataServer;
-            _appState = appState;
+            this.dataServer = dataServer;
+            this.appState = appState;
 
-            if (_dataServer == null) return;
+            if (this.dataServer == null) return;
             if (PoiService != null) return;
 
-            PoiService = PoiService.CreateService(_dataServer, SERVICENAME, new Guid("EEEEEEEE-487E-4B0A-B3AE-64A0B38855D9"), true, false, true);
+            PoiService = PoiService.CreateService(this.dataServer, ServiceName, new Guid("EEEEEEEE-487E-4B0A-B3AE-64A0B38855D9"), true);
             PoiService.HasSensorData = false;
             PoiService.Initialized += (e, f) =>
             {
@@ -55,60 +57,68 @@ namespace csCommon.Plugins.HlaRest
             };
         }
 
-        public void Init(string server, List<string> restLabels)//, List<PoI> poiTypes)
+        /// <summary>
+        /// Initialize the service and specify which labels can be edited by the user.
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="editableRestLabels"></param>
+        public void Init(string server, List<string> editableRestLabels)//, List<PoI> poiTypes)
         {
-            _restLabels = restLabels;
-            _graphicsLayer = new GraphicsLayer { ID = SERVICENAME };
-            _graphicsLayer.Initialize();
+            restLabels = editableRestLabels;
+            graphicsLayer = new GraphicsLayer { ID = ServiceName };
+            graphicsLayer.Initialize();
 
-            PoiService.Layer.ChildLayers.Insert(0, _graphicsLayer);
-            _appState.ViewDef.UpdateLayers();
+            PoiService.Layer.ChildLayers.Insert(0, graphicsLayer);
+            appState.ViewDef.UpdateLayers();
 
-            _client = new HttpClient { BaseAddress = new Uri(server) };
-            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client = new HttpClient { BaseAddress = new Uri(server) };
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             PoiService.Start();
         }
 
-        private bool _pollPois = false;
-        private DateTime _currTimestamp;
-        private HttpClient _client;
-        private int nPois = 1000;
-        private int totalPois = 0;
+        private bool pollPois;
+        private DateTime currTimestamp;
+        private HttpClient client;
+        private const int NumberOfPois = 1000;
+        private const double Tolerance = 0.000001;
+        private int totalPois;
 
-        private List<string> _restLabels = new List<string>();
+        private List<string> restLabels = new List<string>();
 
         public void StartPollingPois(Action<PoI> poiCallback = null)
         {
-            if (_pollPois) return;
+            if (pollPois) return;
 
-            _pollPois = true;
+            pollPois = true;
             Task.Run(async () =>
             {
-                var startTimestamp = DateTime.Now;
-                while (_pollPois)
+                // var startTimestamp = DateTime.Now;
+                while (pollPois)
                 {
-                    _currTimestamp = DateTime.Now;
+                    currTimestamp = DateTime.Now;
                     PoiService.PoIs.StartBatch();
                     totalPois = 0;
+                    var now = DateTime.Now;
 
-                    var pois = await PollPois(nPois, (poi) =>
+                    await PollPois(NumberOfPois, poi =>
                     {
                         totalPois++;
                         var servicePoi = PoiService.PoIs.FirstOrDefault(p => p.PoiId == poi.PoiId);
 
                         if (servicePoi == null)
                         {
-                            if (poi.Position.Latitude != 0 && poi.Position.Longitude != 0)
-                            {
-                                poiCallback?.Invoke(poi);
-                                poi.LabelChanged += PoiOnLabelChanged;
-                                PoiService.PoIs.Add(poi);
-                            }
+                            if (Math.Abs(poi.Position.Latitude) < Tolerance || Math.Abs(poi.Position.Longitude) < Tolerance) return;
+                            poiCallback?.Invoke(poi);
+                            poi.LabelChanged += PoiOnLabelChanged;
+                            PoiService.PoIs.Add(poi);
+                            poiUpdateTimes[poi.PoiId] = now;
                         }
                         else
                         {
-                            if (servicePoi.Position.Latitude != poi.Position.Latitude && servicePoi.Position.Longitude != poi.Position.Longitude)
+                            poiUpdateTimes[servicePoi.PoiId] = now;
+
+                            if (Math.Abs(servicePoi.Position.Latitude - poi.Position.Latitude) > Tolerance && Math.Abs(servicePoi.Position.Longitude - poi.Position.Longitude) > Tolerance)
                             {
                                 servicePoi.Position = poi.Position;
                             }
@@ -120,90 +130,115 @@ namespace csCommon.Plugins.HlaRest
                                 poi.Labels.ForEach(label =>
                                 {
                                     var prev = servicePoi.Labels[label.Key];
-                                    if (prev != label.Value)
-                                    {
-                                        servicePoi.Labels[label.Key] = label.Value;
-                                        servicePoi.TriggerLabelChanged(label.Key, prev, label.Value);
-                                    }
+                                    if (prev == label.Value) return;
+                                    servicePoi.Labels[label.Key] = label.Value;
+                                    servicePoi.TriggerLabelChanged(label.Key, prev, label.Value);
                                 });
                                 servicePoi.IsNotifying = prevNotifying;
                             });
                         }
                     });
 
-                    var cycleDuration = DateTime.Now - _currTimestamp;
+                    var cycleDuration = DateTime.Now - currTimestamp;
                     Debug.WriteLine("{0} pois loaded ({1}s)", totalPois, cycleDuration.TotalSeconds);
 
                     if (totalPois >= 2000)
                     {
-                        _pollPois = false;
+                        pollPois = false;
                         Debug.WriteLine("Finished loading {0} pois from rest service", totalPois);
                     }
 
-                    var idleDuration = PollingIntervalMillis - (int)cycleDuration.TotalMilliseconds;
+                    var idleDuration = pollingIntervalMillis - (int)cycleDuration.TotalMilliseconds;
 
                     PoiService.PoIs.FinishBatch();
 
-                    if (idleDuration > 0)
-                    {
-                        Debug.WriteLine("Wait for {0:0.0}s", idleDuration / 1000F);
-                        await Task.Delay(TimeSpan.FromMilliseconds(idleDuration));
-                    }
+                    RemoveOldPois();
+
+                    if (idleDuration <= 0) continue;
+                    // Debug.WriteLine("Wait for {0:0.0}s", idleDuration / 1000F);
+                    await Task.Delay(TimeSpan.FromMilliseconds(idleDuration));
                 }
-                var duration = DateTime.Now - startTimestamp;
-                Debug.WriteLine("Loading took {0}m", duration.TotalMinutes);
+                // var duration = DateTime.Now - startTimestamp;
+                // Debug.WriteLine("Loading took {0}m", duration.TotalMinutes);
+            });
+        }
+
+        /// <summary>
+        /// Remove POIs that haven't been updated for some time.
+        /// </summary>
+        private void RemoveOldPois()
+        {
+            var now = DateTime.Now;
+            DateTime dt;
+            var poisToRemove = new List<BaseContent>();
+            poiUpdateTimes.ForEach(kvp =>
+            {
+                if (now - kvp.Value < poiKeepAliveTime) return;
+                var poi = PoiService.PoIs.FirstOrDefault(p => p.PoiId == kvp.Key);
+                if (poi == null) return;
+                poiUpdateTimes.TryRemove(kvp.Key, out dt);
+                poisToRemove.Add(poi);
+                poi.LabelChanged -= PoiOnLabelChanged;
+            });
+            if (poisToRemove.Count == 0) return;
+            Execute.OnUIThread(() =>
+            {
+                // Debug.WriteLine(">>> Deleting {0} POIs.", poisToRemove.Count);
+                PoiService.PoIs.StartBatch();
+                foreach (var poi in poisToRemove)
+                {
+                    PoiService.PoIs.Remove(poi);
+                }
+                PoiService.PoIs.FinishBatch();
             });
         }
 
         private async void PoiOnLabelChanged(object sender, LabelChangedEventArgs labelChangedEventArgs)
         {
             var poi = (PoI)sender;
-            if (poi.IsNotifying && poi.Labels.ContainsKey("trackId"))
+            if (!poi.IsNotifying || !poi.Labels.ContainsKey("trackId")) return;
+            var entityUpdate = new JObject
             {
-                var entityUpdate = new JObject
-                {
-                    {"TrackId", poi.Labels["trackId"] },
-                    //{"EntityId", poi.ContentId },
-                    {"properties", new JObject() }
-                };
-                var properties = (JObject)entityUpdate["properties"];
+                {"TrackId", poi.Labels["trackId"] },
+                //{"EntityId", poi.ContentId },
+                {"properties", new JObject() }
+            };
+            var properties = (JObject)entityUpdate["properties"];
 
-                if (!string.IsNullOrWhiteSpace(labelChangedEventArgs.Label) && labelChangedEventArgs.OldValue != labelChangedEventArgs.NewValue)
-                {
-                    if (_restLabels.Contains(labelChangedEventArgs.Label))
-                    {
-                        properties[labelChangedEventArgs.Label] = labelChangedEventArgs.NewValue;
-                    }
-                    else
-                    {
-                        poi.Labels.ForEach(label =>
-                        {
-                            if (_restLabels.Contains(label.Key))
-                            {
-                                properties[label.Key] = label.Value;
-                            }
-                        });
-                    }
-
-                    var body = JsonConvert.SerializeObject(entityUpdate, Formatting.None);
-                    // post to rest service
-                    await _client.PutAsync($"api/HlaEntities/{poi.Labels["trackId"]}", new StringContent(body));
-                    //await _client.PutAsync($"api/HlaEntities/{poi.ContentId}", new StringContent(body));
-                }
+            if (string.IsNullOrWhiteSpace(labelChangedEventArgs.Label) ||
+                labelChangedEventArgs.OldValue == labelChangedEventArgs.NewValue) return;
+            if (restLabels.Contains(labelChangedEventArgs.Label))
+            {
+                properties[labelChangedEventArgs.Label] = labelChangedEventArgs.NewValue;
             }
+            else
+            {
+                poi.Labels.ForEach(label =>
+                {
+                    if (restLabels.Contains(label.Key))
+                    {
+                        properties[label.Key] = label.Value;
+                    }
+                });
+            }
+
+            var body = JsonConvert.SerializeObject(entityUpdate, Formatting.None);
+            // post to rest service
+            await client.PutAsync($"api/HlaEntities/{poi.Labels["trackId"]}", new StringContent(body));
+            //await _client.PutAsync($"api/HlaEntities/{poi.ContentId}", new StringContent(body));
         }
 
         public void StopPollingPois()
         {
-            _pollPois = false;
+            pollPois = false;
         }
 
         public async Task<PoI[]> PollPois(int nPois = 5, Action<PoI> parseFeatureCallback = null)
         {
-            //var response = await _client.GetAsync("pois?npois=" + nPois);
+            //var response = await _client.GetAsync("pois?npois=" + NumberOfPois);
             try
             {
-                var response = await _client.GetAsync("api/HlaEntities");
+                var response = await client.GetAsync("api/HlaEntities");
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     return new PoI[0];
@@ -254,6 +289,5 @@ namespace csCommon.Plugins.HlaRest
 
             return poi;
         }
-
     }
 }
