@@ -287,7 +287,7 @@ namespace csCommon.Plugins.HlaRest
             var poi = new PoI();
             var prevNotifying = poi.IsNotifying;
             poi.IsNotifying = false;
-            poi.PoiId = (string)feature["properties"]["entityIdentifier"];//Guid.Parse((string)feature["properties"]["id"]);
+            poi.PoiId = (string)feature["properties"]["trackId"];//Guid.Parse((string)feature["properties"]["id"]);
             //poi.Name = (string) feature["properties"]["Name"];
             //poi.ContentId = (string) feature["properties"]["Bame"];
             poi.Service = PoiService;
