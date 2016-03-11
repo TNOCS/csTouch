@@ -51,7 +51,7 @@ namespace csDataServerPlugin
     public class BackupTabViewModel : Screen
     {
 
-        public AppStateSettings AppState { get { return AppStateSettings.Instance; }}
+        public AppStateSettings AppState => AppStateSettings.Instance;
 
         private PoiService service;
 
