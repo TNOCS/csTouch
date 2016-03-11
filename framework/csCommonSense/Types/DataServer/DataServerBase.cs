@@ -778,14 +778,14 @@ namespace DataServer {
                     }
                     
                     //s.IsInitialized = true;
-                    if (Subscribed != null) Subscribed(this, new ServiceSubscribeEventArgs {Service = s});
+                    Subscribed?.Invoke(this, new ServiceSubscribeEventArgs {Service = s});
                     s.TriggerInitialized();
                     AppStateSettings.Instance.TriggerScriptCommand(this, ScriptCommands.UpdateLayers);
                     s.IsLoading = false;
                 }
                 else {
                     s.Subscribe(pMode);
-                    if (Subscribed != null) Subscribed(this, new ServiceSubscribeEventArgs {Service = s});
+                    Subscribed?.Invoke(this, new ServiceSubscribeEventArgs {Service = s});
                     s.TriggerInitialized();
                 }
             }
