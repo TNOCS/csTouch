@@ -401,7 +401,7 @@ namespace DataServer
 
         public bool CreateBackup()
         {
-            if (!IsFileBased) return false;
+            if (!IsFileBased) return CreateBackupOfLiveService();
             if (string.IsNullOrEmpty(FileName) || !File.Exists(FileName)) return false;
             var backupFileName = GetBackupFileName();
             if (File.Exists(backupFileName)) return false;
@@ -417,10 +417,16 @@ namespace DataServer
                 Logger.Log("Service Backup", "Error saving backup", e.Message, Logger.Level.Error);
                 return false;
             }
+        }
 
-
-
-
+        private bool CreateBackupOfLiveService()
+        {
+            if (string.IsNullOrEmpty(FileName)) return false;
+            var backupFileName = GetBackupFileName();
+            if (File.Exists(backupFileName)) return false;
+            var xml = ToXml(true, false);
+            File.WriteAllText(backupFileName, xml.ToString());
+            return true;
         }
 
         public IEnumerable<Backup> GetBackups()
@@ -1035,6 +1041,11 @@ namespace DataServer
 
         public void FromXml(string xtext, string directoryName)
         {
+            if (string.IsNullOrEmpty(xtext))
+            {
+                AppStateSettings.Instance.TriggerNotification("Document is empty: " + directoryName);
+                return;
+            }
             var xs = XDocument.Parse(xtext);
             //Console.WriteLine("FromXml(1) in {0}.", sw.Elapsed);
             var element = xs.Root;
