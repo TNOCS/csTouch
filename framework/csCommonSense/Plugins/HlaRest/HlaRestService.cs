@@ -219,10 +219,10 @@ namespace csCommon.Plugins.HlaRest
         private async void PoiOnLabelChanged(object sender, LabelChangedEventArgs labelChangedEventArgs)
         {
             var poi = (PoI)sender;
-            if (!poi.IsNotifying || !poi.Labels.ContainsKey("trackId")) return;
+            if (!poi.IsNotifying || !poi.Labels.ContainsKey("hlaIdentifier")) return;
             var entityUpdate = new JObject
             {
-                {"TrackId", poi.Labels["trackId"] },
+                {"HlaIdentifier", poi.Labels["hlaIdentifier"] },
                 //{"EntityId", poi.ContentId },
                 {"properties", new JObject() }
             };
@@ -247,7 +247,7 @@ namespace csCommon.Plugins.HlaRest
 
             var body = JsonConvert.SerializeObject(entityUpdate, Formatting.None);
             // post to rest service
-            await client.PutAsync($"api/HlaEntities/{poi.Labels["trackId"]}", new StringContent(body));
+            await client.PutAsync($"api/HlaEntities/{poi.Labels["hlaIdentifier"]}", new StringContent(body));
             //await _client.PutAsync($"api/HlaEntities/{poi.ContentId}", new StringContent(body));
         }
 
@@ -287,7 +287,7 @@ namespace csCommon.Plugins.HlaRest
             var poi = new PoI();
             var prevNotifying = poi.IsNotifying;
             poi.IsNotifying = false;
-            poi.PoiId = (string)feature["properties"]["trackId"];//Guid.Parse((string)feature["properties"]["id"]);
+            poi.PoiId = (string)feature["properties"]["hlaIdentifier"];//Guid.Parse((string)feature["properties"]["id"]);
             //poi.Name = (string) feature["properties"]["Name"];
             //poi.ContentId = (string) feature["properties"]["Bame"];
             poi.Service = PoiService;
