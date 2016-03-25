@@ -47,6 +47,7 @@ namespace DataServer
         public List<CallOutAction> CalloutActions = new List<CallOutAction>();
 
         private string contentId;
+        private Dictionary<string, object> data = new Dictionary<string, object>();
         private long dateLong;
         private bool expanded;
         private BaseGeometry geometry;
@@ -58,6 +59,7 @@ namespace DataServer
         private Dictionary<string, string> labels = new Dictionary<string, string>();
         private string layer = string.Empty;
         private int? maxItems;
+        private Dictionary<string, IModelPoiInstance> modelInstances = new Dictionary<string, IModelPoiInstance>();
         private List<Model> models;
         private PoIStyle nEffectiveStyle;
         private PoIStyle nstyle;
@@ -261,15 +263,16 @@ namespace DataServer
         /// </summary>
         private void LookupPropertyPoiTypeInPoITypes()
         {
-            var poiService = Service as PoiService;
-            if ((poiService == null) || (string.IsNullOrEmpty(PoiTypeId))) return;
-            var lookup = poiService.PoITypes.FirstOrDefault(k => k.ContentId == PoiTypeId);
+            if ((Service is PoiService /* Need service to lookup PoIType */) && 
+                (!String.IsNullOrEmpty(PoiTypeId) /* Need PoIType id to lookup*/ ))
+            {
+                var lookup = ((PoiService)Service).PoITypes.FirstOrDefault(k => k.ContentId == PoiTypeId);
             if ((PoiType == null) || (!PoiType.Equals(lookup)))
             {
                 PoiType = lookup; // Only call when value is changed
             }
         }
-
+        }
         /// <summary>
         ///     A collection of, potentially empty, labels, where each dictionary item is a different representation of this PoI,
         ///     e.g. a JSON, XML, RSS or HTML representation. Note that a PoI may have multipe representations.
@@ -556,13 +559,16 @@ namespace DataServer
                 if (s != null)
                 {
                     var pl = s.Layer as dsStaticLayer;
-                    var subl = pl?.GetSubLayer(Layer);
+                    if (pl != null)
+                    {
+                        var subl = pl.GetSubLayer(Layer);
                     if (subl != null)
                         subl.PropertyChanged += (o, e) =>
                         {
                             if (e.PropertyName == "Visible")
                                 IsVisible = subl.Visible;
                         };
+                    }
                 }
                 NotifyOfPropertyChange(() => Service);
             }
@@ -745,6 +751,7 @@ namespace DataServer
         public void UpdateEffectiveStyle()
         {
             nEffectiveStyle = null;
+            NotifyOfPropertyChange(() => NEffectiveStyle);
         }
 
         public void TriggerPositionChanged()
@@ -872,7 +879,7 @@ namespace DataServer
             else
             {
                 var ds = (ps.Layer as dsLayer);
-                ds?.UpdatePoi((PoI)this); //else Debug.Assert(false, "invalid cast");
+                if (ds != null && this is PoI) ds.UpdatePoi((PoI)this); //else Debug.Assert(false, "invalid cast");
             }
         }
 
@@ -1386,10 +1393,19 @@ namespace DataServer
 
         #region analysis
 
-        public void GetEffectiveAnalysis(BaseContent p, ref AnalysisMetaInfo a)
+        private List<Highlight> _mRuntimeHighlights = new List<Highlight>();
+
+        [XmlIgnore]
+        public List<Highlight> RuntimeHighlights
+        {
+            get { return _mRuntimeHighlights; }
+        }
+
+        public static void GetEffectiveAnalysis(BaseContent p, ref AnalysisMetaInfo a)
         {
             if (p.PoiType != null) GetEffectiveAnalysis(p.PoiType, ref a);
-            if (p.Style?.Analysis != null) a.Highlights.AddRange(p.Style.Analysis.Highlights);
+            if (p.Style != null && p.Style.Analysis != null) a.Highlights.AddRange(p.Style.Analysis.Highlights);
+            if (p.RuntimeHighlights.Any()) a.Highlights.AddRange(p.RuntimeHighlights);
         }
 
         /// <summary>
@@ -1414,6 +1430,20 @@ namespace DataServer
             nEffectiveStyle = null;
             NotifyOfPropertyChange(() => NEffectiveStyle);
             return true;
+        }
+
+        public void SetPosition(double pLongitude, double pLatitude)
+        {
+            if (Position == null)
+            {
+                Position = new Position(pLongitude, pLatitude);
+            }
+            else
+            {
+                Position.Longitude = pLongitude;
+                Position.Latitude = pLatitude;
+            }
+            TriggerPositionChanged();
         }
 
         #endregion
