@@ -45,10 +45,15 @@
 			<Image Source="flag.png" HorizontalAlignment="Center" VerticalAlignment="Center" />    
 		</Border>-->
 		<Border Visibility="Collapsed" x:Name="bDistance" Margin="0,0,0,0" Height="10" Width="10" CornerRadius="5" Background="Red" HorizontalAlignment="Center" VerticalAlignment="Center" >
-			<Border x:Name="tbDistance" Width="80" Margin="-40,-10,-40,-10" CornerRadius="10" Height="20" Background="Black" >
+			<Border x:Name="tbDistance" Width="200" Margin="-100,-10,-100,-10" CornerRadius="10" Height="20" Background="Black" >
 		        <TextBlock x:Name="tDistance" FontSize="14" Foreground="White" TextAlignment="Center"  />
 			</Border>
 		</Border>
+        <Border Visibility="Collapsed" x:Name="bBearing" Margin="0,0,0,0" Height="10" Width="10" CornerRadius="5" Background="Red" HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <Border x:Name="tbBearing" Width="200" Margin="-100,-10,-100,-10" CornerRadius="10" Height="20" Background="Black" >
+                <TextBlock x:Name="tBearing" FontSize="14" Foreground="White" TextAlignment="Center" />
+            </Border>
+        </Border>
         <mapIconMenu1:ReferenceAlignPanel  HorizontalReferencePointAlignment="Center" VerticalReferencePointAlignment="Center" AlignReferencePoint="0,0" AllowRealign="False" Width="200" Height="200" Margin="-100,-100,0,0" >
             <mapIconMenu1:MapMenu MenuEnabled="{Binding Path='Menu',ElementName=SurfaceUserControl}" Radius="50"  Margin="0,0,0,0" x:Name="MKRoot" VerticalAlignment="Bottom">
                 <mapIconMenu1:MapMenuItem x:Name="bCircle" RootToolTip="User" Style="{DynamicResource MenuKillerItemStyle1}">

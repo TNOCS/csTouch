@@ -29,11 +29,18 @@ namespace csCommon.MapPlugins.MapTools.MeasureTool
         private bool _firstMovement = true;
 
         private double _distance;
+        private double _bearing;
 
         public double Distance
         {
             get { return _distance; }
             set { _distance = value; NotifyOfPropertyChange(() => Distance); }
+        }
+
+        public double Bearing
+        {
+            get { return _bearing; }
+            set { _bearing = value; NotifyOfPropertyChange(() => Bearing); }
         }
 
 
@@ -51,6 +58,19 @@ namespace csCommon.MapPlugins.MapTools.MeasureTool
             return dist;//Math.Sqrt((deltaX*deltaX) + (deltaY*deltaY));
         }
 
+        public double GetBearing()
+        {
+            var w = new WebMercator();
+            var p1 = w.ToGeographic(Start.Mp) as MapPoint;
+            var p2 = w.ToGeographic(Finish.Mp) as MapPoint;
+            var lon1 = p1.X;
+            var lat1 = p1.Y;
+            var lon2 = p2.X;
+            var lat2 = p2.Y;
+
+            return csShared.Utils.CoordinateUtils.Bearing(lat1, lon1, lat2, lon2);
+        }
+   
         public void Init(GroupLayer gl, MapPoint start, MapPoint finish, ResourceDictionary rd)
         {
             Start = new csPoint() { Mp = start };
@@ -88,8 +108,6 @@ namespace csCommon.MapPlugins.MapTools.MeasureTool
             _finish.Attributes["state"] = "finish";
             MLayer.Graphics.Add(_finish);
 
-
-
             Layer.ChildLayers.Add(MLayer);
             MLayer.Initialize();
 
@@ -112,8 +130,6 @@ namespace csCommon.MapPlugins.MapTools.MeasureTool
 
             pl.Paths.Add(pc);
             Line.Geometry = pl;
-
-
         }
 
         internal void Remove()
@@ -144,6 +160,7 @@ namespace csCommon.MapPlugins.MapTools.MeasureTool
 
             UpdateLine();
             Distance = GetDistance();
+            Bearing = GetBearing();
         }
     }
 }

@@ -7,6 +7,7 @@ using ESRI.ArcGIS.Client;
 using ESRI.ArcGIS.Client.Geometry;
 using ESRI.ArcGIS.Client.Projection;
 using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 
@@ -128,11 +129,7 @@ namespace csGeoLayers.MapTools.MeasureTool
             else
             {
                 bCircle.IsExpanded = true;
-
             }
-
-
-
 
             bCircle.Background = Brushes.Black;
 
@@ -200,20 +197,18 @@ namespace csGeoLayers.MapTools.MeasureTool
             DependencyProperty.Register("Menu", typeof(bool), typeof(ucMeasureMapTool), new UIPropertyMetadata(false));
 
 
-
         void ViewDef_MapManipulationDelta(object sender, EventArgs e)
         {
-            UpdateDistance();
+            UpdateDataLabel();
         }
 
         void _measure_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Distance")
             {
-                UpdateDistance();
+                UpdateDataLabel();
             }
         }
-
 
         #endregion
 
@@ -270,7 +265,7 @@ namespace csGeoLayers.MapTools.MeasureTool
                     Point pos = e.Position;
                     SharpMap.Geometries.Point w = AppState.ViewDef.ViewToWorld(pos.X, pos.Y);
                     _measure.UpdatePoint(_state, (MapPoint)Mercator.FromGeographic(new MapPoint(w.Y, w.X)));
-                    UpdateDistance();
+                    UpdateDataLabel();
                     //_center = e.GetTouchPoint(AppState.MapControl).Position;
                     //e.TouchDevice.Capture(bCircle);
                     //e.Handled = true;
@@ -321,32 +316,34 @@ namespace csGeoLayers.MapTools.MeasureTool
             return angle;
         }
 
-        private void UpdateDistance()
+        private void UpdateDataLabel()
         {
             if (this._state == "start")
             {
-                double d = _measure.Distance;
-                tDistance.Text = d.ToString("#####.##") + " km";
+                double distance = _measure.Distance;
+                tDistance.Text = distance.ToString("##,###,###.##", CultureInfo.InvariantCulture) + " m" + "  |  " + (distance / 1852.0).ToString("##,###,##0.##", CultureInfo.InvariantCulture) + " NM";
+
+
+                double bearing = _measure.Bearing;
+                tBearing.Text = bearing.ToString("###.##", CultureInfo.InvariantCulture) + " deg" + "  |  " + (bearing / 0.05625).ToString("#,##0.##", CultureInfo.InvariantCulture) + " mil";
+
                 var s = AppState.ViewDef.MapPoint(_measure.Start.Mp);
                 var f = AppState.ViewDef.MapPoint(_measure.Finish.Mp);
                 var x = ((f.X - s.X) / 2) + s.X;
                 var y = ((f.Y - s.Y) / 2) + s.Y;
                 Point p = new Point(x, y);
                 Point rel = AppState.ViewDef.MapControl.TranslatePoint(p, this);
-                TransformGroup tg = new TransformGroup();
-                tg.Children.Add(new TranslateTransform(rel.X, rel.Y));
-                double a = Angle(s.X, s.Y, f.X, f.Y);
 
+                bDistance.RenderTransform = new TranslateTransform(rel.X, rel.Y - 10);
+                bBearing.RenderTransform = new TranslateTransform(rel.X, rel.Y + 10);
 
-                tbDistance.RenderTransform = new RotateTransform(a);
-                tbDistance.RenderTransformOrigin = new Point(0.5, 0.5);
-                bDistance.RenderTransform = tg;
                 bDistance.Visibility = Visibility.Visible;
-
+                bBearing.Visibility = Visibility.Visible;
             }
             else
             {
                 bDistance.Visibility = Visibility.Collapsed;
+                bBearing.Visibility = Visibility.Collapsed;
             }
         }
 
