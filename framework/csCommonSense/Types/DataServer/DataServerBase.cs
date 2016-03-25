@@ -13,6 +13,7 @@ using Caliburn.Micro;
 using csCommon.Types;
 using csCommon.Types.DataServer.PoI.IO;
 using csCommon.Utils.IO;
+using csImb;
 using csShared;
 using csShared.Controls.Popups.MenuPopup;
 using csShared.Geo;
@@ -29,6 +30,24 @@ namespace DataServer {
         public Service Service { get; set; }
     }
 
+    [ProtoContract]
+    class TypeSurrogate
+    {
+        [ProtoMember(1)]
+        public string AssemblyQualifiedName { get; set; }
+        // protobuf-net wants an implicit or explicit operator between the types
+        public static implicit operator Type(TypeSurrogate value)
+        {
+            return value == null ? null : Type.GetType(value.AssemblyQualifiedName);
+        }
+        public static implicit operator TypeSurrogate(Type value)
+        {
+            return value == null ? null : new TypeSurrogate
+            {
+                AssemblyQualifiedName = value.AssemblyQualifiedName
+            };
+        }
+    }
     public class DataServerBase : PropertyChangedBase, IDataServer {
         public const int CollaborativeObjectsSeparator = 70;
         private const string ServiceChannelExtentions = ".Services";
@@ -121,6 +140,8 @@ namespace DataServer {
             set {
                 try {
                     model = value;
+                    // Net all versions have built-in serializer/deserialiser for System.Type
+                    // Built in type: model.Add(typeof(Type), false).SetSurrogate(typeof(TypeSurrogate));
                     model.Add(typeof (PrivateMessage), true);
                     model.Add(typeof (BaseContent), true);
                     model.Add(typeof (ContentList), true);
@@ -252,40 +273,44 @@ namespace DataServer {
             CheckVariable(name, v);
         }
 
-        private void CheckVariable(string name, string vv)
+        private void CheckVariable(string pImbVariableName, string pImbVariableContent)
         {
-            var v = vv.Split('|');
-            if (!name.StartsWith(Service.ServiceVariableName)) return;
+            if (!pImbVariableName.StartsWith(Service.ServiceVariableName)) return;
+            var v = pImbVariableContent.Split('|');
 
-            var guid = Guid.Parse(name.Split(':')[1]);
-            var os   = (PoiService)Services.FirstOrDefault(k => k.Id == guid);
+            var sharedServiceGuid = Guid.Parse(pImbVariableName.Split(':')[1]);
+            var shadowPoiService   = (PoiService)Services.FirstOrDefault(k => k.Id == sharedServiceGuid); // Check if service is already known
+            var isSharedServiceAlreadyKnown = (shadowPoiService != null); // Is the shared service already known
             
-            if (v.Length == 2) {
-                var ns             = new PoiService {
-                    Id             = guid,
-                    Name           = v[1],
-                    IsShared       = true,
-                    StaticService  = true, //os != null && os.StaticService,
-                    Server         = int.Parse(v[0]),
-                    RelativeFolder = "Shared Layers",
-                    Mode           = Mode.client,
-                    Folder         = FileStore.GetLocalFolder() + "\\Services\\" + guid
-                };
-                if (os == null)
-                {
-                    if (!FileStore.FolderExists("Services")) FileStore.CreateFolder("Services");
-                    if (!FileStore.FolderExists("Services\\" + guid))
-                         FileStore.CreateFolder("Services\\" + guid);
 
-                    ns.dsb = this;
-                    Services.Add(ns);
-                    ns.InitPoiService();
-                    NotifyOfPropertyChange(() => DynamicServices);
+
+            bool isSharedServiceStoppedNotification = (v.Length == 1); // When there is no service name
+            bool isSharedServiceNotification = (v.Length == 2);
+
+
+
+            if (isSharedServiceNotification)
+            {
+                var imbHandleSharingService = int.Parse(v[0]);
+                var sharedServiceName = v[1];
+
+                ImbClientStatus sharedServiceHosting = null;
+                if (AppState.Imb.Clients.TryGetValue(imbHandleSharingService, out sharedServiceHosting))
+                {
+                    string hostingClient = sharedServiceHosting.Name;
+                };
+
+                if (shadowPoiService == null)
+                {
+                    shadowPoiService = CreateShadowServiceForSharedService(
+                        sharedServiceName, sharedServiceGuid, imbHandleSharingService);
+                        
+                    
                 }
                 else
                 {
-                    os.Name = v[1];
-                    if (!os.StaticService)
+                    shadowPoiService.Name = sharedServiceName; // Update name
+                    if (!shadowPoiService.StaticService)
                         NotifyOfPropertyChange(() => DynamicServices);
                 }
                 Execute.OnUIThread(() =>
@@ -295,24 +320,24 @@ namespace DataServer {
                         var group = AppState.Imb.Groups.FirstOrDefault(g => g.IsActive);
                         if (group != null) AppState.Imb.JoinGroup(group);
                     }
-                    if (AppState.Imb.ActiveGroup != null && AppState.Imb.ActiveGroup.Layers.Contains(ns.Id))
+                    if (AppState.Imb.ActiveGroup != null && AppState.Imb.ActiveGroup.Layers.Contains(sharedServiceGuid))
                     {
-                        if (os != null) {
-                            if (!os.IsLocal) return;
-                            os.IsLocal = false;
-                            os.Server = ns.Server;
-                            SendPrivateMessage(os.Server, PrivateMessageActions.SubscribeRequest, os.Id);
+                        if (isSharedServiceAlreadyKnown)
+                        {
+                            if (!shadowPoiService.IsLocal) return;
+                            Subscribe(shadowPoiService);
+                            
                         }
                         else
-                            ns.Start();
-                        AppState.TriggerNotification(ns.Name + " layer shared in " + AppState.Imb.ActiveGroup.Name, pathData: MenuHelpers.LayerIcon);
+                            shadowPoiService.Start();
+                        AppState.TriggerNotification(sharedServiceName + " layer shared in " + AppState.Imb.ActiveGroup.Name, pathData: MenuHelpers.LayerIcon);
                     }
                     else
                     {
                         var nea = new NotificationEventArgs
                         {
                             Text       = "Do you want to join?",
-                            Header     = ns.Name + " now available",
+                            Header = sharedServiceName + " now available",
                             Duration   = new TimeSpan(0, 0, 30),
                             Background = AppState.AccentBrush,
                             Image      = new BitmapImage(new Uri(@"pack://application:,,,/csCommon;component/Resources/Icons/layers4.png")),
@@ -322,12 +347,13 @@ namespace DataServer {
                         nea.OptionClicked += (s, n) =>
                         {
                             if (n.Option != "Yes") return;
-                            if (os != null) {
-                                os.Server = ns.Server;
-                                SendPrivateMessage(os.Server, PrivateMessageActions.SubscribeRequest, os.Id);
+                            if (isSharedServiceAlreadyKnown)
+                            {
+                                // Request the sharing service IMB client to add this client to subscribtion list
+                                Subscribe(shadowPoiService);
                             }
-                            else 
-                                ns.Start();
+                            else
+                                shadowPoiService.Start();
 
                         };
                         AppState.TriggerNotification(nea);
@@ -335,37 +361,53 @@ namespace DataServer {
                 });
                 
             }
-            else
+            else if (isSharedServiceStoppedNotification)
             {
-                if (os != null  && os.Layer != null)
+                if (isSharedServiceAlreadyKnown)
                 {
                     Execute.OnUIThread(() =>
                     {
-                        AppState.TriggerNotification("Layer '" + os.Name + "' is not available anymore");
-                        ((IStartStopLayer)os.Layer).Stop();
-                        //os.Unsubscribe();
-                        //if (UnSubscribed != null) UnSubscribed(this, new ServiceSubscribeEventArgs {Service = os});
-                        Execute.OnUIThread(() => Services.Remove(os));
-                        Services.Remove(os);
-
-                        DeleteService(os);
-
-                        NotifyOfPropertyChange(() => DynamicServices);
+                        AppState.TriggerNotification("Layer '" + shadowPoiService.Name + "' is not available anymore");
+                        DeleteService(shadowPoiService);
                     });
                     
                 }
                 else
                 {
-                    Execute.OnUIThread(() => Services.Remove(os));
-                    Services.Remove(os);
-
-                    DeleteService(os);
-
-                    NotifyOfPropertyChange(() => DynamicServices);
+                    DeleteService(shadowPoiService);
+                   
                 }
-            }
+            } // else parse error!
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pSharedServiceGuid">The ID of the service that is being shared by remote IMB client</param>
+        /// <param name="PImbHandleSharingService">The IMB handle of the remote IMB client that is sharing</param>
+        /// <returns></returns>
+        private PoiService CreateShadowServiceForSharedService(string pSharedServiceName, Guid pSharedServiceGuid, int pImbHandleSharingService)
+        {
+            if (!FileStore.FolderExists("Services")) FileStore.CreateFolder("Services");
+            if (!FileStore.FolderExists("Services\\" + pSharedServiceGuid))
+                FileStore.CreateFolder("Services\\" + pSharedServiceGuid);
+            var shadowPoiService = new PoiService
+            {
+                Id = pSharedServiceGuid,
+                Name = pSharedServiceName,
+                IsShared = true,
+                IsLocal = false,
+                StaticService = false, /* could be true of false: don't known is static of dynamic service */
+                Server = pImbHandleSharingService,
+                RelativeFolder = "Shared Layers",
+                Mode = Mode.client,
+                Folder = Path.Combine(Path.Combine(FileStore.GetLocalFolder() , "Services"), pSharedServiceGuid.ToString()),
+                dsb = this
+            };
+            Services.Add(shadowPoiService);
+            shadowPoiService.InitPoiService();
+            NotifyOfPropertyChange(() => DynamicServices);
+            return shadowPoiService;
+        }
         private static AppStateSettings AppState { get { return AppStateSettings.Instance; }}
         
         public void Start(string folder, Mode myMode, string originFolder, bool autoStart = false, bool addLocalServices = true) {
@@ -431,9 +473,10 @@ namespace DataServer {
         }
 
         // TODO This (legacy) code is used in multiple spots in the code; we now have more than one way to load a data service.
+        // Load .ds file and creates a service fot this ds file
         public PoiService AddLocalDataService(string folder, Mode _mode, string file, string originFolder = "", bool autoStart = false) {
             if (string.IsNullOrEmpty(originFolder)) originFolder = Path.Combine(Directory.GetCurrentDirectory(), AppState.Config.Get("Poi.LocalFolder", "PoiLayers"));
-            
+            // Use GUID in filename is ID for service (important when file is cloned!)
             var f = file.Split('\\').Last();
             var stat = (f.StartsWith("~"));
             if (stat)
@@ -727,6 +770,7 @@ namespace DataServer {
         public void DeleteService(PoiService s) {
             if (s == null) return;
             if (s.IsSubscribed) UnSubscribe(s);
+            if (s.Layer != null) s.Layer.Stop();
             if (s.Layer != null && s.Layer.Parent != null && s.Layer.Parent.ChildLayers.Contains(s.Layer))
             {
                 s.Layer.Parent.ChildLayers.Remove(s.Layer);
@@ -749,6 +793,7 @@ namespace DataServer {
                 Logger.Log("DataService", "Error delete dataservice at: " + s.FileName, e.Message,
                     Logger.Level.Error);
             }
+            NotifyOfPropertyChange(() => DynamicServices);
         }
 
         #region imbClient service actions9
