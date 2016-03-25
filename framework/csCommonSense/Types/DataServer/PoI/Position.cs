@@ -420,5 +420,10 @@ namespace DataServer
             // convert radians to degrees (as bearing: 0...360)
             return (RadianToDegree(radians) + 360) % 360;
         }
+
+        public Position Clone()
+        {
+            return new Position(Longitude, Latitude, Altitude);
+        }
     }
 }
