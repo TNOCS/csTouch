@@ -99,6 +99,8 @@ namespace DataServer
 
         public delegate void PingReceivedHandler(Service s, BaseContent b);
 
+        public delegate void ModelLoadedHandler(BaseContent baseContent, IModelPoiInstance model);
+
         public const string ServiceVariableName = "Service:";
         public const string StaticServiceVariableName = "StaticService:";
         //private static readonly object _lock = new object();
@@ -418,7 +420,6 @@ namespace DataServer
                 return false;
             }
         }
-
         private bool CreateBackupOfLiveService()
         {
             if (string.IsNullOrEmpty(FileName)) return false;
@@ -642,6 +643,8 @@ namespace DataServer
 
         public event PingReceivedHandler PingReceived;
 
+        public event ModelLoadedHandler OnModelLoaded;
+
         public void MakeLocal()
         {
             UnSubscribeServiceChannel();
@@ -680,8 +683,14 @@ namespace DataServer
             if (PingReceived != null) PingReceived(this, c);
         }
 
+
         // Debounce every second or when 100 pois are received
         private DebouncedProcessor<BaseContent> _baseContentDebounce = new DebouncedProcessor<BaseContent>(1000,100);
+        internal void RaiseModelLoaded(BaseContent baseContent, IModelPoiInstance model)
+        {
+            var handler = OnModelLoaded;
+            if (handler != null) handler(baseContent, model);
+        }
         private void serviceChannel_OnBuffer(TEventEntry aEvent, int aTick, int aBufferId, TByteBuffer aBuffer)
         {
             var cm = ContentMessage.ConvertByteArrayToMessage(aBuffer.Buffer);
@@ -771,11 +780,39 @@ namespace DataServer
                                 try
                                 {
                                     obj.IsInTransit = true;
+                                    // Clone label dictionary
+                                    var diffLabels = new Dictionary<string, string>();
+                                    if (obj.Labels != null)
+                                    {
+                                        foreach (KeyValuePair<string, string> label in obj.Labels)
+                                        {
+                                            diffLabels.Add(label.Key, label.Value);
+                                        }
+                                    }
                                     RuntimeTypeModel.Default.DeserializeWithLengthPrefix(ms, obj, cl.ContentType,
                                         PrefixStyle.Base128, 0);
-
                                     _baseContentDebounce.Add(obj);
                                     //obj.ForceUpdate(true, true);
+
+                                    // Notify label changed:
+                                    if (obj.Labels != null)
+                                    {
+                                        foreach (KeyValuePair<string, string> currentLabel in obj.Labels)
+                                        {
+                                            string oldLabelValue;
+                                            if (diffLabels.TryGetValue(currentLabel.Key, out oldLabelValue))
+                                            {
+                                               if (currentLabel.Value != oldLabelValue) // label changed
+                                               {
+                                                  TriggerLabelChangedBySync(obj, currentLabel.Key, oldLabelValue, currentLabel.Value);
+                                               }
+                                            }
+                                            else // new label
+                                            {
+                                                TriggerLabelChangedBySync(obj, currentLabel.Key, null, currentLabel.Value);
+                                            }
+                                        }
+                                    }
                                 }
                                 catch (Exception e)
                                 {
@@ -795,6 +832,16 @@ namespace DataServer
                     }
                     break;
             }
+        }
+
+        /// <summary>
+        /// Notify label changed when BaseContent is synchronised over IMB bus
+        /// </summary>
+        private void TriggerLabelChangedBySync(BaseContent pConent, string pLabelKey, string pOldValue, string pNewValue)
+        {
+            // dsPoiLayer runs in Guid thread and uses label changed
+            Execute.OnUIThread(() => pConent.TriggerLabelChanged(pLabelKey, pOldValue, pNewValue));
+
         }
 
         public void Close()
