@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Management.Instrumentation;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -312,6 +313,7 @@ namespace WpfConverters
 
     public class BooleanHiddenConverter : IValueConverter
     {
+        public static BooleanHiddenConverter Instance = new BooleanHiddenConverter();
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool)
