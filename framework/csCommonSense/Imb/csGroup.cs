@@ -2,6 +2,7 @@
 using csShared;
 using csShared.Controls.Popups.MenuPopup;
 using csShared.Geo;
+using DataServer;
 using ESRI.ArcGIS.Client.Geometry;
 using ESRI.ArcGIS.Client.Projection;
 using IMB3;
@@ -14,6 +15,8 @@ using Point = System.Windows.Point;
 
 namespace csImb
 {
+    using System.Diagnostics;
+
     public class csGroup : PropertyChangedBase
     {
         private string name;
@@ -66,55 +69,95 @@ namespace csImb
 
         private BindableCollection<Guid> layers = new BindableCollection<Guid>();
 
+        // Service GUID that are shared
         public BindableCollection<Guid> Layers
         {
             get { return layers; }
             set { layers = value; NotifyOfPropertyChange(() => Layers); }
         }
 
-        public bool IsActive
+        public bool IsMemberOfGroup 
+        {
+            get { return IsActive; }
+        }
+
+        public bool IsActive // Use IsMemberOfGroup; backwards compatible
         {
             get { return AppState.Imb != null && Clients.Contains(AppState.Imb.Imb.ClientHandle); }
         }
 
         internal void FromString(string v)
         {
+            // parses group definition received from IMB (see ImbGroupDefinitionString)
             var ss = v.Split('|');
             Owner = long.Parse(ss[0]);
             OwnerClient = AppState.Imb.FindClient(Owner);
-            var oldList = Clients.ToList();
-            Clients.Clear();
-            Clients.AddRange(ss[1].Split(';').Where(k => !string.IsNullOrEmpty(k)).Select(long.Parse));
 
-            Layers.Clear();
-            Layers.AddRange(ss[2].Split(';').Where(k => !string.IsNullOrEmpty(k)).Select(Guid.Parse));
+            var imbClientHandlesInGroup = ss[1].Split(';').Where(k => !string.IsNullOrEmpty(k)).Select(long.Parse).ToList();
+            var layers = ss[2].Split(';').Where(k => !string.IsNullOrEmpty(k)).Select(Guid.Parse).ToList();
 
-            // show notifications
-            foreach (var c in Clients)
+            // Update administration for clients belonging to group
+            var removedHandles = Clients.Except(imbClientHandlesInGroup).ToList();
+            var addedHandles = imbClientHandlesInGroup.Except(Clients).ToList();
+            var unchangedHandles = Clients.Intersect(imbClientHandlesInGroup).ToList();
+            if (removedHandles.Count > 0)
             {
-                if (oldList.Contains(c)) continue;
-                var fc = AppState.Imb.FindClient(c);
-                if (fc != null) Execute.OnUIThread(() => AppState.TriggerNotification(fc.Name + " joined " + Name, pathData: MenuHelpers.GroupIcon));
-
-                if (Owner == AppState.Imb.Imb.ClientHandle) UpdateExtent(true);
+                // Converts addedHandles handle id's to names
+                var clientNames = removedHandles.Select(
+                    handleId =>
+                    {
+                        var fc = AppState.Imb.FindClient(handleId);
+                        return (fc != null) ? fc.Name : handleId.ToString(CultureInfo.InvariantCulture);
+                    });
+                Execute.OnUIThread(() => AppState.TriggerNotification(string.Format("{0} left group {1}",
+                    String.Join(",", clientNames), Name), pathData: MenuHelpers.GroupIcon));
+                Clients.RemoveRange(addedHandles);
             }
 
-            foreach (var c in oldList)
+            if (addedHandles.Count > 0)
             {
-                if (Clients.Contains(c)) continue;
-                var fc = AppState.Imb.FindClient(c);
-                if (fc != null) Execute.OnUIThread(() =>
-                    AppState.TriggerNotification(fc.Name + " left " + Name, pathData: MenuHelpers.GroupIcon));
+                // Converts addedHandles handle id's to names
+                var clientNames = addedHandles.Select(
+                    handleId =>
+                        {
+                            var fc = AppState.Imb.FindClient(handleId);
+                            return (fc != null) ? fc.Name : handleId.ToString(CultureInfo.InvariantCulture);
+                        });
+                Execute.OnUIThread(() => AppState.TriggerNotification(string.Format("{0} joined group {1}",
+                    String.Join(",", clientNames), Name), pathData: MenuHelpers.GroupIcon));
+                Clients.AddRange(addedHandles);
             }
 
-            if (Owner == AppState.Imb.Imb.ClientHandle) 
-                UpdateGroup();
-            else 
-                TriggerUpdates();
+
+            // Update shared layers.
+            var removedLayers = Layers.Except(layers).ToList();
+            var addedLayers = layers.Except(Layers).ToList();
+            Layers.RemoveRange(removedLayers);
+            Layers.AddRange(addedLayers);
+
+            if (addedHandles.Count + removedHandles.Count > 0) // Did group client list change?
+            {
+                NotifyOfPropertyChange(() => FullClients);
+                NotifyOfPropertyChange(() => IsActive);
+                NotifyOfPropertyChange(() => IsMemberOfGroup);
+            }
+            if (this.Owner == this.AppState.Imb.Imb.ClientHandle)
+            {
+                // Owner of group
+                UpdateExtent(true);
+                // SetImbGroup(); 
+            }
+            
         }
 
         public override string ToString()
         {
+            return ImbGroupDefinitionString();
+        }
+
+        private string ImbGroupDefinitionString()
+        {
+            // <IMB client ID of owner of group>|<IMB client ID's that joined group (seperated by ;)>|<Layers shared in group>
             var r = Owner + "|";
             r  = Clients.Aggregate(r, (current, c) => current + (c + ";"));
             r += "|";
@@ -133,12 +176,17 @@ namespace csImb
 
         public void InitImb()
         {
+            Debug.Assert(commandChannel == null, "Already initialized");
             commandChannel = AppState.Imb.Imb.Subscribe(CommandsChannelName, true);
 
             commandChannel.OnNormalEvent                          += CommandChannelOnNormalEvent;
             AppState.ViewDef.MapControl.ExtentChanged             += MapControl_ExtentChanged;
             AppState.ViewDef.MapControl.PreviewTouchDown          += MapControl_PreviewTouchDown;
             AppState.ViewDef.MapControl.PreviewMouseRightButtonUp += MapControl_PreviewMouseRightButtonUp;
+
+            Clients.Add(AppState.Imb.Imb.ClientHandle);
+            UpdateGroup();
+
         }
 
         void MapControl_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
@@ -265,23 +313,32 @@ namespace csImb
             });
         }
 
-
         public void StopImb()
         {
+            Debug.Assert(commandChannel != null, "Already deinitialized" );
+
+            foreach (var l in Layers)
+            {
+                var s = (PoiService)AppState.DataServer.Services.FirstOrDefault(k => k.Id == l);
+                if (s != null && s.Layer != null) s.Layer.Stop();
+            }
+
             AppState.ViewDef.MapControl.ExtentChanged             -= MapControl_ExtentChanged;
             AppState.ViewDef.MapControl.PreviewMouseRightButtonUp -= MapControl_PreviewMouseRightButtonUp;
-            commandChannel.OnNormalEvent                          += CommandChannelOnNormalEvent;
-
-            commandChannel.UnSubscribe();
-            commandChannel = null;
+            if (commandChannel != null)
+            {
+                commandChannel.OnNormalEvent -= CommandChannelOnNormalEvent;
+                commandChannel.UnSubscribe();
+                commandChannel = null;
+            }
+            Clients.Remove(AppState.Imb.Imb.ClientHandle);
+            UpdateGroup();  
+            
         }
 
-        public void TriggerUpdates()
-        {
-            NotifyOfPropertyChange(() => IsActive);
-            NotifyOfPropertyChange(() => FullClients);
-        }
-
+        /// <summary>
+        /// Converts Clients handle id to client objects
+        /// </summary>
         public BindableCollection<ImbClientStatus> FullClients
         {
             get
@@ -290,16 +347,34 @@ namespace csImb
                 foreach (var c in Clients)
                 {
                     var nc = AppState.Imb.FindClient(c);
+                    //Debug.Assert((nc != null), "IMB Client not found");
                     if (nc != null) r.Add(nc);
                 }
                 return r;
             }
         }
 
+        private string ImbVariableNameForGroup
+        {
+            get
+            {
+                return string.Format("{0}.group", Name);
+            }
+        }
+
+        /// <summary>
+        /// Puts the GROUP definition on IMB bus
+        /// </summary>
+        private void SetImbGroup()
+        {
+            AppState.Imb.Imb.SetVariableValue(ImbVariableNameForGroup, ImbGroupDefinitionString());
+            base.NotifyOfPropertyChange(() => IsActive);
+            base.NotifyOfPropertyChange(() => IsMemberOfGroup);
+        }
+
         public void UpdateGroup()
         {
-            AppState.Imb.Imb.SetVariableValue(Name + ".group", ToString());
-            TriggerUpdates();
+            SetImbGroup();
         }
     }
 }

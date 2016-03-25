@@ -24,7 +24,7 @@
             <csCommon:LayerBackgroundColor x:Key="LayerBackgroundColor" />
             <wpfConverters:BooleanActiveOpacityConverter x:Key="BooleanActiveOpacityConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <wpfConverters:BooleanHiddenConverter x:Key="BooleanHiddenConverter" />
+            
             <wpfConverters:ReverseBooleanVisibilityConverter x:Key="ReverseBooleanVisibilityConverter" />
             <wpfConverters:ReverseBooleanActiveOpacityConverter x:Key="ReverseBooleanActiveOpacityConverter" />
             <csCommon:ServiceIconConverter x:Key="ServiceIconConverter" />
@@ -1319,7 +1319,7 @@
                                                     Background="Blue"
                                                     CornerRadius="2"
                                                     Visibility="{Binding HasChildren,
-                                                                         Converter={StaticResource BooleanHiddenConverter}}">
+                                                                         Converter={x:Static wpfConverters:BooleanHiddenConverter.Instance}}">
                                                 <Grid HorizontalAlignment="Left">
                                                     <Path x:Name="expandedPath"
                                                           Width="Auto"
@@ -1373,7 +1373,7 @@
                                                     Background="Orange"
                                                     CornerRadius="2"
                                                     Visibility="{Binding IsOnline,
-                                                                         Converter={StaticResource BooleanHiddenConverter}}">
+                                                                         Converter={x:Static wpfConverters:BooleanHiddenConverter.Instance}}">
                                                 <Path x:Name="expandedPath1"
                                                       Width="Auto"
                                                       Height="Auto"
@@ -1402,7 +1402,7 @@
                                                     Background="Green"
                                                     CornerRadius="2"
                                                     Visibility="{Binding IsShared,
-                                                                         Converter={StaticResource BooleanHiddenConverter}}">
+                                                                         Converter={x:Static wpfConverters:BooleanHiddenConverter.Instance}}">
                                                 <Image Margin="1" Source="/csCommon;component/Resources/Icons/person.png" />
                                             </Border>
                                         </Grid>

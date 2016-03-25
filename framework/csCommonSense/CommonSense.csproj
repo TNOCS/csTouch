@@ -266,7 +266,7 @@
     </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.480, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>c:\dev\cs\cs\libs\protobuf-net.dll</HintPath>
+      <HintPath>..\..\libs\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="ReachFramework" />
     <Reference Include="S22.Imap">
@@ -1739,6 +1739,7 @@
     </None>
     <None Include="Resources\Icons\SecurityCamera.svg" />
     <Resource Include="Resources\Icons\radial_sliders.png" />
+    <EmbeddedResource Include="Resources\Icons\ImageNotFound.png" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -189,7 +189,7 @@
 
                     <Custom:SurfaceToggleButton x:Name="surfaceToggleButton" 
                                                 cal:Message.Attach="[Event Checked]=[Action Join()];[Event Unchecked]=[Action Leave()]" 
-                                                IsChecked="{Binding Group.IsActive, Mode=OneWay}" 
+                                                IsChecked="{Binding Group.IsMemberOfGroup, Mode=OneWay}" 
                                                 Content="{Binding Group.Name}" HorizontalAlignment="Stretch" Margin="0,0,44,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="Black" FontSize="24" HorizontalContentAlignment="Left" MinHeight="0" Padding="7,7,7,0" Opacity="{Binding Group.IsActive, Converter={StaticResource BooleanActiveOpacityConverter}}" />
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="15,0,0,0" VerticalAlignment="Top" >
                         <TextBlock Text="{Binding Clients}" Foreground="Black" FontSize="10"  />

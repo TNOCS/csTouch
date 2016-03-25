@@ -73,7 +73,7 @@ namespace csCommon.RemoteScreenPlugin
         {
             if (!CanCreateGroup) return;
             var ng = new csGroup {Name = NewGroupName.Trim()};
-            AppState.Imb.CreateGroup(ng);
+            AppState.Imb.CreateGroupAndJoin(ng);
             //AppState.Imb.JoinGroup(ng);
             NewGroupName = string.Empty;
             SelectedTab = 0;

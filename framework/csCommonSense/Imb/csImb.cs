@@ -318,7 +318,7 @@ namespace csImb
 
         #region groups
 
-        public void CreateGroup(csGroup group)
+        public void CreateGroupAndJoin(csGroup group)
         {
             if (Imb == null) return;
             Status.Id = Imb.ClientHandle;
@@ -333,15 +333,17 @@ namespace csImb
 
         public void JoinGroup(csGroup ng) {
             if (ng == null) return;
-            foreach (var g in Groups.Where(k => k.IsActive && k != ng)) {
-                LeaveGroup(g);
+            if ((ActiveGroup != null) && (ActiveGroup.Name == ng.Name)) return; // Already member of group
+            foreach (var g in Groups.Where(k => k.IsMemberOfGroup && k.Name != ng.Name)) 
+            {
+                LeaveGroup(g, false);
             }
             ActiveGroup = ng;
-            if (ng.IsActive) return;
-            AppState.TriggerNotification("You joined " + ng.Name, pathData: MenuHelpers.GroupIcon);
-            ng.Clients.Add(AppState.Imb.Imb.ClientHandle);
-            ng.UpdateGroup();
-            ng.InitImb();
+            if (!ng.IsMemberOfGroup)
+            {
+                ng.InitImb();
+                AppState.TriggerNotification("You joined " + ng.Name, pathData: MenuHelpers.GroupIcon);
+            }
         }
 
         private csGroup activeGroup;
@@ -351,27 +353,25 @@ namespace csImb
             get {
                 if (activeGroup != null) return activeGroup;
                 if (Groups != null && Groups.Count > 0)
-                    activeGroup = Groups.FirstOrDefault(g => g.IsActive);
+                    activeGroup = Groups.FirstOrDefault(g => g.IsMemberOfGroup);
                 return activeGroup;
             }
-            set { activeGroup = value; NotifyOfPropertyChange(()=>ActiveGroup); }
+            set
+            {
+                if (ReferenceEquals(activeGroup, value)) return;
+                activeGroup = value; 
+                NotifyOfPropertyChange(()=>ActiveGroup); 
+            }
         }
             
-        public void LeaveGroup(csGroup g)
+        public void LeaveGroup(csGroup g, bool pRemoveActiveGroup = true)
         {
             if (g == null) return;
-            if (g.IsActive)
+            if (g.IsMemberOfGroup)
             {
-                foreach (var l in g.Layers)
-                {
-                    var s = (PoiService)AppState.DataServer.Services.FirstOrDefault(k => k.Id == l);
-                    if (s != null && s.Layer !=null) s.Layer.Stop();
-                }
-                ActiveGroup = null;
-                AppState.TriggerNotification("You left " + g.Name, pathData: MenuHelpers.GroupIcon);
-                g.Clients.Remove(AppState.Imb.Imb.ClientHandle);
-                g.UpdateGroup();               
                 g.StopImb();
+                if (pRemoveActiveGroup) ActiveGroup = null;
+                AppState.TriggerNotification("You left " + g.Name, pathData: MenuHelpers.GroupIcon);
             };      
         }
 
@@ -463,15 +463,16 @@ namespace csImb
             }
         }
 
-        private void ParseGroup(string aVarName, string value) {
-            var id = aVarName.Split('.')[0];
+         private void ParseGroup(string aVarName, string value) {
+            var groupName = aVarName.Split('.')[0];
 
-            var group = groups.FirstOrDefault(k => Equals(k.Name, id)); // Equals made static.
+            var group = groups.FirstOrDefault(k => Equals(k.Name, groupName)); // Equals made static.
 
             if (string.IsNullOrEmpty(value)) {
                 if (CanDeleteGroup(group)) {
+                    Groups.Remove(group);
                     Execute.OnUIThread(() => {
-                        Groups.Remove(group);
+                        
                         AppState.TriggerNotification(group.Name + " has been deleted", pathData: MenuHelpers.GroupIcon);
                     });
                     // First call OnClientRemoved before you remove the client. Otherwise you will generate an exception.
@@ -479,14 +480,16 @@ namespace csImb
             }
             else {
                 if (group != null) {
-                    group.FromString(value);
+                    group.FromString(value); // Update group info
                 }
                 else {
-                    var st = new csGroup {Name = id};
+                    // Create group
+                    var st = new csGroup {Name = groupName};
                     st.FromString(value);
                     Groups.Add(st);
-                    var s = id + " group was created";
-                    if (st.OwnerClient != null) s += " by " + st.OwnerClient.Name;
+                    var s = string.Format("Created group '{0}'{1}",
+                        groupName, (st.OwnerClient != null ? 
+                        string.Format(" owned by client '{0}'", (st.OwnerClient.Name ?? "-")) : string.Empty));
                     Execute.OnUIThread(() => AppState.TriggerNotification(s, pathData: MenuHelpers.GroupIcon));
                 }
             }
@@ -795,6 +798,14 @@ namespace csImb
             UpdateStatus();
         }
 
+        public string ImbClientHandleToName(long pImbHandle )
+        {
+            ImbClientStatus client;
+            if (pImbHandle == Id) return string.Format("SELF ({0})", pImbHandle);
+            return Clients.TryGetValue(pImbHandle, out client)
+                ? string.Format("{0} ({1})", client.Name, pImbHandle)
+                : string.Format("{0}", pImbHandle);
+        }
 
 
         
