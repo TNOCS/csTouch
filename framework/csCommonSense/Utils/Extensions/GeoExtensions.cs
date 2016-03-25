@@ -15,6 +15,8 @@ using System.Windows.Input;
 
 namespace csShared.Utils
 {
+    using System.Diagnostics;
+
     using DocumentFormat.OpenXml.Drawing;
 
     using Graphic = ESRI.ArcGIS.Client.Graphic;
@@ -23,6 +25,8 @@ namespace csShared.Utils
 
     public static class GeometryExtensionMethods
     {
+        // The gis map uses EPSG:3857 (900913) need to convert it to EPSG:4326 (lat/lon)
+
         public static readonly WebMercator MyWebMercator = new WebMercator();
 
         public static Position ToPosition(this MapPoint point)
@@ -213,7 +217,7 @@ namespace csShared.Utils
             var result = new List<System.Windows.Point>();
             if (pEsriGeometry == null) return result;
             
-            if (pEsriGeometry is Polyline)
+            if (pEsriGeometry is Polyline) // Can be a line
             {
                 var source = pEsriGeometry as Polyline;
                 foreach (var path in source.Paths)
@@ -225,22 +229,7 @@ namespace csShared.Utils
                         result.Add(new Point(r.X, r.Y));
                     }
                 }
-            }
-            if (pEsriGeometry is Polyline)
-            {
-                var source = pEsriGeometry as Polyline;
-                foreach (var path in source.Paths)
-                {
-                    foreach (var po in path)
-                    {
-                        var r = MercatorConverter.ToGeographic(po) as MapPoint;
-                        if (r == null) continue;
-                        result.Add(new Point(r.X, r.Y));
-                    }
-                }
-            }
-
-            if (pEsriGeometry is Polygon)
+            } else if (pEsriGeometry is Polygon)
             {
                 var source = pEsriGeometry as Polygon;
                 foreach (var path in source.Rings)
@@ -252,6 +241,10 @@ namespace csShared.Utils
                         result.Add(new Point(r.X, r.Y));
                     }
                 }
+            }
+            else
+                    {
+                Debug.Assert(false, "Not implemented ESRI type");
             }
             return result;
         }
