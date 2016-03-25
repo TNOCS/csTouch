@@ -169,6 +169,7 @@ namespace csShared.Geo
         /// </summary>
         public void CenterMapOnWgs84Point(DataServer.Position pCenterPosition)
         {
+            if (pCenterPosition == null) return;
             PanAndPoint(new System.Windows.Point(pCenterPosition.Longitude, pCenterPosition.Latitude), true);
         }
         /// <summary>
