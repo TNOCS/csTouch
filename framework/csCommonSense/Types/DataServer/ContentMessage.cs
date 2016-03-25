@@ -4,6 +4,8 @@ using ProtoBuf;
 
 namespace DataServer
 {
+    using csShared.Utils;
+
     [ProtoContract]
     public class ContentMessage
     {
@@ -24,6 +26,8 @@ namespace DataServer
 
         public static ContentMessage ConvertByteArrayToMessage(byte[] buffer)
         {
+            try
+            {
             using (var ms = new MemoryStream())
             {
                 ms.Write(buffer, 0, buffer.Length);
@@ -32,13 +36,29 @@ namespace DataServer
                 //message = (Message)model.Deserialize(ms, null, typeof(Message));
             }
         }
+            catch (InvalidOperationException pMessage /* deserialize error */)
+            {
+                Logger.Log("IMB", "Deserialize IMB message failed: " + pMessage.Message, "", Logger.Level.Warning);
+                throw;
+            }
+            
+        }
 
         public MemoryStream ConvertToStream()
         {
             var ms = new MemoryStream();
+            try
+            {
+                Serializer.SerializeWithLengthPrefix(ms, this, PrefixStyle.Base128, MessageSeparator);
+            }
+            catch (InvalidOperationException pMessage /* serialize error */)
+            {
+                Logger.Log("IMB", "Serialize IMB message failed: " + pMessage.Message, "", Logger.Level.Error);
+                throw;
+
+            }
             
-            Serializer.SerializeWithLengthPrefix(ms, this, PrefixStyle.Base128, MessageSeparator);
-            return ms;
+             return ms;
         }
     }
 }
