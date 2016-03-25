@@ -1000,6 +1000,7 @@ namespace DataServer
 
         /// <summary>
         /// Create a clone of the data service, including images.
+        /// Important the Id of the service is not changed; this is done when adding service
         /// </summary>
         /// <param name="folder">Folder of reference data service</param>
         /// <param name="file">Reference data service</param>
