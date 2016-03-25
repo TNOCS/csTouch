@@ -296,6 +296,27 @@ namespace csShared.Utils
         /// <returns></returns>
         public static double Distance(Point pPoint1, Point pPoint2) { return Math.Sqrt(Math.Abs(pPoint1.X - pPoint2.X) + Math.Abs(pPoint1.Y - pPoint2.Y)); }
 
+
+        /// <summary>
+        ///  Calculates the bearing in degrees for the line from point 1 (lat1, lon1) to point 2 (lat2, lon2).
+        /// </summary>
+        public static double Bearing(double pLat1, double pLon1, double pLat2, double pLon2)
+        {
+            double lat1 = Deg2Rad(pLat1);
+            double lon1 = Deg2Rad(pLon1);
+            double lat2 = Deg2Rad(pLat2);
+            double lon2 = Deg2Rad(pLon2);
+
+            double deltaLat = lat2 - lat1;
+            double deltaLon = lon2 - lon1;
+
+            double tanPar1 = Math.Sin(deltaLon) * Math.Cos(lat2);
+            double tanPar2 = Math.Cos(lat1) * Math.Sin(lat2) - Math.Sin(lat1) * Math.Cos(lat2) * Math.Cos(deltaLon);
+
+            double theta = Math.Atan2(tanPar1, tanPar2);
+            return (Rad2Deg(theta) + 360) % 360;
+        }
+
         #region Coordinate conversions
 
         #region Constants
