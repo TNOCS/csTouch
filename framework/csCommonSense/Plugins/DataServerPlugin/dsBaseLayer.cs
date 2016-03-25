@@ -26,6 +26,8 @@ using nl.tno.cs.presenter;
 
 namespace csDataServerPlugin
 {
+    using System.Diagnostics;
+
     public interface ILoadingLayer
     {
         bool  IsLoading { get; }
@@ -259,6 +261,7 @@ namespace csDataServerPlugin
                     {
                         var pm = plugin.Models[m.Type];
                         var mi = Activator.CreateInstance(pm) as IModel;
+                        Debug.Assert(mi != null, "Failed to create model instance");
                         if (mi == null) continue;
                         mi.Service = Service;
                         mi.Id = m.Id;
@@ -271,6 +274,7 @@ namespace csDataServerPlugin
                     if (!Models.ContainsKey(m.Id)) continue;
                     var instance = Models[m.Id].GetPoiInstance(p);
                     instance.Start();
+                    p.RaiseOnModelLoaded(instance);
                 }
             }
 
