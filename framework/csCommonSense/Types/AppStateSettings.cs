@@ -1555,9 +1555,12 @@ namespace csShared
         /// </summary>
         /// <param name="pPoiType"></param>
         /// <param name="pPosition"></param>
-        public static void CreatePoiByPoiType(PoI pPoiType, Position pPosition)
+        public static PoI CreatePoiByPoiType(PoI pPoiType, Position pPosition)
         {
-            if (!pPoiType.Data.ContainsKey("layer")) return;
+            if (!pPoiType.Data.ContainsKey("layer")) return null;
+            var poiLayer = pPoiType.Data["layer"] as dsLayer;
+            if (poiLayer == null) return null;
+
             var newPoi = new PoI
             {
                 PoiTypeId = pPoiType.ContentId,
@@ -1571,8 +1574,7 @@ namespace csShared
             foreach (var poiLabel in pPoiType.Labels) newPoi.Labels[poiLabel.Key] = poiLabel.Value;
             foreach (var pl in pPoiType.EffectiveMetaInfo) if (pl.DefaultValue != null && !newPoi.Labels.ContainsKey(pl.Label)) newPoi.Labels[pl.Label] = pl.DefaultValue;
             newPoi.MetaInfo = null;
-            var poiLayer = pPoiType.Data["layer"] as dsLayer;
-            if (poiLayer == null) return;
+
 
             newPoi.Service = poiLayer.Service;
 
@@ -1608,6 +1610,7 @@ namespace csShared
                 poiLayer.Service.PoIs.Add(newPoi);
                 poiLayer.Service.UpdateContentList();
             }
+            return newPoi;
         }
 
         private void InstanceDrop(object sender, DropEventArgs se)
