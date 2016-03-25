@@ -590,6 +590,7 @@ namespace csDataServerPlugin
                     break;
                 case DrawingModes.Freehand:
                 case DrawingModes.Polyline:
+                case DrawingModes.Line:
                     borderColor = this.SelectedPoiType.StrokeColor;
                     break;
                 case DrawingModes.Polygon:
@@ -1107,6 +1108,24 @@ namespace csDataServerPlugin
                                                            }, 
                                                    Width = this.mEsriShapePoi.StrokeWidth
                                                };
+                    break;
+                case DrawingModes.Line:
+                    this.Draw.DrawMode = DrawMode.LineSegment;
+                    this.Draw.LineSymbol = new LineSymbol
+                    {
+                        Color =
+                            new SolidColorBrush(this.mEsriShapePoi.StrokeColor)
+                            {
+                                Opacity
+                                    =
+                                    this
+                                    .mEsriShapePoi
+                                    .NEffectiveStyle
+                                    .StrokeOpacity
+                                    .Value
+                            },
+                        Width = this.mEsriShapePoi.StrokeWidth
+                    };
                     break;
                 case DrawingModes.Circle:
                     this.Draw.DrawMode = DrawMode.Circle;
