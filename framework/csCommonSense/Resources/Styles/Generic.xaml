@@ -1683,7 +1683,7 @@
                                                     <custom:SurfaceButton x:Name="PART_Close"
                                                                           Content="SurfaceButton"
                                                                           Style="{DynamicResource CloseButtonStyle}"
-                                                                          Visibility="{Binding CanExit, Converter={StaticResource BooleanHiddenConverter}}"
+                                                                          Visibility="{Binding CanExit, Converter={x:Static wpfConverters:BooleanHiddenConverter.Instance}}"
                                                                           Background="#00FF0000"
                                                                           Margin="0,0,0,-8" />
                                                 </Border>
