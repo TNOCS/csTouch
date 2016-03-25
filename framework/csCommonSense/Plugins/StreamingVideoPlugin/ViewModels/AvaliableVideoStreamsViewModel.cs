@@ -16,6 +16,9 @@ using VlcVideoPlayer.ViewModels;
 
 namespace csStreamingVideoPlugin.ViewModels
 {
+    using System.Windows;
+    using System.Windows.Input;
+
     public class AvaliableVideoStreamsViewModel : Screen
     {
         private AvaliableVideoStreamsView view;
@@ -114,7 +117,7 @@ namespace csStreamingVideoPlugin.ViewModels
             int height = (videoVM.VideoHeight == 0) ? 50 : (int)(videoVM.VideoHeight *0.30);
             int width = (videoVM.VideoWidth == 0) ? 50 : (int)(videoVM.VideoWidth*0.30);
 
-            var mousePosition = Mouse.Position;
+            var mousePosition = Mouse.GetPosition(Application.Current.MainWindow);
             var x = ((view.ActualWidth - 600) / view.ActualWidth) * mousePosition.X + 300;
             var fe = FloatingHelpers.CreateFloatingElement(String.Format("Video {0}", videoVM.Owner.Model.Description), 
                 new System.Windows.Point(x, 300 + rnd.Next(200) - 100),
