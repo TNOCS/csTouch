@@ -506,6 +506,12 @@ namespace csDataServerPlugin
                             }
                         }
 
+                        // When image not found display not_found image (so poi is visible on map)
+                        /* if (p.NEffectiveStyle.Picture == null)
+                        {
+                            p.NEffectiveStyle.Picture = LoadImageFromResource("csCommon.Resources.Icons.ImageNotFound.png");
+                        } */
+
                         //Fix by Jeroen: Invalid bitmap, don't add
                         if (p.NEffectiveStyle.Picture == null)
                             return;
@@ -680,7 +686,11 @@ namespace csDataServerPlugin
                             p.NEffectiveStyle.Picture = new BitmapImage(new Uri(s));
                         }
                     }
-
+                    // When image not found display not_found image (so poi is visible on map)
+                    /* if (p.NEffectiveStyle.Picture == null)
+                    {
+                        p.NEffectiveStyle.Picture = LoadImageFromResource("csCommon.Resources.Icons.ImageNotFound.png");
+                    } */
                     g.Symbol = new PictureMarkerSymbol
                     {
                         Source  = p.NEffectiveStyle.Picture,
@@ -730,6 +740,24 @@ namespace csDataServerPlugin
                     break;
             }
         }
+        /*
+        private BitmapImage LoadImageFromResource(string pResourceUrl)
+        {
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var resources = assembly.GetManifestResourceNames();
+            using (Stream stream = assembly.GetManifestResourceStream(pResourceUrl))
+            {
+
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = stream;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                return bitmap;
+            }
+        }*/
 
         #region ConvertPoints helpers
 
