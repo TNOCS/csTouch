@@ -106,6 +106,14 @@ namespace csDataServerPlugin
             p.Data["layer"] = this;
 
             var g = new PoiGraphic { Service = parent.Service };
+            var p1 = Graphics.FirstOrDefault(x => ((x.Attributes.ContainsKey("id") && (Guid)x.Attributes["id"] == p.Id)));
+            bool doInsert = true;
+            if (p1 != null)
+            {
+                g = p1 as PoiGraphic;
+                g.Service = parent.Service;
+                doInsert = false;
+            }
             
             GetGraphic(p, ref g);
             g.Layer = this;
@@ -113,7 +121,8 @@ namespace csDataServerPlugin
             g.GroupLayer = parent;
             g.Poi = p;
             p.Data["graphic"] = g;
-            Graphics.Add(g);
+
+            if (doInsert) Graphics.Add(g);
             p.PositionChanged += (e, f) => UpdatePosition(g, p);
 
             foreach (var m in p.EffectiveMetaInfo.Where(k=>k.Type == MetaTypes.datetime))
