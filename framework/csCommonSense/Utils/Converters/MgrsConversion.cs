@@ -7,12 +7,17 @@ using NETGeographicLib;
 
 namespace csCommon.Converters
 {
-    // Class for conversion between Latitude-Longitude coordinates and MGRS (Military Grid Reference System) coordinates.
-    // For more details, see the documentation of NETGeographicLib [http://geographiclib.sourceforge.net/html/NET/].
-
+    /// <summary>
+    /// Class for conversion between Latitude-Longitude coordinates and MGRS (Military Grid Reference System) coordinates.
+    /// For more details, see the documentation of NETGeographicLib [http://geographiclib.sourceforge.net/html/NET/].
+    /// </summary>
     public class MgrsConversion
     {
-        // Returns a string representation the MGRS coordinates, with the highest level of precision (1 m).
+        /// <summary>
+        /// Returns a string representation the MGRS coordinates, with the highest level of precision (1 m).
+        /// </summary>
+        /// <param name="lat"> Latitude in degrees </param>
+        /// <param name="lon"> Longitude in degrees </param>
         public static string convertLatLonToMgrs(double lat, double lon)
         {
             int zone;
@@ -24,13 +29,19 @@ namespace csCommon.Converters
             return mgrs;
         }
 
-        // Returns a string representation the MGRS coordinates, with specified precision.
-        // Precision should be specified with the prec parameter:
-        // prec = 1 -> 10 km precision
-        // prec = 2 -> 1 km precision
-        // prec = 3 -> 100 m precision
-        // prec = 4 -> 10 m precision
-        // prec = 5 -> 1 m precision
+        /// <summary>
+        /// Returns a string representation the MGRS coordinates, with specified precision.
+        /// Precision should be specified with the prec parameter:
+        /// prec = 1 -> 10 km precision
+        /// prec = 2 -> 1 km precision
+        /// prec = 3 -> 100 m precision
+        /// prec = 4 -> 10 m precision
+        /// prec = 5 -> 1 m precision
+        /// </summary>
+        /// <param name="lat"> Latitude in degrees </param>
+        /// <param name="lon"> Longitude in degrees </param>
+        /// <param name="prec"> Precision parameter (see description) </param>
+
         public static string convertLatLonToMgrsWithPrecision(double lat, double lon, int prec)
         {
             int zone;
@@ -42,7 +53,10 @@ namespace csCommon.Converters
             return mgrs;
         }
 
-        // Returns a double array with [lat, lon] in degrees
+        /// <summary>
+        /// Returns a double array with [lat, lon] in degrees
+        /// </summary>
+        /// <param name="mgrs"> MGRS string </param>
         public static double[] convertMgrsToLatLon(string mgrs)
         {
             int zone, prec;
