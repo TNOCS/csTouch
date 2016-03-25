@@ -23,6 +23,18 @@ namespace DataServer
             Labels = new Dictionary<string, string>();
         }
 
+        public event EventHandler<IModelPoiInstance> OnModelLoaded;
+
+        public void RaiseOnModelLoaded(IModelPoiInstance pModel)
+        {
+            var handler = OnModelLoaded;
+            if (handler != null) OnModelLoaded(this, pModel);
+            if (this.Service != null)
+            {
+                this.Service.RaiseModelLoaded(this, pModel);
+            }
+        }
+
         public bool IsSelected
         {
             get { return isSelected; }
@@ -138,11 +150,26 @@ namespace DataServer
 
         public event EventHandler<PoiSelectedEventArgs> Selected;
 
-        public void SetLabel(string key, string value)
+        public void SetLabel(string key, string value, bool callLabelChanged = false)
         {
+            string oldValue = "";
+            if (callLabelChanged)
+            {
+                Labels.TryGetValue(key, out oldValue);
+            }
             Labels[key] = value;
             NotifyOfPropertyChange(() => Labels);
+            // TriggerLabelChanged MUST be called! 
+            // If not: the label is not saved / synchronised
+            // See also comment MetaLabel.cs from Arnould
+            /* property callLabelChanged added for backward compatible; don't change working of old code.. */
+            if (callLabelChanged) 
+            {
+                if (oldValue != value) TriggerLabelChanged(key, oldValue, value);
         }
+        }
+
+        
 
         public object Clone()
         {
