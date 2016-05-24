@@ -778,7 +778,7 @@ namespace PoiServer.PoI
                             bc.NAnalysisStyle.StrokeColor = GetHighlightColor(this, value);
                             break;
                         case VisualTypes.SymbolSize:
-                            bc.NAnalysisStyle.IconWidth = GetSymbolSize(this, value);
+                            bc.NAnalysisStyle.IconHeight = bc.NAnalysisStyle.IconWidth = GetSymbolSize(this, value);
                             break;
                     }
                     break;

@@ -692,14 +692,20 @@ namespace csDataServerPlugin
                     {
                         p.NEffectiveStyle.Picture = LoadImageFromResource("csCommon.Resources.Icons.ImageNotFound.png");
                     } */
-                    g.Symbol = new PictureMarkerSymbol
+
+                    if (p.NEffectiveStyle.Picture != null && p.NEffectiveStyle.IconWidth != null)
                     {
-                        Source  = p.NEffectiveStyle.Picture,
-                        Width   = p.NEffectiveStyle.IconWidth.Value,
-                        Height  = p.NEffectiveStyle.IconHeight.Value,
-                        OffsetX = p.NEffectiveStyle.IconWidth.Value / 2,
-                        OffsetY = p.NEffectiveStyle.IconHeight.Value / 2
-                    };
+                        g.Symbol = new PictureMarkerSymbol
+                        {
+                            Source = p.NEffectiveStyle.Picture,
+                            Width = p.NEffectiveStyle.IconWidth.Value,
+                            Height = p.NEffectiveStyle.IconHeight.Value,
+                            OffsetX = p.NEffectiveStyle.IconWidth.Value/2,
+                            OffsetY = p.NEffectiveStyle.IconHeight.Value/2,
+                            Opacity = p.NEffectiveStyle.FillOpacity.Value
+                        };
+                    }
+
                     break;
                 case DrawingModes.Freehand:
                     if (p.FillColor.A == 0)
