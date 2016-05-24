@@ -139,6 +139,7 @@ namespace csCommon.Plugins.HlaRest
                             });
                         }
                     });
+                    PoiService.PoIs.FinishBatch();
 
                     //Execute.OnUIThread(() =>
                     //{
@@ -175,7 +176,6 @@ namespace csCommon.Plugins.HlaRest
 
                     RemoveOldPois();
 
-                    PoiService.PoIs.FinishBatch();
 
                     if (idleDuration <= 0) continue;
                     Debug.WriteLine("Wait for {0:0.0}s", idleDuration / 1000F);
