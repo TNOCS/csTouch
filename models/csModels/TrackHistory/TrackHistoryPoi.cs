@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using PointCollection = ESRI.ArcGIS.Client.Geometry.PointCollection;
 
@@ -202,12 +203,19 @@ namespace csModels.TrackHistory
             if (trackCoordinates.Count < 2) return;
             if (ShowArrow) CreateArrow();
 
-            Execute.OnUIThread(() =>
+            try
             {
-                ClearGraphics();
-                if (ShowTrail) DrawLine(trackCoordinates);
-                if (ShowArrow) DrawArrow(arrowCoordinates);
-            });
+                Execute.OnUIThread(() =>
+                {
+                    ClearGraphics();
+                    if (ShowTrail) DrawLine(trackCoordinates);
+                    if (ShowArrow) DrawArrow(arrowCoordinates);
+                });
+            }
+            catch (AggregateException ae)
+            {
+                
+            }
         }
 
         private readonly object myLock = new object();
