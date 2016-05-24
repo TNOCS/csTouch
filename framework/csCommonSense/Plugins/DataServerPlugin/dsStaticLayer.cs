@@ -274,11 +274,7 @@ namespace csDataServerPlugin
                 g.Visible = p.NEffectiveStyle.Visible.Value;
             }
 
-            if (checkVisibility)
-            {
-                //g.Visible = true;
-                g.UpdateVisibility();
-            }
+            
             switch (p.NEffectiveStyle.DrawingMode)
             {
                 case DrawingModes.Image:
@@ -353,6 +349,11 @@ namespace csDataServerPlugin
                             };
                     }
                     break;
+            }
+            if (checkVisibility)
+            {
+                //g.Visible = true;
+                g.UpdateVisibility();
             }
         }
 

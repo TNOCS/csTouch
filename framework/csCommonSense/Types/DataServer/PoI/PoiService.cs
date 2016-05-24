@@ -1366,6 +1366,17 @@ namespace DataServer
                         });
                         */
                         foreach (var a in add) a.UpdateAnalysisStyle();
+                        contentInExtent.ForEach((p)=> {
+                            if (p.Data.ContainsKey("graphic"))
+                            {
+                                Execute.OnUIThread(() =>
+                                {
+                                    var pg = ((PoiGraphic)p.Data?["graphic"]);
+                                    pg.UpdateVisibility();
+                                });
+                            }
+                        });
+                        
 
                         //var rv =
                         //    VisibleContent.Where(
