@@ -54,6 +54,7 @@ namespace csShared.Utils
         private const int LogLevel = -1;
 
         private Logger() {
+            if (AppState.Config.OnlineValues.Count == 0) throw new Exception("Config must be loaded before the logger can be started, as we use its settings!");
             bw.DoWork += BwDoWork;
             bwstat.DoWork += BwstatDoWork;
         }

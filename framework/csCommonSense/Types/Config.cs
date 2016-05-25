@@ -290,17 +290,16 @@ namespace csShared
 
         public void LoadOfflineConfig()
         {
-            Logger.Log("Config", "Loading Offline Config", "", Logger.Level.Info);
-
             configOnlineString = LoadConfig(false, "configoffline.xml"); // TODO REVIEW (1) Config ONLINE string loads Config OFFLINE; (2) the name of the Config Offline file is specified in App.config, but that specification is ignored here.
             if (!string.IsNullOrEmpty(configOnlineString))
                 OnlineValues = ParseValues(configOnlineString);
             if (ConfigLoaded != null) ConfigLoaded(this, null);
+            //Logger.Log("Config", "Loaded Offline Config", "", Logger.Level.Info);
         }
 
         public void LoadLocalConfig()
         {
-            Logger.Log("Config", "Loading Local Config", "", Logger.Level.Info);
+            //Logger.Log("Config", "Loading Local Config", "", Logger.Level.Info);
             configLocalString = LoadConfig(false, "localconfig.xml");
             if (configLocalString == "")
             {
