@@ -55,7 +55,7 @@ namespace csImb
             set { ownerClient = value; NotifyOfPropertyChange(() => OwnerClient); }
         }
 
-        private bool followMap = true;
+        private bool followMap = false;
 
         public bool FollowMap
         {
