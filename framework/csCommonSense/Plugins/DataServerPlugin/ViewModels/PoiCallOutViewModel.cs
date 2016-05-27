@@ -133,10 +133,10 @@ namespace csDataServerPlugin.ViewModels
         private void Poi_LabelChanged(object sender, System.EventArgs e)
         {
             var lcArgs = (LabelChangedEventArgs) e;
-            if (lcArgs.OldValue == lcArgs.NewValue) return;
+            if ((lcArgs.OldValue == lcArgs.NewValue) && !string.IsNullOrWhiteSpace(lcArgs.Label)) return;
             var mll = Poi.GetMetaLabels();
             var ml = mll.FirstOrDefault(k => k.Meta.Label == ((LabelChangedEventArgs)e).Label);
-            if (ml != null && !InEditMode && !ml.Meta.EditActive && Poi.NEffectiveStyle.TapMode != TapMode.CallOutEdit)
+            if (string.IsNullOrWhiteSpace(lcArgs.Label) || (ml != null && !InEditMode && !ml.Meta.EditActive && Poi.NEffectiveStyle.TapMode != TapMode.CallOutEdit) )
                 UpdateCallOut();
         }
 

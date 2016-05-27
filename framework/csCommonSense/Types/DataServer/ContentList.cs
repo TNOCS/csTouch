@@ -159,10 +159,12 @@ namespace DataServer
         }
 
         private void SendContent(BaseContent c) {
-            lock (queueLock) {
+            
+            if (c.IsInTransit || !c.IsNotifying) return;
+            lock (queueLock)
+            {
                 if (!sendQueue.Contains(c)) sendQueue.Add(c);
             }
-            if (c.IsInTransit || !c.IsNotifying) return;
             if (lastSend.AddMilliseconds(300) < DateTime.Now) {
                 SendQueue();
             }

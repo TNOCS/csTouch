@@ -568,6 +568,7 @@ namespace DataServer
         /// <summary>
         /// When true, scales the PoI so at higher resolutions, the PoI doesn't take so much space.
         /// </summary>
+        [ProtoMember(39)]
         public bool? ScalePoi
         {
             get { return scalePoi; }
@@ -582,6 +583,7 @@ namespace DataServer
         /// <summary>
         /// When ScalePoi is true, determines the resolution at which to start scaling the PoI.
         /// </summary>
+        [ProtoMember(40)]
         public double? ScaleStartResolution
         {
             get { return scaleStartResolution; }
@@ -596,6 +598,7 @@ namespace DataServer
         /// <summary>
         /// When ScalePoi is true, determines the scale at which the PoI is scaled.
         /// </summary>
+        [ProtoMember(41)]
         public double? ScaleUnits
         {
             get { return scaleUnits; }
@@ -611,6 +614,7 @@ namespace DataServer
         /// When ScalePoi is true, specifies the maximum scale factor, i.e. 
         /// when the original size is 32 and maxScale is 4, the minimum size will be 32/4 = 8.
         /// </summary>
+        [ProtoMember(42)]
         public double? MaxScale
         {
             get { return maxScale; }
@@ -638,7 +642,7 @@ namespace DataServer
                 StrokeWidth        = 1.0,
                 StrokeColor        = Colors.Black,
                 FillColor          = Colors.Black,
-                FillOpacity        = .25,
+                FillOpacity        = 1.0,
                 NameLabel          = name,
                 Visible            = true,
                 Category           = "Other",

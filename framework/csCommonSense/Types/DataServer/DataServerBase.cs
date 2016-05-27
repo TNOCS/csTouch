@@ -275,7 +275,9 @@ namespace DataServer {
 
         private void CheckVariable(string pImbVariableName, string pImbVariableContent)
         {
-            if (!pImbVariableName.StartsWith(Service.ServiceVariableName)) return;
+            var isStatic = pImbVariableName.StartsWith(Service.StaticServiceVariableName);
+            if (!pImbVariableName.StartsWith(Service.ServiceVariableName) && !isStatic) return;
+
             var v = pImbVariableContent.Split('|');
 
             var sharedServiceGuid = Guid.Parse(pImbVariableName.Split(':')[1]);
@@ -303,15 +305,19 @@ namespace DataServer {
                 if (shadowPoiService == null)
                 {
                     shadowPoiService = CreateShadowServiceForSharedService(
-                        sharedServiceName, sharedServiceGuid, imbHandleSharingService);
-                        
-                    
+                        sharedServiceName, sharedServiceGuid, imbHandleSharingService, isStatic);
+
+                    shadowPoiService.StaticService = isStatic;
                 }
                 else
                 {
+                    shadowPoiService.StaticService = isStatic;
                     shadowPoiService.Name = sharedServiceName; // Update name
                     if (!shadowPoiService.StaticService)
+                    {
                         NotifyOfPropertyChange(() => DynamicServices);
+                    }
+                    
                 }
                 Execute.OnUIThread(() =>
                 {
@@ -385,7 +391,7 @@ namespace DataServer {
         /// <param name="pSharedServiceGuid">The ID of the service that is being shared by remote IMB client</param>
         /// <param name="PImbHandleSharingService">The IMB handle of the remote IMB client that is sharing</param>
         /// <returns></returns>
-        private PoiService CreateShadowServiceForSharedService(string pSharedServiceName, Guid pSharedServiceGuid, int pImbHandleSharingService)
+        private PoiService CreateShadowServiceForSharedService(string pSharedServiceName, Guid pSharedServiceGuid, int pImbHandleSharingService, bool isStatic = false)
         {
             if (!FileStore.FolderExists("Services")) FileStore.CreateFolder("Services");
             if (!FileStore.FolderExists("Services\\" + pSharedServiceGuid))
@@ -396,7 +402,7 @@ namespace DataServer {
                 Name = pSharedServiceName,
                 IsShared = true,
                 IsLocal = false,
-                StaticService = false, /* could be true of false: don't known is static of dynamic service */
+                StaticService = isStatic, /* could be true of false: don't known is static of dynamic service */
                 Server = pImbHandleSharingService,
                 RelativeFolder = "Shared Layers",
                 Mode = Mode.client,
