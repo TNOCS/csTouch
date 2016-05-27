@@ -155,7 +155,13 @@ namespace DataServer
                 if (poiCl == null) return;
 
                 poiCl.StartBatch();
-                contents.ForEach(d => d.ForceUpdate());
+                contents.ForEach(d =>
+                {
+                    var prevNotifying = d.IsNotifying;
+                    d.IsNotifying = false;
+                    d.ForceUpdate(true);
+                    d.IsNotifying = prevNotifying;
+                });
                 poiCl.FinishBatch();
             };
         }
@@ -840,7 +846,13 @@ namespace DataServer
         private void TriggerLabelChangedBySync(BaseContent pConent, string pLabelKey, string pOldValue, string pNewValue)
         {
             // dsPoiLayer runs in Guid thread and uses label changed
-            Execute.OnUIThread(() => pConent.TriggerLabelChanged(pLabelKey, pOldValue, pNewValue));
+            Execute.OnUIThread(() =>
+            {
+                var prevNotifying = pConent.IsNotifying;
+                pConent.IsNotifying = false;
+                pConent.TriggerLabelChanged(pLabelKey, pOldValue, pNewValue);
+                pConent.IsNotifying = prevNotifying;
+            });
 
         }
 
