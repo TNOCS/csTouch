@@ -246,7 +246,7 @@ namespace csRemoteScreenPlugin
                 AppState.Imb.SetScreenId(screenId);                
             }
 
-            if (!AppState.StartPanelTabItems.Contains(spti))
+            if (spti != null && !AppState.StartPanelTabItems.Contains(spti))
             {                
                 AppState.StartPanelTabItems.Add(spti);
             }
