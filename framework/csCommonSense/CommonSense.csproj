@@ -142,6 +142,9 @@
     <Reference Include="FirstFloor.ModernUI">
       <HintPath>..\..\libs\FirstFloor.ModernUI.dll</HintPath>
     </Reference>
+    <Reference Include="GeoUtility">
+      <HintPath>..\..\libs\GeoUtility.dll</HintPath>
+    </Reference>
     <Reference Include="Gma.QrCodeNet.Encoding, Version=0.0.1.35308, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\Gma.QrCodeNet.Encoding.dll</HintPath>
@@ -462,6 +465,21 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Plugins\HlaRest\HlaRestService.cs" />
+    <Compile Include="Plugins\MgrsGrid\CohenSutherland.cs" />
+    <Compile Include="Plugins\MgrsGrid\DrawMgrsGrid.cs" />
+    <Compile Include="Plugins\MgrsGrid\Geographic2Esri.cs" />
+    <Compile Include="Plugins\MgrsGrid\GeographicBoundingBox.cs" />
+    <Compile Include="Plugins\MgrsGrid\GridZone.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsBoundingBox.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsConfig.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsCoordinateLabel.xaml.cs">
+      <DependentUpon>MgrsCoordinateLabel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Plugins\MgrsGrid\MgrsEsriLayer.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsGridPlugin.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsRasterLayer.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsViewport.cs" />
+    <Compile Include="Plugins\MgrsGrid\WGS84LatLongPoint.cs" />
     <Compile Include="Plugins\SearchPlugin\APIs\MGRSSearch.cs" />
     <Compile Include="Plugins\StreamingVideoPlugin\ImbCommands\BaseCommand.cs" />
     <Compile Include="Plugins\StreamingVideoPlugin\ImbCommands\DisplayVideoCmd.cs" />
@@ -1939,6 +1957,10 @@
     <Page Include="Plugins\EffectAppraisalPlugin\Views\EffectAppraisalView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Plugins\MgrsGrid\MgrsCoordinateLabel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Plugins\NotebookPlugin\NoteTabView.xaml">
       <Generator>MSBuild:Compile</Generator>

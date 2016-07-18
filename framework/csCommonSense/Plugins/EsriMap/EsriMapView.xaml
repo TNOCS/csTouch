@@ -164,7 +164,9 @@
                                                    x:Name="wtlBase"
                                                    Visible="True" />
                     </esri:GroupLayer>
+                    <esri:GroupLayer x:Name="glOverlay" ID="Overlay">
 
+                    </esri:GroupLayer>
                     <esri:AcceleratedDisplayLayers ID="AcceleratedLayers">
                         <!--<esri:ArcGISTiledMapServiceLayer ID="StreetMapLayer"   x:Name="wtlAccBase" Url=""  Visible="False"  />-->
                         <esri:GroupLayer ID="AcceleratedLayers"
