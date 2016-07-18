@@ -9,11 +9,12 @@ namespace csCommon.Plugins.StreamingVideoPlugin.ImbCommands
         
         public DisplayVideoCmd(ref string[] theParams)
         {
-            if (theParams.Length != 3) throw new ArgumentException("Number of parameters doesnt match command");
+            if (theParams.Length < 3) throw new ArgumentException("Number of parameters doesnt match command");
             SecondScreenId = Convert.ToInt32(theParams[1]);
             Model = new VideoStream()
             {
-                VideoUrl = theParams[2]
+                VideoUrl = theParams[2],
+                Description = (theParams.Length >= 4) ? theParams[3] : ""
             };
         }
 
@@ -28,7 +29,7 @@ namespace csCommon.Plugins.StreamingVideoPlugin.ImbCommands
 
         public override string ToImbMessage()
         {
-            return string.Format("{0}||{1}|{2}", typeof(DisplayVideoCmd).Name, SecondScreenId, Model.VideoUrl);
+            return string.Format("{0}||{1}|{2}|{3}", typeof(DisplayVideoCmd).Name, SecondScreenId, Model.VideoUrl, Model.Description ?? "");
         }
     }
 }
