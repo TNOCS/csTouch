@@ -664,6 +664,7 @@
     <Compile Include="Plugins\Presenter\Views\TnoPresenterView.xaml.cs">
       <DependentUpon>TnoPresenterView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Types\Geo\MapCoordinateCopyPasteCommand.cs" />
     <Compile Include="Types\TextAnalysis\KeywordAnalysis.cs" />
     <Compile Include="Types\TextAnalysis\SimpleTextFinder.cs" />
     <Compile Include="Types\TextAnalysis\TextFinder\ITextFinder.cs" />

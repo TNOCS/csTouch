@@ -33,7 +33,7 @@ namespace csCommon.MapPlugins.EsriMap
         {
             InitializeComponent();
             Loaded += EsriMapViewLoaded;
-            appState.ViewDef.MapControl = emMain;
+            appState.ViewDef.SetMapControl(emMain);
             appState.ViewDef.BaseLayer = wtlBase;
             appState.ViewDef.Layers = glAppLayers;
             appState.ViewDef.BaseLayers = glBaseLayers;
