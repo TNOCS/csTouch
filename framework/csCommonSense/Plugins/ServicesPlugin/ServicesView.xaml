@@ -16,7 +16,7 @@
                     <TextBlock x:Name="Status" TextWrapping="Wrap" Text="{Binding Instance.Status}" Foreground="{Binding Instance.StatusColor}"/>
                 </StackPanel>
                 <Grid Margin="5,5,0,0" Visibility="{Binding Instance.IsAvailable, Converter={wpfConverters:ConvertBoolToVisibility}, ConverterParameter=False}" HorizontalAlignment="Right">
-                    <controls:SurfaceButton  x:Name="Stop"  cal:Message.Attach="[Event Click]=[Action Stop($dataContext)]" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Center" Background="#BF000000" Visibility="{Binding Instance.IsRunning, Converter={StaticResource BooleanHiddenConverter}}" BorderThickness="0" Padding="6,2,10,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                    <controls:SurfaceButton  x:Name="Stop"  cal:Message.Attach="[Event Click]=[Action Stop($dataContext)]" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Center" Background="#BF000000" Visibility="{Binding Instance.IsRunning, Converter={x:Static wpfConverters:BooleanHiddenConverter.Instance}}" BorderThickness="0" Padding="6,2,10,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                         <Path Data="M0,0L64,0 64,64 0,64z" Stretch="Uniform" Fill="#FFF4F4F4" Width="20" Height="20" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <Path.RenderTransform>
                                 <TransformGroup>

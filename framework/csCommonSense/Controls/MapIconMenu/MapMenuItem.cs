@@ -456,6 +456,12 @@ namespace csCommon.csMapCustomControls.MapIconMenu
         private void MCenterButtonPreviewTouchMove(object sender, TouchEventArgs e)
         {
             SetLastTouch();
+
+            if (MoveThresholdPassed(e))
+            {
+                StopLongTappedTimer();
+            }
+            
             if (RelativeElement != null && touchTime.AddMilliseconds(200) < DateTime.Now)
             {
                 var p = e.GetTouchPoint(RelativeElement).Position;
@@ -465,8 +471,19 @@ namespace csCommon.csMapCustomControls.MapIconMenu
             e.Handled = true;
         }
 
-       
-
+        private bool MoveThresholdPassed(TouchEventArgs e)
+        {
+            Point currentPoint = e.GetTouchPoint(this).Position;
+            Point firstPoint = e.GetIntermediateTouchPoints(this)[0].Position;
+            double dX = currentPoint.X - firstPoint.X;
+            double dY = currentPoint.Y - firstPoint.Y;
+            if (Math.Abs(dX) > 4 || Math.Abs(dY) > 4)
+            {
+                return true;
+            }
+            return false;
+        }
+        
         private void MCenterButtonPreviewTouchDown(object sender, TouchEventArgs e)
         {
             FireIconTouchedEvent();
@@ -495,6 +512,7 @@ namespace csCommon.csMapCustomControls.MapIconMenu
             SetLastTouch();
             if (RelativeElement == null || mouseTime.AddMilliseconds(200) >= DateTime.Now) return;
             var p = e.GetPosition(RelativeElement);
+            StopLongTappedTimer();
             FireIconStartMovingEvent(p);
             FireIconMovedEvent(p);
         }
@@ -698,7 +716,6 @@ namespace csCommon.csMapCustomControls.MapIconMenu
             if (!Moving) // Event already fired
             {
                 Moving = true;
-                StopLongTappedTimer();
                 var handler = IconStartMoving;
                 if (handler != null) handler(this, new IconMovedEventArgs() { Position = pPosition });
             }
@@ -706,7 +723,6 @@ namespace csCommon.csMapCustomControls.MapIconMenu
 
         private void FireIconMovedEvent(Point pPosition)
         {
-            StopLongTappedTimer();
             var handler = IconMoved;
             if (handler != null) handler(this, new IconMovedEventArgs { Position = pPosition });
         }

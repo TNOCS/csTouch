@@ -13,6 +13,7 @@ using ESRI.ArcGIS.Client.Projection;
 using Gavaghan.Geodesy;
 using Newtonsoft.Json.Linq;
 using ProtoBuf;
+using csCommon.Converters;
 
 namespace DataServer
 {
@@ -339,6 +340,11 @@ namespace DataServer
         public System.Windows.Point ToPoint()
         {
             return new System.Windows.Point(Longitude, Latitude);
+        }
+
+        public string ToMgrs()
+        {
+            return MgrsConversion.convertLatLonToMgrs(Latitude, Longitude);
         }
 
         /// <summary>

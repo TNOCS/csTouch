@@ -6,7 +6,7 @@
         x:Class="csCommon.MapPlugins.Search.SearchResultView">
 	<UserControl.Resources>
 		<DataTemplate x:Key="ResultTemplate">
-            <Grid cal:Message.Attach="[Event MouseDown]=[Action Find($dataContext)];[Event TouchUp]=[Action Find($dataContext)]">
+            <Grid cal:Message.Attach="[Event TouchDown]=[Action Find($dataContext)];[Event MouseDown]=[Action Find($dataContext)]">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>

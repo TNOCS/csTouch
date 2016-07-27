@@ -19,7 +19,7 @@
             			<Grid Visibility="Collapsed">
             				<TextBlock Text="{Binding Name}" Margin="5,0,0,0" FontSize="21" FontWeight="Bold" Visibility="Collapsed" />
             				<StackPanel Margin="2,0,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
-            					<Custom:SurfaceToggleButton x:Name="stbExpand" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" IsChecked="True" Style="{DynamicResource SurfaceToggleButtonStyle1}" MinWidth="20" MinHeight="20">
+            					<Custom:SurfaceToggleButton x:Name="stbExpand" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" IsChecked="False" Style="{DynamicResource SurfaceToggleButtonStyle1}" MinWidth="20" MinHeight="20">
             						<Custom:SurfaceToggleButton.Resources>
                                             <!-- ToggleButton -->
             							<Style x:Key="SurfaceToggleButtonStyle1" TargetType="{x:Type Custom:SurfaceToggleButton}" 		

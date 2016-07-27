@@ -1336,12 +1336,17 @@ namespace IMB3
 
         // variables
 
+        public void RequestAllVariablesFromImb()
+        {
+            WriteCommand(TCommands.icAllVariables, null); // request all variables for initial values
+        }
+
         private event TOnVariable FOnVariable;
 
         public event TOnVariable OnVariable {
             add {
                 FOnVariable += value;
-                WriteCommand(TCommands.icAllVariables, null); // request all varibales for initial values
+                RequestAllVariablesFromImb();
             }
             remove { FOnVariable -= value; }
         }

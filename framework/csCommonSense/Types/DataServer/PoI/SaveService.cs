@@ -6,6 +6,7 @@ using csShared;
 using csShared.Controls.Popups.MenuPopup;
 using DataServer;
 using ESRI.ArcGIS.Client;
+using csCommon.Logging;
 
 namespace csCommon.Types.DataServer.PoI
 {
@@ -32,6 +33,7 @@ namespace csCommon.Types.DataServer.PoI
 
         public PoiService CreateService(string name, string folder, string relativeFolder)
         {
+            LogCs.LogMessage(String.Format("SaveService: Create PoiService '{0}'", name));
             var ss = new PoiService()
             {
                 IsLocal        = true,

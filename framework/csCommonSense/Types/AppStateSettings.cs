@@ -37,6 +37,8 @@ using Media = csImb.Media;
 
 namespace csShared
 {
+    using csCommon.Imb;
+    using csCommon.Logging;
     using csCommon.Utils;
 
     using csDataServerPlugin;
@@ -74,6 +76,7 @@ namespace csShared
 
     public sealed class AppStateSettings : PropertyChangedBase
     {
+
         #region fields
 
         private static AppStateSettings instance;
@@ -133,6 +136,7 @@ namespace csShared
 
         private AppStateSettings()
         {
+            LogCs.LogMessage("Initialize AppStateSettings");
             ViewDef = new MapViewDef();
             ViewDef.InitBaseLayerProviders();
 
@@ -148,6 +152,8 @@ namespace csShared
         }
 
         public Border MainBorder { get; set; }
+
+        public Dictionary<string, object> Temp { get; set; }
 
         public event NotificationEventHandler NewNotification;
 
@@ -884,7 +890,8 @@ namespace csShared
         {
             if (Imb == null) return;
             if (Imb.IsConnected) Imb.Close();
-            Imb.Enabled = Config.GetBool("IMB.Enabled", true);
+            var imbCfg = new csImbConfig(Config);
+            Imb.Enabled = imbCfg.ImbIsEnabled; 
             if (Imb.IsConnected || !Imb.Enabled) return;
             Config.ApplicationName = Config.Get("App.Name", Config.ApplicationName);
             Imb.Status.Application = Config.ApplicationName;
@@ -901,16 +908,12 @@ namespace csShared
             Imb.Status.Orientation = "horizontal";
             Imb.Status.Os = "Windows7";
             if (string.IsNullOrEmpty(Imb.Status.MyImage)) Imb.Status.MyImage = Config.Get("IMB.MyImage", "arnoud.org/tno/icons/person.png");
-            if (string.IsNullOrEmpty(Imb.Status.Type)) Imb.Status.Type = Config.Get("IMB.Type", "TouchTable");
+            if (string.IsNullOrEmpty(Imb.Status.Type)) Imb.Status.Type = imbCfg.ImbType;
             Imb.Status.Client = true;
             Imb.Status.Manunifactor = "Microsoft";
             Imb.Status.Action = "Map";
 
-            var host = Config.Get("IMB.Host", "localhost");
-            var port = Config.GetInt("IMB.Port", 4000);
-            var fed = Config.Get("IMB.Federation", "cs");
-
-            Imb.Init(host, port, Imb.Status.Name, 1, fed);
+            Imb.Init(imbCfg.ImbHostName, imbCfg.ImbPortNumber, Imb.Status.Name, 1, imbCfg.ImbFederation);
 
             //Todo: Fix Jeroen
             if (!Imb.IsConnected) return;
@@ -969,9 +972,9 @@ namespace csShared
 
         public void InitImb(string server, int port, string federation, string name, int id)
         {
-            Config.SetLocalConfig("IMB.Host", server);
-            Config.SetLocalConfig("IMB.Port", port.ToString(CultureInfo.InvariantCulture));
-            Config.SetLocalConfig("IMB.Federation", federation);
+            Config.SetLocalConfig(csImbConfig.CfgNameImbHost, server);
+            Config.SetLocalConfig(csImbConfig.CfgNameImbPort, port.ToString(CultureInfo.InvariantCulture));
+            Config.SetLocalConfig(csImbConfig.CfgNameImbFederation, federation);
             Config.SetLocalConfig("FullName", name, true);
             Config.UserId = id;
             Imb.Status.Name = name;
@@ -1298,24 +1301,26 @@ namespace csShared
             return plugin;
         }
 
-        public IPlugin InitializeAndStartPlugin(string name, bool reuse)
+        public IPlugin InitializeAndStartPlugin(string pPluginIdentifierName, bool reuse)
         {
             try
             {
-                var p = InitializePlugin(name, reuse);
+                var p = InitializePlugin(pPluginIdentifierName, reuse);
                 if (p != null)
                 {
                     p.Start();
+                    LogCs.LogMessage(String.Format("Plugin '{0}' initialized and started.", pPluginIdentifierName));
                 }
                 else
                 {
-                    Logger.Log("Plugins", "Error loading plugin : " + name, "", Logger.Level.Error);
+                    Logger.Log("Plugins", String.Format("Error loading plugin : {0} (not found) ", pPluginIdentifierName), "", Logger.Level.Error);
                 }
                 return p;
             }
             catch (Exception e)
             {
-                Logger.Log("Plugins", "Error loading plugin : " + name, e.Message, Logger.Level.Error);
+                LogCs.LogException(String.Format("Failed to load plugin {0} (exception)", pPluginIdentifierName), e);
+                Logger.Log("Plugins", "Error loading plugin : " + pPluginIdentifierName, e.Message, Logger.Level.Error);
                 return null;
             }
         }

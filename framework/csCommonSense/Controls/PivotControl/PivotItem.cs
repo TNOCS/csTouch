@@ -12,7 +12,7 @@ namespace csCommon.csMapCustomControls.PivotControl
 
         public PivotItem()
         {
-            TouchUp += (sender, e) =>
+            TouchDown += (sender, e) =>
             {
                 var pivotItem = sender as PivotItem;
                 if (pivotItem == null) return;

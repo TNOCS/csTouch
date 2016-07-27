@@ -9,8 +9,7 @@ using csCommon.Plugins.AppStatus;
 using csShared;
 using csShared.Utils;
 using IMB3;
-
-
+using csCommon.Imb;
 
 namespace csCommon.Plugins.Config
 {
@@ -86,8 +85,8 @@ namespace csCommon.Plugins.Config
 
         public void Connect(ImbConnectionString ics)
         {
-            AppState.Config.SetLocalConfig("IMB.Host", ics.Server, false);
-            AppState.Config.SetLocalConfig("IMB.Port", ics.Port.ToString(CultureInfo.InvariantCulture), true);
+            AppState.Config.SetLocalConfig(csImbConfig.CfgNameImbHost, ics.Server, false);
+            AppState.Config.SetLocalConfig(csImbConfig.CfgNameImbPort, ics.Port.ToString(CultureInfo.InvariantCulture), true);
             AppState.InitImb();
             UpdateStatus();
         }
@@ -112,7 +111,7 @@ namespace csCommon.Plugins.Config
         {
             
             if (AppState.Imb.Imb == null) return;
-            if (!AppState.Config.GetBool("IMB.Enabled", true)) return;
+            if (!AppState.Config.GetBool(csImbConfig.CfgNameImbIsEnabled, true)) return;
             Connections = new BindableCollection<ImbConnectionString>();
             var hs = AppState.Config.Get("ImbHistory", "");
             var hh = hs.Split(',');

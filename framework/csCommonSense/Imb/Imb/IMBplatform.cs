@@ -6,6 +6,7 @@ using System.Diagnostics;
 using csShared.Utils;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using IMB3.ByteBuffers;
+using csCommon.Logging;
 
 namespace IMB3
 {
@@ -237,11 +238,13 @@ namespace IMB3
             bool success = result.AsyncWaitHandle.WaitOne(timeout, true);
             if (success)
             {
+                LogCs.LogMessage(String.Format("Created TCP/IP connection with IMB bus {0}@{1}", aRemoteHost, aRemotePort));
                 FClient.EndConnect(result);
                 FNetStream = FClient.GetStream();
             }
             else
             {
+                LogCs.LogError(String.Format("Failed to create a TCP/IP connection with IMB bus {0}@{1}", aRemoteHost, aRemotePort));
                 FClient.Close();
             }
         }

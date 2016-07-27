@@ -174,6 +174,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\KLV\KlvUnmanned.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\libs\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net">
       <HintPath>..\..\libs\Lucene.Net.dll</HintPath>
     </Reference>
@@ -399,6 +402,8 @@
     <Compile Include="Controls\Popups\MenuPopup\MenuHelpers.cs" />
     <Compile Include="Controls\PropertyDial.cs" />
     <Compile Include="Imb\csGroup.cs" />
+    <Compile Include="Imb\csImbConfig.cs" />
+    <Compile Include="Logging\LogCs.cs" />
     <Compile Include="MapContent\Panoramio\LookrContent.cs" />
     <Compile Include="MapContent\ShapeFiles\ShapeFileReader\ShapePolygonZ.cs" />
     <Compile Include="MapTools\BagGeoCodingTool\BagGeoCodingMapToolPlugin.cs" />

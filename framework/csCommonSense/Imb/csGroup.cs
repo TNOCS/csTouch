@@ -15,6 +15,7 @@ using Point = System.Windows.Point;
 
 namespace csImb
 {
+    using csCommon.Logging;
     using System.Diagnostics;
 
     public class csGroup : PropertyChangedBase
@@ -55,7 +56,7 @@ namespace csImb
             set { ownerClient = value; NotifyOfPropertyChange(() => OwnerClient); }
         }
 
-        private bool followMap = false;
+        private bool followMap = true;
 
         public bool FollowMap
         {
@@ -88,7 +89,7 @@ namespace csImb
 
         internal void FromString(string v)
         {
-            // parses group definition received from IMB (see ImbGroupDefinitionString)
+            // parses group definition received from IMB (see function ImbGroupDefinitionString)
             var ss = v.Split('|');
             Owner = long.Parse(ss[0]);
             OwnerClient = AppState.Imb.FindClient(Owner);
@@ -109,6 +110,7 @@ namespace csImb
                         var fc = AppState.Imb.FindClient(handleId);
                         return (fc != null) ? fc.Name : handleId.ToString(CultureInfo.InvariantCulture);
                     });
+
                 Execute.OnUIThread(() => AppState.TriggerNotification(string.Format("{0} left group {1}",
                     String.Join(",", clientNames), Name), pathData: MenuHelpers.GroupIcon));
                 Clients.RemoveRange(addedHandles);
@@ -159,7 +161,7 @@ namespace csImb
         {
             // <IMB client ID of owner of group>|<IMB client ID's that joined group (seperated by ;)>|<Layers shared in group>
             var r = Owner + "|";
-            r  = Clients.Aggregate(r, (current, c) => current + (c + ";"));
+            r = Clients.Aggregate(r, (current, c) => current + (c + ";"));
             r += "|";
             return Layers.Aggregate(r, (current, l) => current + (l.ToString() + ";"));
         }
@@ -196,17 +198,21 @@ namespace csImb
 
         void MapControl_PreviewTouchDown(object sender, TouchEventArgs e)
         {
-            var start = DateTime.Now;
-            var posStart = e.GetTouchPoint(AppState.ViewDef.MapControl).Position;
-            e.TouchDevice.Deactivated += (s, f) =>
+            // Shows GeoPoint (yellow circles) when touching on table; also send to other members in IMB group?
+            if (AppState.Config.GetBool("CommonSenseFramework.GeoPointerInGroupIsEnabled", true))
             {
-                if (!(DateTime.Now.Subtract(start).TotalMilliseconds > 1000)) return;
-                var posEnd = e.TouchDevice.GetTouchPoint(AppState.ViewDef.MapControl).Position;
-                if ((Math.Abs(posStart.X - posEnd.X) < 15) && (Math.Abs(posStart.Y - posEnd.Y) < 15))
+                var start = DateTime.Now;
+                var posStart = e.GetTouchPoint(AppState.ViewDef.MapControl).Position;
+                e.TouchDevice.Deactivated += (s, f) =>
                 {
-                    TriggerGeoPointer(posStart);
-                }
-            };
+                    if (!(DateTime.Now.Subtract(start).TotalMilliseconds > 1000)) return;
+                    var posEnd = e.TouchDevice.GetTouchPoint(AppState.ViewDef.MapControl).Position;
+                    if ((Math.Abs(posStart.X - posEnd.X) < 15) && (Math.Abs(posStart.Y - posEnd.Y) < 15))
+                    {
+                        TriggerGeoPointer(posStart);
+                    }
+                };
+            }
         }
 
         private void TriggerGeoPointer(Point pos)
@@ -367,7 +373,10 @@ namespace csImb
         /// </summary>
         private void SetImbGroup()
         {
+            LogCs.LogMessage(String.Format("Broadcast on IMB bus: IMB variable '{0}' to '{1}' (group information) ", 
+                ImbVariableNameForGroup, ImbGroupDefinitionString()));
             AppState.Imb.Imb.SetVariableValue(ImbVariableNameForGroup, ImbGroupDefinitionString());
+            
             base.NotifyOfPropertyChange(() => IsActive);
             base.NotifyOfPropertyChange(() => IsMemberOfGroup);
         }

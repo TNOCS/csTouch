@@ -43,7 +43,11 @@ namespace csDataServerPlugin
 
         public dsStaticLayer(PoiService s, DataServerPlugin p)
         {
-            if (s     == null) s = new PoiService();
+            if (s == null)
+            {
+                csCommon.Logging.LogCs.LogMessage(String.Format("dsStaticLayer: Create PoiService '{0}'", "empty"));
+                s = new PoiService();
+            }
             Service   = s;
             Visible   = false;
             ID        = Service.Name;
