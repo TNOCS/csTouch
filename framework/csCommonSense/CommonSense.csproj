@@ -592,6 +592,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Types\DataServer\DataServiceTemplateImporter.cs" />
     <Compile Include="Types\DataServer\Interfaces\IConvertibleXmlWithSettings.cs" />
+    <Compile Include="Types\DataServer\JoinSharedServiceEventArgs.cs" />
     <Compile Include="Types\DataServer\PoI\IO\ExcelExporter.cs" />
     <Compile Include="Types\DataServer\PoI\IO\CsvExporter.cs" />
     <Compile Include="Types\DataServer\PoI\IO\DataServiceIO.cs" />
