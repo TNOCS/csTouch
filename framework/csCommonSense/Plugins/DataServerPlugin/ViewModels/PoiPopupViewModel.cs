@@ -462,6 +462,8 @@ namespace csDataServerPlugin
                     if (!ml.Meta.VisibleInCallOut) continue;
                     //Get the section/category for the label
                     var sectionLabel = ml.Meta.Section;
+                    
+                    ml.Meta.InEditMode = isNewPoi;
                     if (string.IsNullOrEmpty(sectionLabel))
                         sectionLabel = "Info";
 
