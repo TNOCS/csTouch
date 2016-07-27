@@ -28,14 +28,14 @@ namespace DataServer
         {
             try
             {
-            using (var ms = new MemoryStream())
-            {
-                ms.Write(buffer, 0, buffer.Length);
-                ms.Position = 0;
-                return Serializer.DeserializeWithLengthPrefix<ContentMessage>(ms, PrefixStyle.Base128, MessageSeparator);
-                //message = (Message)model.Deserialize(ms, null, typeof(Message));
+                using (var ms = new MemoryStream())
+                {
+                    ms.Write(buffer, 0, buffer.Length);
+                    ms.Position = 0;
+                    return Serializer.DeserializeWithLengthPrefix<ContentMessage>(ms, PrefixStyle.Base128, MessageSeparator);
+                    //message = (Message)model.Deserialize(ms, null, typeof(Message));
+                }
             }
-        }
             catch (InvalidOperationException pMessage /* deserialize error */)
             {
                 Logger.Log("IMB", "Deserialize IMB message failed: " + pMessage.Message, "", Logger.Level.Warning);
@@ -58,7 +58,7 @@ namespace DataServer
 
             }
             
-             return ms;
+            return ms;
         }
     }
 }

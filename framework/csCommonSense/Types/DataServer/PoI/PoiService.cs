@@ -1337,7 +1337,7 @@ namespace DataServer
                         var add = PoIs
                             .Where(p => !contentInExtent.Contains(p) && (p.IsVisibleInExtent(Extent)))
                             .ToArray();
-                        Debug.WriteLine("Add: {0}, Remove: {1}", add.Length, remove.Length);
+                       // Debug.WriteLine("Add: {0}, Remove: {1}", add.Length, remove.Length);
                         contentInExtent.RemoveRange(remove);
                         contentInExtent.AddRange(add);
 
@@ -1400,7 +1400,7 @@ namespace DataServer
                     finally
                     {
                         timer.Stop();
-                        Debug.WriteLine("Content list updated: {0}s",timer.Elapsed.TotalSeconds);
+                        //Debug.WriteLine("Content list updated: {0}s",timer.Elapsed.TotalSeconds);
                         _isUpdatingContentList = false;
                     }
                 }
