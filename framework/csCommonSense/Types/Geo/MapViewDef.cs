@@ -704,7 +704,7 @@ namespace csShared.Geo
         private void UpdateMapActivations()
         {
             foreach (var p in BaseLayerProviders) p.Activated = false;
-            foreach (WebTileLayer l in BaseLayers.Where(k => ((WebTileLayer)k).TileProvider != null)) l.TileProvider.Activated = true;
+            foreach (WebTileLayer l in BaseLayers.OfType< WebTileLayer>().Where(k => ((WebTileLayer)k).TileProvider != null)) l.TileProvider.Activated = true;
         }
 
         public void RemoveMapType(string mapType)

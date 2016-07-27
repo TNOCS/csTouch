@@ -803,7 +803,8 @@ namespace DataServer
                                     // Notify label changed:
                                     if (obj.Labels != null)
                                     {
-                                        foreach (KeyValuePair<string, string> currentLabel in obj.Labels)
+                                        var safeList = obj.Labels.ToArray(); // Collection changed in obj.Labels
+                                        foreach (KeyValuePair<string, string> currentLabel in safeList)
                                         {
                                             string oldLabelValue;
                                             if (diffLabels.TryGetValue(currentLabel.Key, out oldLabelValue))
