@@ -66,6 +66,7 @@ namespace DataServer
 
         public event EventHandler<TappedEventArgs> Tapped;
         public event EventHandler<PoI> PoiLongTapped;
+        public event EventHandler<PoI> PoiRightClicked;
 
         public PoiService()
         {
@@ -1919,6 +1920,12 @@ namespace DataServer
         public void RaisePoiLongTapped(PoI pPoI)
         {
             var handler = PoiLongTapped;
+            if (handler != null) handler(this, pPoI);
+        }
+
+        public void RaisePoiRightClicked(PoI pPoI)
+        {
+            var handler = PoiRightClicked;
             if (handler != null) handler(this, pPoI);
         }
     }

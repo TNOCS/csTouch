@@ -89,6 +89,7 @@
                                           IconReleased="BCircleIconReleased"
                                           IconTapped="BCircleIconTapped"
                                           IconLongTapped="BCircleIconLongTapped"
+                                          IconRightClicked="BCircleIconRightClicked"
                                           RootToolTip="User">
                     <mapIconMenu1:MapMenuItem.Header>
                         <Grid RenderTransformOrigin="0.5, 0.5">
