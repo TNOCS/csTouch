@@ -154,11 +154,27 @@ namespace csShared
         public event NotificationEventHandler DeleteNotification;
         public event EventHandler DeleteAllTextNotifications;
 
+        /// <summary>
+        /// Trigger a notification. 
+        /// NOTE Use Execute.OnUIThread to call this method (as the Brush is otherwise not created on the GUI thread).
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="header"></param>
+        /// <param name="background"></param>
+        /// <param name="image"></param>
+        /// <param name="pathData"></param>
+        /// <param name="duration"></param>
+        /// <returns></returns>
         public NotificationEventArgs TriggerNotification(string title, string header = "Notification",
             Brush background = null, ImageSource image = null, string pathData = "", long duration = 10000) {
-            Brush brush1 = new SolidColorBrush(Colors.Black);
-            brush1.Opacity = 0.65;
-            if (background != null) brush1 = background;
+            Brush brush1;
+            if (background != null)
+                brush1 = background;
+            else
+            {
+                brush1 = new SolidColorBrush(Colors.Black);
+                brush1.Opacity = 0.65; 
+            }
             var nea = new NotificationEventArgs {
                 Text = title,
                 Header = header,

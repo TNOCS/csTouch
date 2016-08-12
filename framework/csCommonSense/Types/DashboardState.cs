@@ -38,7 +38,7 @@ namespace csShared
             if (handlers.Contains(handler)) handlers.Remove(handler);
         }
 
-        public void SaveDashboard(string title)
+        public DashboardState SaveDashboard(string title)
         {
             var d = new DashboardState() { Title = title };
             foreach (var h in handlers)
@@ -47,8 +47,7 @@ namespace csShared
             }
             Add(d);
             Save();
-
-            // save
+            return d;
         }
 
         public void GoToDashboard(DashboardState d, Dictionary<string, string> param = null)

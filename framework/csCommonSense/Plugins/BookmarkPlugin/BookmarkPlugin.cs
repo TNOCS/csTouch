@@ -13,7 +13,6 @@ namespace csBookmarkPlugin
     [Export(typeof(IPlugin))]
     public class BookmarkPlugin : PropertyChangedBase, IPlugin
     {
-
         private IPluginScreen _screen;
 
         public IPluginScreen Screen
@@ -67,8 +66,6 @@ namespace csBookmarkPlugin
             set { _file = value; NotifyOfPropertyChange(()=>BFile); }
         }
         
-
-
         #region IPlugin Members
 
         public string Name
@@ -124,16 +121,7 @@ namespace csBookmarkPlugin
                 UpdateVisibility();
             }
             AppState.ViewDef.VisibleChanged += ViewDefVisibleChanged;
-
-            
-             
         }
-
-        
-
-       
-
-        
 
         void ViewDefVisibleChanged(object sender, VisibleChangedEventArgs e)
         {
@@ -175,13 +163,6 @@ namespace csBookmarkPlugin
             UpdateVisibility();
         }
 
-        
-
-       
-
         #endregion
-
-
-       
     }
 }

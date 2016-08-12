@@ -74,9 +74,7 @@ namespace csBookmarkPlugin
             if (p.Tag is DashboardState)
             {
                 UnPin((DashboardState)p.Tag);
-                
             }
-            
         }
 
         void fw_Changed(object sender, FileSystemEventArgs e)
