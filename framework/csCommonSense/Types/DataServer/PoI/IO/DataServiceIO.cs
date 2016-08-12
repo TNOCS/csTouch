@@ -6,6 +6,7 @@ using csCommon.Utils.IO;
 using csShared;
 using DataServer;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using csCommon.Logging;
 
 namespace csCommon.Types.DataServer.PoI.IO
 {
@@ -50,6 +51,7 @@ namespace csCommon.Types.DataServer.PoI.IO
                 var guid = (!string.IsNullOrEmpty(guidStr))
                     ? Guid.Parse(guidStr)
                     : Guid.NewGuid();
+                LogCs.LogMessage(String.Format("ImportData: Create PoiService '{0}'", filenameNoGuid));
                 var ps = new PoiService
                 {
                     IsLocal = true,
@@ -124,6 +126,7 @@ namespace csCommon.Types.DataServer.PoI.IO
                 };
                 poiService.InitPoiService();
                 LoadPoiServiceData(poiService, file);
+                LogCs.LogMessage(String.Format("LoaDataService: Create PoiService '{0}'", poiService.Name));
                 exception = null;
                 return poiService;
             }

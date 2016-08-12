@@ -320,7 +320,7 @@ namespace csGeoLayers.MapTools.MeasureTool
         {
             if (this._state == "start")
             {
-                double distance = _measure.Distance;
+                double distance = _measure.Distance * 1000;
                 tDistance.Text = distance.ToString("##,###,###.##", CultureInfo.InvariantCulture) + " m" + "  |  " + (distance / 1852.0).ToString("##,###,##0.##", CultureInfo.InvariantCulture) + " NM";
 
 

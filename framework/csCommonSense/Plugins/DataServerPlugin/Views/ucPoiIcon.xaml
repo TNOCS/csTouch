@@ -13,7 +13,9 @@
         <wpfConverters:BorderRadiusConverter x:Key="BorderRadiusConverter" />
         <converters:PoiIconConverter x:Key="PoiIconConverter" />
     </UserControl.Resources>
-    <Grid Width="Auto"
+    <Grid 
+        Visibility="{Binding Attributes[PoI].NEffectiveStyle.Visible, Converter={StaticResource BooleanToVisibilityConverter}}"
+        Width="Auto"
           Height="Auto"
           HorizontalAlignment="Left"
           Background="{x:Null}">

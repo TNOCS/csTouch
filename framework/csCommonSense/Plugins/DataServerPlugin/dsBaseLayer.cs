@@ -515,7 +515,7 @@ namespace csDataServerPlugin
                 }
                 var d = DateTime.Now;
                 var SaveName = ea.Result;
-
+                csCommon.Logging.LogCs.LogMessage(String.Format("CloneLayer: Create PoiService '{0}'", "empty"));
                 var ss = new PoiService()
                 {
                     IsLocal = true,

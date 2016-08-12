@@ -24,6 +24,8 @@ using ProtoBuf;
 using ProtoBuf.Meta;
 using csShared.Utils;
 using PoiServer.PoI;
+using csCommon.Logging;
+using csCommon.Types.DataServer;
 
 namespace DataServer {
     public class ServiceSubscribeEventArgs : EventArgs {
@@ -70,7 +72,7 @@ namespace DataServer {
             get { return activeService; }
             set
             {
-                activeService = value; NotifyOfPropertyChange(()=>ActiveService);
+                activeService = value; NotifyOfPropertyChange(() => ActiveService);
                 if (AppState.Imb != null && AppState.Imb.Status != null)
                 {
                     AppState.Imb.Status.Action = (value != null) ? value.Name : "";
@@ -78,9 +80,9 @@ namespace DataServer {
                 }
             }
         }
-        
 
-        public DataServerBase() {
+
+        public DataServerBase(){
             Templates = new ObservableCollection<PoiService>();
         }
 
@@ -98,7 +100,7 @@ namespace DataServer {
                 {
                     contentTypes = new Dictionary<string, Type>();
 
-                    var type = typeof (IContent);
+                    var type = typeof(IContent);
                     var types = AppDomain.CurrentDomain.GetAssemblies().ToList()
                         .SelectMany(s => s.GetTypes())
                         .Where(type.IsAssignableFrom);
@@ -108,7 +110,7 @@ namespace DataServer {
                         if (t.IsInterface) continue;
                         try
                         {
-                            var tt = (IContent) Activator.CreateInstance(t, null);
+                            var tt = (IContent)Activator.CreateInstance(t, null);
                             contentTypes[tt.XmlNodeId] = t;
                         }
                         catch (Exception e)
@@ -142,30 +144,30 @@ namespace DataServer {
                     model = value;
                     // Net all versions have built-in serializer/deserialiser for System.Type
                     // Built in type: model.Add(typeof(Type), false).SetSurrogate(typeof(TypeSurrogate));
-                    model.Add(typeof (PrivateMessage), true);
-                    model.Add(typeof (BaseContent), true);
-                    model.Add(typeof (ContentList), true);
-                    model.Add(typeof (IContent), true);
-                    model[typeof (BaseContent)].AddSubType(50, typeof (PoI));
-                    model[typeof (BaseContent)].AddSubType(100, typeof (Event));
-                    model[typeof (BaseContent)].AddSubType(150, typeof (ServiceSettings));
-                    model[typeof (BaseContent)].AddSubType(180, typeof (SqlQuery));
-                    model[typeof (BaseContent)].AddSubType(200, typeof (Track));
-                    model[typeof (BaseContent)].AddSubType(250, typeof (Task));
-                    model.Add(typeof (PoI), true);
-                    model.Add(typeof (Track), true);
-                    model.Add(typeof (PoIStyle), true);
-                    model.Add(typeof (Event), true);
-                    model.Add(typeof (Task), true);
-                    model.Add(typeof (Color), false).SetSurrogate(typeof (MyColor));
-                    model.Add(typeof (Color), false).Add("A", "R", "G", "B");
-                    model.Add(typeof (Point), false).Add("X", "Y");
-                    model.Add(typeof (BindableCollection<IContent>), true);
-                    model.Add(typeof (MetaInfo), true);
-                    model.Add(typeof (MetaInfoCollection), true);
-                    model.Add(typeof (MetaTypes), true);
-                    model.Add(typeof (Model), true);
-                    model.Add(typeof (ModelParameter), true);
+                    model.Add(typeof(PrivateMessage), true);
+                    model.Add(typeof(BaseContent), true);
+                    model.Add(typeof(ContentList), true);
+                    model.Add(typeof(IContent), true);
+                    model[typeof(BaseContent)].AddSubType(50, typeof(PoI));
+                    model[typeof(BaseContent)].AddSubType(100, typeof(Event));
+                    model[typeof(BaseContent)].AddSubType(150, typeof(ServiceSettings));
+                    model[typeof(BaseContent)].AddSubType(180, typeof(SqlQuery));
+                    model[typeof(BaseContent)].AddSubType(200, typeof(Track));
+                    model[typeof(BaseContent)].AddSubType(250, typeof(Task));
+                    model.Add(typeof(PoI), true);
+                    model.Add(typeof(Track), true);
+                    model.Add(typeof(PoIStyle), true);
+                    model.Add(typeof(Event), true);
+                    model.Add(typeof(Task), true);
+                    model.Add(typeof(Color), false).SetSurrogate(typeof(MyColor));
+                    model.Add(typeof(Color), false).Add("A", "R", "G", "B");
+                    model.Add(typeof(Point), false).Add("X", "Y");
+                    model.Add(typeof(BindableCollection<IContent>), true);
+                    model.Add(typeof(MetaInfo), true);
+                    model.Add(typeof(MetaInfoCollection), true);
+                    model.Add(typeof(MetaTypes), true);
+                    model.Add(typeof(Model), true);
+                    model.Add(typeof(ModelParameter), true);
                     // TODO ERIK Check whether we need to serialize this too. Currently, it generates an exception when compiling the model.
                     //model.Add(typeof (Service), true).AddSubType(50, typeof(PoiService));
                     model.CompileInPlace();
@@ -203,6 +205,7 @@ namespace DataServer {
         /// </summary>
         public void Start(Mode startMode)
         {
+            
             mode = startMode;
             //Services.CollectionChanged += ServicesChanged;
             Model = RuntimeTypeModel.Default;
@@ -222,10 +225,10 @@ namespace DataServer {
         /// <summary>
         ///     Stop server
         /// </summary>
-        public void Stop() {
+        public void Stop(){
             isRunning = false;
             Services.CollectionChanged -= ServicesCollectionChanged;
-            foreach (var s in Services.Where(k=>k.IsInitialized && k.IsSubscribed)) UnSubscribe(s);
+            foreach (var s in Services.Where(k => k.IsInitialized && k.IsSubscribed)) UnSubscribe(s);
             //client.Close();
         }
 
@@ -237,10 +240,10 @@ namespace DataServer {
             }
         }
 
-        private void ServicesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+        private void ServicesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e){
             DynamicServices.Clear();
             foreach (var ds in Services.Where(k => !k.StaticService && k is PoiService))
-                DynamicServices.Add((PoiService) ds);
+                DynamicServices.Add((PoiService)ds);
         }
 
         #endregion
@@ -255,14 +258,14 @@ namespace DataServer {
             id = client.Id;
             foreach (var v in client.Variables)
             {
-                CheckVariable(v.Key,v.Value);     
+                ProcessReceivedImbBusVariable(v.Key, v.Value);
             }
             client.Imb.OnVariable += Imb_OnVariable;
             privateChannel = client.Imb.Subscribe(client.Id + ServiceChannelExtentions);
             privateChannel.OnBuffer += ReceivedPrivateMessage;
         }
 
-        public void SendFile(string imageId, byte[] image, Service service) {
+        public void SendFile(string imageId, byte[] image, Service service){
             SendPrivateMessage(service.Server, PrivateMessageActions.SendData, service.Id, imageId, image, Guid.Empty, "");
         }
 
@@ -270,14 +273,31 @@ namespace DataServer {
         {
             var name = aVarName;
             var v = Encoding.UTF8.GetString(aVarValue, 0, aVarValue.Length);
-            CheckVariable(name, v);
+            ProcessReceivedImbBusVariable(name, v);
         }
 
-        private void CheckVariable(string pImbVariableName, string pImbVariableContent)
-        {
-            var isStatic = pImbVariableName.StartsWith(Service.StaticServiceVariableName);
-            if (!pImbVariableName.StartsWith(Service.ServiceVariableName) && !isStatic) return;
+        private List<Guid> mHandledServices = new List<Guid>();
 
+        private void ProcessReceivedImbBusVariable(string pImbVariableName, string pImbVariableContent)
+        {
+            if (pImbVariableName.StartsWith(Service.ServiceVariableName))
+                ReceivedServiceNotificationOnImbBus(pImbVariableName, pImbVariableContent);
+        }
+
+        private Dictionary<string, string> mLastProcessedImbVariables = new Dictionary<string, string>(); // Key:Variable name ;Value:content
+
+        public event  EventHandler<JoinSharedServiceEventArgs> OnNewSharedService;
+        /// <summary>
+        /// IMB bus variable updated 
+        /// </summary>
+        /// <param name="pImbVariableName"></param>
+        /// <param name="pImbVariableContent"></param>
+        private void ReceivedServiceNotificationOnImbBus(string pImbVariableName, string pImbVariableContent)
+        {
+            if (mLastProcessedImbVariables.ContainsKey(pImbVariableName))
+                if (mLastProcessedImbVariables[pImbVariableName] == pImbVariableContent) return; // IMB variable didn't change since
+            mLastProcessedImbVariables[pImbVariableName] = pImbVariableContent;
+            // IMB variable message structure: "Service:<message>"
             var v = pImbVariableContent.Split('|');
 
             var sharedServiceGuid = Guid.Parse(pImbVariableName.Split(':')[1]);
@@ -293,107 +313,171 @@ namespace DataServer {
 
             if (isSharedServiceNotification)
             {
-                var imbHandleSharingService = int.Parse(v[0]);
+                var imbHandleSharingService = int.Parse(v[0]); // The IMB handle of client sharing this service
                 var sharedServiceName = v[1];
 
                 ImbClientStatus sharedServiceHosting = null;
+                string hostingClient = "unknown";
+                // Is the user friendly name known for IMB id?
                 if (AppState.Imb.Clients.TryGetValue(imbHandleSharingService, out sharedServiceHosting))
                 {
-                    string hostingClient = sharedServiceHosting.Name;
+                    hostingClient = sharedServiceHosting.Name;
                 };
 
                 if (shadowPoiService == null)
                 {
+                    LogCs.LogMessage(
+                        String.Format("Received notification on IMB bus of new shared service '{0}' (hosted by IMB client {1} ({2}))",
+                        sharedServiceName, imbHandleSharingService, hostingClient));
                     shadowPoiService = CreateShadowServiceForSharedService(
-                        sharedServiceName, sharedServiceGuid, imbHandleSharingService, isStatic);
-
-                    shadowPoiService.StaticService = isStatic;
+                        sharedServiceName, sharedServiceGuid, imbHandleSharingService);
                 }
                 else
                 {
-                    shadowPoiService.StaticService = isStatic;
-                    shadowPoiService.Name = sharedServiceName; // Update name
-                    if (!shadowPoiService.StaticService)
+                    if (shadowPoiService.Name != sharedServiceName)
                     {
+                        LogCs.LogMessage(
+                             String.Format("Received notification on IMB bus: shared service '{0}' is renamed to '{1}' ({2})", 
+                             shadowPoiService.Name, sharedServiceName, sharedServiceGuid));
+                        shadowPoiService.Name = sharedServiceName; // Update name
                         NotifyOfPropertyChange(() => DynamicServices);
                     }
-                    
                 }
                 Execute.OnUIThread(() =>
                 {
                     // At startup, the active group may not be initialized
                     if (AppState.Imb.ActiveGroup == null && AppState.Imb.Groups != null && AppState.Imb.Groups.Count > 0) {
                         var group = AppState.Imb.Groups.FirstOrDefault(g => g.IsActive);
-                        if (group != null) AppState.Imb.JoinGroup(group);
+                        if (group != null)
+                        {
+                            LogCs.LogMessage(String.Format("Auto join IMB group '{0}' (first group where this IMB client is member of) ", group.Name));
+                            AppState.Imb.JoinGroup(group);
+                        }
                     }
+                    // Is the shared service part of the active IMB group?
                     if (AppState.Imb.ActiveGroup != null && AppState.Imb.ActiveGroup.Layers.Contains(sharedServiceGuid))
                     {
                         if (isSharedServiceAlreadyKnown)
                         {
                             if (!shadowPoiService.IsLocal) return;
+                            LogCs.LogMessage(String.Format("The shared service '{0}' is shared in active IMB group '{1}': auto subscribe",
+                               shadowPoiService.Name, AppState.Imb.ActiveGroup.Name));
                             Subscribe(shadowPoiService);
-                            
+
                         }
                         else
+                        {
                             shadowPoiService.Start();
+                            LogCs.LogMessage(String.Format("The new created shared service '{0}' is shared in active IMB group '{1}': auto start service",
+                                shadowPoiService.Name, AppState.Imb.ActiveGroup.Name));
+                        }
                         AppState.TriggerNotification(sharedServiceName + " layer shared in " + AppState.Imb.ActiveGroup.Name, pathData: MenuHelpers.LayerIcon);
                     }
                     else
                     {
-                        var nea = new NotificationEventArgs
+                        if (!mHandledServices.Contains(sharedServiceGuid))
                         {
-                            Text       = "Do you want to join?",
-                            Header = sharedServiceName + " now available",
-                            Duration   = new TimeSpan(0, 0, 30),
-                            Background = AppState.AccentBrush,
-                            Image      = new BitmapImage(new Uri(@"pack://application:,,,/csCommon;component/Resources/Icons/layers4.png")),
-                            Foreground = Brushes.White,
-                            Options    = new List<string> {"Yes", "No"}
-                        };
-                        nea.OptionClicked += (s, n) =>
-                        {
-                            if (n.Option != "Yes") return;
-                            if (isSharedServiceAlreadyKnown)
+                            mHandledServices.Add(sharedServiceGuid);
+                            // Look like old code; The framework now tries to join the first group it sees. 
+                            // Is some cases to group is found
+                            bool handled = false;
+                            if (OnNewSharedService != null)
                             {
-                                // Request the sharing service IMB client to add this client to subscribtion list
-                                Subscribe(shadowPoiService);
+                                var args = new JoinSharedServiceEventArgs(sharedServiceName, sharedServiceGuid, imbHandleSharingService);
+                                OnNewSharedService(this, args); // Join new shared service or not?
+                                if ((args.JoinSharedService.HasValue) && (args.JoinSharedService.Value))
+                                {
+                                    LogCs.LogMessage(String.Format("The eventhandler OnNewSharedService returned to join shared service '{0}'",
+                                       shadowPoiService.Name));
+                                    JoinSharedService(isSharedServiceAlreadyKnown, shadowPoiService);
+                                    mHandledServices.Remove(shadowPoiService.Id);
+                                    
+                                }
+                                handled = args.JoinSharedService.HasValue;
                             }
-                            else
-                                shadowPoiService.Start();
+                            if (!handled)
+                            {
+                                if (AppState.Config.GetBool("CsFramework.ShowJoinServiceNotification", true))
+                                {
 
-                        };
-                        AppState.TriggerNotification(nea);
+
+                                    LogCs.LogMessage(String.Format("Ask user with notification message to join shared service '{0}'", shadowPoiService.Name));
+                                    var nea = new NotificationEventArgs
+                                    {
+                                        Text = "Do you want to join?",
+                                        Header = sharedServiceName + " now available",
+                                        Duration = new TimeSpan(0, 0, 30),
+                                        Background = AppState.AccentBrush,
+                                        Image =
+                                            new BitmapImage(
+                                                new Uri(
+                                                    @"pack://application:,,,/csCommon;component/Resources/Icons/layers4.png")),
+                                        Foreground = Brushes.White,
+                                        Options = new List<string> { "Yes", "No" }
+                                    };
+                                    nea.Closing += (services, e) => mHandledServices.Remove(sharedServiceGuid);
+                                    nea.OptionClicked += (s, n) =>
+                                    {
+                                        mHandledServices.Remove(shadowPoiService.Id);
+                                        if (n.Option == "Yes")
+                                        {
+                                            LogCs.LogMessage(String.Format("User confirmed to join shared service '{0}'", shadowPoiService.Name));
+                                            JoinSharedService(isSharedServiceAlreadyKnown, shadowPoiService);
+                                        }
+
+
+                                    };
+                                    AppState.TriggerNotification(nea);
+
+                                }
+                                else
+                                {
+                                    mHandledServices.Remove(shadowPoiService.Id);
+                                    LogCs.LogMessage(String.Format("The config value 'CsFramework.ShowJoinServiceNotification' is false and event OnNewSharedService not set, no join dialog shown for shared service '{0}'",
+                                        shadowPoiService.Name));
+                                }
+                            }
+                        }
                     }
                 });
                 
             }
             else if (isSharedServiceStoppedNotification)
             {
-                if (isSharedServiceAlreadyKnown)
-                {
-                    Execute.OnUIThread(() =>
+                Execute.OnUIThread(() =>
                     {
+                        LogCs.LogMessage(String.Format("Received notification on IMB bus: shared service '{0}' is not avaliable anymore.", shadowPoiService.Name));
                         AppState.TriggerNotification("Layer '" + shadowPoiService.Name + "' is not available anymore");
                         DeleteService(shadowPoiService);
                     });
                     
-                }
-                else
-                {
-                    DeleteService(shadowPoiService);
-                   
-                }
+
             } // else parse error!
         }
+
+
+        private void JoinSharedService(bool pServiceAlreadyExsisted, PoiService pSharedService)
+        {
+
+            if (pServiceAlreadyExsisted)
+            {
+                // Request the sharing service IMB client to add this client to subscribtion list
+                Subscribe(pSharedService);
+            }
+            else
+                pSharedService.Start();
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="pSharedServiceGuid">The ID of the service that is being shared by remote IMB client</param>
         /// <param name="PImbHandleSharingService">The IMB handle of the remote IMB client that is sharing</param>
         /// <returns></returns>
-        private PoiService CreateShadowServiceForSharedService(string pSharedServiceName, Guid pSharedServiceGuid, int pImbHandleSharingService, bool isStatic = false)
+        private PoiService CreateShadowServiceForSharedService(string pSharedServiceName, Guid pSharedServiceGuid, int pImbHandleSharingService)
         {
-            if (!FileStore.FolderExists("Services")) FileStore.CreateFolder("Services");
+            if (!FileStore.FolderExists("Services"))
+                FileStore.CreateFolder("Services");
             if (!FileStore.FolderExists("Services\\" + pSharedServiceGuid))
                 FileStore.CreateFolder("Services\\" + pSharedServiceGuid);
             var shadowPoiService = new PoiService
@@ -402,7 +486,7 @@ namespace DataServer {
                 Name = pSharedServiceName,
                 IsShared = true,
                 IsLocal = false,
-                StaticService = isStatic, /* could be true of false: don't known is static of dynamic service */
+                StaticService = false, /* could be true of false: don't known is static of dynamic service */
                 Server = pImbHandleSharingService,
                 RelativeFolder = "Shared Layers",
                 Mode = Mode.client,
@@ -411,28 +495,31 @@ namespace DataServer {
             };
             Services.Add(shadowPoiService);
             shadowPoiService.InitPoiService();
+            LogCs.LogMessage(String.Format("Added shared service '{0}' (GUID: {1}) to local servicelist, the orginal service is hosted on IMB client with handle {2}.",
+                    pSharedServiceName, pSharedServiceGuid, pImbHandleSharingService));
+            LogCs.LogMessage(String.Format("Shared service '{0}' stores persistent data in folder '{1}'.", pSharedServiceName, shadowPoiService.Folder));
             NotifyOfPropertyChange(() => DynamicServices);
             return shadowPoiService;
         }
-        private static AppStateSettings AppState { get { return AppStateSettings.Instance; }}
-        
-        public void Start(string folder, Mode myMode, string originFolder, bool autoStart = false, bool addLocalServices = true) {
+        private static AppStateSettings AppState { get { return AppStateSettings.Instance; } }
+
+        public void Start(string folder, Mode myMode, string originFolder, bool autoStart = false, bool addLocalServices = true){
             Start(myMode);
             baseFolder = folder;
-            if (addLocalServices) AddLocalDataServices(folder, myMode, originFolder,  autoStart);
+            if (addLocalServices) AddLocalDataServices(folder, myMode, originFolder, autoStart);
         }
 
-        public void AddLocalDataServices(string folder, Mode myMode, string originFolder = "",  bool autoStart = false) 
+        public void AddLocalDataServices(string folder, Mode myMode, string originFolder = "", bool autoStart = false)
         {
             if (string.IsNullOrEmpty(originFolder))
             {
                 originFolder = Path.Combine(Directory.GetCurrentDirectory(), AppState.Config.Get("Poi.LocalFolder", "PoiLayers"));
             }
-            
+
             if (!FileStore.FolderExists(folder)) return;
 
             var poiServiceImporters = PoiServiceImporters.Instance;
-            foreach (var importer in poiServiceImporters) 
+            foreach (var importer in poiServiceImporters)
             {
                 if (!importer.SupportsMetaData)
                 {
@@ -475,12 +562,12 @@ namespace DataServer {
 
             var dirs = FileStore.GetFolders(folder);
             foreach (var d in dirs)
-                AddLocalDataServices(d, myMode, originFolder,  autoStart);
+                AddLocalDataServices(d, myMode, originFolder, autoStart);
         }
 
         // TODO This (legacy) code is used in multiple spots in the code; we now have more than one way to load a data service.
         // Load .ds file and creates a service fot this ds file
-        public PoiService AddLocalDataService(string folder, Mode _mode, string file, string originFolder = "", bool autoStart = false) {
+        public PoiService AddLocalDataService(string folder, Mode _mode, string file, string originFolder = "", bool autoStart = false){
             if (string.IsNullOrEmpty(originFolder)) originFolder = Path.Combine(Directory.GetCurrentDirectory(), AppState.Config.Get("Poi.LocalFolder", "PoiLayers"));
             // Use GUID in filename is ID for service (important when file is cloned!)
             var f = file.Split('\\').Last();
@@ -488,71 +575,71 @@ namespace DataServer {
             if (stat)
                 f = f.Remove(0, 1);
             var idname = f.Substring(0, f.Length - 3).Split('.'); // p.Name.Substring(0, p.Name.Length - 3).Split('.');
-            var guid = idname.Length > 1 && !string.IsNullOrEmpty(idname[1]) 
+            var guid = idname.Length > 1 && !string.IsNullOrEmpty(idname[1])
                 ? Guid.Parse(idname[0])
                 : Guid.NewGuid();
             if (idname.Length != 2) return null;
             var name = idname[1].Replace("_", "");
 
 
-            var ps = new PoiService 
+            var ps = new PoiService
             {
-                IsLocal        = true,
-                Folder         = folder,
-                Id             = guid,
-                Name           = name,
-                StaticService  = stat,
+                IsLocal = true,
+                Folder = folder,
+                Id = guid,
+                Name = name,
+                StaticService = stat,
                 RelativeFolder = folder.Replace(originFolder, string.Empty),
-                AutoStart      = autoStart
+                AutoStart = autoStart
             };
             ps.InitPoiService();
             AddService(ps, _mode);
-            
+
             if (_mode != Mode.server) return ps;
             Subscribe(ps);
-            if (ps.Settings!=null) ps.Settings.ShareOnline = true;
+            if (ps.Settings != null) ps.Settings.ShareOnline = true;
             return ps;
         }
 
         //        public void AddLocalDataServiceTemplate(string folder, string file) {
-//            var idName = Path.GetFileNameWithoutExtension(file); 
-//            var guid = Guid.NewGuid();
-//            if (string.IsNullOrEmpty(idName)) return;
-//            var ps = new PoiService {
-//                IsLocal = true,
-//                Folder = folder,
-//                Id = guid,
-//                Name = idName,
-//                IsTemplate = true,
-//                StaticService = false,
-//                RelativeFolder = folder.Replace(baseFolder, string.Empty)
-//            };
-//            ps.InitPoiService();
-//            Templates.Add(ps);
-//            //CheckSettings(ps);
-//        }
-//
-//        public PoiService AddLocalDataServiceFromCsv(string folder, Mode _mode, string file, string originFolder = "",
-//            bool autoStart = false)
-//        {
-//            PoiServiceImporterFromFileList poiServiceImporterFromFileList = PoiServiceImporterFromFileList.Instance;
-//            IImporter<FileLocation, PoiService> suitableImporter = poiServiceImporterFromFileList.FirstOrDefault(importer => importer.DataFormatExtension.Equals("csv"));
-//
-//            if (suitableImporter == null)
-//            {
-//                throw new NotImplementedException("Cannot find an importer for CSV files in the assembly.");
-//            }
-//
-//            IOResult<PoiService> ioResult = suitableImporter.ImportData(new FileLocation(Path.Combine(folder, file)));
-//            if (ioResult.Successful)
-//            {
-//                return ioResult.Result;
-//            }
-//            else
-//            {
-//                throw ioResult.Exception;
-//            }
-//        }
+        //            var idName = Path.GetFileNameWithoutExtension(file); 
+        //            var guid = Guid.NewGuid();
+        //            if (string.IsNullOrEmpty(idName)) return;
+        //            var ps = new PoiService {
+        //                IsLocal = true,
+        //                Folder = folder,
+        //                Id = guid,
+        //                Name = idName,
+        //                IsTemplate = true,
+        //                StaticService = false,
+        //                RelativeFolder = folder.Replace(baseFolder, string.Empty)
+        //            };
+        //            ps.InitPoiService();
+        //            Templates.Add(ps);
+        //            //CheckSettings(ps);
+        //        }
+        //
+        //        public PoiService AddLocalDataServiceFromCsv(string folder, Mode _mode, string file, string originFolder = "",
+        //            bool autoStart = false)
+        //        {
+        //            PoiServiceImporterFromFileList poiServiceImporterFromFileList = PoiServiceImporterFromFileList.Instance;
+        //            IImporter<FileLocation, PoiService> suitableImporter = poiServiceImporterFromFileList.FirstOrDefault(importer => importer.DataFormatExtension.Equals("csv"));
+        //
+        //            if (suitableImporter == null)
+        //            {
+        //                throw new NotImplementedException("Cannot find an importer for CSV files in the assembly.");
+        //            }
+        //
+        //            IOResult<PoiService> ioResult = suitableImporter.ImportData(new FileLocation(Path.Combine(folder, file)));
+        //            if (ioResult.Successful)
+        //            {
+        //                return ioResult.Result;
+        //            }
+        //            else
+        //            {
+        //                throw ioResult.Exception;
+        //            }
+        //        }
 
         //private static void CheckSettings(Service ps) {
         //    if (ps.SettingsList != null) return;
@@ -565,28 +652,28 @@ namespace DataServer {
         /// <summary>
         ///     received message on private channel
         /// </summary>
-        private void ReceivedPrivateMessage(TEventEntry aEvent, int aTick, int aBufferId, TByteBuffer aBuffer) { // REVIEW TODO fix: removed async
+        private void ReceivedPrivateMessage(TEventEntry aEvent, int aTick, int aBufferId, TByteBuffer aBuffer){ // REVIEW TODO fix: removed async
             var pm = PrivateMessage.ConvertByteArrayToMessage(aBuffer.Buffer);
             if (pm == null) return;
             var s = Services.FirstOrDefault(k => k.Id == pm.Id);
             if (s == null) return;
 
-            switch (pm.Action) {
+            switch (pm.Action){
                 case PrivateMessageActions.RequestData:
                     SendData(pm.Sender, s, pm.ContentId, pm.OwnerId, pm.Channel);
                     break;
                 case PrivateMessageActions.ResponseData:
-                    if ((s.store.SaveBytes(s.Folder,  pm.ContentId, pm.Content, false))) // REVIEW TODO fix: removed await
+                    if ((s.store.SaveBytes(s.Folder, pm.ContentId, pm.Content, false))) // REVIEW TODO fix: removed await
                         s.DataReceived(pm.ContentId, pm.Content);
                     break;
                 case PrivateMessageActions.SubscribeRequest:
                     // TODO EV Why do you set server initialization to false? When adding a task, it is not synchronized anymore (RegisterContent is cancelled).
                     //s.IsInitialized = false;
                     if (!s.Subscribers.Contains(pm.Sender)) s.Subscribers.Add(pm.Sender);
-                    
+
                     SendPrivateMessage(pm.Sender, PrivateMessageActions.Subscribe, s.Id);
                     var reqClient = AppState.Imb.FindClient(pm.Sender);
-                    if (reqClient != null && (AppState.Imb.ActiveGroup==null || !AppState.Imb.ActiveGroup.Clients.Contains(reqClient.Id))) Execute.OnUIThread(() => AppState.TriggerNotification(reqClient.Name + " has joined " + s.Name, image: reqClient.Image));
+                    if (reqClient != null && (AppState.Imb.ActiveGroup == null || !AppState.Imb.ActiveGroup.Clients.Contains(reqClient.Id))) Execute.OnUIThread(() => AppState.TriggerNotification(reqClient.Name + " has joined " + s.Name, image: reqClient.Image));
                     break;
                 case PrivateMessageActions.UnsubscribeRequest:
                     //s.IsInitialized = false;
@@ -594,7 +681,7 @@ namespace DataServer {
                     SendPrivateMessage(pm.Sender, PrivateMessageActions.Unsubscribe, s.Id);
                     var unsubClient = AppState.Imb.FindClient(pm.Sender);
                     if (unsubClient != null) Execute.OnUIThread(() => AppState.TriggerNotification(unsubClient.Name + " has left " + s.Name, image: unsubClient.Image));
-                    
+
                     break;
                 case PrivateMessageActions.ServiceReset: // requested for service reset
                     int priority = 2;
@@ -605,17 +692,17 @@ namespace DataServer {
                     break;
                 case PrivateMessageActions.RequestXml:
                     var res = s.ToXml().ToString();
-                    SendPrivateMessage(pm.Sender,PrivateMessageActions.ResponseXml,s.Id,res,Guid.Empty);
+                    SendPrivateMessage(pm.Sender, PrivateMessageActions.ResponseXml, s.Id, res, Guid.Empty);
                     break;
                 case PrivateMessageActions.ResponseXml:
-                    s.FromXml(pm.ContentId,s.Folder);
+                    s.FromXml(pm.ContentId, s.Folder);
                     s.TriggerInitialized();
                     break;
                 case PrivateMessageActions.Subscribe:
                     s.Subscribe(mode);
                     s.SubscribeServiceChannel();
                     //Subscribe(s);
-                    if (Subscribed != null) Subscribed(this, new ServiceSubscribeEventArgs {Service = s});
+                    if (Subscribed != null) Subscribed(this, new ServiceSubscribeEventArgs { Service = s });
                     var npm = new PrivateMessage {
                         Action = PrivateMessageActions.ServiceReset,
                         Id = s.Id,
@@ -627,7 +714,7 @@ namespace DataServer {
                 case PrivateMessageActions.Unsubscribe:
                     s.Unsubscribe();
                     s.UnSubscribeServiceChannel();
-                    if (UnSubscribed != null) UnSubscribed(this, new ServiceSubscribeEventArgs {Service = s});
+                    if (UnSubscribed != null) UnSubscribed(this, new ServiceSubscribeEventArgs { Service = s });
                     break;
                 case PrivateMessageActions.ListReset: // receiving lists from server
                     ListReset(s.Id, pm.Content, pm.Channel);
@@ -659,7 +746,7 @@ namespace DataServer {
         /// <param name="contentId"></param>
         /// <param name="ownerId"></param>
         /// <param name="channel"></param>
-        private void SendData(int receiver, Service service, string contentId, Guid ownerId, string channel) {
+        private void SendData(int receiver, Service service, string contentId, Guid ownerId, string channel){
             var data = service.store.GetBytes(service.Folder, contentId);
             if (data != null) SendPrivateMessage(receiver, PrivateMessageActions.ResponseData, service.Id, contentId, data, ownerId, channel);
         }
@@ -674,7 +761,7 @@ namespace DataServer {
         /// <param name="serviceId"></param>
         /// <param name="buffer"></param>
         /// <param name="channel"></param>
-        private void ListReset(Guid serviceId, byte[] buffer, string channel) {
+        private void ListReset(Guid serviceId, byte[] buffer, string channel){
             Service s = Services.FirstOrDefault(k => k.Id == serviceId);
             if (s == null) return;
             s.ListReset(buffer, channel);
@@ -685,16 +772,16 @@ namespace DataServer {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="serviceId"></param>
-        private void SendServiceReset(int sender, Guid serviceId, int priority) {
+        private void SendServiceReset(int sender, Guid serviceId, int priority){
             var s = Services.FirstOrDefault(k => k.Id == serviceId);
             var channel = sender + ServiceChannelExtentions;
 
             foreach (var cl in s.AllContent) {
-                var pm = new PrivateMessage
-                {Action = PrivateMessageActions.ListReset, Sender = client.Id, Id = serviceId};
+                var pm = new PrivateMessage 
+                {Action = PrivateMessageActions.ListReset, Sender = client.Id, Id = serviceId };
                 var ms = new MemoryStream();
                 var st = cl.ToList().Where(k => k.Priority <= priority).ToList();
-                Model.SerializeWithLengthPrefix(ms, st, typeof (List<BaseContent>), PrefixStyle.Base128, 72);
+                Model.SerializeWithLengthPrefix(ms, st, typeof(List<BaseContent>), PrefixStyle.Base128, 72);
                 pm.Content = ms.ToArray();
                 pm.Channel = cl.Id;
                 if (cl == s.AllContent.First()) pm.ContentId = "First";
@@ -709,10 +796,10 @@ namespace DataServer {
         /// </summary>
         /// <param name="s"></param>
         /// <param name="serviceMode"></param>
-        public void AddService(Service s, Mode serviceMode) {
+        public void AddService(Service s, Mode serviceMode){
             if (s.Id == Guid.Empty) s.Id = Guid.NewGuid();
             if (string.IsNullOrEmpty(s.Name)) s.Name = "New Service";
-            
+
 
             s.Server = id;
 
@@ -740,11 +827,11 @@ namespace DataServer {
         }
 
         public void SendPrivateMessage(int server, PrivateMessageActions action, Guid serviceId, string contentId,
-                                       Guid ownerId) {
+                                       Guid ownerId){
             SendPrivateMessage(server, action, serviceId, contentId, null, ownerId, "");
         }
 
-        public void SendPrivateMessage(int server, PrivateMessage pm) {
+        public void SendPrivateMessage(int server, PrivateMessage pm){
             if (server <= 0) return;
             var channel = server + ServiceChannelExtentions;
             var content = pm.ConvertToStream().ToArray();
@@ -752,18 +839,14 @@ namespace DataServer {
         }
 
         public void SendPrivateMessage(int server, PrivateMessageActions action, Guid serviceId) {
-            if (server <= 0) return;
-            var channel = server + ServiceChannelExtentions;
-            var pm = new PrivateMessage {Action = action, Sender = client.Id, Id = serviceId};
-            var content = pm.ConvertToStream().ToArray();
-            client.Imb.SignalBuffer(channel, 0, content);
+            SendPrivateMessage(server, new PrivateMessage { Action = action, Sender = client.Id, Id = serviceId });
         }
 
         /// <summary>
         ///     Remove a service
         /// </summary>
         /// <param name="s"></param>
-        public void RemoveService(Service s) {
+        public void RemoveService(Service s){
             if (!Services.Contains(s)) return;
             s.Close();
             Services.Remove(s);
@@ -773,7 +856,7 @@ namespace DataServer {
         ///     delete a service
         /// </summary>
         /// <param name="s"></param>
-        public void DeleteService(PoiService s) {
+        public void DeleteService(PoiService s){
             if (s == null) return;
             if (s.IsSubscribed) UnSubscribe(s);
             if (s.Layer != null) s.Layer.Stop();
@@ -792,10 +875,10 @@ namespace DataServer {
 
                     File.Delete(s.FileName);
                 }
-                
-                    
+
+
             }
-            catch (Exception e) {
+            catch (Exception e){
                 Logger.Log("DataService", "Error delete dataservice at: " + s.FileName, e.Message,
                     Logger.Level.Error);
             }
@@ -804,7 +887,7 @@ namespace DataServer {
 
         #region imbClient service actions9
 
-        public void Subscribe(Service s) {
+        public void Subscribe(Service s){
             Subscribe(s, s.Mode);
         }
 
@@ -815,19 +898,19 @@ namespace DataServer {
         /// </summary>
         /// <param name="s"></param>
         /// <param name="pMode"></param>
-        public async void Subscribe(Service s, Mode pMode) {
+        public async void Subscribe(Service s, Mode pMode){
             if (s == null) return;
-            
-            if (s.IsLocal) {
+
+            if (s.IsLocal){
                 // a local file, just open it
-                if (s.IsFileBased) {
+                if (s.IsFileBased){
                     s.IsLoading = true;
                     if (!await s.OpenFile())
                     {
                         s.IsLoading = false;
                         return;
                     }
-                    
+
                     //s.IsInitialized = true;
                     Subscribed?.Invoke(this, new ServiceSubscribeEventArgs {Service = s});
                     s.TriggerInitialized();
@@ -842,28 +925,28 @@ namespace DataServer {
             }
             else
                 SendPrivateMessage(s.Server, PrivateMessageActions.SubscribeRequest, s.Id);
-            
+
         }
 
         /// <summary>
         ///     unsubscribe from a service
         /// </summary>
         /// <param name="s"></param>
-        public void UnSubscribe(Service s) {
+        public void UnSubscribe(Service s){
             if (s == null) return;
             if (s.Mode == Mode.server) s.MakeLocal();
-            if (s.IsLocal) {
+            if (s.IsLocal){
                 //if (s.Mode == Mode.client)
                 //{
                 s.CheckSave();
                 Execute.OnUIThread(() => {
                     s.IsSubscribed = false;
-                                             
+
                     s.Unsubscribe();
-                    
+
                 });
                 //}
-                if (UnSubscribed != null) UnSubscribed(this, new ServiceSubscribeEventArgs {Service = s});
+                if (UnSubscribed != null) UnSubscribed(this, new ServiceSubscribeEventArgs { Service = s });
             }
             else
                 SendPrivateMessage(s.Server, PrivateMessageActions.UnsubscribeRequest, s.Id);
@@ -873,7 +956,7 @@ namespace DataServer {
 
         public event EventHandler<TappedEventArgs> Tapped;
 
-        public void TriggerTapped(TappedEventArgs tappedEventArgs) {
+        public void TriggerTapped(TappedEventArgs tappedEventArgs){
             var handler = Tapped;
             if (handler != null) handler(this, tappedEventArgs);
         }

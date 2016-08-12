@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using csCommon.Types;
+using csCommon.Types.Geo;
 using csShared.Geo.Content;
 using csShared.Geo.Esri;
 using csShared.Utils;
@@ -288,7 +289,23 @@ namespace csShared.Geo
             get { return AppStateSettings.Instance; }
         }
 
-        public Map MapControl { get; set; }
+
+        public void SetMapControl(Map pMap)
+        {
+            MapControl = pMap;
+        }
+
+        private Map mMapControl;
+        public Map MapControl
+        {
+            get { return mMapControl; }
+            private set
+            {
+                if (MapControl != null) MapCoordinateCopyPasteCommand.UnRegisterHotkeys(value);
+                if (value != null) MapCoordinateCopyPasteCommand.RegisterHotkeys(value);
+                mMapControl = value;
+            }
+        }
 
         public void GetAllSubLayers(GroupLayer gl, ref List<GraphicsLayer> result)
         {
@@ -687,7 +704,7 @@ namespace csShared.Geo
         private void UpdateMapActivations()
         {
             foreach (var p in BaseLayerProviders) p.Activated = false;
-            foreach (WebTileLayer l in BaseLayers.Where(k => ((WebTileLayer)k).TileProvider != null)) l.TileProvider.Activated = true;
+            foreach (WebTileLayer l in BaseLayers.OfType< WebTileLayer>().Where(k => ((WebTileLayer)k).TileProvider != null)) l.TileProvider.Activated = true;
         }
 
         public void RemoveMapType(string mapType)

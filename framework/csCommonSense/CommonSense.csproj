@@ -142,6 +142,9 @@
     <Reference Include="FirstFloor.ModernUI">
       <HintPath>..\..\libs\FirstFloor.ModernUI.dll</HintPath>
     </Reference>
+    <Reference Include="GeoUtility">
+      <HintPath>..\..\libs\GeoUtility.dll</HintPath>
+    </Reference>
     <Reference Include="Gma.QrCodeNet.Encoding, Version=0.0.1.35308, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\Gma.QrCodeNet.Encoding.dll</HintPath>
@@ -170,6 +173,9 @@
     <Reference Include="KlvUnmanned, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\KLV\KlvUnmanned.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\libs\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net">
       <HintPath>..\..\libs\Lucene.Net.dll</HintPath>
@@ -396,6 +402,8 @@
     <Compile Include="Controls\Popups\MenuPopup\MenuHelpers.cs" />
     <Compile Include="Controls\PropertyDial.cs" />
     <Compile Include="Imb\csGroup.cs" />
+    <Compile Include="Imb\csImbConfig.cs" />
+    <Compile Include="Logging\LogCs.cs" />
     <Compile Include="MapContent\Panoramio\LookrContent.cs" />
     <Compile Include="MapContent\ShapeFiles\ShapeFileReader\ShapePolygonZ.cs" />
     <Compile Include="MapTools\BagGeoCodingTool\BagGeoCodingMapToolPlugin.cs" />
@@ -462,6 +470,21 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Plugins\HlaRest\HlaRestService.cs" />
+    <Compile Include="Plugins\MgrsGrid\CohenSutherland.cs" />
+    <Compile Include="Plugins\MgrsGrid\DrawMgrsGrid.cs" />
+    <Compile Include="Plugins\MgrsGrid\Geographic2Esri.cs" />
+    <Compile Include="Plugins\MgrsGrid\GeographicBoundingBox.cs" />
+    <Compile Include="Plugins\MgrsGrid\GridZone.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsBoundingBox.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsConfig.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsCoordinateLabel.xaml.cs">
+      <DependentUpon>MgrsCoordinateLabel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Plugins\MgrsGrid\MgrsEsriLayer.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsGridPlugin.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsRasterLayer.cs" />
+    <Compile Include="Plugins\MgrsGrid\MgrsViewport.cs" />
+    <Compile Include="Plugins\MgrsGrid\WGS84LatLongPoint.cs" />
     <Compile Include="Plugins\SearchPlugin\APIs\MGRSSearch.cs" />
     <Compile Include="Plugins\StreamingVideoPlugin\ImbCommands\BaseCommand.cs" />
     <Compile Include="Plugins\StreamingVideoPlugin\ImbCommands\DisplayVideoCmd.cs" />
@@ -569,6 +592,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Types\DataServer\DataServiceTemplateImporter.cs" />
     <Compile Include="Types\DataServer\Interfaces\IConvertibleXmlWithSettings.cs" />
+    <Compile Include="Types\DataServer\JoinSharedServiceEventArgs.cs" />
     <Compile Include="Types\DataServer\PoI\IO\ExcelExporter.cs" />
     <Compile Include="Types\DataServer\PoI\IO\CsvExporter.cs" />
     <Compile Include="Types\DataServer\PoI\IO\DataServiceIO.cs" />
@@ -646,6 +670,7 @@
     <Compile Include="Plugins\Presenter\Views\TnoPresenterView.xaml.cs">
       <DependentUpon>TnoPresenterView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Types\Geo\MapCoordinateCopyPasteCommand.cs" />
     <Compile Include="Types\TextAnalysis\KeywordAnalysis.cs" />
     <Compile Include="Types\TextAnalysis\SimpleTextFinder.cs" />
     <Compile Include="Types\TextAnalysis\TextFinder\ITextFinder.cs" />
@@ -1939,6 +1964,10 @@
     <Page Include="Plugins\EffectAppraisalPlugin\Views\EffectAppraisalView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Plugins\MgrsGrid\MgrsCoordinateLabel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Plugins\NotebookPlugin\NoteTabView.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -257,11 +257,26 @@ namespace csDataServerPlugin
                     foreach (var s in e.OldItems)
                     {
                         var ps = s as PoiService;
+                        RemoveServiceTabItem(s as PoiService);
                         if (ps == null || !ps.StaticService) continue;
                         var l = StaticLayers.FirstOrDefault(k => k.Service == ps);
                         if (l != null) StaticLayers.Remove(l);
                     }
                     break;
+            }
+        }
+
+        /// <summary>
+        /// When service is removed from dataserver servicelist remove the associated tabs
+        /// </summary>
+        /// <param name="pPoiService"></param>
+        private void RemoveServiceTabItem(PoiService pPoiService)
+        {
+            if (pPoiService == null) return;
+            var tabs = AppState.StartPanelTabItems.Where(k => k.ModelInstance is TabItemViewModel && object.ReferenceEquals(((TabItemViewModel)k.ModelInstance).Service, pPoiService)).ToList();
+            foreach (var tabItem in tabs)
+            {
+               AppState.StartPanelTabItems.Remove(tabItem);
             }
         }
 
@@ -395,7 +410,7 @@ namespace csDataServerPlugin
             AppState.DashboardStateStates.RegisterHandler(SetDashboard);
 
             // add layers
-            
+            // this loads all services from the POI layer directory
             layerFolder = Path.Combine(Directory.GetCurrentDirectory(),AppState.Config.Get("Poi.LocalFolder", "PoiLayers"));
             Dsb.Start(layerFolder, Mode.client, layerFolder);
 

@@ -380,8 +380,7 @@ namespace csGeoLayers
         {
             Contract.Requires(source != null);
             Contract.Requires(action != null);
-
-            foreach (TSource item in source)
+            if (source!=null) foreach (TSource item in source)
             {
                 action(item);
             }

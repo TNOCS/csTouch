@@ -55,7 +55,7 @@
                                     Margin="5"
                                     HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Bottom">
-                Save
+                Update
             </controls:SurfaceButton>
             <!--<Button x:Name="bSave">Save</Button>-->
             <!--<kb:KeyboardTextBox Grid.Row="1" HorizontalAlignment="Stretch" TextWrapping="Wrap"

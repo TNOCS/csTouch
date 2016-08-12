@@ -10,6 +10,7 @@ using csShared;
 using csShared.Interfaces;
 using csShared.Utils;
 using IMB3;
+using csCommon.Imb;
 
 namespace csCommon.Plugins.Config
 {
@@ -133,16 +134,16 @@ namespace csCommon.Plugins.Config
         {
             var result = Connections.Aggregate(string.Empty, (current, c) => current + (c + ","));
             result = result.Trim(',');
-            AppState.Config.SetLocalConfig("ImbHistory", result, true);
+            AppState.Config.SetLocalConfig(csImbConfig.CfgNameImbHistory, result, true);
         }
 
         public void UpdateStatus()
         {
             
             if (AppState.Imb.Imb == null) return;
-            if (!AppState.Config.GetBool("IMB.Enabled", true)) return;
+            if (!AppState.Config.GetBool(csImbConfig.CfgNameImbIsEnabled, true)) return;
             Connections = new BindableCollection<ImbConnectionString>();
-            var hs = AppState.Config.Get("ImbHistory", "");
+            var hs = AppState.Config.Get(csImbConfig.CfgNameImbHistory, "");
             var hh = hs.Split(',');
 
             foreach (var h in hh)

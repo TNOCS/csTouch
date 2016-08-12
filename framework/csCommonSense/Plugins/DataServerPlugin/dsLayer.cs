@@ -57,7 +57,11 @@ namespace csDataServerPlugin
 
         public dsLayer(PoiService s, DataServerPlugin p)
         {
-            if (s == null) s = new PoiService();
+            if (s == null)
+            {
+                csCommon.Logging.LogCs.LogMessage(String.Format("dsLayer: Create PoiService '{0}'", "empty"));
+                s = new PoiService();
+            }
             Service = s;
             ID = Service.Name;
             plugin = p;

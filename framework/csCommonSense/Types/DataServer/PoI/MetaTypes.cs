@@ -12,6 +12,7 @@
         bbcode,
         rating,
         options,
+        optionsrow,
         unknown,
         image,
         datetime,

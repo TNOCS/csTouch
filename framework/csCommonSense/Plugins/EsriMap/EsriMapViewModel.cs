@@ -6,6 +6,7 @@ using Caliburn.Micro;
 using IMB3;
 using csShared;
 using csShared.Interfaces;
+using ESRI.ArcGIS.Client;
 
 namespace csCommon.MapPlugins.EsriMap
 {
@@ -123,6 +124,17 @@ namespace csCommon.MapPlugins.EsriMap
                 scaleLineOffset = value;
                 NotifyOfPropertyChange(() => ScaleLineOffset);
             }
+        }
+
+        // TODO move to interface
+        public void AddMapOverlay(FrameworkElement pElement)
+        {
+            if (map != null) map.LayoutRoot.Children.Add(pElement);
+        }
+
+        public void AddEsriLayer(DynamicLayer pLayer)
+        {
+            map.glOverlay.ChildLayers.Add(pLayer);
         }
     }
 }

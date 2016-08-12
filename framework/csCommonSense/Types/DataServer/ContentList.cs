@@ -80,6 +80,7 @@ namespace DataServer
             set
             {
                 isRessetable = value;
+                // Looks like NotifyOfPropertyChange("IsRessetable"); doesnt do the job (poi's not synchronised)
                 NotifyOfPropertyChange();
             }
         }

@@ -373,7 +373,16 @@ namespace csShared.Geo.Esri
                                 .ToList();
                             foreach (var tts in threadsToStart)
                             {
-                                tts.Value.Start();
+                                try
+                                {
+                                    tts.Value.Start();
+                                } catch(Exception ex)
+                                {
+                                    tts.Value.Abort();
+                                    Thread t;
+                                    activeThreads.TryRemove(tts.Key, out t);
+                                    // TODO
+                                }
                             }
                         }
 

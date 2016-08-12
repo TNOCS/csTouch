@@ -243,7 +243,7 @@ namespace csShared.Utils
                 }
             }
             else
-                    {
+            {
                 Debug.Assert(false, "Not implemented ESRI type");
             }
             return result;

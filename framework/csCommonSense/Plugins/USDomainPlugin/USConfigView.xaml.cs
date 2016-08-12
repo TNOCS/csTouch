@@ -17,6 +17,7 @@ using SessionsEvents;
 using Microsoft.Surface.Presentation.Controls;
 //using csSurface;
 using csShared;
+using csCommon.Imb;
 
 namespace csUSDomainPlugin
 {
@@ -79,8 +80,8 @@ namespace csUSDomainPlugin
                 {
                     Plugin.Connection.OnDisconnect += new TConnection.TOnDisconnect(connection_UpdateConnectionStatus);
                     // store settings
-                    AppStateSettings.Instance.Config.SetLocalConfig("IMB.Host", USClientIMBHostText.Text); 
-                    AppStateSettings.Instance.Config.SetLocalConfig("IMB.Port", USClientIMBPortText.Text);
+                    AppStateSettings.Instance.Config.SetLocalConfig(csImbConfig.CfgNameImbHost, USClientIMBHostText.Text); 
+                    AppStateSettings.Instance.Config.SetLocalConfig(csImbConfig.CfgNameImbPort, USClientIMBPortText.Text);
                     AppStateSettings.Instance.Config.SetLocalConfig("IMB.IdleFederation", USClientIMBFederationText.Text);
                 }
                 UpdateConnectionStatus();

@@ -9,13 +9,16 @@ using Microsoft.Surface.Presentation.Controls;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using DataServer;
-using csDataServerPlugin.ViewModels;
+using System.Windows.Controls;
+
 
 namespace csShared.Controls.Popups.MapCallOut
 {
@@ -249,6 +252,39 @@ namespace csShared.Controls.Popups.MapCallOut
             Close(null);
         }
 
+        /// <summary>
+        /// When binding a property to a textbox/combox the property is not updated
+        /// when a menu item is selected (because this doesn't cause a focus change)
+        /// This method writes the value in the gui to the property from the active element!
+        /// </summary>
+        public static void DoSimulateFocusChange()
+        {
+            TextBox textBox = Keyboard.FocusedElement as TextBox;
+
+            if (textBox != null)
+            {
+                BindingExpression be = textBox.GetBindingExpression(TextBox.TextProperty);
+                if (be != null && !textBox.IsReadOnly && textBox.IsEnabled)
+                {
+                    be.UpdateSource();
+                }
+                return;
+            }
+            ComboBox lComboBox = Keyboard.FocusedElement as ComboBox;
+
+            if (lComboBox != null)
+            {
+                BindingExpression be = lComboBox.GetBindingExpression(ComboBox.TextProperty);
+                if (be != null && !lComboBox.IsReadOnly && lComboBox.IsEnabled)
+                {
+                    be.UpdateSource();
+                }
+                return;
+            }
+
+           
+        }
+
         public void Close(EventArgs e)
         {
 
@@ -264,6 +300,7 @@ namespace csShared.Controls.Popups.MapCallOut
             //}
             try
             {
+                DoSimulateFocusChange();
                 if (ViewModel != null)
                 {
                     var viewType = ViewModel.GetType();

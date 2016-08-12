@@ -35,6 +35,7 @@ using csShared.Controls.Popups.MenuPopup;
 //using csWebDotNetLib;
 //using IO.Swagger.Model;
 using Newtonsoft.Json.Linq;
+using csCommon.Logging;
 //using Layer = IO.Swagger.Model.Layer;
 
 
@@ -212,6 +213,7 @@ namespace DataServer
         /// <returns>A new PoiService</returns>
         public static PoiService CreateService(DataServerBase dataServer, string serviceName, Guid id, bool openTab = false, bool autoStart = false, bool isStatic = true)
         {
+            LogCs.LogMessage(String.Format("Static func CreateService: Create PoiService '{0}'", serviceName));
             var res = new PoiService
             {
                 IsLocal       = true,
@@ -482,6 +484,7 @@ namespace DataServer
 
         public void InitPoiService()
         {
+            LogCs.LogMessage(String.Format("Initialize PoiService '{0}'", Name));
             PoITypes = new ContentList { ContentType = typeof(PoI), Id = "poitypes", Service = this };
             AllContent.Add(PoITypes);
 
@@ -1337,7 +1340,7 @@ namespace DataServer
                         var add = PoIs
                             .Where(p => !contentInExtent.Contains(p) && (p.IsVisibleInExtent(Extent)))
                             .ToArray();
-                        Debug.WriteLine("Add: {0}, Remove: {1}", add.Length, remove.Length);
+                       // Debug.WriteLine("Add: {0}, Remove: {1}", add.Length, remove.Length);
                         contentInExtent.RemoveRange(remove);
                         contentInExtent.AddRange(add);
 
@@ -1400,7 +1403,7 @@ namespace DataServer
                     finally
                     {
                         timer.Stop();
-                        Debug.WriteLine("Content list updated: {0}s",timer.Elapsed.TotalSeconds);
+                        //Debug.WriteLine("Content list updated: {0}s",timer.Elapsed.TotalSeconds);
                         _isUpdatingContentList = false;
                     }
                 }

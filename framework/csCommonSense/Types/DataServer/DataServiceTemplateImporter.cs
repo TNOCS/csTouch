@@ -18,13 +18,13 @@ namespace csCommon.Types.DataServer
                 string file = source.LocationString;
                 string folder = Path.GetDirectoryName(file) ?? "";
                 string originFolder = Path.Combine(Directory.GetCurrentDirectory(), AppStateSettings.Instance.Config.Get("Poi.LocalFolder", "PoiLayers"));
-
+                
                 var idName = Path.GetFileNameWithoutExtension(file);
                 if (string.IsNullOrEmpty(idName))
                 {
                     return new IOResult<PoiService>(new Exception(string.Format("Invalid filename: {0}", file)));
                 }
-
+                Logging.LogCs.LogMessage(String.Format("Create PoiService '{0}' from file '{1}' (DataServiceTemplateImporter)", idName, source.LocationString));
                 var guid = Guid.NewGuid();
                 var ps = new PoiService
                 {

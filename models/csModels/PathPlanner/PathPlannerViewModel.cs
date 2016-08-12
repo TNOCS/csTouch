@@ -457,7 +457,10 @@ namespace csModels.PathPlanner
                 Points = CreatePath(source, sink)
             };
             var convertFromString = ColorConverter.ConvertFromString(sink.StrokeColor);
-            link.Style = new PoIStyle { CanMove = false, CanDelete = false, StrokeColor = convertFromString != null ? (Color)convertFromString : Colors.Blue };
+            link.Style = new PoIStyle { CanMove = false, CanDelete = false, StrokeColor = convertFromString != null ? (Color)convertFromString : Colors.Blue, StrokeWidth = 3 };
+            link.Style.DrawingMode = DrawingModes.Polyline;
+            link.UpdateEffectiveStyle();
+            var s = link.DrawingMode;
             return link;
         }
 

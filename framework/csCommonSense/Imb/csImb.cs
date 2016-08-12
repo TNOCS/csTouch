@@ -17,6 +17,7 @@ using DataServer;
 using IMB3;
 using IMB3.ByteBuffers;
 using Timer = System.Timers.Timer;
+using csCommon.Logging;
 
 namespace csImb
 {
@@ -312,7 +313,7 @@ namespace csImb
             }
             if (aVarName.EndsWith(".group"))
             {
-                ParseGroup(aVarName,value);
+                ProcessImbVariableGroup(aVarName,value);
             }
         }
 
@@ -342,6 +343,7 @@ namespace csImb
             if (!ng.IsMemberOfGroup)
             {
                 ng.InitImb();
+                LogCs.LogMessage("Joined IMB group '{0}'", ng.Name);
                 AppState.TriggerNotification("You joined " + ng.Name, pathData: MenuHelpers.GroupIcon);
             }
         }
@@ -352,7 +354,7 @@ namespace csImb
         {
             get {
                 if (activeGroup != null) return activeGroup;
-                if (Groups != null && Groups.Count > 0)
+                if (Groups != null && Groups.Count > 0) 
                     activeGroup = Groups.FirstOrDefault(g => g.IsMemberOfGroup);
                 return activeGroup;
             }
@@ -371,6 +373,7 @@ namespace csImb
             {
                 g.StopImb();
                 if (pRemoveActiveGroup) ActiveGroup = null;
+                LogCs.LogMessage(String.Format("Left IMB group '{0}'", g.Name));
                 AppState.TriggerNotification("You left " + g.Name, pathData: MenuHelpers.GroupIcon);
             };      
         }
@@ -463,7 +466,7 @@ namespace csImb
             }
         }
 
-         private void ParseGroup(string aVarName, string value) {
+        private void ProcessImbVariableGroup(string aVarName, string value) {
             var groupName = aVarName.Split('.')[0];
 
             var group = groups.FirstOrDefault(k => Equals(k.Name, groupName)); // Equals made static.
