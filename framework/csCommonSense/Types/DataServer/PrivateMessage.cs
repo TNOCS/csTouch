@@ -8,13 +8,13 @@ namespace DataServer
     public class PrivateMessage
     {        
         [ProtoMember(1)]
-        public int Sender { get; set; }        
+        public int Sender { get; set; }  // IMB client handle of requesting client       
         [ProtoMember(2)]
         public PrivateMessageActions Action { get; set; }
         [ProtoMember(3)]
         public byte[] Content { get; set; }
         [ProtoMember(4)]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } // Service GUID, etc
         [ProtoMember(5)]
         public string Channel { get; set; }
         [ProtoMember(6)]

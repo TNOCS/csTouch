@@ -1,29 +1,24 @@
-﻿using System;
+﻿
+using DataServer;
+using log4net;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace csCommon.Logging
 {
-    using System.Diagnostics;
-
-    using log4net;
-    using log4net.Appender;
-    using log4net.Config;
-    using log4net.Layout;
-    using System.Runtime.CompilerServices;
-    /// <summary>
-    ///  
-    /// </summary>
-    internal class LogCs
+    internal class LogImbService
     {
         #region Static Fields
 
         /// <summary>
         ///     The m log.
         /// </summary>
-        private static readonly ILog mLog = LogManager.GetLogger("CommonSenseLogger");
+        private static readonly ILog mLog = LogManager.GetLogger("ImbServiceCommunicationLogger");
 
         #endregion
 
@@ -32,7 +27,7 @@ namespace csCommon.Logging
         /// <summary>
         /// Simple logger for CommonSense. For advanced logging use Logger.cs 
         /// </summary>
-        static LogCs()
+        static LogImbService()
         {
             // See 
             // <appSettings>
@@ -87,11 +82,11 @@ namespace csCommon.Logging
         /// <param name="pMessage">
         /// The p message.
         /// </param>
-        internal static void LogMessage(string pMessage, [CallerMemberName] string memberName = null, [CallerFilePath] string filePath = null, [CallerLineNumber] int lineNumber = 0)
+        internal static void LogMessage(Service pService, string pMessage, [CallerMemberName] string memberName = null, [CallerFilePath] string filePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             if (mLog.IsInfoEnabled)
             {
-                mLog.Info(pMessage ?? "-");
+                mLog.Info(String.Format("Service '{0}'({1}); {2}", pService.Name, pService.Id, pMessage ?? "-"));
             }
         }
 
@@ -116,7 +111,7 @@ namespace csCommon.Logging
                 mLog.Info(pLocation + System.Environment.NewLine + ": " + pContent);
             }
         }
-        
+
 
         #endregion
     }
