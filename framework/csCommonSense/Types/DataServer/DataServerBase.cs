@@ -654,11 +654,20 @@ namespace DataServer {
         /// </summary>
         private void ReceivedPrivateMessage(TEventEntry aEvent, int aTick, int aBufferId, TByteBuffer aBuffer){ // REVIEW TODO fix: removed async
             var pm = PrivateMessage.ConvertByteArrayToMessage(aBuffer.Buffer);
-            if (pm == null) return;
+            if (pm == null)
+            {
+                LogCs.LogWarning(String.Format("Received IMB message: Corrupt message! ", pm.Id, pm.Action));
+                return;
+            }
             var s = Services.FirstOrDefault(k => k.Id == pm.Id);
-            if (s == null) return;
+            if (s == null)
+            {
+                LogCs.LogWarning(String.Format("Received IMB message: Service with GUID '{0}' is not found in servicelist (msg action is {1}). Ignore message. ",
+                        pm.Id, pm.Action));
+                return;
+            }
 
-            switch (pm.Action){
+            switch (pm.Action) {
                 case PrivateMessageActions.RequestData:
                     SendData(pm.Sender, s, pm.ContentId, pm.OwnerId, pm.Channel);
                     break;
@@ -670,10 +679,13 @@ namespace DataServer {
                     // TODO EV Why do you set server initialization to false? When adding a task, it is not synchronized anymore (RegisterContent is cancelled).
                     //s.IsInitialized = false;
                     if (!s.Subscribers.Contains(pm.Sender)) s.Subscribers.Add(pm.Sender);
-
-                    SendPrivateMessage(pm.Sender, PrivateMessageActions.Subscribe, s.Id);
+                    SendToImbBusSubscriptedToService(s.Id, pm.Sender);
                     var reqClient = AppState.Imb.FindClient(pm.Sender);
-                    if (reqClient != null && (AppState.Imb.ActiveGroup == null || !AppState.Imb.ActiveGroup.Clients.Contains(reqClient.Id))) Execute.OnUIThread(() => AppState.TriggerNotification(reqClient.Name + " has joined " + s.Name, image: reqClient.Image));
+                    LogCs.LogMessage(String.Format("Received IMB message: IMB client with handle {0} ({1}) requested to join service '{2}' (joined service).",
+                        pm.Sender, (reqClient != null) ? reqClient.Name : "-", s.Name));
+                    if (reqClient != null && (AppState.Imb.ActiveGroup == null || !AppState.Imb.ActiveGroup.Clients.Contains(reqClient.Id)))
+                        Execute.OnUIThread(
+                            () => AppState.TriggerNotification(reqClient.Name + " has joined " + s.Name, image: reqClient.Image));
                     break;
                 case PrivateMessageActions.UnsubscribeRequest:
                     //s.IsInitialized = false;
@@ -695,10 +707,14 @@ namespace DataServer {
                     SendPrivateMessage(pm.Sender, PrivateMessageActions.ResponseXml, s.Id, res, Guid.Empty);
                     break;
                 case PrivateMessageActions.ResponseXml:
+                    LogCs.LogMessage(String.Format("Received IMB message: Recieved service XML definition for service {0} ({1}), Load XML into service.",
+                         s.Name, s.Id));
+                    LogCs.ToFile(String.Format("./logging/ReceivedServiceDefinition_{0}_{1}_{2}", s.Name, s.Id, DateTime.Now.Ticks), pm.ContentId);
                     s.FromXml(pm.ContentId, s.Folder);
                     s.TriggerInitialized();
                     break;
                 case PrivateMessageActions.Subscribe:
+                    LogCs.LogMessage(String.Format("Received IMB message: Subscribe to (join) service {0} ({1}) mode={2}", s.Name, s.Id, mode));
                     s.Subscribe(mode);
                     s.SubscribeServiceChannel();
                     //Subscribe(s);
@@ -831,15 +847,28 @@ namespace DataServer {
             SendPrivateMessage(server, action, serviceId, contentId, null, ownerId, "");
         }
 
-        public void SendPrivateMessage(int server, PrivateMessage pm){
-            if (server <= 0) return;
-            var channel = server + ServiceChannelExtentions;
+        public void SendPrivateMessage(int pToImbHandle, PrivateMessage pm){
+            if (pToImbHandle <= 0) return;
+            var channel = pToImbHandle + ServiceChannelExtentions;
             var content = pm.ConvertToStream().ToArray();
+            switch(pm.Action)
+            {
+                case PrivateMessageActions.Subscribe:
+                    var s = Services.FirstOrDefault(k => k.Id == pm.Id);
+                    LogCs.LogMessage(String.Format("Send to IMB channel '{0}': IMB client handle '{1}' subscribed to service '{2}' {3} hosted on IMB handle '{4}' (joined service)",
+                          channel, pToImbHandle, pm.Id, s != null ? s.Name : "-", pm.Sender));
+                    break;
+            }
             client.Imb.SignalBuffer(channel, 0, content);
         }
 
         public void SendPrivateMessage(int server, PrivateMessageActions action, Guid serviceId) {
             SendPrivateMessage(server, new PrivateMessage { Action = action, Sender = client.Id, Id = serviceId });
+        }
+
+        private void SendToImbBusSubscriptedToService(Guid pServiceId, int pImbClientHandle)
+        {
+            SendPrivateMessage(pImbClientHandle, PrivateMessageActions.Subscribe, pServiceId);
         }
 
         /// <summary>

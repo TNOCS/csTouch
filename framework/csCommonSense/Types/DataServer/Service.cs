@@ -26,6 +26,8 @@ using System.Windows.Threading;
 using System.Xml.Linq;
 using csCommon.Utils;
 using csGeoLayers;
+using csCommon.Logging;
+using System.Text;
 
 namespace DataServer
 {
@@ -556,6 +558,7 @@ namespace DataServer
             if (client == null || !client.IsConnected) return;
             serviceChannel = client.Imb.Subscribe("ServiceChannel." + Id);
             serviceChannel.OnBuffer += serviceChannel_OnBuffer;
+            LogCs.LogMessage(String.Format("Service '{0}' ({1}) subscribed to IMB communication channel '{2}' ", Name, Id, serviceChannel.EventName));
         }
 
         public void UnSubscribeServiceChannel()
@@ -564,6 +567,7 @@ namespace DataServer
             serviceChannel.UnSubscribe();
             serviceChannel.UnPublish();
             serviceChannel.OnBuffer -= serviceChannel_OnBuffer;
+            LogCs.LogMessage(String.Format("Service '{0}' ({1}) unsubscribed from IMB service communication channel", Name, Id));
         }
 
         [DebuggerStepThrough]
@@ -700,7 +704,11 @@ namespace DataServer
         private void serviceChannel_OnBuffer(TEventEntry aEvent, int aTick, int aBufferId, TByteBuffer aBuffer)
         {
             var cm = ContentMessage.ConvertByteArrayToMessage(aBuffer.Buffer);
-            if (cm == null) return;
+            if (cm == null)
+            {
+                LogImbService.LogWarning(String.Format("Corrupted IMB message received in service {0} ({1}) ", Name, Id));
+                return;
+            }
 
             switch (cm.Action)
             {
@@ -728,16 +736,20 @@ namespace DataServer
                 case ContentMessageActions.Remove:
                     try
                     {
+                        IContent c = null;
                         var cl = AllContent.FirstOrDefault(k => k.Id == cm.ContentList);
                         if (cl != null)
                         {
-                            IContent c = cl.FirstOrDefault(k => k.Id == cm.Id);
+                            c = cl.FirstOrDefault(k => k.Id == cm.Id);
                             if (c != null)
                             {
                                 c.IsInTransit = true;
-                                cl.Remove(cl.FirstOrDefault(k => k.Id == cm.Id));
+                                cl.Remove((BaseContent)c);
                             }
                         }
+                        var bc = (c as BaseContent);
+                        LogImbService.LogMessage(this, String.Format("Removed content '{0}'",
+                            (c == null) ? "Removed " + bc?.Name : " ITEM NOT FOUND "));
                     }
                     catch (Exception e)
                     {
@@ -753,6 +765,7 @@ namespace DataServer
                         {
                             cl = new ContentList { Id = cm.ContentList, ContentType = cm.ContentType, Service = this };
                             AllContent.Add(cl);
+                            LogImbService.LogMessage(this, String.Format("Add content type '{0}' to contentlist (id={1})", cm.ContentType, cm.ContentList));
                         }
                         using (var ms = new MemoryStream())
                         {
@@ -770,10 +783,14 @@ namespace DataServer
                                         PrefixStyle.Base128, 0);
 
                                     cl.Add(obj);
+                                    LogImbService.LogMessage(this, String.Format(" Add new content '{0}' of (type is '{0}') to contentlist.",
+                                         obj.Name ?? "-", cm.ContentType));
                                 }
                                 catch (Exception e)
                                 {
-                                    Logger.Log("DataServer.Service", "serviceChannel_OnBuffer error 1", e.Message, Logger.Level.Error, true);
+                                    Logger.Log("DataServer.Service", "serviceChannel_OnBuffer error 1 (unable to add new content)", e.Message, Logger.Level.Error, true);
+                                    LogImbService.LogException(String.Format("Process IMB Message: In service '{0}'({1}) unable to add new content '{0}' of type '{1}' to contentlist '{2}'",
+                                         Name, Id, cm.Id, cm.ContentType, cm.ContentList), e);
                                     throw;
                                 }
                                 finally
@@ -797,10 +814,12 @@ namespace DataServer
                                     }
                                     RuntimeTypeModel.Default.DeserializeWithLengthPrefix(ms, obj, cl.ContentType,
                                         PrefixStyle.Base128, 0);
-                                    _baseContentDebounce.Add(obj);
-                                    //obj.ForceUpdate(true, true);
+                                    _baseContentDebounce.Add(obj); // Batch the 'ForceUpdate' routine for preformance!!
+                                                                   //obj.ForceUpdate(true, true);
 
                                     // Notify label changed:
+                                    var sb = new StringBuilder();
+                                    sb.Append("Label changed: ");
                                     if (obj.Labels != null)
                                     {
                                         var safeList = obj.Labels.ToArray(); // Collection changed in obj.Labels
@@ -811,19 +830,25 @@ namespace DataServer
                                             {
                                                if (currentLabel.Value != oldLabelValue) // label changed
                                                {
-                                                  TriggerLabelChangedBySync(obj, currentLabel.Key, oldLabelValue, currentLabel.Value);
+                                                    sb.AppendFormat("'{0}': '{0}'->'{1}';", currentLabel.Key, oldLabelValue, currentLabel.Value);
+                                                    TriggerLabelChangedBySync(obj, currentLabel.Key, oldLabelValue, currentLabel.Value);
                                                }
                                             }
                                             else // new label
                                             {
+                                                sb.AppendFormat("'{0}': '<not set>'->'{1}';", currentLabel.Key, currentLabel.Value);
                                                 TriggerLabelChangedBySync(obj, currentLabel.Key, null, currentLabel.Value);
                                             }
                                         }
                                     }
+                                    LogImbService.LogMessage(this, String.Format("Updated COMPLETE content of '{0}' (type={1}). {2}",
+                                        obj.Name ?? "-", cm.ContentType, sb.ToString()));
                                 }
                                 catch (Exception e)
                                 {
                                     Logger.Log("DataServer.Service", "serviceChannel_OnBuffer error 2", e.Message, Logger.Level.Error, true);
+                                    LogImbService.LogException(String.Format("Process IMB Message: In service '{0}'({1}) unable to add exsisting content '{0}' of type '{1}' to contentlist '{2}'",
+                                        Name, Id, cm.Id, cm.ContentType, cm.ContentList), e);
                                     throw;
                                 }
                                 finally
@@ -836,6 +861,8 @@ namespace DataServer
                     catch (Exception e)
                     {
                         Logger.Log("DataService", "Error updating content object", e.Message, Logger.Level.Error);
+                        LogImbService.LogException(String.Format("Process IMB Message: In service '{0}'({1}) unable to add/update content.",
+                             Name, Id, cm.Id), e);
                     }
                     break;
             }
