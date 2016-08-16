@@ -70,14 +70,16 @@ namespace csCommon
             get { return "Layers"; }
         }
 
+        public LayersViewModel LayersVM { get; private set; }
+
         public void Init()
         {
-            var viewModel = new LayersViewModel(); // IoC.GetAllInstances(typeof(ILayerSelection)).Where(k => ((ILayerSelection)k).Caption == "Layers").FirstOrDefault() as IMapSelection;
+            LayersVM = new LayersViewModel(); // IoC.GetAllInstances(typeof(ILayerSelection)).Where(k => ((ILayerSelection)k).Caption == "Layers").FirstOrDefault() as IMapSelection;
 
 
             spti = new StartPanelTabItem
             {
-                ModelInstance = viewModel,
+                ModelInstance = LayersVM,
                 Position = StartPanelPosition.left,
                 HeaderStyle = TabHeaderStyle.Image,
                 Name = "Layers",
