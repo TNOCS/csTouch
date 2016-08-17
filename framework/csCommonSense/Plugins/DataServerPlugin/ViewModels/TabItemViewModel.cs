@@ -1007,7 +1007,7 @@ namespace csDataServerPlugin
                             break;
                         case DrawingModes.Polygon:
                             this.AddNotification(
-                                "Add polgygon", 
+                                "Add polygon", 
                                 "Click on map to select the polygon points, double click to end.");
                             break;
                         case DrawingModes.Polyline:
