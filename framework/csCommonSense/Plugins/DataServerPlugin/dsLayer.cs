@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using csCommon.Logging;
 //using csCommon.Plugins.DataServerPlugin.Utils;
 using csShared;
 using csShared.Controls.Popups.InputPopup;
@@ -242,6 +243,7 @@ namespace csDataServerPlugin
         /// <param name="p"></param>
         public new void RemovePoi(PoI p)
         {
+            LogCs.LogMessage(String.Format("dsLayer: RemovePoi {0} ({1})", p.Id, p.Name ?? ""));
             base.RemovePoi(p);
             if (!p.Data.ContainsKey("layer")) return;
             var gl = p.Data["layer"] as IdsChildLayer;

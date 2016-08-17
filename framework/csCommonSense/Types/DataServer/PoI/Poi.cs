@@ -50,6 +50,23 @@ namespace DataServer
             }
         }
 
+        /// <summary>
+        /// Z-index for ordering POI's on layer. High number are drawn on top of low numbers.
+        /// </summary>
+        public int ZIndex
+        {
+            get
+            {
+                object result;
+                if (Data.TryGetValue("Zindex", out result)) return (int)result;
+                return 0;
+            }
+            set
+            {
+                Data["Zindex"] = value;
+            }
+        }
+
         public new string PoiId // REVIEW TODO Added new.
         {
             get { return ContentId; }
