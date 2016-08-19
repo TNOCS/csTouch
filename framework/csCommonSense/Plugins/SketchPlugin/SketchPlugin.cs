@@ -267,6 +267,7 @@ namespace MSA.Plugins.SketchPlugin
                             }
                         }
                     }
+                    newPoi.UpdateEffectiveStyle();
                     SketchService.PoIs.Add(newPoi);
                     break;
                 case DrawMode.Circle:
@@ -283,6 +284,7 @@ namespace MSA.Plugins.SketchPlugin
                             }
                         }
                     }
+                    newPoi.UpdateEffectiveStyle();
                     SketchService.PoIs.Add(newPoi);
                     break;
             }

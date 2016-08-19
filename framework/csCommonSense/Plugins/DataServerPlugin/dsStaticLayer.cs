@@ -267,12 +267,16 @@ namespace csDataServerPlugin
 
         public void UpdatePoiStyle(PoI p, bool checkVisibility = false) // REVIEW TODO fix: 'new' keyword removed.
         {
+            
             if (!p.Data.ContainsKey("graphic") || !(p.Data["graphic"] is StaticGraphic))
             {
                 UpdatePoiStyleGraphics(p, checkVisibility);
                 return;
             }
             var g = (StaticGraphic) p.Data["graphic"];
+
+            if (g!= null) g.SetZIndex(p.ZIndex); // set z-order number
+
             if (p.NEffectiveStyle.Visible != null && g.Visible != p.NEffectiveStyle.Visible.Value)
             {
                 g.Visible = p.NEffectiveStyle.Visible.Value;
@@ -483,6 +487,7 @@ namespace csDataServerPlugin
                 else
                 {
                     g = new StaticGraphic { Service = Service, Poi = p };
+                    g.SetZIndex(p.ZIndex);
                     GetGraphic(p, ref g);
                     l.Graphics.Add(g);
                     p.Data["graphic"] = g;

@@ -20,6 +20,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using PointCollection = ESRI.ArcGIS.Client.Geometry.PointCollection;
 using csCommon.Types.Geometries.AdvancedGeometry.Symbols;
+using csCommon.Logging;
 
 namespace csDataServerPlugin
 {
@@ -77,6 +78,9 @@ namespace csDataServerPlugin
 
         public void RemovePoi(PoI p)
         {
+            LogCs.LogMessage(String.Format("dsPoiLayer: RemovePoi {0} ({1})", p.Id, p.Name ?? ""));
+
+
             Execute.OnUIThread(() =>
             {
                 if (!p.Data.ContainsKey("layer")) return;
@@ -96,6 +100,7 @@ namespace csDataServerPlugin
 
         public void AddPoi(PoI p)
         {
+            LogCs.LogMessage(String.Format("dsPoiLayer: AddPoi {0} ({1})", p.Id, p.Name ?? ""));
             //if (p.Data.ContainsKey("layer")) return;
             if (!string.IsNullOrEmpty(p.PoiTypeId) && p.PoiType == null)
                 p.PoiType = parent.Service.PoITypes.FirstOrDefault(k => (k).ContentId == p.PoiTypeId) as PoI;

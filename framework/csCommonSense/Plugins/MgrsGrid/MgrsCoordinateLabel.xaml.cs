@@ -43,7 +43,8 @@ namespace csCommon.Plugins.MgrsGrid
                 MapPoint mapPoint = AppStateSettings.Instance.ViewDef.MapControl.ScreenToMap(screenPoint);
                 var latlon = mapPoint.ToGenericGeometry();
                 var mgrs = latlon.ConvertToMgrs();
-                LatLonCoordsTextBlock.Text = string.Format(CultureInfo.InvariantCulture, "WGS84({0:00.000000},{1:000.000000}) ", latlon.Latitude, latlon.Longitude);
+                // LatLonCoordsTextBlock.Text = string.Format(CultureInfo.InvariantCulture, "WGS84({0:00.000000},{1:000.000000}) ", latlon.Latitude, latlon.Longitude);
+                LatLonCoordsTextBlock.Text = latlon.ToTextualDescription(WGS84LatLongPoint.TextualDescription.Decimal);
                 MgrsCoordsTextBlock.Text = string.Format(CultureInfo.InvariantCulture, "MGRS({0})", mgrs.ToLongString());
 
             }

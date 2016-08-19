@@ -28,6 +28,10 @@ namespace csShared
 
     public class NotificationEventArgs : EventArgs
     {
+        /// <summary>
+        /// Pass data to the notification event.
+        /// </summary>
+        public object Data { get; set; }
 
         private List<string> options = new List<string>();
 
