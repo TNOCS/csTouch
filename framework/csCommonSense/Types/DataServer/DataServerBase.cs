@@ -788,22 +788,33 @@ namespace DataServer {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="serviceId"></param>
-        private void SendServiceReset(int sender, Guid serviceId, int priority){
+        private void SendServiceReset(int sender, Guid serviceId, int priority)
+        {
+
             var s = Services.FirstOrDefault(k => k.Id == serviceId);
             var channel = sender + ServiceChannelExtentions;
 
-            foreach (var cl in s.AllContent) {
-                var pm = new PrivateMessage 
-                {Action = PrivateMessageActions.ListReset, Sender = client.Id, Id = serviceId };
-                var ms = new MemoryStream();
-                var st = cl.ToList().Where(k => k.Priority <= priority).ToList();
-                Model.SerializeWithLengthPrefix(ms, st, typeof(List<BaseContent>), PrefixStyle.Base128, 72);
-                pm.Content = ms.ToArray();
-                pm.Channel = cl.Id;
-                if (cl == s.AllContent.First()) pm.ContentId = "First";
-                if (cl == s.AllContent.Last()) pm.ContentId = "Last";
-                client.Imb.SignalBuffer(channel, 0, pm.ConvertToStream().ToArray());
+            foreach (var cl in s.AllContent)
+            {
+                try
+                {
+                    var pm = new PrivateMessage
+                    { Action = PrivateMessageActions.ListReset, Sender = client.Id, Id = serviceId };
+                    var ms = new MemoryStream();
+                    var st = cl.ToList().Where(k => k.Priority <= priority).ToList();
+                    Model.SerializeWithLengthPrefix(ms, st, typeof(List<BaseContent>), PrefixStyle.Base128, 72);
+                    pm.Content = ms.ToArray();
+                    pm.Channel = cl.Id;
+                    if (cl == s.AllContent.First()) pm.ContentId = "First";
+                    if (cl == s.AllContent.Last()) pm.ContentId = "Last";
+                    client.Imb.SignalBuffer(channel, 0, pm.ConvertToStream().ToArray());
+                }
+                catch (Exception ex)
+                {
+                    LogImbService.LogException(string.Format("SendServiceReset failed (broadcast service content on IMB)"), ex);
+                }
             }
+
         }
 
 
