@@ -1,36 +1,34 @@
-﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<UserControl x:Class="csCommon.NotificationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:s="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
-             xmlns:local="clr-namespace:csCommon"
-             xmlns:cal="http://www.caliburnproject.org" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:csShared="clr-namespace:csShared"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:csCommon"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             mc:Ignorable="d"
-             x:Class="csCommon.NotificationView" d:DataContext="{d:DesignInstance local:NotificationViewModel}">
+             xmlns:s="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
+             d:DataContext="{d:DesignInstance local:NotificationViewModel}"
+             mc:Ignorable="d">
     <UserControl.Resources>
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Storyboard x:Key="sbShowNotification">
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
-                                           Storyboard.TargetName="bNotification">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="bNotification" Storyboard.TargetProperty="(UIElement.Visibility)">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Visible}" />
             </ObjectAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)"
-                                              Storyboard.TargetName="bNotification">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="bNotification" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <SplineThicknessKeyFrame KeyTime="0" Value="0,0,100,-50" />
                 <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="0,0,100,0" />
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="sbHideNotification">
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
-                                           Storyboard.TargetName="bNotification">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="bNotification" Storyboard.TargetProperty="(UIElement.Visibility)">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Visible}" />
             </ObjectAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)"
-                                              Storyboard.TargetName="bNotification">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="bNotification" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <SplineThicknessKeyFrame KeyTime="0" Value="0,0,100,0" />
                 <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="0,0,100,-50" />
             </ThicknessAnimationUsingKeyFrames>
@@ -38,56 +36,63 @@
     </UserControl.Resources>
 
     <Grid>
-        <ItemsControl Margin="0,100,0,0" ItemsSource="{Binding Notifications}"
-                      ItemTemplate="{DynamicResource NotificationTemplate}">
+        <ItemsControl Margin="0,100,0,0"
+                      ItemTemplate="{DynamicResource NotificationTemplate}"
+                      ItemsSource="{Binding Notifications}">
             <ItemsControl.Resources>
                 <DataTemplate x:Key="NotificationTemplate" DataType="csShared:NotificationEventArgs">
-                    <Border x:Name="bNotification" Visibility="Visible"
-                            cal:Message.Attach="[Event MouseDown]=[Action NotificationClick($dataContext)]"
+                    <Border x:Name="bNotification"
+                            Width="300"
                             Height="Auto"
                             MinHeight="80"
-                            VerticalAlignment="Top"
-                            Background="{Binding Background}"
+                            Margin="0,15,0,0"
                             HorizontalAlignment="Right"
-                            Margin="0,15,0,0" Width="300">
+                            VerticalAlignment="Top"
+                            cal:Message.Attach="[Event MouseDown]=[Action NotificationClick($dataContext)]"
+                            Background="{Binding Background}"
+                            Visibility="Visible">
                         <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
                             <StackPanel Margin="50,-5,0,0">
                                 <mui:BBCodeBlock x:Name="tbNotificationHeader"
-                                                 HorizontalAlignment="Left"
-                                                 TextWrapping="Wrap"
-                                                 BBCode="{Binding Header}"
-                                                 VerticalAlignment="Top"
                                                  Margin="0"
-                                                 Foreground="{Binding Foreground}"
-                                                 FontSize="22" />
-                                <mui:BBCodeBlock x:Name="tbNotificationTitle"
                                                  HorizontalAlignment="Left"
-                                                 TextWrapping="Wrap"
-                                                 BBCode="{Binding Text}"
                                                  VerticalAlignment="Top"
-                                                 FontSize="18"
+                                                 BBCode="{Binding Header}"
+                                                 FontSize="22"
+                                                 Foreground="{Binding Foreground}"
+                                                 TextWrapping="Wrap" />
+                                <mui:BBCodeBlock x:Name="tbNotificationTitle"
+                                                 MinHeight="{Binding MinHeight}"
                                                  Margin="0,0,5,0"
-                                                 Foreground="{Binding Foreground}" />
-                                <ItemsControl ItemsSource="{Binding WorkingOptions}" 
-                                              Margin="0,0,10,0"
+                                                 HorizontalAlignment="Left"
+                                                 VerticalAlignment="Top"
+                                                 BBCode="{Binding Text}"
+                                                 FontSize="18"
+                                                 Foreground="{Binding Foreground}"
+                                                 TextWrapping="Wrap" />
+                                <ItemsControl Margin="0,0,10,0"
+                                              ItemTemplate="{DynamicResource DataTemplate1}"
                                               ItemsPanel="{DynamicResource ItemsPanelTemplate1}"
-                                              ItemTemplate="{DynamicResource DataTemplate1}">
+                                              ItemsSource="{Binding WorkingOptions}">
                                     <ItemsControl.Resources>
 
                                         <ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
                                             <StackPanel IsItemsHost="True" Orientation="Horizontal" />
                                         </ItemsPanelTemplate>
-                                        <DataTemplate x:Key="DataTemplate1"
-                                                      DataType="csShared:NotificationOptionSelectedEventArgs">
+                                        <DataTemplate x:Key="DataTemplate1" DataType="csShared:NotificationOptionSelectedEventArgs">
                                             <Grid Margin="5">
-                                                <s:SurfaceButton Content="{Binding Option}"
-                                                                 cal:Message.Attach="[Event Click]=[Action OptionClick($dataContext, $eventArgs)];[Event TouchEnter]=[Action OptionClick($dataContext, $eventArgs)]"
+                                                <s:SurfaceButton Margin="0"
                                                                  HorizontalAlignment="Left"
-                                                                 Margin="0"
                                                                  VerticalAlignment="Top"
-                                                                 Background="#4D000000"
-                                                                 VerticalContentAlignment="Center"
                                                                  HorizontalContentAlignment="Center"
+                                                                 VerticalContentAlignment="Center"
+                                                                 cal:Message.Attach="[Event Click]=[Action OptionClick($dataContext, $eventArgs)];[Event TouchEnter]=[Action OptionClick($dataContext, $eventArgs)]"
+                                                                 Background="#4D000000"
+                                                                 Content="{Binding Option}"
                                                                  Padding="6,2,10,2" />
                                             </Grid>
                                         </DataTemplate>
@@ -95,19 +100,56 @@
                                     </ItemsControl.Resources>
                                 </ItemsControl>
                             </StackPanel>
-                            <Image HorizontalAlignment="Left" Width="40" Height="40" VerticalAlignment="Top"
+                            <Image Width="{Binding ImageWidth}"
+                                   Height="{Binding ImageHeight}"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
                                    Source="{Binding Image}"
-                                   Visibility="{Binding ShowImage, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            <Viewbox Width="40" Height="40" VerticalAlignment="Top" HorizontalAlignment="Left">
+                                   Visibility="{Binding ShowImage,
+                                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            <Viewbox Width="40"
+                                     Height="40"
+                                     HorizontalAlignment="Left"
+                                     VerticalAlignment="Top">
                                 <Path Data="{Binding PathData}" Fill="White" />
                             </Viewbox>
+                            <Border Grid.Row="1"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom"
+                                    BorderBrush="White"
+                                    BorderThickness="0,2,0,0"
+                                    Visibility="{Binding ShowAutoClickOption,
+                                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <StackPanel Orientation="Horizontal">
+                                    <s:SurfaceButton x:Name="AutoClickOption"
+                                                     Margin="0"
+                                                     HorizontalAlignment="Left"
+                                                     VerticalAlignment="Top"
+                                                     HorizontalContentAlignment="Center"
+                                                     VerticalContentAlignment="Center"
+                                                     cal:Message.Attach="[Event Click]=[Action AutoClick($dataContext, $eventArgs)];[Event TouchEnter]=[Action AutoClick($dataContext, $eventArgs)]"
+                                                     Background="Transparent"
+                                                     Content="{Binding AutoClickText}"
+                                                     Padding="6,2,10,2" />
+                                    <Canvas Width="5"
+                                            Height="30"
+                                            Margin="0,10,0,0"
+                                            VerticalAlignment="Top">
+                                        <Path Data="M 0,0 L 5,10 0,20"
+                                              Stroke="White"
+                                              StrokeThickness="3" />
+                                    </Canvas>
+                                </StackPanel>
+                            </Border>
                         </Grid>
                     </Border>
                 </DataTemplate>
             </ItemsControl.Resources>
         </ItemsControl>
 
-        <Grid x:Name="bFreeText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <Grid x:Name="bFreeText"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch" />
     </Grid>
 
 </UserControl>
