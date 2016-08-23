@@ -329,8 +329,17 @@ namespace csCommon
                 }
                 catch (SystemException e)
                 {
-                    Console.WriteLine("Error loading module {0}, {1}", pluginDllFile, e.Message);
-                    throw;
+                    Logging.LogCs.LogException(string.Format("Failed to load plugin {0} ({1}).", pluginDllFile, e.Message), e);
+                    MessageBox.Show(string.Format("Failed to load plugin {0}.", pluginDllFile), "Load failure");
+                    if (e is System.Reflection.ReflectionTypeLoadException)
+                    {
+                        var typeLoadException = e as ReflectionTypeLoadException;
+                        var loaderExceptions = typeLoadException.LoaderExceptions;
+                        foreach(var missing in loaderExceptions)
+                        {
+                            Logging.LogCs.LogMessage("*) Loader exception: " + missing.Message);
+                        }
+                    }
                 }
             }
 
