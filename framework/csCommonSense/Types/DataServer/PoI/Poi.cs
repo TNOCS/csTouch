@@ -1,4 +1,5 @@
-﻿using csCommon.Utils.Collections;
+﻿using csCommon.Types.Geometries.AdvancedGeometry;
+using csCommon.Utils.Collections;
 using csEvents.Sensors;
 using ProtoBuf;
 using System;
@@ -291,5 +292,9 @@ namespace DataServer
 
 
         public bool OpenOnAdd;
+
+
+        [XmlIgnore]
+        public IDrawAdvancedGeometry DrawAdvancedGeometry { get; set; }
     }
 }

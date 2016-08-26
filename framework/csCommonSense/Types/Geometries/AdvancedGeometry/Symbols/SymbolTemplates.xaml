@@ -42,18 +42,18 @@
         -->
         <Canvas>
             <Path	x:Name="Element"
-                Stroke="{Binding Attributes[PoI].AdvancedLineStroke}"
+                Stroke="{Binding Attributes[PoI].DrawAdvancedGeometry.AdvancedLineStroke}"
                    
-                Fill="{Binding Attributes[PoI].AdvancedFillStroke}"
-                StrokeThickness="{Binding Attributes[PoI].AdvancedLineStrokeWidth}"
+                Fill="{Binding Attributes[PoI].DrawAdvancedGeometry.AdvancedFillStroke}"
+                StrokeThickness="{Binding Attributes[PoI].DrawAdvancedGeometry.AdvancedLineStrokeWidth}"
                 StrokeDashCap="Round"
                 StrokeStartLineCap="Round"
                 StrokeLineJoin="Round"
                 StrokeEndLineCap="{Binding Symbol.EndLineCap}"
                 StrokeDashOffset="{Binding Symbol.DashOffset}"
-                advancedGeometry:GeometryTransformerService.AttachedGeometryTransformer="{Binding Attributes[PoI].AdvancedLineGeometryTransformer}"
+                advancedGeometry:GeometryTransformerService.AttachedGeometryTransformer="{Binding Attributes[PoI].DrawAdvancedGeometry.AdvancedLineGeometryTransformer}"
                     
-                StrokeDashArray="{Binding Path=Attributes[PoI].AdvancedLineDash, Converter={StaticResource doubleCollectionCloner}}">
+                StrokeDashArray="{Binding Path=Attributes[PoI].DrawAdvancedGeometry.AdvancedLineDash, Converter={StaticResource doubleCollectionCloner}}">
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup x:Name="SelectionStates">
                         <VisualState x:Name="Unselected"/>
