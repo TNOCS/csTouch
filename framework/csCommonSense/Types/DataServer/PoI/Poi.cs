@@ -14,7 +14,8 @@ namespace DataServer
 {
     [ProtoContract]
     [DebuggerDisplay("PoI {Name}, Id={Id}, Type={PoiTypeId}, Category={NEffectiveStyle.Category}")]
-    public class PoI : BaseContent
+    public sealed class PoI : BaseContent
+    // class is sealed because inheritance is not support by IMB bus (inheritance model must be defined in protobuf) ; See RuntimeTypeModel in DataServerBase
     {
         private bool enabled = true;
         private bool isSelected;
