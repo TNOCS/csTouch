@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -26,7 +27,7 @@ namespace csShared
         public string Option { get; set; }
     }
 
-    public class NotificationEventArgs : EventArgs
+    public class NotificationEventArgs : EventArgs, INotifyPropertyChanged
     {
         /// <summary>
         /// Pass data to the notification event.
@@ -44,6 +45,35 @@ namespace csShared
         public Uri SoundUri { get; set; }
 
         public bool ShowImage { get { return string.IsNullOrEmpty(PathData); } }
+
+        #region AutoClick behaviour
+
+        private const int DefaultImageSize = 40;
+        public double ImageWidth { get; set; } = DefaultImageSize;
+        public double ImageHeight { get; set; } = DefaultImageSize;
+        public double MinHeight { get { return ImageHeight < DefaultImageSize ? 0 : ImageHeight - 20; } }
+
+        public double AutoClickInSeconds { get; set; }
+        public string AutoClickTemplate { get; set; }
+        public string AutoClickText {
+            get { return string.Format(AutoClickTemplate, AutoClickInSeconds); }
+        }
+        public void AutoClickUpdate()
+        {
+            OnPropertyChanged("AutoClickText");
+        }
+
+        public bool ShowAutoClickOption { get { return !string.IsNullOrEmpty(AutoClickTemplate) && AutoClickInSeconds > 0 ? true : false; } }
+
+        #endregion
+
+        public event EventHandler Starting;
+
+        public void OnStarting()
+        {
+            var handler = Starting;
+            if (handler != null) handler(this, Empty);
+        }
 
         public event EventHandler Closing;
 
@@ -188,7 +218,14 @@ namespace csShared
         public BindableCollection<NotificationOption> WorkingOptions { get; set; }
 
         public event EventHandler<NotificationOptionSelectedEventArgs> OptionClicked;
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        // Create the OnPropertyChanged method to raise the event
+        protected void OnPropertyChanged(string name)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(name));
+        }
         /// <summary>
         /// Raise the option clicked event.
         /// </summary>
@@ -196,6 +233,7 @@ namespace csShared
         /// <param name="usesTouch">Touch is used to trigger the event.</param>
         public void TriggerOptionClicked(string option, bool usesTouch)
         {
+            if (AutoClickInSeconds > 0) AutoClickInSeconds = int.MinValue;
             var handler = OptionClicked;
             if (handler != null) handler(this, new NotificationOptionSelectedEventArgs { Option = option, UsesTouch = usesTouch });
         }

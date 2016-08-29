@@ -638,6 +638,7 @@
     <Compile Include="Types\Geometries\AdvancedGeometry\GeometryTransformers\SmoothBezierTransformer.cs" />
     <Compile Include="Types\Geometries\AdvancedGeometry\GeometryTransformers\SquarePatternTransformer.cs" />
     <Compile Include="Types\Geometries\AdvancedGeometry\GeometryTransformers\TrianglePatternTransformer.cs" />
+    <Compile Include="Types\Geometries\AdvancedGeometry\IDrawAdvancedGeometry.cs" />
     <Compile Include="Types\Geometries\AdvancedGeometry\IGeometryTransformer.cs" />
     <Compile Include="Types\Geometries\AdvancedGeometry\Symbols\ExtendedLineSymbol.cs" />
     <Compile Include="Types\Geometries\Geometries.cs" />

@@ -15,8 +15,6 @@ namespace csCommon
     using System.ComponentModel.Composition;
     using System.Windows.Threading;
 
-    
-
     [Export(typeof(IPluginScreen))]
     public class NotificationViewModel : Screen, IPluginScreen
     {
@@ -44,7 +42,6 @@ namespace csCommon
              me.Open(u);
              me.Play();
         }
-         
 
         protected override void OnViewLoaded(object view)
         {
@@ -94,6 +91,25 @@ namespace csCommon
             Notifications.Remove(s);
         }
 
+        public void AutoClick(NotificationEventArgs o, object eventArgs)
+        {
+            if (o == null) return;
+            var usesTouch = false;
+            var touchEvent = eventArgs as TouchEventArgs;
+            if (touchEvent != null)
+            {
+                usesTouch = true;
+                touchEvent.Handled = true;
+            }
+            else
+            {
+                var routedEvent = eventArgs as RoutedEventArgs;
+                if (routedEvent != null) routedEvent.Handled = true;
+            }
+            o.TriggerOptionClicked(o.AutoClickText, usesTouch);
+            Remove(o);
+        }
+
         public void OptionClick(NotificationOption o, object eventArgs)
         {
             if (o == null) return;
@@ -115,7 +131,24 @@ namespace csCommon
 
         void AppStateNewNotification(NotificationEventArgs e)
         {
-            Notification = e;            
+            Notification = e;
+            e.OnStarting();          
+            if (e.AutoClickInSeconds > 0)
+            {
+                e.Duration = TimeSpan.FromSeconds(e.AutoClickInSeconds + 1);
+
+                var _timer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, (sender, args) =>
+                {
+                    e.AutoClickInSeconds--;
+                    e.AutoClickUpdate();
+                    if (e.AutoClickInSeconds > 0) return;
+                    var timer = sender as DispatcherTimer;
+                    timer.Stop();
+                    if (e.AutoClickInSeconds > int.MinValue) e.TriggerOptionClicked(e.AutoClickText, false);
+                }, Application.Current.Dispatcher);
+
+                _timer.Start();
+            }
             switch (e.Style)
             {
                 case NotificationStyle.Popup:
@@ -163,6 +196,10 @@ namespace csCommon
             }
         }
 
+        /// <summary>
+        /// Add a notification popup (title, text and options)
+        /// </summary>
+        /// <param name="e"></param>
         private void AddPopup(NotificationEventArgs e)
         {
             Notifications.Add(e);
@@ -179,7 +216,7 @@ namespace csCommon
             if (!e.Options.Any()) return;
             e.WorkingOptions = new BindableCollection<NotificationOption>();
             foreach (var a in e.Options)
-                e.WorkingOptions.Add(new NotificationOption {Notification = e, Option = a});
+                e.WorkingOptions.Add(new NotificationOption { Notification = e, Option = a });
         }
 
         public string Name
