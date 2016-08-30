@@ -72,8 +72,8 @@ namespace csShared
             {
                 if (!pConfigFile.Exists)
                 {
-                    MessageBox.Show(String.Format("Excel configuration file {0} not found, cannot apply configuration", pConfigFile.FullName));
                     LogCs.LogError(String.Format("Excel configuration file {0} not found, cannot apply configuration", pConfigFile.FullName));
+                    Application.Current.Shutdown();
                     return;
                 }
                 using (var fs = new FileStream(pConfigFile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -96,8 +96,8 @@ namespace csShared
                     }
                     if (!configNames.Contains(pConfigName))
                     {
-                        MessageBox.Show(string.Format("Configuration '{0}' not found in excel sheet '{1}'; cannot apply config", pConfigName, pConfigFile.FullName));
                         LogCs.LogError(string.Format("Configuration '{0}' not found in excel sheet '{1}'; cannot apply config", pConfigName, pConfigFile.FullName));
+                        Application.Current.Shutdown();
                         return;
                     }
                     char column = (char)((byte)'B' + (byte)configNames.FindIndex(x => String.Equals(x, pConfigName)));
