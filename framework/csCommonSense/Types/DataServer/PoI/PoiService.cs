@@ -66,6 +66,7 @@ namespace DataServer
 
         public event EventHandler<TappedEventArgs> Tapped;
         public event EventHandler<PoI> PoiLongTapped;
+        public event EventHandler<PoI> PoiRightClicked;
 
         public PoiService()
         {
@@ -1185,7 +1186,7 @@ namespace DataServer
                 {
                     var p = bc as PoI;
                     if (p == null) continue;
-                    if (p.Style != null && p.Style.Icon != null) store.QueueBytes(p.Style.Icon);
+                    if (p.Style?.Icon != null) store.QueueBytes(p.Style.Icon);
                 }
             }
             store.GetQueue();
@@ -1335,7 +1336,7 @@ namespace DataServer
                         if (contentInExtent == SearchContent)
                             SearchContent = null;
                         var remove = contentInExtent
-                            .Where(p => !p.IsVisibleInExtent(Extent))
+                            .Where(p => !PoIs.Contains(p) || !p.IsVisibleInExtent(Extent))
                             .ToArray();
                         var add = PoIs
                             .Where(p => !contentInExtent.Contains(p) && (p.IsVisibleInExtent(Extent)))
@@ -1919,6 +1920,12 @@ namespace DataServer
         public void RaisePoiLongTapped(PoI pPoI)
         {
             var handler = PoiLongTapped;
+            if (handler != null) handler(this, pPoI);
+        }
+
+        public void RaisePoiRightClicked(PoI pPoI)
+        {
+            var handler = PoiRightClicked;
             if (handler != null) handler(this, pPoI);
         }
     }

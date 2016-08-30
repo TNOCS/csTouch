@@ -208,6 +208,17 @@ namespace DataServer
         public List<MetaInfo> MetaInfo { get; set; }
 
         public BaseContent PoiType { get; set; } // See method LookupPropertyPoiTypeInPoITypes()
+        
+        [XmlIgnore]
+        public BaseContent PoiTypeWithLookup // Use PoiTypeId to lookup PoiType 
+        {
+            get
+            {
+                LookupPropertyPoiTypeInPoITypes();
+                return PoiType;
+            }
+        }
+        
 
         [XmlIgnore]
         public PoIStyle NAnalysisStyle { get; set; }
@@ -261,7 +272,7 @@ namespace DataServer
         /// <summary>
         /// Look up PoiTypeId in the Service.PoITypes (if found, property PoiType is set)
         /// </summary>
-        private void LookupPropertyPoiTypeInPoITypes()
+        internal void LookupPropertyPoiTypeInPoITypes()
         {
             if ((Service is PoiService /* Need service to lookup PoIType */) && 
                 (!String.IsNullOrEmpty(PoiTypeId) /* Need PoIType id to lookup*/ ))

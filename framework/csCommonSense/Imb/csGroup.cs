@@ -193,7 +193,10 @@ namespace csImb
 
         void MapControl_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            TriggerGeoPointer(e.GetPosition(AppState.ViewDef.MapControl));
+            if (AppState.Config.GetBool("CommonSenseFramework.GeoPointerInGroupIsEnabled", true))
+            {
+                TriggerGeoPointer(e.GetPosition(AppState.ViewDef.MapControl));
+            }
         }
 
         void MapControl_PreviewTouchDown(object sender, TouchEventArgs e)

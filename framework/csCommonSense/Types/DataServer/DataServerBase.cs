@@ -666,7 +666,7 @@ namespace DataServer {
                         pm.Id, pm.Action));
                 return;
             }
-
+            var reqClient = AppState.Imb.FindClient(pm.Sender);
             switch (pm.Action) {
                 case PrivateMessageActions.RequestData:
                     SendData(pm.Sender, s, pm.ContentId, pm.OwnerId, pm.Channel);
@@ -680,7 +680,7 @@ namespace DataServer {
                     //s.IsInitialized = false;
                     if (!s.Subscribers.Contains(pm.Sender)) s.Subscribers.Add(pm.Sender);
                     SendToImbBusSubscriptedToService(s.Id, pm.Sender);
-                    var reqClient = AppState.Imb.FindClient(pm.Sender);
+                    
                     LogCs.LogMessage(String.Format("Received IMB message: IMB client with handle {0} ({1}) requested to join service '{2}' (joined service).",
                         pm.Sender, (reqClient != null) ? reqClient.Name : "-", s.Name));
                     if (reqClient != null && (AppState.Imb.ActiveGroup == null || !AppState.Imb.ActiveGroup.Clients.Contains(reqClient.Id)))
@@ -744,6 +744,8 @@ namespace DataServer {
                         var l = count;
                         s.TriggerInitialized();
                     }
+                    LogCs.LogMessage(String.Format("Received IMB message: IMB client with handle {0} ({1}) ordered to reset content '{2}' of service '{3}'.",  
+                        pm.Sender, (reqClient != null) ? reqClient.Name : "-", pm.Channel, s.Id));
                     break;
                 case PrivateMessageActions.SendData:
                     var f = s.Folder + @"\_Media\" + pm.ContentId;
@@ -808,6 +810,15 @@ namespace DataServer {
                     if (cl == s.AllContent.First()) pm.ContentId = "First";
                     if (cl == s.AllContent.Last()) pm.ContentId = "Last";
                     client.Imb.SignalBuffer(channel, 0, pm.ConvertToStream().ToArray());
+
+                    LogImbService.LogMessage(string.Format("Send to IMB channel '{0}' action ListReset for content '{1}', content is: ", channel,cl.Id));
+                    var count = 1;
+                    foreach(var x in st)
+                    {
+                        LogImbService.LogMessage(string.Format("{0}.) {1} ", channel, x.ToString()));
+                        count++;
+                        
+                    }
                 }
                 catch (Exception ex)
                 {

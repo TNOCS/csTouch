@@ -65,12 +65,23 @@ namespace csCommon.Logging
         /// <param name="pEx">
         /// The p ex.
         /// </param>
-        internal static void LogException(string pMessage, Exception pEx,
+        internal static void LogException(Service pService, string pMessage, Exception pEx,
             [CallerMemberName] string memberName = null, [CallerFilePath] string filePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             if (mLog.IsErrorEnabled)
             {
-                mLog.Error(pMessage ?? "-", pEx);
+                mLog.Error(string.Format("Service '{0}'({1}); {2}", pService.Name, pService.Id, pMessage ?? " - "), pEx);
+            }
+
+            Debug.Assert(false, (pEx != null) ? pEx.Message : pMessage);
+        }
+
+        internal static void LogException(string pMessage, Exception pEx,
+    [CallerMemberName] string memberName = null, [CallerFilePath] string filePath = null, [CallerLineNumber] int lineNumber = 0)
+        {
+            if (mLog.IsErrorEnabled)
+            {
+                mLog.Error(string.Format("{2}",  pMessage ?? " - "), pEx);
             }
 
             Debug.Assert(false, (pEx != null) ? pEx.Message : pMessage);
@@ -90,6 +101,13 @@ namespace csCommon.Logging
             }
         }
 
+        internal static void LogMessage(string pMessage, [CallerMemberName] string memberName = null, [CallerFilePath] string filePath = null, [CallerLineNumber] int lineNumber = 0)
+        {
+            if (mLog.IsInfoEnabled)
+            {
+                mLog.Info(String.Format("{2}", pMessage ?? "-"));
+            }
+        }
         /// <summary>
         /// The log message.
         /// </summary>

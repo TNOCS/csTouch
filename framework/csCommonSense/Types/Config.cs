@@ -1,4 +1,7 @@
 ﻿using Caliburn.Micro;
+using ClosedXML.Excel;
+using csCommon;
+using csCommon.Logging;
 using csShared.Utils;
 using System;
 using System.Collections.Generic;
@@ -7,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows;
 using System.Windows.Media;
 using System.Xml.Linq;
 
@@ -62,7 +66,68 @@ namespace csShared
             foreach (var a in localValues) values[a.Key] = a.Value;
         }
 
-        private Dictionary<string, string> ParseValues(string e)
+        private void OverrideVariablesFromExcelSheet(FileInfo pConfigFile, string pConfigName)
+        {
+            try
+            {
+                if (!pConfigFile.Exists)
+                {
+                    LogCs.LogError(String.Format("Excel configuration file {0} not found, cannot apply configuration", pConfigFile.FullName));
+                    Application.Current.Shutdown();
+                    return;
+                }
+                using (var fs = new FileStream(pConfigFile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    var workbook = new XLWorkbook(fs);
+                    var worksheet = workbook.Worksheets.FirstOrDefault();
+                    // Get all configuration names
+                    List<string> configNames = new List<string>();
+                    var configNameFound = true;
+                    var index = (byte)'B';
+                    while (configNameFound)
+                    {
+                        string configName = worksheet.Cell((char)index + "3").Value.ToString();
+                        index++;
+                        if (!String.IsNullOrWhiteSpace(configName))
+                        {
+                            configNames.Add(configName);
+                        }
+                        else configNameFound = false;
+                    }
+                    if (!configNames.Contains(pConfigName))
+                    {
+                        LogCs.LogError(string.Format("Configuration '{0}' not found in excel sheet '{1}'; cannot apply config", pConfigName, pConfigFile.FullName));
+                        Application.Current.Shutdown();
+                        return;
+                    }
+                    char column = (char)((byte)'B' + (byte)configNames.FindIndex(x => String.Equals(x, pConfigName)));
+                    // Apply 
+                    bool foundEmptyRow = false;
+                    int row = 4;
+                    while (!foundEmptyRow)
+                    {
+                        var columnName = worksheet.Cell("A" + row).Value.ToString();
+                        var columnValue = worksheet.Cell(column + row.ToString()).Value.ToString();
+                        if (!String.IsNullOrWhiteSpace(columnName))
+                        {
+                            if (!columnName.StartsWith("#"))
+                            {
+                                LogCs.LogMessage(string.Format("Override config variable '{0}' with '{1}'", columnName, columnValue));
+                                OnlineValues[columnName] = columnValue;
+                            }
+                        }
+                        else foundEmptyRow = true;
+                        row++;
+                    }
+                }
+            } catch (Exception ex)
+            {
+                LogCs.LogException("Failed to apply excel configuration sheet: " + pConfigFile.FullName, ex);
+            }
+        }
+
+
+        private static Dictionary<string, string> ParseValues(string e)
         {
             var result = new Dictionary<string, string>();
             try
@@ -80,6 +145,7 @@ namespace csShared
             {
                 Logger.Log("Config", "Error parsing config string", e, Logger.Level.Error);
             }
+            
             return result;
         }
 
@@ -288,11 +354,27 @@ namespace csShared
 
         #region local config
 
+        private void ApplyExcelConfigSheet()
+        {
+            
+            var options = new ConfigCmdLineOptions();
+            if (CommandLine.Parser.Default.ParseArguments(Environment.GetCommandLineArgs(), options))
+            {
+                if (!String.IsNullOrEmpty(options.ConfigurationFile) &&
+                    !String.IsNullOrEmpty(options.ConfigurationName))
+                {
+                    OverrideVariablesFromExcelSheet(new FileInfo(options.ConfigurationFile /*@"c:\development\ConfigurationV1340.xlsx"*/), options.ConfigurationName);
+                }
+            }
+        }
+
+
         public void LoadOfflineConfig()
         {
             configOnlineString = LoadConfig(false, "configoffline.xml"); // TODO REVIEW (1) Config ONLINE string loads Config OFFLINE; (2) the name of the Config Offline file is specified in App.config, but that specification is ignored here.
             if (!string.IsNullOrEmpty(configOnlineString))
                 OnlineValues = ParseValues(configOnlineString);
+            ApplyExcelConfigSheet();
             if (ConfigLoaded != null) ConfigLoaded(this, null);
             //Logger.Log("Config", "Loaded Offline Config", "", Logger.Level.Info);
         }
