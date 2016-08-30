@@ -1185,7 +1185,7 @@ namespace DataServer
                 {
                     var p = bc as PoI;
                     if (p == null) continue;
-                    if (p.Style != null && p.Style.Icon != null) store.QueueBytes(p.Style.Icon);
+                    if (p.Style?.Icon != null) store.QueueBytes(p.Style.Icon);
                 }
             }
             store.GetQueue();
@@ -1335,7 +1335,7 @@ namespace DataServer
                         if (contentInExtent == SearchContent)
                             SearchContent = null;
                         var remove = contentInExtent
-                            .Where(p => !p.IsVisibleInExtent(Extent))
+                            .Where(p => !PoIs.Contains(p) || !p.IsVisibleInExtent(Extent))
                             .ToArray();
                         var add = PoIs
                             .Where(p => !contentInExtent.Contains(p) && (p.IsVisibleInExtent(Extent)))
