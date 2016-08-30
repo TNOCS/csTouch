@@ -112,6 +112,12 @@
     <Reference Include="Catfood.Shapefile">
       <HintPath>..\..\libs\Catfood.Shapefile.dll</HintPath>
     </Reference>
+    <Reference Include="ClosedXML">
+      <HintPath>..\..\libs\OfficeOpenXml\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="CommandLine">
+      <HintPath>..\..\libs\CommandLine.dll</HintPath>
+    </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\DocumentFormat.OpenXml.dll</HintPath>
@@ -356,6 +362,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonSenseBootstrapper.cs" />
+    <Compile Include="ConfigCmdLineOptions.cs" />
     <Compile Include="Controls\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
     </Compile>
@@ -594,6 +601,7 @@
     <Compile Include="Types\DataServer\DataServiceTemplateImporter.cs" />
     <Compile Include="Types\DataServer\Interfaces\IConvertibleXmlWithSettings.cs" />
     <Compile Include="Types\DataServer\JoinSharedServiceEventArgs.cs" />
+    <Compile Include="Types\DataServer\PoI\DynamicEffectiveStyle.cs" />
     <Compile Include="Types\DataServer\PoI\IO\ExcelExporter.cs" />
     <Compile Include="Types\DataServer\PoI\IO\CsvExporter.cs" />
     <Compile Include="Types\DataServer\PoI\IO\DataServiceIO.cs" />
