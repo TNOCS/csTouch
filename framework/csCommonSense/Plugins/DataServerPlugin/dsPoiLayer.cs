@@ -41,6 +41,17 @@ namespace csDataServerPlugin
         private MarkerSymbol markerSymbol;
         private static readonly MapViewDef mapViewDef = AppStateSettings.Instance.ViewDef;
 
+        private static ResourceDictionary mEsriDictionary;
+
+        static dsPoiLayer()
+        {
+            mEsriDictionary = new ResourceDictionary
+            {
+                Source = new Uri("csCommon;component/Resources/Styles/PDictionary.xaml", UriKind.Relative)
+            };
+
+        }
+
         public dsPoiLayer(IServiceLayer layer)
         {
             parent = layer;
@@ -49,12 +60,7 @@ namespace csDataServerPlugin
         public override void Initialize()
         {
             base.Initialize();
-            var pd = new ResourceDictionary
-            {
-                Source = new Uri("csCommon;component/Resources/Styles/PDictionary.xaml", UriKind.Relative)
-            };
-
-            markerSymbol = pd["ImageSymbol"] as MarkerSymbol;
+            markerSymbol = mEsriDictionary["ImageSymbol"] as MarkerSymbol;
             mapViewDef.MapControl.MapGesture -= MapControlMapGesture;
             mapViewDef.MapControl.MapGesture += MapControlMapGesture;
         }
@@ -281,11 +287,8 @@ namespace csDataServerPlugin
 
         private void CreateFillSymbol(PoI p, Graphic g)
         {
-            var resourceDictionary = new ResourceDictionary
-            {
-                Source = new Uri("csCommon;component/Resources/Styles/PDictionary.xaml", UriKind.Relative)
-            };
-            var fillSymbol = resourceDictionary["TouchFillSymbol"] as FillSymbol;
+            
+            var fillSymbol = mEsriDictionary["TouchFillSymbol"] as FillSymbol;
             g.Symbol = fillSymbol;
             g.Attributes["Fill"] = new SolidColorBrush(p.FillColor) { Opacity = p.NEffectiveStyle.FillOpacity.Value };
             g.Attributes["BorderThickness"] = p.StrokeWidth;
@@ -306,11 +309,7 @@ namespace csDataServerPlugin
         }
         private void CreateLineSymbol(PoI p, Graphic g)
         {
-            var resourceDictionary = new ResourceDictionary
-            {
-                Source = new Uri("csCommon;component/Resources/Styles/PDictionary.xaml", UriKind.Relative)
-            };
-            var lineSymbol = resourceDictionary["TouchLineSymbol"] as LineSymbol;
+            var lineSymbol = mEsriDictionary["TouchLineSymbol"] as LineSymbol;
             g.Symbol = lineSymbol;
             g.Attributes["BorderThickness"] = p.StrokeWidth;
             g.Attributes["BorderBrush"] = new SolidColorBrush(p.StrokeColor) { Opacity = p.NEffectiveStyle.StrokeOpacity.Value };
