@@ -272,7 +272,7 @@ namespace DataServer
         /// <summary>
         /// Look up PoiTypeId in the Service.PoITypes (if found, property PoiType is set)
         /// </summary>
-        private void LookupPropertyPoiTypeInPoITypes()
+        internal void LookupPropertyPoiTypeInPoITypes()
         {
             if ((Service is PoiService /* Need service to lookup PoIType */) && 
                 (!String.IsNullOrEmpty(PoiTypeId) /* Need PoIType id to lookup*/ ))
