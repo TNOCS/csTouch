@@ -176,7 +176,7 @@ namespace DataServer
         public bool IsInitialized
         {
             get { return isInitialized; }
-            set
+            private set
             {
                 if (value == isInitialized) return;
                 isInitialized = value;
@@ -753,6 +753,7 @@ namespace DataServer
                     }
                     catch (Exception e)
                     {
+                        LogImbService.LogException(this, String.Format("Failed to removed content "), e);
                         Logger.Log("Data Service", "Error removing poi", e.Message, Logger.Level.Error);
                     }
                     break;
@@ -789,8 +790,8 @@ namespace DataServer
                                 catch (Exception e)
                                 {
                                     Logger.Log("DataServer.Service", "serviceChannel_OnBuffer error 1 (unable to add new content)", e.Message, Logger.Level.Error, true);
-                                    LogImbService.LogException(String.Format("Process IMB Message: In service '{0}'({1}) unable to add new content '{0}' of type '{1}' to contentlist '{2}'",
-                                         Name, Id, cm.Id, cm.ContentType, cm.ContentList), e);
+                                    LogImbService.LogException(this, String.Format("Unable to add new content '{0}' of type '{1}' to contentlist '{2}'",
+                                          cm.Id, cm.ContentType, cm.ContentList), e);
                                     throw;
                                 }
                                 finally
@@ -847,8 +848,8 @@ namespace DataServer
                                 catch (Exception e)
                                 {
                                     Logger.Log("DataServer.Service", "serviceChannel_OnBuffer error 2", e.Message, Logger.Level.Error, true);
-                                    LogImbService.LogException(String.Format("Process IMB Message: In service '{0}'({1}) unable to add exsisting content '{0}' of type '{1}' to contentlist '{2}'",
-                                        Name, Id, cm.Id, cm.ContentType, cm.ContentList), e);
+                                    LogImbService.LogException(this, String.Format("Unable to add exsisting content '{0}' of type '{1}' to contentlist '{2}'",
+                                        cm.Id, cm.ContentType, cm.ContentList), e);
                                     throw;
                                 }
                                 finally
@@ -861,8 +862,7 @@ namespace DataServer
                     catch (Exception e)
                     {
                         Logger.Log("DataService", "Error updating content object", e.Message, Logger.Level.Error);
-                        LogImbService.LogException(String.Format("Process IMB Message: In service '{0}'({1}) unable to add/update content.",
-                             Name, Id, cm.Id), e);
+                        LogImbService.LogException(this, String.Format("Unable to add/update content {0}.", cm.Id), e);
                     }
                     break;
             }
@@ -1184,14 +1184,27 @@ namespace DataServer
                 {
                     c = CreateContentList(channel, typeof(IContent));
                     AllContent.Add(c);
+                    LogImbService.LogMessage(this, String.Format("Created contentlist for channel '{0}' and added to service.", channel));
                 }
                 c.Clear();
+                
                 foreach (var cli in cl)
                 {
                     //cli.IsNotifying = false;
                     cli.Service = this;
                     c.Add(cli);
                 }
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine(String.Format("\nReceived on IMB the contentlist '{0}' (reset list), new content is:", channel));
+                
+                int count = 1;
+                foreach(var cli in cl)
+                {
+                    sb.AppendLine(String.Format("{0}.) Content '{1}'({2})\n{3}", count, cli.Name ?? "", cli.Id, cli.ToXml().ToString()));
+                    count++;
+                }
+                LogImbService.LogMessage(this, sb.ToString());
             }
         }
 

@@ -21,10 +21,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Action          = System.Action;
+using Action = System.Action;
 using PointCollection = ESRI.ArcGIS.Client.Geometry.PointCollection;
-using Polygon         = ESRI.ArcGIS.Client.Geometry.Polygon;
-using Task            = System.Threading.Tasks.Task;
+using Polygon = ESRI.ArcGIS.Client.Geometry.Polygon;
+using Task = System.Threading.Tasks.Task;
+using csCommon.Logging;
 
 namespace csDataServerPlugin
 {
@@ -620,6 +621,7 @@ namespace csDataServerPlugin
             }
             catch (Exception e)
             {
+                LogCs.LogException("dsStaticLayer.AddPoi: Exception adding poi icon on map (causes strange behaviour of poi icon (missing eventhandler etc.)) ", e);
                 Logger.Log("dsStaticLayer.AddPoi", "Error adding graphic", e.Message, Logger.Level.Error);
             }
         }

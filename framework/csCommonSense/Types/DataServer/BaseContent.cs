@@ -208,6 +208,17 @@ namespace DataServer
         public List<MetaInfo> MetaInfo { get; set; }
 
         public BaseContent PoiType { get; set; } // See method LookupPropertyPoiTypeInPoITypes()
+        
+        [XmlIgnore]
+        public BaseContent PoiTypeWithLookup // Use PoiTypeId to lookup PoiType 
+        {
+            get
+            {
+                LookupPropertyPoiTypeInPoITypes();
+                return PoiType;
+            }
+        }
+        
 
         [XmlIgnore]
         public PoIStyle NAnalysisStyle { get; set; }
