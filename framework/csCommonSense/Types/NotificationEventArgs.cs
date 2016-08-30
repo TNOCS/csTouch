@@ -56,7 +56,7 @@ namespace csShared
         public double AutoClickInSeconds { get; set; }
         public string AutoClickTemplate { get; set; }
         public string AutoClickText {
-            get { return string.Format(AutoClickTemplate, AutoClickInSeconds); }
+            get { return string.Format(AutoClickTemplate ?? "{0}", AutoClickInSeconds); }
         }
         public void AutoClickUpdate()
         {
