@@ -430,5 +430,11 @@ namespace csDataServerPlugin
         {
             if ((PoI != null) && (PoI.Service is PoiService)) (PoI.Service as PoiService).RaisePoiLongTapped(PoI);
         }
+
+        private void BCircleIconRightClicked(object sender, EventArgs e)
+        {
+            if ((PoI != null) && (PoI.Service is PoiService)) (PoI.Service as PoiService).RaisePoiRightClicked(PoI);
+        }
+
     }
 }

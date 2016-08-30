@@ -45,6 +45,7 @@ namespace csCommon.csMapCustomControls.MapIconMenu
         public event IconMovedEventHandler IconMoved;
         public event IconTapedEventHandler IconTapped;
         public event EventHandler          IconLongTapped;
+        public event EventHandler          IconRightClicked;
         public event IconMovedEventHandler IconReleased;
         public event IconMovedEventHandler IconStartMoving;
         public event IconMovedEventHandler IconMoveCompleted;
@@ -357,6 +358,7 @@ namespace csCommon.csMapCustomControls.MapIconMenu
                 _mCenterButton.PreviewMouseMove += MCenterButtonPreviewMouseMove;
                 _mCenterButton.MouseEnter += MCenterButtonMouseEnter;
                 _mCenterButton.LostMouseCapture += MCenterButtonLostMouseCapture;
+                _mCenterButton.PreviewMouseRightButtonUp += MCenterButtonPreviewRightButtonUp;
 
                 _mCenterButton.PreviewTouchDown += MCenterButtonPreviewTouchDown;
                 _mCenterButton.LostTouchCapture += MCenterButtonLostTouchCapture;
@@ -519,22 +521,35 @@ namespace csCommon.csMapCustomControls.MapIconMenu
 
         private void MCenterButtonPreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            SetLastTouch();
-            //e.Handled = false;
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                SetLastTouch();
+                //e.Handled = false;
+            }
+
+        }
+
+        private void MCenterButtonPreviewRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            StopLongTappedTimer();
+            FireRightMouseUpEvent();
         }
 
         private void MCenterButtonPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            FireIconTouchedEvent();
-            //if (_mm != null && _mm.MenuEnabled && !isTouch)
-            if (!isTouch)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                SetLastTouch();
-                MapMenuCommands.Expand.Execute(null, this);
-                mouseTime = DateTime.Now;
-                _mCenterButton.CaptureMouse();
+                FireIconTouchedEvent();
+                //if (_mm != null && _mm.MenuEnabled && !isTouch)
+                if (!isTouch)
+                {
+                    SetLastTouch();
+                    MapMenuCommands.Expand.Execute(null, this);
+                    mouseTime = DateTime.Now;
+                    _mCenterButton.CaptureMouse();
+                }
+                e.Handled = true;
             }
-            e.Handled = true;
         }
 
         private void mPanel_ChildArranged(object sender, UIElement child, double angle)
@@ -733,7 +748,14 @@ namespace csCommon.csMapCustomControls.MapIconMenu
             var handler = IconLongTapped;
             if (handler != null) handler(this, EventArgs.Empty);
         }
-#endregion
+
+        private void FireRightMouseUpEvent()
+        {
+            var handler = IconRightClicked;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        #endregion
 
         /// <summary>
         /// The icon is clicked (mouse or touch) set timer to wait for x msec (while icon still touched); then fire event
