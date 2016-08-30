@@ -790,7 +790,7 @@ namespace DataServer {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="serviceId"></param>
-        private void SendServiceReset(int sender, Guid serviceId, int priority)
+        private void SendServiceReset(int sender /* IMB client handle */, Guid serviceId, int priority)
         {
 
             var s = Services.FirstOrDefault(k => k.Id == serviceId);
@@ -810,15 +810,18 @@ namespace DataServer {
                     if (cl == s.AllContent.First()) pm.ContentId = "First";
                     if (cl == s.AllContent.Last()) pm.ContentId = "Last";
                     client.Imb.SignalBuffer(channel, 0, pm.ConvertToStream().ToArray());
-
-                    LogImbService.LogMessage(string.Format("Send to IMB channel '{0}' action ListReset for content '{1}', content is: ", channel,cl.Id));
+                    // Loggging:
+                    var sb = new StringBuilder();
+                    sb.AppendLine(string.Format("Send to IMB channel '{0}' action ListReset for content '{1}' (ContentId={2},From IMB client handle {3}) for service '{4}', content is: {5}", 
+                        channel,cl.Id, pm.ContentId, client.Id, serviceId, Environment.NewLine));
                     var count = 1;
                     foreach(var x in st)
                     {
-                        LogImbService.LogMessage(string.Format("{0}.) {1} ", channel, x.ToString()));
+                        sb.AppendLine(string.Format("{0}.) {1} ", count, x.ToString()));
                         count++;
                         
                     }
+                    LogImbService.LogMessage(sb.ToString());
                 }
                 catch (Exception ex)
                 {

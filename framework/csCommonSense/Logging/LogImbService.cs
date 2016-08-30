@@ -81,7 +81,7 @@ namespace csCommon.Logging
         {
             if (mLog.IsErrorEnabled)
             {
-                mLog.Error(string.Format("{2}",  pMessage ?? " - "), pEx);
+                mLog.Error(string.Format("{0}",  pMessage ?? " - "), pEx);
             }
 
             Debug.Assert(false, (pEx != null) ? pEx.Message : pMessage);
@@ -105,7 +105,7 @@ namespace csCommon.Logging
         {
             if (mLog.IsInfoEnabled)
             {
-                mLog.Info(String.Format("{2}", pMessage ?? "-"));
+                mLog.Info(String.Format("{0}", pMessage ?? "-"));
             }
         }
         /// <summary>
