@@ -88,9 +88,10 @@ namespace csStreamingVideoPlugin
 
         public void Init()
         {
+            
             string fullPath = System.Reflection.Assembly.GetAssembly(typeof(StreamingVideoPlugin)).Location;
             string directory = Path.GetDirectoryName(fullPath);
-            videoStreams = VideoStreams.Load(new FileInfo(Path.Combine(directory, "streamingvideo.xml")));
+            videoStreams = VideoStreams.Load(new FileInfo(Path.Combine(directory, AppStateSettings.Instance.Config.Get("StreamingVideo.ConfigFile", "streamingvideo.xml"))));
             streamingVideoVM = new AvaliableVideoStreamsViewModel(this);
         }
 
