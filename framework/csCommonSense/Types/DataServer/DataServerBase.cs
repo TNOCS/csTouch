@@ -679,10 +679,11 @@ namespace DataServer {
                     // TODO EV Why do you set server initialization to false? When adding a task, it is not synchronized anymore (RegisterContent is cancelled).
                     //s.IsInitialized = false;
                     if (!s.Subscribers.Contains(pm.Sender)) s.Subscribers.Add(pm.Sender);
+                    LogImbService.LogMessage(String.Format("Received IMB message: IMB client with handle {0} ({1}) requested to subscribe (join) service '{2}' ({3}) (add to service).",
+                          pm.Sender, (reqClient != null) ? reqClient.Name : "-", s.Name, pm.Id));
                     SendToImbBusSubscriptedToService(s.Id, pm.Sender);
-                    
-                    LogCs.LogMessage(String.Format("Received IMB message: IMB client with handle {0} ({1}) requested to join service '{2}' (joined service).",
-                        pm.Sender, (reqClient != null) ? reqClient.Name : "-", s.Name));
+                    LogImbService.LogMessage(String.Format("IMB handles subscribed (joined) to service {0}: {1}", s.Name, s.SubscribedImbClientHandles));
+
                     if (reqClient != null && (AppState.Imb.ActiveGroup == null || !AppState.Imb.ActiveGroup.Clients.Contains(reqClient.Id)))
                         Execute.OnUIThread(
                             () => AppState.TriggerNotification(reqClient.Name + " has joined " + s.Name, image: reqClient.Image));
@@ -693,7 +694,9 @@ namespace DataServer {
                     SendPrivateMessage(pm.Sender, PrivateMessageActions.Unsubscribe, s.Id);
                     var unsubClient = AppState.Imb.FindClient(pm.Sender);
                     if (unsubClient != null) Execute.OnUIThread(() => AppState.TriggerNotification(unsubClient.Name + " has left " + s.Name, image: unsubClient.Image));
-
+                    LogImbService.LogMessage(String.Format("Received IMB message: IMB client with handle {0} ({1}) requested to unsubscribe (unjoin) to service '{2}' ({3}) (joined service).",
+      pm.Sender, (reqClient != null) ? reqClient.Name : "-", s.Name, pm.Id));
+                    LogImbService.LogMessage(String.Format("IMB handles subscribed (joined) to service {0}: {1}", s.Name, s.SubscribedImbClientHandles));
                     break;
                 case PrivateMessageActions.ServiceReset: // requested for service reset
                     int priority = 2;
@@ -707,14 +710,14 @@ namespace DataServer {
                     SendPrivateMessage(pm.Sender, PrivateMessageActions.ResponseXml, s.Id, res, Guid.Empty);
                     break;
                 case PrivateMessageActions.ResponseXml:
-                    LogCs.LogMessage(String.Format("Received IMB message: Recieved service XML definition for service {0} ({1}), Load XML into service.",
+                    LogImbService.LogMessage(String.Format("Received IMB message: Recieved service XML definition for service {0} ({1}), Load XML into service.",
                          s.Name, s.Id));
-                    LogCs.ToFile(String.Format("./logging/ReceivedServiceDefinition_{0}_{1}_{2}", s.Name, s.Id, DateTime.Now.Ticks), pm.ContentId);
+                    LogImbService.ToFile(String.Format("./logging/ReceivedServiceDefinition_{0}_{1}_{2}", s.Name, s.Id, DateTime.Now.Ticks), pm.ContentId);
                     s.FromXml(pm.ContentId, s.Folder);
                     s.TriggerInitialized();
                     break;
                 case PrivateMessageActions.Subscribe:
-                    LogCs.LogMessage(String.Format("Received IMB message: Subscribe to (join) service {0} ({1}) mode={2}", s.Name, s.Id, mode));
+                    LogImbService.LogMessage(String.Format("Received IMB message: Subscribe request to subscribe to (join) service {0} ({1}) acknowledged (mode={2})", s.Name, s.Id, mode));
                     s.Subscribe(mode);
                     s.SubscribeServiceChannel();
                     //Subscribe(s);
@@ -742,9 +745,10 @@ namespace DataServer {
                     if (pm.ContentId == "Last")
                     {
                         var l = count;
+                        LogImbService.LogMessage(String.Format("Received last content for Service {0}", s.Id);
                         s.TriggerInitialized();
                     }
-                    LogCs.LogMessage(String.Format("Received IMB message: IMB client with handle {0} ({1}) ordered to reset content '{2}' of service '{3}'.",  
+                    LogImbService.LogMessage(String.Format("Received IMB message: IMB client with handle {0} ({1}) ordered to reset content '{2}' of service '{3}'.",  
                         pm.Sender, (reqClient != null) ? reqClient.Name : "-", pm.Channel, s.Id));
                     break;
                 case PrivateMessageActions.SendData:
@@ -792,34 +796,39 @@ namespace DataServer {
         /// <param name="serviceId"></param>
         private void SendServiceReset(int sender /* IMB client handle */, Guid serviceId, int priority)
         {
-
+            
             var s = Services.FirstOrDefault(k => k.Id == serviceId);
             var channel = sender + ServiceChannelExtentions;
-
+            LogImbService.LogMessage(String.Format("Send complete content of service '{0}' to IMB channel '{1}' (action ListReset)", serviceId, channel));
+            int contentNumber = 0;
             foreach (var cl in s.AllContent)
             {
                 try
                 {
+                    contentNumber++;
                     var pm = new PrivateMessage
-                    { Action = PrivateMessageActions.ListReset, Sender = client.Id, Id = serviceId };
-                    var ms = new MemoryStream();
-                    var st = cl.ToList().Where(k => k.Priority <= priority).ToList();
-                    Model.SerializeWithLengthPrefix(ms, st, typeof(List<BaseContent>), PrefixStyle.Base128, 72);
-                    pm.Content = ms.ToArray();
-                    pm.Channel = cl.Id;
-                    if (cl == s.AllContent.First()) pm.ContentId = "First";
-                    if (cl == s.AllContent.Last()) pm.ContentId = "Last";
-                    client.Imb.SignalBuffer(channel, 0, pm.ConvertToStream().ToArray());
-                    // Loggging:
-                    var sb = new StringBuilder();
-                    sb.AppendLine(string.Format("Send to IMB channel '{0}' action ListReset for content '{1}' (ContentId={2},From IMB client handle {3}) for service '{4}', content is: {5}", 
-                        channel,cl.Id, pm.ContentId, client.Id, serviceId, Environment.NewLine));
-                    var count = 1;
-                    foreach(var x in st)
                     {
-                        sb.AppendLine(string.Format("{0}.) {1} ", count, x.ToString()));
-                        count++;
-                        
+                        Action = PrivateMessageActions.ListReset,
+                        Sender = client.Id,
+                        Id = serviceId
+                    };
+                    var sb = new StringBuilder();
+                    using (var ms = new MemoryStream())
+                    {
+                        var st = cl.ToList().Where(k => k.Priority <= priority).ToList();
+                        Model.SerializeWithLengthPrefix(ms, st, typeof(List<BaseContent>), PrefixStyle.Base128, 72);
+                        pm.Content = ms.ToArray();
+                        pm.Channel = cl.Id;
+                        if (cl == s.AllContent.First()) pm.ContentId = "First";
+                        if (cl == s.AllContent.Last()) pm.ContentId = "Last";
+                        client.Imb.SignalBuffer(channel, 0, pm.ConvertToStream().ToArray());
+                        sb.AppendLine(string.Format("{0} {1}.) Content '{2}': ", Environment.NewLine, contentNumber, cl.Id));
+                        var count = 1;
+                        foreach (var x in st)
+                        {
+                            sb.AppendLine(string.Format("{0}.{0}) {1} ", contentNumber, count, x.ToXml().ToString()));
+                            count++;
+                        }
                     }
                     LogImbService.LogMessage(sb.ToString());
                 }
@@ -880,8 +889,13 @@ namespace DataServer {
             {
                 case PrivateMessageActions.Subscribe:
                     var s = Services.FirstOrDefault(k => k.Id == pm.Id);
-                    LogCs.LogMessage(String.Format("Send to IMB channel '{0}': IMB client handle '{1}' subscribed to service '{2}' {3} hosted on IMB handle '{4}' (joined service)",
+                    LogImbService.LogMessage(String.Format("Send to IMB channel '{0}': IMB client handle '{1}' subscribed (joined) to service '{2}' {3} hosted on IMB handle '{4}'",
                           channel, pToImbHandle, pm.Id, s != null ? s.Name : "-", pm.Sender));
+                    break;
+               case PrivateMessageActions.ServiceReset:
+                    var s1 = Services.FirstOrDefault(k => k.Id == pm.Id);
+                    LogImbService.LogMessage(String.Format("Send to IMB channel '{0}': IMB client handle '{1}' request ListReset for service '{2}' {3} hosted on IMB handle '{4}'",
+                         channel, pm.Sender , pm.Id, s1 != null ? s1.Name : "-", pToImbHandle));
                     break;
             }
             client.Imb.SignalBuffer(channel, 0, content);

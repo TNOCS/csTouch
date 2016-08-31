@@ -28,6 +28,7 @@ using csCommon.Utils;
 using csGeoLayers;
 using csCommon.Logging;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace DataServer
 {
@@ -493,6 +494,20 @@ namespace DataServer
         {
             get { return subscribers; }
             set { subscribers = value; }
+        }
+
+        [XmlIgnore]
+        public string SubscribedImbClientHandles
+        {
+            get
+            {
+
+                return String.Join(",", Subscribers.Select(handle =>
+                {
+                    var reqClient = AppStateSettings.Instance.Imb.FindClient(handle);
+                    return reqClient != null ? String.Format("{0} ({1})", reqClient.Name, handle) : string.Format("{0}", handle);
+                }));
+            }
         }
 
         public static bool Dirty { get; set; }
