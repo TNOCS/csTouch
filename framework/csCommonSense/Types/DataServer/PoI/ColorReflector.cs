@@ -28,6 +28,10 @@ namespace DataServer
             return Colors.Black;
         }
 
+        public static Color? ToColorFromHexWithUndefined(string hex)
+        {
+            return string.IsNullOrEmpty(hex) ? (Color? )null : ToColorFromHex(hex);
+        }
 
         public static Color ToColorFromHex(string hex) {
             if (string.IsNullOrEmpty(hex))

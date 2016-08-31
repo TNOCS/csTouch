@@ -154,10 +154,11 @@ namespace DataServer
         {
             get { return FillColor.ToString(); }
             set { 
-                FillColor = string.IsNullOrEmpty(value) ? new Color?() : ColorReflector.ToColorFromHex(value); 
+                FillColor = ColorReflector.ToColorFromHexWithUndefined(value); 
             }
         }
 
+        // FillColor is serialized / deserialized with property Fill
         public Color? FillColor
         {
             get { return fillColor; }
@@ -173,9 +174,10 @@ namespace DataServer
         private string Stroke
         {
             get { return StrokeColor.ToString(); }
-            set { StrokeColor = ColorReflector.ToColorFromHex(value); }
+            set { StrokeColor = ColorReflector.ToColorFromHexWithUndefined(value); }
         }
-        
+
+        // StrokeColor is serialized / deserialized with property Stroke
         public Color? StrokeColor
         {
             get { return strokeColor; }
@@ -221,7 +223,7 @@ namespace DataServer
             get { return CallOutFillColor.ToString(); }
             set
             {
-                if (!string.IsNullOrEmpty(value)) CallOutFillColor = ColorReflector.ToColorFromHex(value);
+                CallOutFillColor = ColorReflector.ToColorFromHexWithUndefined(value);
             }
         }
         
@@ -237,7 +239,7 @@ namespace DataServer
             get { return CallOutForeground.ToString(); }
             set
             {
-                if (!string.IsNullOrEmpty(value)) CallOutForeground = ColorReflector.ToColorFromHex(value);
+                CallOutForeground = ColorReflector.ToColorFromHexWithUndefined(value);
             }
         }
 
