@@ -552,20 +552,8 @@ namespace DataServer
             }
         }
 
-        public bool? Cluster
-        {
-            get { return cluster; }   
-            set
-            {
-                if (cluster == value) return;
-                if (cluster.HasValue && !cluster.Value)
-                {
-                    
-                }
-                cluster = value;
-                NotifyOfPropertyChange(()=>Cluster);
-            }
-        }
+        
+
 
         /// <summary>
         /// When true, scales the PoI so at higher resolutions, the PoI doesn't take so much space.
@@ -625,6 +613,22 @@ namespace DataServer
                 if (maxScale == value) return;
                 maxScale = value;
                 NotifyOfPropertyChange(()=>MaxScale);
+            }
+        }
+
+        [ProtoMember(43)]
+        public bool? Cluster
+        {
+            get { return cluster; }
+            set
+            {
+                if (cluster == value) return;
+                if (cluster.HasValue && !cluster.Value)
+                {
+
+                }
+                cluster = value;
+                NotifyOfPropertyChange(() => Cluster);
             }
         }
 
