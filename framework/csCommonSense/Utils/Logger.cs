@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Media;
 using csEvents;
 using csShared.Controls.Popups.MenuPopup;
+using csCommon.Logging;
 
 namespace csShared.Utils
 {
@@ -187,6 +188,7 @@ namespace csShared.Utils
         /// <param name="showInGUI"></param>
         /// <param name="showInEventLog"></param>
         public static void Log(string source, string message, string content, Level level, bool showInGUI = false, bool showInEventLog = false) {
+            LogCs.LogMessage(message ?? "" + " " + content ?? "");
             if (((int) level) < LogLevel) return;
             var s = string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}", 
                 AppState.Config.UserName, AppState.Config.ApplicationName, level, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture), source, message, content, AppState.Config.UserId, Session);

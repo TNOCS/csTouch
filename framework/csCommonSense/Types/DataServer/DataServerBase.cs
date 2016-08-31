@@ -745,14 +745,16 @@ namespace DataServer {
                     if (pm.ContentId == "Last")
                     {
                         var l = count;
-                        LogImbService.LogMessage(String.Format("Received last content for Service {0}", s.Id);
+                        LogImbService.LogMessage(String.Format("Received last content for Service {0}", s.Id));
                         s.TriggerInitialized();
                     }
                     LogImbService.LogMessage(String.Format("Received IMB message: IMB client with handle {0} ({1}) ordered to reset content '{2}' of service '{3}'.",  
                         pm.Sender, (reqClient != null) ? reqClient.Name : "-", pm.Channel, s.Id));
                     break;
                 case PrivateMessageActions.SendData:
+                    
                     var f = s.Folder + @"\_Media\" + pm.ContentId;
+                    LogImbService.LogMessage(String.Format("IMB Message SendData received; store {0} bytes to location {1}", pm.Content.Length, f));
                     s.store.SaveBytes(f, pm.Content);
                     break;
             }
@@ -799,7 +801,8 @@ namespace DataServer {
             
             var s = Services.FirstOrDefault(k => k.Id == serviceId);
             var channel = sender + ServiceChannelExtentions;
-            LogImbService.LogMessage(String.Format("Send complete content of service '{0}' to IMB channel '{1}' (action ListReset)", serviceId, channel));
+            var sb = new StringBuilder();
+            sb.AppendLine(String.Format("\nSend complete content of service '{0}' to IMB channel '{1}' (action ListReset, {2} IMB messages used)", serviceId, channel, s.AllContent.Count()));
             int contentNumber = 0;
             foreach (var cl in s.AllContent)
             {
@@ -812,7 +815,7 @@ namespace DataServer {
                         Sender = client.Id,
                         Id = serviceId
                     };
-                    var sb = new StringBuilder();
+                   
                     using (var ms = new MemoryStream())
                     {
                         var st = cl.ToList().Where(k => k.Priority <= priority).ToList();
@@ -822,22 +825,23 @@ namespace DataServer {
                         if (cl == s.AllContent.First()) pm.ContentId = "First";
                         if (cl == s.AllContent.Last()) pm.ContentId = "Last";
                         client.Imb.SignalBuffer(channel, 0, pm.ConvertToStream().ToArray());
-                        sb.AppendLine(string.Format("{0} {1}.) Content '{2}': ", Environment.NewLine, contentNumber, cl.Id));
+                        sb.AppendLine(string.Format("{0}.) Content types '{1}': ", contentNumber, cl.Id));
                         var count = 1;
+                        if (st.Count == 0) sb.AppendLine(string.Format("No items"));
                         foreach (var x in st)
                         {
-                            sb.AppendLine(string.Format("{0}.{0}) {1} ", contentNumber, count, x.ToXml().ToString()));
+                            sb.AppendLine(string.Format("{0}.{1})\n{2} ", contentNumber, count, x.ToXml().ToString()));
                             count++;
                         }
                     }
-                    LogImbService.LogMessage(sb.ToString());
+                    
                 }
                 catch (Exception ex)
                 {
                     LogImbService.LogException(string.Format("SendServiceReset failed (broadcast service content on IMB)"), ex);
                 }
             }
-
+            LogImbService.LogMessage(sb.ToString());
         }
 
 
