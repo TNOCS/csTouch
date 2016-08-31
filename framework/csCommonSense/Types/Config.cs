@@ -363,7 +363,7 @@ namespace csShared
                 if (!String.IsNullOrEmpty(options.ConfigurationFile) &&
                     !String.IsNullOrEmpty(options.ConfigurationName))
                 {
-                    OverrideVariablesFromExcelSheet(new FileInfo(options.ConfigurationFile /*@"c:\development\ConfigurationV1340.xlsx"*/), options.ConfigurationName);
+                    OverrideVariablesFromExcelSheet(new FileInfo(options.ConfigurationFile), options.ConfigurationName);
                 }
             }
         }
