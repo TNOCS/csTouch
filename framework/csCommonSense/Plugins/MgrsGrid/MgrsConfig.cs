@@ -28,8 +28,8 @@ namespace csCommon.Plugins.MgrsGrid
 
         public bool IsEnabled
         {
-            get { return AppStateSettings.Instance.Config.GetBool("MGRS.IsEnabled", true); }
-            set { AppStateSettings.Instance.Config.SetLocalConfig("MGRS.IsEnabled", Convert.ToString(value)); }
+            get { return AppStateSettings.Instance.Config.GetBool("MGRS.DrawLayerIsEnabled", true); }
+            set { AppStateSettings.Instance.Config.SetLocalConfig("MGRS.DrawLayerIsEnabled", Convert.ToString(value)); }
         }
 
         
