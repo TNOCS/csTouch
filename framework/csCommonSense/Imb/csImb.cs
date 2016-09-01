@@ -804,10 +804,10 @@ namespace csImb
         public string ImbClientHandleToName(long pImbHandle )
         {
             ImbClientStatus client;
-            if (pImbHandle == Id) return string.Format("SELF ({0})", pImbHandle);
+            if (pImbHandle == Id) return string.Format("'SELF'({0})", pImbHandle);
             return Clients.TryGetValue(pImbHandle, out client)
-                ? string.Format("{0} ({1})", client.Name, pImbHandle)
-                : string.Format("{0}", pImbHandle);
+                ? string.Format("'{0}'({1})", client.Name, pImbHandle)
+                : string.Format("''({0})", pImbHandle);
         }
 
 

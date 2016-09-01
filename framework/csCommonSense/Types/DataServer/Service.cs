@@ -835,7 +835,8 @@ namespace DataServer
 
                                     // Notify label changed:
                                     var sb = new StringBuilder();
-                                    sb.Append("Label changed: ");
+                                    var labelChanged = false;
+                                    sb.AppendLine(String.Format("Label(s) changed: "));
                                     if (obj.Labels != null)
                                     {
                                         var safeList = obj.Labels.ToArray(); // Collection changed in obj.Labels
@@ -846,19 +847,21 @@ namespace DataServer
                                             {
                                                if (currentLabel.Value != oldLabelValue) // label changed
                                                {
-                                                    sb.AppendFormat("'{0}': '{0}'->'{1}';", currentLabel.Key, oldLabelValue, currentLabel.Value);
+                                                    sb.AppendFormat("Label '{0}': '{1}'->'{2}'{3}", currentLabel.Key, oldLabelValue, currentLabel.Value, Environment.NewLine);
                                                     TriggerLabelChangedBySync(obj, currentLabel.Key, oldLabelValue, currentLabel.Value);
+                                                    labelChanged = true;
                                                }
                                             }
                                             else // new label
                                             {
-                                                sb.AppendFormat("'{0}': '<not set>'->'{1}';", currentLabel.Key, currentLabel.Value);
+                                                sb.AppendFormat("Label '{0}': '<not set>'->'{1}'{2}", currentLabel.Key, currentLabel.Value, Environment.NewLine);
                                                 TriggerLabelChangedBySync(obj, currentLabel.Key, null, currentLabel.Value);
+                                                labelChanged = true;
                                             }
                                         }
                                     }
-                                    LogImbService.LogMessage(this, String.Format("Updated COMPLETE content of '{0}' (type={1}). {2}",
-                                        obj.Name ?? "-", cm.ContentType, sb.ToString()));
+                                    LogImbService.LogMessage(this, String.Format("Override content of '{0}' (content type={1}). {4}{2}{4}{3}",
+                                        obj.Name ?? "-", cm.ContentType, labelChanged ? sb.ToString() : "No labels changed", obj.ToXml().ToString(), Environment.NewLine));
                                 }
                                 catch (Exception e)
                                 {
@@ -1211,12 +1214,13 @@ namespace DataServer
                 }
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine(String.Format("\nReceived on IMB the contentlist '{0}' (reset list), new content is:", channel));
+                sb.AppendLine(String.Format("{0}Received on IMB the contentlist '{1}' for service '{2}'({3}) (Action ResetList), the new content is:{0}",
+                    Environment.NewLine, channel, Name, Id));
                 
                 int count = 1;
                 foreach(var cli in cl)
                 {
-                    sb.AppendLine(String.Format("{0}.) Content '{1}'({2})\n{3}", count, cli.Name ?? "", cli.Id, cli.ToXml().ToString()));
+                    sb.AppendLine(String.Format("{1}.) Content '{2}'({3}){0}{4}", Environment.NewLine, count, cli.Name ?? "", cli.Id, cli.ToXml().ToString()));
                     count++;
                 }
                 LogImbService.LogMessage(this, sb.ToString());
