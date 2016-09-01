@@ -583,7 +583,7 @@ namespace csModels.PathEditor
                     CanEdit           = false
                 },
                 Position              = new Position(pos.X, pos.Y),
-                MetaInfo              = new List<MetaInfo>
+                MetaInfo              = new MetaInfoCollection
                 {
                     new MetaInfo { IsEditable = false, Label = "Name", Title = "Name", Type = MetaTypes.text, VisibleInCallOut = true }
                 }

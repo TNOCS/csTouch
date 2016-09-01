@@ -1561,7 +1561,7 @@ namespace DataServer
                     StrokeWidth = strokeWidth,
                     CallOutTimeOut = 10
                 },
-                MetaInfo = new List<MetaInfo>()
+                MetaInfo = new MetaInfoCollection()
             };
 
             if (!string.IsNullOrWhiteSpace(icon))

@@ -524,7 +524,7 @@ namespace DataServer
         private string TextColor
         {
             get { return InnerTextColor.ToString(); }
-            set { InnerTextColor = ColorReflector.ToColorFromHex(value); }
+            set { InnerTextColor = ColorReflector.ToColorFromHexWithUndefined(value); }
         }
 
         private string subTitles;

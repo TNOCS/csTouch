@@ -82,7 +82,7 @@ namespace csModels.Router
                     InnerTextColor    = Colors.Black,
                     CanEdit           = false
                 },
-                MetaInfo              = new List<MetaInfo>
+                MetaInfo              = new MetaInfoCollection
                 {
                     new MetaInfo { IsEditable = false, Label = "Name", Title = "Name", Type = MetaTypes.text, VisibleInCallOut = true }
                 }
@@ -138,7 +138,7 @@ namespace csModels.Router
                     TapMode           = TapMode.CallOutPopup,
                     CanEdit           = false
                 },
-                MetaInfo              = new List<MetaInfo>
+                MetaInfo              = new MetaInfoCollection()
                 {
                     new MetaInfo { IsEditable = false, Label = "Name", Title = "Name", Type = MetaTypes.text, VisibleInCallOut = true }
                 }

@@ -136,14 +136,14 @@ namespace DataServer
         public Dictionary<string, IModelPoiInstance> ModelInstances { get; set; } = new Dictionary<string, IModelPoiInstance>();
 
         [XmlIgnore]
-        public List<MetaInfo> EffectiveMetaInfo
+        public MetaInfoCollection EffectiveMetaInfo
         {
             get
             {
                 if (MetaInfo != null) return MetaInfo;
                 if (PoiType != null && PoiType != this && PoiType.EffectiveMetaInfo != null)
                     return PoiType.EffectiveMetaInfo;
-                return new List<MetaInfo>();
+                return new MetaInfoCollection();
             }
         }
 
@@ -205,7 +205,7 @@ namespace DataServer
         }
 
         [ProtoMember(9, OverwriteList = true)]
-        public List<MetaInfo> MetaInfo { get; set; }
+        public MetaInfoCollection MetaInfo { get; set; }
 
         public BaseContent PoiType { get; set; } // See method LookupPropertyPoiTypeInPoITypes()
         
@@ -1271,7 +1271,7 @@ namespace DataServer
           bool callout = true, string section = "Info", List<string> options = null, double minvalue = Double.NaN,
           double maxvalue = Double.NaN, string format = null, bool editActive = false, bool canEdit = true)
         {
-            var metaInfo = MetaInfo ?? new List<MetaInfo>();
+            var metaInfo = MetaInfo ?? new MetaInfoCollection();
             var mi = new MetaInfo
             {
                 Label = title,
@@ -1311,7 +1311,7 @@ namespace DataServer
             bool visibleInCallout = true, string section = "Info", List<string> options = null, double minvalue = Double.NaN,
             double maxvalue = Double.NaN, string format = null, bool editActive = false, bool canEdit = true)
         {
-            var metaInfo = MetaInfo ?? new List<MetaInfo>();
+            var metaInfo = MetaInfo ?? new MetaInfoCollection();
             var mi = new MetaInfo
             {
                 Label = source,
@@ -1598,7 +1598,7 @@ namespace DataServer
 
         public void TypeFromGeoJson(JProperty json)
         {
-            MetaInfo = new List<MetaInfo>();
+            MetaInfo = new MetaInfoCollection();
             foreach (var childJ in json.Children().OfType<JObject>())
             {
                 JToken tokenS;

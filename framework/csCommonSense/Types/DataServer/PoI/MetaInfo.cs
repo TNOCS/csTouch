@@ -8,6 +8,7 @@ using OxyPlot;
 using ProtoBuf;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -60,6 +61,7 @@ namespace DataServer
         public double MaxValue { get; set; }
 
         [ProtoMember(6)]
+        [DefaultValue(double.MinValue)]
         public double MinValue
         {
             get { return minValue; }
@@ -75,6 +77,7 @@ namespace DataServer
 
         private bool visibleInCallOut = true;
         [ProtoMember(7)]
+        [DefaultValue(true)]
         public bool VisibleInCallOut
         {
             get { return visibleInCallOut; }
