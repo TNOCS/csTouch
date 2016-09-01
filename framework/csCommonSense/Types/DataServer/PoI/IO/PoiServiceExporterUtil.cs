@@ -110,7 +110,7 @@ namespace csCommon.Types.DataServer.PoI.IO
                 foreach (var poIType in poiService.PoITypes)
                 {
                     outputFileWriter.WriteLine(poIType.PoiId);
-                    List<MetaInfo> metaInfos = poIType.MetaInfo;
+                    MetaInfoCollection metaInfos = poIType.MetaInfo;
                     if (metaInfos == null) continue;
                     bool first = true;
                     foreach (var metaInfo in metaInfos)
