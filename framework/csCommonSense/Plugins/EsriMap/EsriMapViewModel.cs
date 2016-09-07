@@ -7,6 +7,7 @@ using IMB3;
 using csShared;
 using csShared.Interfaces;
 using ESRI.ArcGIS.Client;
+using System.Windows.Media;
 
 namespace csCommon.MapPlugins.EsriMap
 {
@@ -76,18 +77,36 @@ namespace csCommon.MapPlugins.EsriMap
                 : new Thickness(10);
         }
 
+        private static Brush defaultGeoPointerBrush = new SolidColorBrush(Color.FromRgb(0xE6, 0xC7, 0));
+        private Brush geoPointerBrush = defaultGeoPointerBrush;
+        public Brush GeoPointerBrush
+        {
+            get { return geoPointerBrush; }
+            set {
+                if (geoPointerBrush == value) return;
+                geoPointerBrush = value;
+                NotifyOfPropertyChange(() => GeoPointerBrush);
+            }
+        }
+
         private bool geoPointerVisible;
         private Thickness scaleLineOffset;
 
         public bool GeoPointerVisible
         {
             get { return geoPointerVisible; }
-            set { geoPointerVisible = value; NotifyOfPropertyChange(()=>GeoPointerVisible); }
+            set {
+                geoPointerVisible = value;
+                // When turned off, reset the brush color again
+                if (!geoPointerVisible) GeoPointerBrush = defaultGeoPointerBrush; 
+                NotifyOfPropertyChange(()=>GeoPointerVisible);
+            }
         }
         
         void ViewDef_GeoPointerAdded(object sender, csShared.Geo.GeoPointerArgs e)
         {
             GeoPoint = map.emMain.MapToScreen(e.Position, true);
+            if (e.PointerBrush != null) GeoPointerBrush = e.PointerBrush;
             GeoPointerVisible = true;
             var tm = new DispatcherTimer();
             tm.Tick += delegate

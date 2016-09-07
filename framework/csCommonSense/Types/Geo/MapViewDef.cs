@@ -27,6 +27,10 @@ namespace csShared.Geo
     {
         public MapPoint Position { get; set; }
         public TimeSpan Duration { get; set; }
+        /// <summary>
+        /// Geo pointer brush: if used, you have to set it every time, as it will be reset to the default color (yellowish).
+        /// </summary>
+        public System.Windows.Media.Brush PointerBrush { get; set; }
     }
 
     public class BaseLayersCollection : ObservableCollection<ITileImageProvider>

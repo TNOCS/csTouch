@@ -1,91 +1,72 @@
 ﻿<UserControl x:Class="csCommon.MapPlugins.EsriMap.EsriMapView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:csShared="clr-namespace:csShared"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:esri="http://schemas.esri.com/arcgis/client/2009"
              xmlns:dataSources1="clr-namespace:csShared.Geo.Esri"
+             xmlns:esri="http://schemas.esri.com/arcgis/client/2009"
+             xmlns:esriMap="clr-namespace:csCommon.MapPlugins.EsriMap"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:s="clr-namespace:Microsoft.Surface.Presentation;assembly=Microsoft.Surface.Presentation"
              xmlns:wpfConverters="clr-namespace:WpfConverters"
-             xmlns:esriMap="clr-namespace:csCommon.MapPlugins.EsriMap"
-             xmlns:csShared="clr-namespace:csShared"
-             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance esriMap:EsriMapViewModel}"
              d:DesignHeight="300"
              d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance esriMap:EsriMapViewModel}">
+             mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Storyboard x:Key="sbPointer"
-                    RepeatBehavior="Forever"
-                    AutoReverse="True">
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.HorizontalAlignment)"
-                                           Storyboard.TargetName="GeoPointer">
-                <DiscreteObjectKeyFrame KeyTime="0"
-                                        Value="{x:Static HorizontalAlignment.Left}" />
+                    AutoReverse="True"
+                    RepeatBehavior="Forever">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="GeoPointer" Storyboard.TargetProperty="(FrameworkElement.HorizontalAlignment)">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static HorizontalAlignment.Left}" />
             </ObjectAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)"
-                                           Storyboard.TargetName="GeoPointer">
-                <EasingDoubleKeyFrame KeyTime="0"
-                                      Value="300" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5"
-                                      Value="50">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="GeoPointer" Storyboard.TargetProperty="(FrameworkElement.Width)">
+                <EasingDoubleKeyFrame KeyTime="0" Value="300" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="50">
                     <EasingDoubleKeyFrame.EasingFunction>
                         <BackEase EasingMode="EaseInOut" />
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)"
-                                           Storyboard.TargetName="GeoPointer">
-                <EasingDoubleKeyFrame KeyTime="0"
-                                      Value="300" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5"
-                                      Value="50">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="GeoPointer" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                <EasingDoubleKeyFrame KeyTime="0" Value="300" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="50">
                     <EasingDoubleKeyFrame.EasingFunction>
                         <BackEase EasingMode="EaseInOut" />
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)"
-                                              Storyboard.TargetName="GeoPointer">
-                <EasingThicknessKeyFrame KeyTime="0"
-                                         Value="-150,-150,0,0" />
-                <EasingThicknessKeyFrame KeyTime="0:0:0.5"
-                                         Value="-25,-25,0,0">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="GeoPointer" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="0" Value="-150,-150,0,0" />
+                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="-25,-25,0,0">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <BackEase EasingMode="EaseInOut" />
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.StrokeThickness)"
-                                           Storyboard.TargetName="GeoPointer">
-                <EasingDoubleKeyFrame KeyTime="0"
-                                      Value="30" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5"
-                                      Value="2">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="GeoPointer" Storyboard.TargetProperty="(Shape.StrokeThickness)">
+                <EasingDoubleKeyFrame KeyTime="0" Value="30" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="2">
                     <EasingDoubleKeyFrame.EasingFunction>
                         <BackEase EasingMode="EaseInOut" />
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
-        <Style x:Key="ScaleBarStyle"
-               TargetType="esri:ScaleLine">
-            <Setter Property="Background"
-                    Value="White" />
-            <Setter Property="TargetWidth"
-                    Value="150.0" />
-            <Setter Property="FontSize"
-                    Value="10.0" />
-            <Setter Property="Foreground"
-                    Value="Black" />
+        <Style x:Key="ScaleBarStyle" TargetType="esri:ScaleLine">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="TargetWidth" Value="150.0" />
+            <Setter Property="FontSize" Value="10.0" />
+            <Setter Property="Foreground" Value="Black" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="esri:ScaleLine">
-                        <StackPanel Name="LayoutRoot"
-                                    Orientation="Horizontal">
-                            <Grid VerticalAlignment="Center"
+                        <StackPanel Name="LayoutRoot" Orientation="Horizontal">
+                            <Grid Width="{Binding MetricSize,
+                                                  RelativeSource={RelativeSource TemplatedParent}}"
                                   Height="10"
-                                  Width="{Binding MetricSize, RelativeSource={RelativeSource TemplatedParent}}">
+                                  VerticalAlignment="Center">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="1*" />
@@ -97,42 +78,42 @@
                                     <RowDefinition Height="1*" />
                                     <RowDefinition Height="1*" />
                                 </Grid.RowDefinitions>
-                                <Rectangle Fill="{TemplateBinding Foreground}"
-                                           Grid.Row="0"
-                                           Grid.Column="0" />
-                                <Rectangle Fill="{TemplateBinding Background}"
-                                           Grid.Row="0"
-                                           Grid.Column="1" />
-                                <Rectangle Fill="{TemplateBinding Foreground}"
-                                           Grid.Row="0"
-                                           Grid.Column="2" />
-                                <Rectangle Fill="{TemplateBinding Background}"
-                                           Grid.Row="0"
-                                           Grid.Column="3" />
-                                <Rectangle Fill="{TemplateBinding Foreground}"
-                                           Grid.Row="0"
-                                           Grid.Column="4" />
-                                <Rectangle Fill="{TemplateBinding Background}"
-                                           Grid.Row="1"
-                                           Grid.Column="0" />
-                                <Rectangle Fill="{TemplateBinding Foreground}"
-                                           Grid.Row="1"
-                                           Grid.Column="1" />
-                                <Rectangle Fill="{TemplateBinding Background}"
-                                           Grid.Row="1"
-                                           Grid.Column="2" />
-                                <Rectangle Fill="{TemplateBinding Foreground}"
-                                           Grid.Row="1"
-                                           Grid.Column="3" />
-                                <Rectangle Fill="{TemplateBinding Background}"
-                                           Grid.Row="1"
-                                           Grid.Column="4" />
+                                <Rectangle Grid.Row="0"
+                                           Grid.Column="0"
+                                           Fill="{TemplateBinding Foreground}" />
+                                <Rectangle Grid.Row="0"
+                                           Grid.Column="1"
+                                           Fill="{TemplateBinding Background}" />
+                                <Rectangle Grid.Row="0"
+                                           Grid.Column="2"
+                                           Fill="{TemplateBinding Foreground}" />
+                                <Rectangle Grid.Row="0"
+                                           Grid.Column="3"
+                                           Fill="{TemplateBinding Background}" />
+                                <Rectangle Grid.Row="0"
+                                           Grid.Column="4"
+                                           Fill="{TemplateBinding Foreground}" />
+                                <Rectangle Grid.Row="1"
+                                           Grid.Column="0"
+                                           Fill="{TemplateBinding Background}" />
+                                <Rectangle Grid.Row="1"
+                                           Grid.Column="1"
+                                           Fill="{TemplateBinding Foreground}" />
+                                <Rectangle Grid.Row="1"
+                                           Grid.Column="2"
+                                           Fill="{TemplateBinding Background}" />
+                                <Rectangle Grid.Row="1"
+                                           Grid.Column="3"
+                                           Fill="{TemplateBinding Foreground}" />
+                                <Rectangle Grid.Row="1"
+                                           Grid.Column="4"
+                                           Fill="{TemplateBinding Background}" />
                             </Grid>
-                            <TextBlock Text="{Binding MetricValue, RelativeSource={RelativeSource TemplatedParent}}"
+                            <TextBlock Margin="2,0"
                                        VerticalAlignment="Center"
-                                       Margin="2,0" />
-                            <TextBlock Text="{Binding MetricUnit, RelativeSource={RelativeSource TemplatedParent}}"
-                                       VerticalAlignment="Center" />
+                                       Text="{Binding MetricValue,
+                                                      RelativeSource={RelativeSource TemplatedParent}}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding MetricUnit, RelativeSource={RelativeSource TemplatedParent}}" />
                         </StackPanel>
                     </ControlTemplate>
                 </Setter.Value>
@@ -145,12 +126,11 @@
         </EventTrigger>
     </UserControl.Triggers>
     <Grid x:Name="LayoutRoot"
-          AllowDrop="true"
-          s:SurfaceDragDrop.Drop="GridDrop">
+          s:SurfaceDragDrop.Drop="GridDrop"
+          AllowDrop="true">
 
         <Image x:Name="iTransition" />
-        <esri:Map x:Name="emMain"
-                  IsLogoVisible="False">
+        <esri:Map x:Name="emMain" IsLogoVisible="False">
             <esri:Map.Layers>
                 <esri:LayerCollection x:Name="lcMain">
                     <!--<esri:WmtsLayer Url="http://geodata.nationaalgeoregister.nl/tiles/service/wmts/?"
@@ -158,61 +138,59 @@
                                     ID="AHN2"
                                     ServiceMode="KVP"
                                     x:Name="wtlBase" ></esri:WmtsLayer>-->
-                    <esri:GroupLayer x:Name="glBaseLayers"
-                                     ID="Base Layers">
-                        <dataSources1:WebTileLayer ID="GoogleLayer"
-                                                   x:Name="wtlBase"
+                    <esri:GroupLayer x:Name="glBaseLayers" ID="Base Layers">
+                        <dataSources1:WebTileLayer x:Name="wtlBase"
+                                                   ID="GoogleLayer"
                                                    Visible="True" />
                     </esri:GroupLayer>
-                    <esri:GroupLayer x:Name="glOverlay" ID="Overlay">
-
-                    </esri:GroupLayer>
+                    <esri:GroupLayer x:Name="glOverlay" ID="Overlay" />
                     <esri:AcceleratedDisplayLayers ID="AcceleratedLayers">
                         <!--<esri:ArcGISTiledMapServiceLayer ID="StreetMapLayer"   x:Name="wtlAccBase" Url=""  Visible="False"  />-->
-                        <esri:GroupLayer ID="AcceleratedLayers"
-                                         x:Name="glAcceleratedLayers" />
+                        <esri:GroupLayer x:Name="glAcceleratedLayers" ID="AcceleratedLayers" />
                     </esri:AcceleratedDisplayLayers>
                     <esri:GroupLayer ID="Layers">
-                        <esri:GroupLayer ID="Layers"
-                                         x:Name="glAppLayers" />
-                        <esri:GroupLayer ID="MapTools"
-                                         x:Name="glMapTools" />
+                        <esri:GroupLayer x:Name="glAppLayers" ID="Layers" />
+                        <esri:GroupLayer x:Name="glMapTools" ID="MapTools" />
                     </esri:GroupLayer>
                 </esri:LayerCollection>
             </esri:Map.Layers>
         </esri:Map>
 
-        <esri:ScaleLine Map="{Binding ElementName=emMain}"
-                        Visibility="{Binding ShowScaleLine, Source={x:Static csShared:AppStateSettings.Instance}, Converter={wpfConverters:ConvertBoolToVisibility}}"
-                        Margin="{Binding ScaleLineOffset, FallbackValue=10}"
+        <esri:ScaleLine Margin="{Binding ScaleLineOffset,
+                                         FallbackValue=10}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
-                        Style="{StaticResource ScaleBarStyle}" />
+                        Map="{Binding ElementName=emMain}"
+                        Style="{StaticResource ScaleBarStyle}"
+                        Visibility="{Binding ShowScaleLine,
+                                             Source={x:Static csShared:AppStateSettings.Instance},
+                                             Converter={wpfConverters:ConvertBoolToVisibility}}" />
 
         <Canvas x:Name="canvas"
-                Visibility="Visible"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
                 ClipToBounds="True"
                 IsHitTestVisible="True"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch"
-                RenderTransformOrigin="0.5,0.5" />
+                RenderTransformOrigin="0.5,0.5"
+                Visibility="Visible" />
         <Ellipse x:Name="GeoPointer"
-                 HorizontalAlignment="Left"
-                 Height="100"
-                 Stroke="#FFE6C700"
-                 VerticalAlignment="Top"
                  Width="100"
-                 StrokeThickness="5"
+                 Height="100"
                  Margin="-50,-50,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top"
                  RenderTransformOrigin="0.5,0.5"
-                 Visibility="{Binding GeoPointerVisible, FallbackValue=Hidden, Converter={StaticResource BooleanToVisibilityConverter}}">
+                 Stroke="{Binding GeoPointerBrush}"
+                 StrokeThickness="5"
+                 Visibility="{Binding GeoPointerVisible,
+                                      FallbackValue=Hidden,
+                                      Converter={StaticResource BooleanToVisibilityConverter}}">
             <Ellipse.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform />
                     <SkewTransform />
                     <RotateTransform />
-                    <TranslateTransform X="{Binding GeoPoint.X, FallbackValue=0}"
-                                        Y="{Binding GeoPoint.Y, FallbackValue=0}" />
+                    <TranslateTransform X="{Binding GeoPoint.X, FallbackValue=0}" Y="{Binding GeoPoint.Y, FallbackValue=0}" />
                 </TransformGroup>
             </Ellipse.RenderTransform>
         </Ellipse>

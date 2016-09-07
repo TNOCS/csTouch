@@ -28,8 +28,7 @@ namespace csCommon.Plugins.Events
         public event EventHandler Addevent;
         public void TriggerAdd(object sender)
         {
-            if (Addevent != null)
-                Addevent(sender, null);
+            Addevent?.Invoke(sender, null);
         }
 
         private IEvent selectedEvent;
