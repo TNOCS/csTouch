@@ -271,8 +271,15 @@ namespace csCommon.Plugins.HlaRest
                 var jBody = JObject.Parse(body);
 
                 var features = jBody["features"].OfType<JObject>();
-                var pois = features.Select(f => ParseFeature(f, parseFeatureCallback)).ToArray();
-
+                PoI[] pois;
+                if (AppStateSettings.Instance.Config.GetBool("REST.ShowOnlyBlueForces", false))
+                {
+                   pois= features.Where(x => (string)x["properties"]["source"] == "BFTRACKER").Select(f => ParseFeature(f, parseFeatureCallback)).ToArray();
+                }
+                else
+                { 
+                    pois = features.Select(f => ParseFeature(f, parseFeatureCallback)).ToArray();
+                }
                 return pois;
             }
             catch (Exception e)
