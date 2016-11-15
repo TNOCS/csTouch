@@ -10,7 +10,7 @@
              d:DataContext="{d:DesignInstance mapCallOut:MapCallOutViewModel}"
              d:DesignHeight="75"
              d:DesignWidth="300"
-             Opacity="0.7"
+             Opacity="0.85"
              mc:Ignorable="d">
     <UserControl.Resources>
 
