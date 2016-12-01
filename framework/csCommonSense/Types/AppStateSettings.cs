@@ -1009,6 +1009,7 @@ namespace csShared
 
         public void AddStartPanelTabItem(StartPanelTabItem spti)
         {
+            if (spti == null) throw new NullReferenceException("spti");
             StartPanelTabItems.Add(spti);
             BotomPanelVisible = true;
         }
