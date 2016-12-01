@@ -412,6 +412,7 @@
     <Compile Include="Imb\csImbConfig.cs" />
     <Compile Include="Logging\LogCs.cs" />
     <Compile Include="Logging\LogImbService.cs" />
+    <Compile Include="MapContent\Panoramio\CustomPanoramioContent.cs" />
     <Compile Include="MapContent\Panoramio\LookrContent.cs" />
     <Compile Include="MapContent\ShapeFiles\ShapeFileReader\ShapePolygonZ.cs" />
     <Compile Include="MapTools\BagGeoCodingTool\BagGeoCodingMapToolPlugin.cs" />
