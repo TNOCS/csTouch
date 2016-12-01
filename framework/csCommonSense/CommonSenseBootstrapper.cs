@@ -28,6 +28,8 @@ namespace csCommon
     using Caliburn.Micro;
 
     using csShared;
+    using Microsoft.Win32;
+    using Logging;
 
     #endregion
 
@@ -59,6 +61,18 @@ namespace csCommon
         {
             // Enables this to log caliburn message to debug log:
             // LogManager.GetLog = type => new CaliburnLogging(type);
+            
+            try
+            {
+                // Check if Microsoft Surface Runtime is installed
+                var productName = Registry.ClassesRoot.OpenSubKey("Installer\\Products\\D93B2C96060FDA948877104C41A44842", false)?.GetValue("ProductName") as string;
+                if ((productName == null) || (productName != "Microsoft Surface 2.0 Runtime"))
+                {
+                    LogCs.LogError("Microsoft Surface 2.0 Runtime NOT installed, needed to run CS");
+                }
+            } catch(Exception)
+            { }
+            
         }
 
         #region Fields
@@ -70,19 +84,7 @@ namespace csCommon
 
         #endregion
 
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="CommonSenseBootstrapper{T}" /> class.
-        /// </summary>
-        protected CommonSenseBootstrapper()
-        {
-            //this.Initialize(); // used in caliburn 2
         
-            this.Start(); // Used in caliburn 1.5
-        }
-
-        #endregion
 
         #region Methods
 
