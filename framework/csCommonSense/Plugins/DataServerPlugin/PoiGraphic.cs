@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using csCommon.csMapCustomControls.MapIconMenu;
 using csDataServerPlugin.ViewModels;
 using csShared;
 using csShared.Controls.Popups.MapCallOut;
@@ -21,6 +22,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Brushes = System.Windows.Media.Brushes;
 using CallOutOrientation = DataServer.CallOutOrientation;
 using Geometry = ESRI.ArcGIS.Client.Geometry.Geometry;
@@ -85,12 +87,24 @@ namespace csDataServerPlugin
             //AppState.ViewDef.MapControl.ExtentChanged += MapControlExtentChanged;
             //MouseLeftButtonUp += PoiGraphic_MouseLeftButtonUp;
             MouseLeftButtonDown += PoiGraphic_MouseLeftButtonDown;
+            MouseLeftButtonUp += PoiGraphic_MouseLeftButtonUp;
         }
+
+        public void PoiGraphic_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+           if (iconLongTappedTimer != null) // Did long tapped fired?
+            {
+                StopLongTappedTimer();
+                EndTapped();
+            }
+        }
+
+ 
 
         public void PoiGraphic_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var pos = AppState.ViewDef.MapControl.ScreenToMap(e.GetPosition(AppState.ViewDef.MapControl));
-            Tapped(pos);
+            mLastKnownTapPoint = AppState.ViewDef.MapControl.ScreenToMap(e.GetPosition(AppState.ViewDef.MapControl));
+            StartLongTappedTimer();
             e.Handled = false;
         }
 
@@ -113,12 +127,10 @@ namespace csDataServerPlugin
             AppState.ViewDef.MapControl.ExtentChanged -= MapControlExtentChanged;
             //MouseLeftButtonUp -= PoiGraphic_MouseLeftButtonUp;
             MouseLeftButtonDown -= PoiGraphic_MouseLeftButtonDown;
+            MouseLeftButtonUp -= PoiGraphic_MouseLeftButtonUp;
         }
 
-        public void PoiGraphic_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
 
-        }
 
         private void MapControlExtentChanged(object sender, ExtentEventArgs e)
         {
@@ -285,16 +297,80 @@ namespace csDataServerPlugin
             }
         }
 
+        private DispatcherTimer iconLongTappedTimer;
+
+        /// <summary>
+        /// The icon is clicked (mouse or touch) set timer to wait for x msec (while icon still touched); then fire event
+        /// </summary>
+        private void StartLongTappedTimer()
+        {
+            StopLongTappedTimer();
+            iconLongTappedTimer = new DispatcherTimer(DispatcherPriority.Background)
+            {
+                Interval = new TimeSpan(0, 0, 0, 0, MapMenuItem.iconLongTappedTimerInMSec)
+            };
+            iconLongTappedTimer.Tick += LongTappedTimerElapsed;
+            iconLongTappedTimer.Start();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void StopLongTappedTimer()
+        {
+            if (iconLongTappedTimer != null)
+            {
+                iconLongTappedTimer.Stop();
+                iconLongTappedTimer.Tick -= LongTappedTimerElapsed;
+                iconLongTappedTimer = null;
+            }
+        }
+
+
+        private void LongTappedTimerElapsed(object sender, EventArgs e)
+        {
+            StopLongTappedTimer();
+            FireIconLongTapped();
+        }
+
+        private void FireIconLongTapped()
+        {
+            if ((Poi is PoI) && (Poi.Service is PoiService)) (Poi.Service as PoiService).RaisePoiLongTapped(Poi as PoI);
+        }
+        /*
         public void LongTapped(MapPoint tapPos)
         {
             var tappedPosition = (MapPoint)wm.ToGeographic(tapPos);
-        }
+        }*/
 
-        public void Tapped(MapPoint tapPos)
+
+        /// <summary>
+        /// This function is calles from multiple places outside the class!! 
+        /// </summary>
+        /// <param name="tapPos"></param>
+        public void TappedByExternalMapControlMapGesture(MapPoint tapPos)
         {
             if (DateTime.Now < lastTap.AddMilliseconds(500)) return;
             lastTap = DateTime.Now;
-            var tappedPosition = (MapPoint)wm.ToGeographic(tapPos);
+            mLastKnownTapPoint = tapPos;
+            EndTapped();
+
+        }
+
+        private void Tapped(MapPoint tapPos)
+        {
+            mLastKnownTapPoint = tapPos;
+
+            StartLongTappedTimer();
+        }
+
+
+
+        private MapPoint mLastKnownTapPoint;
+
+        private void EndTapped()
+        {
+            var tappedPosition = (MapPoint)wm.ToGeographic(mLastKnownTapPoint);
             Service.TriggerTapped(new TappedEventArgs { Content = Poi, Service = Service, TapPoint = new Point(tappedPosition.X, tappedPosition.Y) });
 
             var tm = Poi.NEffectiveStyle.TapMode.Value;
@@ -321,7 +397,7 @@ namespace csDataServerPlugin
             }
             if (tm == TapMode.OpenMedia)
             {
-                AddMediaToFloatingElements(tapPos);
+                AddMediaToFloatingElements(mLastKnownTapPoint);
             }
             if (callOutVisible)
             {
@@ -339,10 +415,11 @@ namespace csDataServerPlugin
                 case TapMode.CallOutEdit:
                 case TapMode.CallOutPopup:
                 case TapMode.CallOut:
-                    OpenPopup(tapPos, tm);
+                    OpenPopup(mLastKnownTapPoint, tm);
                     break;
                 default: return;
             }
+
         }
 
         public void OpenPopup(MapPoint tapPos, TapMode tm)

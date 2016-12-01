@@ -1214,7 +1214,7 @@ namespace DataServer
                 }
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine(String.Format("{0}Received on IMB the contentlist '{1}' for service '{2}'({3}) (Action ResetList), the new content is:{0}",
+                sb.AppendLine(String.Format("{0}Received on IMB the contentlist '{1}' for service '{2}'({3}) (Action ResetList), the new content is:",
                     Environment.NewLine, channel, Name, Id));
                 
                 int count = 1;

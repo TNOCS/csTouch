@@ -77,9 +77,9 @@ namespace csDataServerPlugin
             if (lastTap.AddMilliseconds(500) >= DateTime.Now) return;
             lastTap = DateTime.Now;
             var gg = FindGraphicsInHostCoordinates(e.GetPosition(mapViewDef.MapControl));
-
+           
             foreach (var g in gg.Cast<PoiGraphic>())
-                g.Tapped(e.MapPoint);
+                g.TappedByExternalMapControlMapGesture(e.MapPoint);
         }
 
         public void RemovePoi(PoI p)

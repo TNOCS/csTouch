@@ -39,7 +39,7 @@ namespace csCommon.csMapCustomControls.MapIconMenu
             CommandManager.RegisterClassCommandBinding(typeof(MapMenuItem), bindingExpand);
         }
 
-        private const int iconLongTappedTimerInMSec = 1500;
+        public const int iconLongTappedTimerInMSec = 1500;
 
         public FrameworkElement RelativeElement;
         public event IconMovedEventHandler IconMoved;

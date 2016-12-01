@@ -330,7 +330,7 @@ namespace csDataServerPlugin
         {
             if (Graphic == null) return;
             //PoI.EffectiveStyle.CallOutFillColor = PoI.EffectiveStyle.CallOutFillColor;
-            Graphic.Tapped(new MapPoint(e.Position.X,e.Position.Y));
+            Graphic.TappedByExternalMapControlMapGesture(new MapPoint(e.Position.X,e.Position.Y));
             //todo if (Layer.DataService.ClickBehaviour == PoIClickBehaviour.popup)
             //{
                 //Layer.OpenPoiPopup(this.PoI);                

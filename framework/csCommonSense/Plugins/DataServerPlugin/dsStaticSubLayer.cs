@@ -62,7 +62,7 @@ namespace csDataServerPlugin
                         var sg = graphic;
                         if (sg.Poi.NEffectiveStyle.TapMode != null && sg.Poi.NEffectiveStyle.TapMode.Value != TapMode.None)
                         {
-                            sg.Tapped(e.MapPoint);
+                            sg.TappedByExternalMapControlMapGesture(e.MapPoint);
                         }
                     }
                     else if (g.Attributes.ContainsKey("staticgraphic"))
@@ -70,7 +70,7 @@ namespace csDataServerPlugin
                         var sg = (StaticGraphic)g.Attributes["staticgraphic"];
                         if (sg.Poi.NEffectiveStyle.TapMode != null && sg.Poi.NEffectiveStyle.TapMode.Value != TapMode.None)
                         {
-                            sg.Tapped(e.MapPoint);
+                            sg.TappedByExternalMapControlMapGesture(e.MapPoint);
                         }
                     }
                 }

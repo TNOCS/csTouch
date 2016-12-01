@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Caliburn.Micro;
 using csDataServerPlugin;
@@ -35,6 +36,17 @@ namespace csCommon
         void sLayer_StoppedLoading(object sender, System.EventArgs e)
         {
             NotifyOfPropertyChange(()=>IsLoading);
+        }
+
+        public sLayer FindRecursive(Func<sLayer, bool> pPredicaat)
+        {
+            if (pPredicaat(this)) return this;
+            foreach(var layer in Children)
+            {
+                var result = layer.FindRecursive(pPredicaat);
+                if (result != null) return result;
+            }
+            return null;
         }
 
         void sLayer_StartedLoading(object sender, System.EventArgs e)

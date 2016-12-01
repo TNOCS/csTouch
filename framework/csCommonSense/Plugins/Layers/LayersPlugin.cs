@@ -17,6 +17,8 @@ namespace csCommon
     [Export(typeof(IPlugin))]
     public class LayersPlugin :  PropertyChangedBase,IPlugin
     {
+        public const string PluginName = "Layers";
+
         public bool CanStop { get { return true; } }
 
         private ISettingsScreen _settings;
@@ -67,7 +69,7 @@ namespace csCommon
         
         public string Name
         {
-            get { return "Layers"; }
+            get { return PluginName; }
         }
 
         public LayersViewModel LayersVM { get; private set; }

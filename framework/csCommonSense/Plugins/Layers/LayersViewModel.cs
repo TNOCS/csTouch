@@ -1,4 +1,5 @@
 using Caliburn.Micro;
+using csCommon.Logging;
 using csCommon.Types;
 using csGeoLayers.Content.Lookr;
 using csGeoLayers.Content.Panoramio;
@@ -17,6 +18,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -31,12 +33,21 @@ namespace csCommon
     [Export(typeof(ILayerSelection))]
     public class LayersViewModel : Screen, ILayerSelection
     {
+        public event EventHandler OnGisLayerStructureChanged;
+
         private sLayer startLayer;
 
         public sLayer StartLayer
         {
             get { return startLayer; }
-            set { startLayer = value; NotifyOfPropertyChange(() => StartLayer); }
+            private set
+            {
+                startLayer = value;
+                NotifyOfPropertyChange(() => StartLayer);
+                var handler = OnGisLayerStructureChanged;
+                handler?.Invoke(this, EventArgs.Empty);
+                
+            }
         }
 
         private int selectedTab;
@@ -286,7 +297,7 @@ namespace csCommon
             }
         }
 
-        public void ParseLayers(Layer layer, ref sLayer parent, string relativePath, bool include = true)
+        private void ParseLayers(Layer layer, ref sLayer parent, string relativePath, bool include = true)
         {
             try
             {
@@ -460,7 +471,7 @@ namespace csCommon
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                LogCs.LogException("ParseLayer", e);
             }
         }
 
@@ -515,7 +526,8 @@ namespace csCommon
         }
         #endregion
 
-        public void Checked(sLayer l)
+        // Called when layer is activated (called from XAML)
+        internal void ActivateGisLayer(sLayer l)
         {
             if (l == null || l.Path==null) return;
             expandedStates[l.Path] = l.IsExpanded;
@@ -535,7 +547,8 @@ namespace csCommon
             //});
         }
 
-        public void Unchecked(sLayer l)
+        // Called when layer is deactivated (called from XAML)
+        internal void DeactivateGisLayer(sLayer l)
         {
             if (l == null || l.Path==null) return;
             expandedStates[l.Path] = l.IsExpanded;
@@ -650,7 +663,8 @@ namespace csCommon
             try
             {
                 updating = true;
-                StartLayer = new sLayer();
+                LogCs.LogMessage("(Re)build viewmodel for GIS layers.");
+                var startLayer = new sLayer();
                 ParseLayers(AppState.ViewDef.AcceleratedLayers, ref startLayer, "AcceleratedLayers", false);
                 ParseLayers(AppState.ViewDef.Layers, ref startLayer, "Layers", false);
                 ParseLayers(AppState.ViewDef.BaseLayers, ref startLayer, "BaseLayers", true);                
@@ -659,13 +673,15 @@ namespace csCommon
                 {
                     ParseLayers(AppState.ViewDef.EsriLayers, ref startLayer, "BaseLayers", true);
                 }
-                NotifyOfPropertyChange(() => StartLayer);
-                //Layers = AppState.ViewDef.Layers;
+                StartLayer = startLayer; // Override with new layout
                 if (view != null)
                 {
                     //view.tvLayers.ItemsSource = StartLayer.Children;
                     view.tvStartLayer.ItemsSource = StartLayer.Children;
                 }
+
+                var layerStructure = LayerStructureAsString();
+                LogCs.LogMessage("GIS layers:\n" + layerStructure);
             }
             catch (Exception)
             {
@@ -676,10 +692,35 @@ namespace csCommon
             {
                 updating = false;
             }
-            
+        }
 
+        public string LayerStructureAsString()
+        {
+            if (StartLayer == null) return "No layers";
+            var sb = new StringBuilder();
+            LayerStructureAsString(1, StartLayer, ref sb);
+            return sb.ToString();
+        }
 
-            
+        private static void LayerStructureAsString(int pLevel, sLayer pLayer, ref StringBuilder pLog)
+        {
+            pLog.AppendLine(Indent(pLevel * 3) + $"* {GetLayerType(pLayer)} '{pLayer.Title}'");
+            foreach (var child in pLayer.Children)
+            {
+                LayerStructureAsString(pLevel + 1, child, ref pLog);
+            }
+        }
+
+        private static string Indent(int pCount)
+        {
+            return "".PadLeft(pCount);
+        }
+
+        private static string GetLayerType(sLayer pLayer)
+        {
+            if (pLayer.Layer == null) return "Unknown layer type";
+            if (pLayer.Layer is GroupLayer) return "Group layer";
+            return pLayer.Layer.GetType().Name;
         }
 
         private static IEnumerable<MenuItem> GetMenuItems(sLayer layer)
@@ -820,7 +861,9 @@ namespace csCommon
 
         private void dirtyTimer_Tick(object sender, EventArgs e)
         {
+            // Check if x seconds  if one of the layers has changed
             if (!dirty) return;
+            
             dirty = false;
             UpdateLayers();
         }

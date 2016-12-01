@@ -541,6 +541,7 @@ namespace csDataServerPlugin
                         ig.Symbol = sym;
                         l.Graphics.Add(ig);
                         ig.MouseLeftButtonDown += (e, st) => g.PoiGraphic_MouseLeftButtonDown(e, st);
+                        ig.MouseLeftButtonUp += (e, st) => g.PoiGraphic_MouseLeftButtonUp(e, st);
                         g.ImageGraphic = ig;
                     }
                 }
