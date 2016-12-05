@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Caliburn.Micro;
 using csShared.Utils;
+using csCommon.Logging;
 
 namespace DataServer
 {
@@ -153,11 +154,12 @@ namespace DataServer
                 var f = GetLocalUrl(folder, id, hash);
                 if (File.Exists(f))
                     return File.ReadAllBytes(f);
+                LogCs.LogMessage(String.Format("Could not load file '{0}' from filestore.", f));
                 return null;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                LogCs.LogException("Filestore exception! ", ex);
                 return null;
             }
             

@@ -428,7 +428,6 @@ namespace csShared
             get { return Config.GetDouble("Startpanel.Bottom.MaxHeight", 300); }
             set
             {
-                Config.SetLocalConfig("Startpanel.Bottom.MaxHeight", value.ToString(CultureInfo.InvariantCulture), true);
                 NotifyOfPropertyChange(() => StartpanelMaxHeight);
             }
         }

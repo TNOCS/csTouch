@@ -26,6 +26,7 @@ using nl.tno.cs.presenter;
 
 namespace csDataServerPlugin
 {
+    using csCommon.Logging;
     using System.Diagnostics;
 
     public interface ILoadingLayer
@@ -475,6 +476,8 @@ namespace csDataServerPlugin
             var image = string.IsNullOrEmpty(Service.Settings.Icon)
                 ? new BitmapImage(new Uri("pack://application:,,,/csCommon;component/Resources/Icons/content.png"))
                 : FileStore.LoadPhoto(Service.store.GetBytes(Service.MediaFolder, Service.Settings.Icon));
+            if (image == null)
+                LogCs.LogMessage(String.Format("No tab image found for service {0}.", service.Name));
             tabItem = new StartPanelTabItem
             {
                 ModelInstance = viewModel,

@@ -861,7 +861,7 @@ namespace DataServer
                                         }
                                     }
                                     LogImbService.LogMessage(this, String.Format("Override content of '{0}' (content type={1}). {4}{2}{4}{3}",
-                                        obj.Name ?? "-", cm.ContentType, labelChanged ? sb.ToString() : "No labels changed", obj.ToXml().ToString(), Environment.NewLine));
+                                        obj.Name ?? "-", cm.ContentType, labelChanged ? sb.ToString() : "No labels changed", obj?.ToXml().ToString() ?? "null" , Environment.NewLine));
                                 }
                                 catch (Exception e)
                                 {

@@ -1158,7 +1158,7 @@ namespace DataServer
                     {
                         k = LabelNumPrefix + k;
                     }
-                    var lc = new XElement(k) { Value = l.Value.RemoveInvalidCharacters() };
+                    var lc = new XElement(k) { Value = l.Value?.RemoveInvalidCharacters() ?? ""};
                     lab.Add(lc);
                 }
                 res.Add(lab);
