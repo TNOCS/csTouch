@@ -100,11 +100,30 @@ namespace csCommon.MapPlugins.Search
 
         private void Init()
         {
-            AppState.SearchApis.Add(new GoogleSearch   { Plugin = Plugin });
-            AppState.SearchApis.Add(new WikiSearch     { Plugin = Plugin });
-            AppState.SearchApis.Add(new PlacesSearch   { Plugin = Plugin });
-            AppState.SearchApis.Add(new GeoNamesSearch { Plugin = Plugin });
-            AppState.SearchApis.Add(new BagSearch      { Plugin = Plugin });
+            if (AppStateSettings.Instance.Config.GetBool("SearchPlugin.GoogleSearch.IsEnabled", true))
+            {
+                AppState.SearchApis.Add(new GoogleSearch { Plugin = Plugin });
+            }
+            if (AppStateSettings.Instance.Config.GetBool("SearchPlugin.WikiSearch.IsEnabled", true))
+            {
+                AppState.SearchApis.Add(new WikiSearch { Plugin = Plugin });
+            }
+            if (AppStateSettings.Instance.Config.GetBool("SearchPlugin.PlacesSearch.IsEnabled", true))
+            {
+                AppState.SearchApis.Add(new PlacesSearch { Plugin = Plugin });
+            }
+            if (AppStateSettings.Instance.Config.GetBool("SearchPlugin.GeoNamesSearch.IsEnabled", true))
+            {
+                AppState.SearchApis.Add(new GeoNamesSearch { Plugin = Plugin });
+            }
+            if (AppStateSettings.Instance.Config.GetBool("SearchPlugin.BagSearch.IsEnabled", true))
+            {
+                AppState.SearchApis.Add(new BagSearch      { Plugin = Plugin });
+            }
+            if (AppStateSettings.Instance.Config.GetBool("SearchPlugin.MGRSSearch.IsEnabled", false))
+            {
+                AppState.SearchApis.Add(new MGRSSearch { Plugin = Plugin });
+            }
             
             sv.Sections.SelectionChanged += Sections_SelectionChanged;
             UpdateSections();
