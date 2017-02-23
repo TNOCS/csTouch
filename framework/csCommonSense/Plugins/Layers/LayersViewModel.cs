@@ -527,7 +527,7 @@ namespace csCommon
         #endregion
 
         // Called when layer is activated (called from XAML)
-        internal void ActivateGisLayer(sLayer l)
+        public void ActivateGisLayer(sLayer l)
         {
             if (l == null || l.Path==null) return;
             expandedStates[l.Path] = l.IsExpanded;
@@ -548,7 +548,7 @@ namespace csCommon
         }
 
         // Called when layer is deactivated (called from XAML)
-        internal void DeactivateGisLayer(sLayer l)
+        public void DeactivateGisLayer(sLayer l)
         {
             if (l == null || l.Path==null) return;
             expandedStates[l.Path] = l.IsExpanded;

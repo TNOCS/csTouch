@@ -24,7 +24,7 @@
             <csCommon:LayerBackgroundColor x:Key="LayerBackgroundColor" />
             <wpfConverters:BooleanActiveOpacityConverter x:Key="BooleanActiveOpacityConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            
+
             <wpfConverters:ReverseBooleanVisibilityConverter x:Key="ReverseBooleanVisibilityConverter" />
             <wpfConverters:ReverseBooleanActiveOpacityConverter x:Key="ReverseBooleanActiveOpacityConverter" />
             <csCommon:ServiceIconConverter x:Key="ServiceIconConverter" />
@@ -78,13 +78,13 @@
                                                     Margin="0"
                                                     HorizontalAlignment="Stretch"
                                                     VerticalAlignment="Top"
+                                                    cal:Message.Attach="[Event Checked]=[Action ActivateGisLayer($dataContext];[Event DeactivateGisLayer]=[Action Unchecked($dataContext)]"
                                                     Background="Black"
                                                     Content="{Binding Title}"
                                                     Foreground="Black"
                                                     IsChecked="{Binding Visible}"
                                                     IsEnabled="{Binding IsLoading,
-                                                                        Converter={StaticResource ReverseBooleanActiveOpacityConverter}}"
-                                                    cal:Message.Attach="[Event Checked]=[Action ActivateGisLayer($dataContext];[Event DeactivateGisLayer]=[Action Unchecked($dataContext)]" />
+                                                                        Converter={StaticResource ReverseBooleanActiveOpacityConverter}}" />
 
                             <!--<Border  HorizontalAlignment="Right" Margin="0,0,50,0">
                                 <i:Interaction.Behaviors>
@@ -172,9 +172,9 @@
                                         </custom:SurfaceButton>
                                         <custom:SurfaceButton x:Name="ConfigButton"
                                                               Margin="0"
+                                                              cal:Message.Attach="[Event Click]=[Action Config($dataContext)]"
                                                               Visibility="{Binding IsConfigAvailable,
-                                                                                   Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                              cal:Message.Attach="[Event Click]=[Action Config($dataContext)]">
+                                                                                   Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <Path Width="20"
                                                   Height="20"
                                                   Margin="0,0,0,0"
@@ -934,8 +934,8 @@
                                           VerticalAlignment="Top"
                                           HorizontalContentAlignment="Center"
                                           VerticalContentAlignment="Center"
-                                          Background="{x:Null}"
-                                          cal:Message.Attach="[Event Click]=[Action AddTemplate($dataContext)]">
+                                          cal:Message.Attach="[Event Click]=[Action AddTemplate($dataContext)]"
+                                          Background="{x:Null}">
                         <Path Width="30"
                               Height="30"
                               Margin="0,0,0,0"
@@ -1096,10 +1096,10 @@
                                           Margin="0,1,1,0"
                                           HorizontalAlignment="Left"
                                           VerticalAlignment="Top"
+                                          cal:Message.Attach="[Event Click] = [Action ConfigContent($dataContext)]"
                                           Style="{DynamicResource SurfaceButtonStyle1}"
                                           Visibility="{Binding IsRunning,
-                                                               Converter={StaticResource BooleanToVisibilityConverter}}"
-                                          cal:Message.Attach="[Event Click] = [Action ConfigContent($dataContext)]">
+                                                               Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Grid Width="48"
                               Height="48"
                               Background="#3F000000"
@@ -1132,10 +1132,10 @@
                                           VerticalAlignment="Top"
                                           HorizontalContentAlignment="Center"
                                           VerticalContentAlignment="Center"
+                                          cal:Message.Attach="[Event Click]=[Action AddContent($dataContext)]"
                                           Background="{x:Null}"
                                           Visibility="{Binding IsRunning,
-                                                               Converter={StaticResource InverseBooleanToVisiblityConverter}}"
-                                          cal:Message.Attach="[Event Click]=[Action AddContent($dataContext)]">
+                                                               Converter={StaticResource InverseBooleanToVisiblityConverter}}">
                         <Path Width="30"
                               Height="30"
                               Margin="0,0,0,0"
@@ -1161,10 +1161,10 @@
                                           VerticalAlignment="Top"
                                           HorizontalContentAlignment="Center"
                                           VerticalContentAlignment="Center"
+                                          cal:Message.Attach="[Event Click]=[Action RemoveContent($dataContext)]"
                                           Background="{x:Null}"
                                           Visibility="{Binding IsRunning,
-                                                               Converter={StaticResource BooleanToVisibilityConverter}}"
-                                          cal:Message.Attach="[Event Click]=[Action RemoveContent($dataContext)]">
+                                                               Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Path Width="29.999"
                               Height="7.261"
                               Margin="0,0,0,0"
@@ -1259,12 +1259,12 @@
                                                                 VerticalAlignment="Top"
                                                                 HorizontalContentAlignment="Left"
                                                                 VerticalContentAlignment="Top"
+                                                                cal:Message.Attach="[Event Click]=[Action UpdateExpandState($dataContext)]"
                                                                 Background="{x:Null}"
                                                                 IsChecked="{Binding IsExpanded,
                                                                                     Mode=TwoWay}"
                                                                 Padding="0"
-                                                                Style="{StaticResource CleanToggleButton}"
-                                                                cal:Message.Attach="[Event Click]=[Action UpdateExpandState($dataContext)]">
+                                                                Style="{StaticResource CleanToggleButton}">
                                         <Grid Height="Auto" HorizontalAlignment="Left">
                                             <Border x:Name="bIcon"
                                                     Width="30"
@@ -1325,14 +1325,14 @@
                                                           Width="Auto"
                                                           Height="Auto"
                                                           Margin="0"
+                                                          d:IsHidden="True"
                                                           Data="M 12.725695 15.919083 L 12.725695 8.8915273 C 12.725695 7.9084376 12.994508 7.1096772 13.532135 6.4952461 C 14.069762 5.8654544 14.837801 5.5505585 15.836252 5.5505585 C 16.834702 5.5505585 17.602741 5.8654544 18.140369 6.4952461 C 18.693357 7.1096772 18.969851 7.9084376 18.969851 8.8915273 L 18.969851 15.919083 L 25.905241 15.919083 C 26.919053 15.919083 27.717813 16.195577 28.301523 16.748565 C 28.900593 17.286192 29.200128 18.046551 29.200128 19.029640 C 29.200128 20.028091 28.900593 20.803810 28.301523 21.356798 C 27.717813 21.909786 26.919053 22.186280 25.905241 22.186280 L 18.969851 22.186280 L 18.969851 29.190795 C 18.969851 30.189245 18.693357 30.995686 18.140369 31.610117 C 17.587381 32.224548 16.819342 32.531764 15.836252 32.531764 C 14.853162 32.531764 14.085123 32.224548 13.532135 31.610117 C 12.994508 30.995686 12.725695 30.189245 12.725695 29.190795 L 12.725695 22.186280 L 5.7903036 22.186280 C 4.8072138 22.186280 4.0084534 21.886745 3.3940223 21.287675 C 2.7949518 20.673244 2.4954170 19.920565 2.4954170 19.029640 C 2.4954170 18.046551 2.7872715 17.286192 3.3709811 16.748565 C 3.9700516 16.195577 4.7764923 15.919083 5.7903036 15.919083 L 12.725695 15.919083 z "
                                                           Fill="White"
                                                           RenderTransformOrigin="0.5,0.5"
                                                           Stretch="Fill"
                                                           StrokeThickness="1"
                                                           Visibility="{Binding IsExpanded,
-                                                                               Converter={StaticResource ReverseBooleanVisibilityConverter}}"
-                                                          d:IsHidden="True">
+                                                                               Converter={StaticResource ReverseBooleanVisibilityConverter}}">
                                                         <Path.RenderTransform>
                                                             <TransformGroup>
                                                                 <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
@@ -1441,6 +1441,7 @@
                                                                     Margin="0"
                                                                     HorizontalAlignment="Stretch"
                                                                     VerticalAlignment="Top"
+                                                                    cal:Message.Attach="[Event Checked]=[Action ActivateGisLayer($dataContext];[Event DeactivateGisLayer]=[Action Unchecked($dataContext)]"
                                                                     BorderBrush="Black"
                                                                     BorderThickness="2"
                                                                     Foreground="Black"
@@ -1449,8 +1450,7 @@
                                                                                         Converter={StaticResource ReverseBooleanActiveOpacityConverter}}"
                                                                     Padding="0"
                                                                     Style="{StaticResource LayerSurfaceCheckBoxStyle}"
-                                                                    Visibility="Collapsed"
-                                                                    cal:Message.Attach="[Event Checked]=[Action Checked($dataContext];[Event Unchecked]=[Action Unchecked($dataContext)]">
+                                                                    Visibility="Collapsed">
                                                 <Grid Width="Auto"
                                                       Height="Auto"
                                                       HorizontalAlignment="Stretch"
@@ -1468,13 +1468,13 @@
                                                                             HorizontalAlignment="Right"
                                                                             VerticalAlignment="Top"
                                                                             VerticalContentAlignment="Center"
+                                                                            cal:Message.Attach="[Event MouseRightButtonDown]=[Action ToggleOpacity($dataContext)]"
                                                                             Background="{x:Null}"
                                                                             IsChecked="{Binding ShowOpacity,
                                                                                                 Mode=TwoWay}"
                                                                             Style="{StaticResource CleanToggleButton}"
                                                                             Visibility="{Binding Visible,
-                                                                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                                            cal:Message.Attach="[Event MouseRightButtonDown]=[Action ToggleOpacity($dataContext)]">
+                                                                                                 Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <Grid Width="15" Height="15">
                                                         <Path Width="Auto"
                                                               Height="Auto"
@@ -1506,9 +1506,9 @@
                                                 </custom:SurfaceToggleButton>
                                                 <custom:SurfaceButton x:Name="ConfigButton"
                                                                       Margin="0"
+                                                                      cal:Message.Attach="[Event Click]=[Action Config($dataContext)]"
                                                                       Visibility="{Binding IsConfigAvailable,
-                                                                                           Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                                      cal:Message.Attach="[Event Click]=[Action Config($dataContext)]">
+                                                                                           Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <Path Width="20"
                                                           Height="20"
                                                           Margin="0,0,0,0"
@@ -1527,12 +1527,12 @@
                                                                       VerticalAlignment="Top"
                                                                       HorizontalContentAlignment="Center"
                                                                       VerticalContentAlignment="Center"
+                                                                      cal:Message.Attach="[Event Click]=[Action LayerMenu($dataContext,$source)]"
                                                                       Background="{x:Null}"
                                                                       Foreground="Black"
                                                                       Padding="0"
                                                                       Visibility="{Binding HasMenu,
-                                                                                           Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                                      cal:Message.Attach="[Event Click]=[Action LayerMenu($dataContext,$source)]">
+                                                                                           Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <Path Width="15"
                                                           Height="15"
                                                           Margin="0"
@@ -1561,9 +1561,9 @@
                                                                       Margin="0,7,0,0"
                                                                       HorizontalAlignment="Left"
                                                                       VerticalAlignment="Top"
+                                                                      cal:Message.Attach="[Event Click]=[Action ToggleOpacity($dataContext)]"
                                                                       Background="{x:Null}"
-                                                                      Padding="0"
-                                                                      cal:Message.Attach="[Event Click]=[Action ToggleOpacity($dataContext)]">
+                                                                      Padding="0">
                                                     <Grid Width="15" Height="15">
                                                         <Path Width="Auto"
                                                               Height="Auto"
@@ -1630,9 +1630,9 @@
                                                     </custom:SurfaceButton>
                                                     <custom:SurfaceButton x:Name="NewConfigButton"
                                                                           Margin="0"
+                                                                          cal:Message.Attach="[Event Click]=[Action Config($dataContext)]"
                                                                           Visibility="{Binding IsConfigAvailable,
-                                                                                               Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                                          cal:Message.Attach="[Event Click]=[Action Config($dataContext)]">
+                                                                                               Converter={StaticResource BooleanToVisibilityConverter}}">
                                                         <Path Width="20"
                                                               Height="20"
                                                               Margin="0,0,0,0"
