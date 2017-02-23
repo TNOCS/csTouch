@@ -247,7 +247,7 @@ namespace CsvToDataService
                 // Add a MetaInfo for the counter.
                 if (clone.MetaInfo == null)
                 {
-                    clone.MetaInfo = new List<MetaInfo>();
+                    clone.MetaInfo = new MetaInfoCollection();
                 }
                 clone.MetaInfo.Add(new MetaInfo()
                 {

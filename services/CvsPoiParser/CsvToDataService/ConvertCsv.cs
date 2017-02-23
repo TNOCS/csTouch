@@ -480,7 +480,7 @@ namespace CsvToDataService
                 },
                 Id = Guid.NewGuid(),
                 DrawingMode = DrawingModes.Image,
-                MetaInfo = new List<MetaInfo>()
+                MetaInfo = new MetaInfoCollection()
             };
 
             if (!poiService.PoITypes.Any())
