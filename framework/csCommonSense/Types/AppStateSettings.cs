@@ -74,7 +74,7 @@ namespace csShared
         }
     }
 
-    public sealed class AppStateSettings : PropertyChangedBase
+    public class AppStateSettings : PropertyChangedBase
     {
 
         #region fields
@@ -134,7 +134,7 @@ namespace csShared
 
         public delegate void NotificationEventHandler(NotificationEventArgs args);
 
-        private AppStateSettings()
+        public AppStateSettings()
         {
             LogCs.LogMessage("Initialize AppStateSettings");
             ViewDef = new MapViewDef();
@@ -278,7 +278,7 @@ namespace csShared
             set
             {
                 dataServer = value;
-                if (DataServerChanged != null) DataServerChanged(this, null);
+                DataServerChanged?.Invoke(this, null);
             }
         }
 
