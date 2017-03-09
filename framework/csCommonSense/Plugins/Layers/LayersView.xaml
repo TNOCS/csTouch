@@ -1441,7 +1441,7 @@
                                                                     Margin="0"
                                                                     HorizontalAlignment="Stretch"
                                                                     VerticalAlignment="Top"
-                                                                    cal:Message.Attach="[Event Checked]=[Action ActivateGisLayer($dataContext];[Event DeactivateGisLayer]=[Action Unchecked($dataContext)]"
+                                                                    cal:Message.Attach="[Event Checked]=[Action ActivateGisLayer($dataContext];[Event Unchecked]=[Action DeactivateGisLayer($dataContext)]"
                                                                     BorderBrush="Black"
                                                                     BorderThickness="2"
                                                                     Foreground="Black"
