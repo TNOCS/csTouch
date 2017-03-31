@@ -1,5 +1,7 @@
 # README #
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a5d5f282c293486195674947ac7f224a)](https://www.codacy.com/app/erikvullings/csTouch?utm_source=github.com&utm_medium=referral&utm_content=TNOCS/csTouch&utm_campaign=badger)
+
 We started this repository because the original cs repository became too big. You can simply pull it and build the CommonSense dll.
 
 ### What is this repository for? ###
